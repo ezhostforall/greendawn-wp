@@ -4,7 +4,7 @@ import { existsSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 
 const dist = join(import.meta.dirname, '../theme/dist');
-const required = ['src/scripts/main.ts', 'src/styles/editor.css', 'src/react/index.tsx'];
+const required = ['src/scripts/main.ts', 'src/styles/editor.css', 'src/react/index.tsx', 'src/styles/greendawn-homepage.css'];
 
 const fail = (message) => {
 	console.error(`Manifest validation failed: ${message}`);

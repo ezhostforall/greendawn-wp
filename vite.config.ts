@@ -62,6 +62,7 @@ export default defineConfig(({ command }) => ({
 				main: resolve(root, 'src/scripts/main.ts'),
 				editor: resolve(root, 'src/styles/editor.css'),
 				'react-example': resolve(root, 'src/react/index.tsx'),
+				'greendawn-homepage': resolve(root, 'src/styles/greendawn-homepage.css'),
 			},
 		},
 	},

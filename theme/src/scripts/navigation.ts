@@ -5,7 +5,7 @@ export function initNavigation(): void {
 	const menu = document.getElementById(toggle?.getAttribute('aria-controls') ?? '');
 	if (!toggle || !disclosure || !menu || menu.classList.contains('is-enhanced')) return;
 
-	const smallScreen = window.matchMedia('(max-width: 60rem)');
+	const smallScreen = window.matchMedia(toggle.dataset.navWide === 'true' ? '(max-width: 75rem)' : '(max-width: 60rem)');
 	const controller = new AbortController();
 	const { signal } = controller;
 	const submenus = new Map<HTMLButtonElement, HTMLUListElement>();

@@ -56,6 +56,7 @@ final class Plugin {
 		}
 
 		( new Modules\Business_Homepage() )->register();
+		( new Modules\Greendawn_Homepage() )->register();
 		( new Modules\Contact_Page() )->register();
 		( new Modules\About_Page() )->register();
 

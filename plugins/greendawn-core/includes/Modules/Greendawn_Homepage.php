@@ -14,6 +14,11 @@ final class Greendawn_Homepage implements Module_Interface {
 
 	private const TEMPLATE = 'templates/greendawn-homepage.php';
 
+	/**
+	 * The translated field definitions for this request.
+	 *
+	 * @var array|null
+	 */
 	private ?array $fields = null;
 
 	/** Hooks the homepage editor. */

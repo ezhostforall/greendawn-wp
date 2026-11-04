@@ -131,7 +131,7 @@ test('the utility bar text can be edited and reset in the Customiser', async ({ 
 	await page.locator('#accordion-section-greendawn_header .accordion-section-title').click();
 	const input = page.getByRole('textbox', { name: 'Utility bar text' });
 	await expect(input).toHaveValue(defaultText);
-	const preview = page.frameLocator('#customize-preview iframe').locator('.gd-utility p');
+	const preview = page.frameLocator('#customize-preview iframe').first().locator('.gd-utility p');
 	await input.fill('Commercial charging for your fleet');
 	await input.press('Tab');
 	await expect(preview).toHaveText('Commercial charging for your fleet');

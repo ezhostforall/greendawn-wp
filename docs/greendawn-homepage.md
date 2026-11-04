@@ -1,12 +1,12 @@
 # Greendawn homepage pilot
 
-The Greendawn Homepage template renders the hero and trust strip from the Astro reference. The branded header is shared across the site, with a transparent overlay on this template and a navy background above inner-page content. The layout and proof stages live in PHP. Greendawn Core registers the editable homepage fields when Secure Custom Fields is active.
+The Greendawn Homepage template renders the hero and trust strip from the Astro reference. The branded header is shared across the site, with a transparent overlay on this template and a navy background above inner-page content. The layout and proof stage order live in PHP. Greendawn Core owns the copy and image defaults and registers the editable homepage fields when Secure Custom Fields is active.
 
 ## Set up the staging page
 
 1. Install the candidate theme and Greendawn Core together. Activate Secure Custom Fields for the editing fields.
-2. Create a Page, select **Greendawn Homepage** as its template and preview it before assigning it as the static homepage. Empty content fields use the supplied Astro copy and engineers photograph. Upload a replacement photograph only if needed and set its alt text in the Media Library.
-3. In **Appearance → Customise → Header**, set **Discuss your site** and the current live enquiry destination. The header and hero use this setting together. The Explore our projects link defaults to the existing public Greendawn gallery. Use the Projects destination field to point it at the migrated project content when ready.
+2. Create a Page, select **Greendawn Homepage** as its template and preview it before assigning it as the static homepage. Empty copy fields show the Greendawn defaults. The hero defaults to the Media Library attachment at `2026/11/greendawn-engineers-electrical-distribution-1600.webp` relative to the site’s uploads folder. If the file was uploaded under a different path, select it in **Hero photograph**. Set its alt text in the Media Library.
+3. In **Appearance → Customise → Header**, set **Discuss your site** and the current live enquiry destination. The header and hero use this setting together. Use **Utility bar text** to edit the message and **Reset utility bar text** to restore the original wording, then publish the change. The Explore our projects link defaults to the existing public Greendawn gallery. Use the Projects destination field to point it at the migrated project content when ready.
 4. Assign the Primary menu with About Us, Our Projects, the three Our Solutions children and Aftercare. Point the entries at their existing live destinations until those pages move. Assign the telephone and customer support links to the Utility menu. The supplied raster wordmark is the fallback when no custom logo is configured.
 5. Verify the Page preview and then assign it under **Settings → Reading** when ready. Compare it with the Astro reference at 390px and 1440px, exercise the menu by keyboard and confirm the enquiry and gallery destinations.
 

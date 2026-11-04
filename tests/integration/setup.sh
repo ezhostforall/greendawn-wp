@@ -183,6 +183,34 @@ create_page greendawn-home "Greendawn home" ''
 greendawn_home_id=$(wp post list --post_type=page --name=greendawn-home --field=ID)
 wp post meta update "$greendawn_home_id" _wp_page_template templates/greendawn-homepage.php
 
+# Mirror the Media Library path supplied for the default homepage photograph.
+wp eval '
+  $name = "greendawn-engineers-electrical-distribution-1600.webp";
+  $relative = "2026/11/" . $name;
+  $uploads = wp_get_upload_dir();
+  if ( attachment_url_to_postid( $uploads["baseurl"] . "/" . $relative ) ) {
+    return;
+  }
+  $file = $uploads["basedir"] . "/" . $relative;
+  wp_mkdir_p( dirname( $file ) );
+  if ( ! copy( get_theme_file_path( "/assets/home/" . $name ), $file ) ) {
+    WP_CLI::error( "Could not seed the Greendawn photograph." );
+  }
+  $id = wp_insert_attachment( array( "post_title" => "Greendawn engineers", "post_mime_type" => "image/webp" ), $file, 0, true );
+  if ( is_wp_error( $id ) ) {
+    WP_CLI::error( $id->get_error_message() );
+  }
+  require_once ABSPATH . "wp-admin/includes/image.php";
+  wp_update_attachment_metadata( $id, wp_generate_attachment_metadata( $id, $file ) );
+  update_post_meta( $id, "_wp_attachment_image_alt", "Greendawn engineers working on commercial electrical distribution equipment" );
+'
+create_page greendawn-home-edited "Greendawn home edited" ''
+greendawn_edited_id=$(wp post list --post_type=page --name=greendawn-home-edited --field=ID)
+wp post meta update "$greendawn_edited_id" _wp_page_template templates/greendawn-homepage.php
+wp post meta update "$greendawn_edited_id" greendawn_home_headline "Charging around your site."
+wp post meta update "$greendawn_edited_id" greendawn_home_headline_accent ""
+wp post meta update "$greendawn_edited_id" greendawn_home_hero_image "$hero_id"
+
 # Exercise WordPress's assigned Posts page and published editorial templates.
 create_page starter-home "Starter home" '<p>Static homepage fixture.</p>'
 create_page blog "Blog" ''

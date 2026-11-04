@@ -31,7 +31,7 @@ $greendawn_submenu_label = __( 'Toggle submenu for %s', 'greendawn' );
 
 	<header class="site-header<?php echo get_theme_mod( 'greendawn_header_sticky', false ) ? ' site-header--sticky' : ''; ?>">
 		<div class="gd-utility">
-			<p><?php esc_html_e( 'Commercial EV infrastructure across England, Scotland & Wales', 'greendawn' ); ?></p>
+			<p><?php echo esc_html( get_theme_mod( 'greendawn_header_utility_text', greendawn_utility_text_default() ) ); ?></p>
 			<?php
 			if ( has_nav_menu( 'utility' ) ) {
 				wp_nav_menu(

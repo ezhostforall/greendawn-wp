@@ -208,7 +208,8 @@
 	color: var(--gd-navy-900);
 }
 
-.greendawn-home .gd-mobile-enquiry {
+.greendawn-home .gd-mobile-enquiry,
+.greendawn-home .primary-nav > .gd-mobile-utility {
 	display: none;
 }
 
@@ -317,10 +318,27 @@
 		text-align: center;
 	}
 
-	.gd-utility:has(.utility-nav) {
+	.greendawn-home .site-header:has(.nav-disclosure) .gd-utility .utility-nav {
+		display: none;
+	}
+
+	.gd-utility {
 		flex-wrap: wrap;
-		gap: 0;
-		padding-block: 0.25rem;
+	}
+
+	.greendawn-home .primary-nav > .gd-mobile-utility {
+		display: flex;
+		flex-wrap: wrap;
+		margin-block-start: 0.75rem;
+	}
+
+	.greendawn-home .primary-nav > .gd-mobile-utility > li {
+		border-top: 0;
+	}
+
+	.greendawn-home .primary-nav > .gd-mobile-utility > li > a {
+		font-family: var(--font-mono);
+		font-size: var(--gd-type-secondary);
 	}
 
 	.greendawn-home .site-header__inner {

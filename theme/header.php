@@ -90,6 +90,25 @@ $greendawn_submenu_label = __( 'Toggle submenu for %s', 'greendawn' );
 					<?php if ( '' !== $greendawn_cta_url && '#' !== $greendawn_cta_url ) : ?>
 						<a class="gd-home-button gd-mobile-enquiry" href="<?php echo esc_url( $greendawn_cta_url ); ?>"><?php echo esc_html( $greendawn_cta_label ); ?></a>
 					<?php endif; ?>
+					<?php
+					if ( has_nav_menu( 'utility' ) ) {
+						$greendawn_hide_menu_ids = static function (): string {
+							return '';
+						};
+						add_filter( 'nav_menu_item_id', $greendawn_hide_menu_ids );
+						wp_nav_menu(
+							array(
+								'theme_location' => 'utility',
+								'container'      => false,
+								'menu_id'        => 'greendawn-mobile-utility',
+								'menu_class'     => 'gd-mobile-utility',
+								'depth'          => 1,
+								'fallback_cb'    => false,
+							)
+						);
+						remove_filter( 'nav_menu_item_id', $greendawn_hide_menu_ids );
+					}
+					?>
 					</nav>
 				<?php endif; ?>
 			<?php endif; ?>

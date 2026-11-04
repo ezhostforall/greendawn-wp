@@ -20,12 +20,13 @@ test('the branded homepage renders its hero, proof and client marks without Java
 			await testInfo.attach(`greendawn-${width}`, { body: await page.screenshot({ fullPage: true }), contentType: 'image/png' });
 		}
 
-		await page.setViewportSize({ width: 1024, height: 700 });
+		await page.setViewportSize({ width: 390, height: 844 });
 		const nav = page.getByRole('navigation', { name: 'Primary', exact: true });
 		await expect(nav).toBeHidden();
 		await page.locator('[data-nav-toggle]').press('Enter');
 		await expect(nav.getByRole('link', { name: 'About' })).toBeVisible();
 		await expect(nav.getByRole('link', { name: 'Discuss your site' })).toBeVisible();
+		await expect(nav.getByRole('link', { name: 'Support', exact: true })).toBeVisible();
 	} finally {
 		await context.close();
 	}

@@ -17,7 +17,7 @@ add_filter(
 		if ( is_page( 'header-empty' ) ) {
 			return array();
 		}
-		if ( ! is_page( 'header-options' ) ) {
+		if ( ! is_page( array( 'header-options', 'greendawn-home' ) ) ) {
 			unset( $locations['utility'] );
 		}
 		return $locations;

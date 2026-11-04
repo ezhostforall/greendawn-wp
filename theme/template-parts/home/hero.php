@@ -26,10 +26,11 @@ foreach ( array( 480, 800, 1200, 1600 ) as $greendawn_width ) {
 	$greendawn_srcset[] = esc_url_raw( $greendawn_hero_src . $greendawn_width . '.webp' ) . ' ' . $greendawn_width . 'w';
 }
 
-$greendawn_enquiry_url = esc_url( (string) get_theme_mod( 'greendawn_header_cta_url', '' ) );
-$greendawn_enquiry_url = '#' === $greendawn_enquiry_url ? '' : $greendawn_enquiry_url;
-$greendawn_project_url = esc_url( (string) greendawn_get_field( 'greendawn_home_projects_url', false, '' ) );
-$greendawn_stages      = array(
+$greendawn_enquiry_url   = esc_url( (string) get_theme_mod( 'greendawn_header_cta_url', '' ) );
+$greendawn_enquiry_url   = '#' === $greendawn_enquiry_url ? '' : $greendawn_enquiry_url;
+$greendawn_enquiry_label = trim( (string) get_theme_mod( 'greendawn_header_cta_label', '' ) );
+$greendawn_project_url   = esc_url( (string) greendawn_get_field( 'greendawn_home_projects_url', false, '' ) );
+$greendawn_stages        = array(
 	__( 'Consult', 'greendawn' ) => __( 'Understand your requirement', 'greendawn' ),
 	__( 'Design', 'greendawn' )  => __( 'Resolve power, layout and scope', 'greendawn' ),
 	__( 'Install', 'greendawn' ) => __( 'Coordinate works and commissioning', 'greendawn' ),
@@ -70,7 +71,7 @@ $greendawn_stages      = array(
 				<div class="gd-hero__actions">
 					<?php if ( '' !== $greendawn_enquiry_url ) : ?>
 						<a class="gd-home-button" href="<?php echo esc_url( $greendawn_enquiry_url ); ?>">
-							<?php echo esc_html( (string) get_theme_mod( 'greendawn_header_cta_label', __( 'Discuss your site', 'greendawn' ) ) ?: __( 'Discuss your site', 'greendawn' ) ); ?>
+							<?php echo esc_html( '' !== $greendawn_enquiry_label ? $greendawn_enquiry_label : __( 'Discuss your site', 'greendawn' ) ); ?>
 							<?php get_template_part( 'template-parts/home/arrow', null, array( 'diagonal' => true ) ); ?>
 						</a>
 					<?php endif; ?>

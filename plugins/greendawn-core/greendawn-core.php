@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Greendawn Core
  * Description: Optional, modular foundation for reusable agency functionality. Does nothing until modules are enabled.
- * Version: 0.5.0
+ * Version: 0.6.4
  * Requires at least: 6.6
  * Requires PHP: 8.1
  * Author: Greendawn
@@ -17,7 +17,7 @@
 
 defined( 'ABSPATH' ) || exit;
 
-define( 'GREENDAWN_CORE_VERSION', '0.5.0' );
+define( 'GREENDAWN_CORE_VERSION', '0.6.4' );
 define( 'GREENDAWN_CORE_DIR', plugin_dir_path( __FILE__ ) );
 
 /**

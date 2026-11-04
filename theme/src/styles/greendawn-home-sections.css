@@ -367,7 +367,21 @@
 }
 
 .gd-trust__intro .gd-eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
   margin-bottom: 0.75rem;
+  color: var(--gd-slate-500);
+  letter-spacing: 0.1em;
+  line-height: 1.2;
+}
+
+.gd-trust__intro .gd-eyebrow::before {
+  width: 1.6rem;
+  height: 2px;
+  flex: none;
+  background: var(--gd-coral);
+  content: '';
 }
 
 .gd-trust__intro > p:last-child {

@@ -76,7 +76,7 @@ for (const width of [320, 768, 960]) {
 		expect(await page.evaluate(() => !document.querySelector('.site-header')?.contains(document.activeElement))).toBe(true);
 		await menuToggle(page).click();
 		await page.keyboard.press('Shift+Tab');
-		await expect(page.locator('.site-title a')).toBeFocused();
+		await expect(page.locator('.site-header .custom-logo-link')).toBeFocused();
 		await expect(primary(page)).toBeHidden();
 		await menuToggle(page).click();
 		await primary(page).getByRole('link', { name: 'About', exact: true }).click();
@@ -172,8 +172,9 @@ test('optional utility, CTA and sticky header work in short viewports and RTL', 
 	await expectNoOverflow(page);
 	await primary(page).getByRole('link', { name: 'Service detail with a longer descriptive label' }).scrollIntoViewIfNeeded();
 	await expect(primary(page).getByRole('link', { name: 'Service detail with a longer descriptive label' })).toBeInViewport();
-	await page.locator('.header-cta').scrollIntoViewIfNeeded();
-	await expect(page.locator('.header-cta')).toBeInViewport();
+	const enquiry = primary(page).getByRole('link', { name: 'Talk to us' });
+	await enquiry.scrollIntoViewIfNeeded();
+	await expect(enquiry).toBeInViewport();
 	await testInfo.attach('short-rtl-header', { body: await page.locator('.site-header').screenshot(), contentType: 'image/png' });
 });
 
@@ -181,7 +182,7 @@ test('no assigned menu does not create empty navigation controls', async ({ page
 	await page.goto('/header-empty/');
 	await expect(menuToggle(page)).toHaveCount(0);
 	await expect(page.locator('.primary-nav, .utility-nav, .header-cta')).toHaveCount(0);
-	await expect(page.locator('.site-title a')).toBeVisible();
+	await expect(page.locator('.site-header .custom-logo-link')).toBeVisible();
 });
 
 for (const width of [320, 1280]) {

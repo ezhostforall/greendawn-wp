@@ -34,7 +34,7 @@ $greendawn_project_url   = esc_url( (string) greendawn_get_field( 'greendawn_hom
 if ( '' === $greendawn_project_url || '#' === $greendawn_project_url ) {
 	$greendawn_project_url = 'https://greendawn.co.uk/gallery/';
 }
-$greendawn_stages        = array(
+$greendawn_stages = array(
 	__( 'Consult', 'greendawn' ) => __( 'Understand your requirement', 'greendawn' ),
 	__( 'Design', 'greendawn' )  => __( 'Resolve power, layout and scope', 'greendawn' ),
 	__( 'Install', 'greendawn' ) => __( 'Coordinate works and commissioning', 'greendawn' ),

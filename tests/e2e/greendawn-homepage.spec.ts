@@ -1,6 +1,6 @@
 import { expect, test } from '@playwright/test';
 
-test('the branded homepage renders its hero, proof and client marks without JavaScript', async ({ browser, baseURL }, testInfo) => {
+test('the branded homepage renders its sections in order without JavaScript', async ({ browser, baseURL }, testInfo) => {
 	const context = await browser.newContext({ baseURL, javaScriptEnabled: false });
 	const page = await context.newPage();
 	try {
@@ -16,6 +16,18 @@ test('the branded homepage renders its hero, proof and client marks without Java
 			await expect(main.getByRole('img', { name: 'Johnsons Cars' })).toBeVisible();
 			await expect(main.getByRole('img', { name: 'The Salvation Army' })).toBeVisible();
 			await expect(main.locator('.gd-hero__proof strong')).toHaveText(['Consult', 'Design', 'Install', 'Manage']);
+			await expect(main.getByRole('heading', { level: 2 })).toHaveText([
+				'One charging project. Coordinated from the start.',
+				'The charger is only one part of the system.',
+				'A clear route from requirement to operation.',
+			]);
+			await expect(main.locator('#problem li')).toHaveCount(6);
+			await expect(main.locator('#system .gd-system__cards h3')).toHaveText([
+				'Power & infrastructure', 'Charging equipment', 'Software & operation',
+			]);
+			await expect(main.locator('#process h3')).toHaveText(['Consult', 'Design', 'Install', 'Manage']);
+			await expect(main.getByRole('link', { name: 'Understand AC and DC charging' })).toHaveAttribute('href', /\/guides\/ac-vs-dc-ev-charging\/$/);
+			await expect(main.getByRole('link', { name: 'Explore site power planning' })).toHaveAttribute('href', /\/guides\/can-my-building-handle-ev-charging\/$/);
 			await expect(main.getByRole('link', { name: 'Discuss your site' })).toHaveAttribute('href', /\/about\/$/);
 			await expect(main.getByRole('link', { name: 'Explore our projects' })).toHaveAttribute('href', 'https://greendawn.co.uk/gallery/');
 			const delivery = main.getByText('Commercial delivery', { exact: true });
@@ -117,6 +129,9 @@ test('saved homepage values render in the initial response with one hero image',
 	expect(imageRequests.filter((url) => url.includes('service-media'))).toHaveLength(1);
 	expect(imageRequests.some((url) => url.includes('greendawn-engineers-electrical-distribution-'))).toBe(false);
 	await expect(page.getByRole('heading', { level: 1 })).toHaveText('Charging around your site. Handled.');
+	await expect(page.locator('.gd-hero__proof strong').first()).toHaveText('Assess');
+	await expect(page.locator('#process h3').first()).toHaveText('Assess');
+	await expect(page.locator('#process .gd-eyebrow')).toHaveText('Assess · Design · Install · Manage');
 });
 
 test('the utility bar text can be edited and reset in the Customiser', async ({ page, baseURL }) => {

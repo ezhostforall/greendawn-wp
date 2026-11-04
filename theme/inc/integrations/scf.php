@@ -86,3 +86,16 @@ function greendawn_home_field( string $name ): string {
 	$value = apply_filters( 'greendawn_home_field_value', '', $name );
 	return is_scalar( $value ) ? (string) $value : '';
 }
+
+/**
+ * Returns the shared delivery stage keys and their editable labels.
+ *
+ * @return array<string, string>
+ */
+function greendawn_home_stages(): array {
+	$stages = array();
+	foreach ( array( 'consult', 'design', 'install', 'manage' ) as $stage ) {
+		$stages[ $stage ] = greendawn_home_field( $stage . '_label' );
+	}
+	return $stages;
+}

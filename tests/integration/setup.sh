@@ -210,6 +210,7 @@ wp post meta update "$greendawn_edited_id" _wp_page_template templates/greendawn
 wp post meta update "$greendawn_edited_id" greendawn_home_headline "Charging around your site."
 wp post meta update "$greendawn_edited_id" greendawn_home_headline_accent ""
 wp post meta update "$greendawn_edited_id" greendawn_home_hero_image "$hero_id"
+wp post meta update "$greendawn_edited_id" greendawn_home_consult_label "Assess"
 
 # Exercise WordPress's assigned Posts page and published editorial templates.
 create_page starter-home "Starter home" '<p>Static homepage fixture.</p>'

@@ -16,6 +16,9 @@ while ( have_posts() ) :
 	<article <?php post_class( 'gd-home' ); ?>>
 		<?php get_template_part( 'template-parts/home/hero' ); ?>
 		<?php get_template_part( 'template-parts/home/trust' ); ?>
+		<?php get_template_part( 'template-parts/home/problem' ); ?>
+		<?php get_template_part( 'template-parts/home/system' ); ?>
+		<?php get_template_part( 'template-parts/home/process' ); ?>
 	</article>
 	<?php
 endwhile;

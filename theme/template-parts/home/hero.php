@@ -71,10 +71,10 @@ $greendawn_project_url   = esc_url( greendawn_home_field( 'projects_url' ) );
 
 	<div class="gd-hero__proof">
 		<?php $greendawn_stage_number = 0; ?>
-		<?php foreach ( array( 'consult', 'design', 'install', 'manage' ) as $greendawn_stage ) : ?>
+		<?php foreach ( greendawn_home_stages() as $greendawn_stage => $greendawn_label ) : ?>
 			<div>
 				<span aria-hidden="true"><?php echo esc_html( sprintf( '%02d', ++$greendawn_stage_number ) ); ?></span>
-				<strong><?php echo esc_html( greendawn_home_field( $greendawn_stage . '_label' ) ); ?></strong>
+				<strong><?php echo esc_html( $greendawn_label ); ?></strong>
 				<small><?php echo esc_html( greendawn_home_field( $greendawn_stage . '_caption' ) ); ?></small>
 			</div>
 		<?php endforeach; ?>

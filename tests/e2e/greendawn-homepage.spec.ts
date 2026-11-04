@@ -16,6 +16,9 @@ test('the branded homepage renders its hero, proof and client marks without Java
 			await expect(main.getByRole('img', { name: 'The Salvation Army' })).toBeVisible();
 			await expect(main.locator('.gd-hero__proof strong')).toHaveText(['Consult', 'Design', 'Install', 'Manage']);
 			await expect(main.getByRole('link', { name: 'Discuss your site' })).toHaveAttribute('href', /\/about\/$/);
+			await expect(main.getByRole('link', { name: 'Explore our projects' })).toHaveAttribute('href', 'https://greendawn.co.uk/gallery/');
+			const delivery = main.getByText('Commercial delivery', { exact: true });
+			expect(await delivery.evaluate((element) => getComputedStyle(element, '::before').backgroundColor)).toBe('rgb(255, 94, 51)');
 			expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBe(width);
 			await testInfo.attach(`greendawn-${width}`, { body: await page.screenshot({ fullPage: true }), contentType: 'image/png' });
 		}
@@ -58,4 +61,40 @@ test('the branded header is shared, with the overlay and hero CSS scoped to the 
 	await expect(nav).toBeHidden();
 	await toggle.press('Enter');
 	await expect(nav.getByRole('link', { name: 'About' })).toBeVisible();
+});
+
+test('the desktop header and hero use the Greendawn hover styles', async ({ page }) => {
+	await page.setViewportSize({ width: 1440, height: 900 });
+	await page.goto('/greendawn-home/');
+	const banner = page.getByRole('banner');
+	const utility = banner.getByRole('navigation', { name: 'Utility' }).getByRole('link', { name: 'Support' });
+	await expect(utility).toHaveCSS('font-size', '15.328px');
+	await utility.hover();
+	await expect(utility).toHaveCSS('color', 'rgb(233, 242, 39)');
+
+	const nav = banner.getByRole('navigation', { name: 'Primary', exact: true });
+	const about = nav.getByRole('link', { name: 'About', exact: true });
+	await about.hover();
+	await expect.poll(() => about.evaluate((element) => getComputedStyle(element.parentElement!, '::after').transform)).toBe('matrix(1, 0, 0, 1, 0, 0)');
+
+	await nav.getByRole('button', { name: 'Toggle submenu for Services' }).click();
+	const advisory = nav.getByRole('link', { name: 'Advisory', exact: true });
+	await advisory.hover();
+	await expect(advisory).toHaveCSS('background-color', 'rgb(233, 242, 39)');
+
+	const headerCta = banner.getByRole('link', { name: 'Discuss your site' });
+	await headerCta.hover();
+	await expect(headerCta).toHaveCSS('background-color', 'rgb(233, 242, 39)');
+	await expect(headerCta).toHaveCSS('transform', 'matrix(1, 0, 0, 1, 0, -2)');
+
+	const main = page.getByRole('main');
+	const heroCta = main.getByRole('link', { name: 'Discuss your site' });
+	await heroCta.hover();
+	await expect(heroCta).toHaveCSS('background-color', 'rgb(250, 249, 246)');
+	await expect(heroCta).toHaveCSS('transform', 'matrix(1, 0, 0, 1, 0, -3)');
+
+	const projects = main.getByRole('link', { name: 'Explore our projects' });
+	await projects.hover();
+	await expect(projects).toHaveCSS('color', 'rgb(233, 242, 39)');
+	await expect(projects).toHaveCSS('gap', '21.6px');
 });

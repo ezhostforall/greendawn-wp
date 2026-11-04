@@ -30,6 +30,10 @@ $greendawn_enquiry_url   = esc_url( (string) get_theme_mod( 'greendawn_header_ct
 $greendawn_enquiry_url   = '#' === $greendawn_enquiry_url ? '' : $greendawn_enquiry_url;
 $greendawn_enquiry_label = trim( (string) get_theme_mod( 'greendawn_header_cta_label', '' ) );
 $greendawn_project_url   = esc_url( (string) greendawn_get_field( 'greendawn_home_projects_url', false, '' ) );
+// The existing public gallery remains the default during the WordPress migration.
+if ( '' === $greendawn_project_url || '#' === $greendawn_project_url ) {
+	$greendawn_project_url = 'https://greendawn.co.uk/gallery/';
+}
 $greendawn_stages        = array(
 	__( 'Consult', 'greendawn' ) => __( 'Understand your requirement', 'greendawn' ),
 	__( 'Design', 'greendawn' )  => __( 'Resolve power, layout and scope', 'greendawn' ),
@@ -67,22 +71,18 @@ $greendawn_stages        = array(
 				<span class="gd-hero-line gd-hero-line--accent"><span><?php greendawn_the_field( 'greendawn_home_headline_accent', 'text', false, __( 'Handled.', 'greendawn' ) ); ?></span></span>
 			</h1>
 			<p class="gd-hero__lead"><?php greendawn_the_field( 'greendawn_home_lead', 'text', false, __( 'Greendawn plans, installs and supports commercial EV charging around your vehicles, users and available power—from a single site to a coordinated estate programme.', 'greendawn' ) ); ?></p>
-			<?php if ( '' !== $greendawn_enquiry_url || '' !== $greendawn_project_url ) : ?>
-				<div class="gd-hero__actions">
-					<?php if ( '' !== $greendawn_enquiry_url ) : ?>
-						<a class="gd-home-button" href="<?php echo esc_url( $greendawn_enquiry_url ); ?>">
-							<?php echo esc_html( '' !== $greendawn_enquiry_label ? $greendawn_enquiry_label : __( 'Discuss your site', 'greendawn' ) ); ?>
-							<?php get_template_part( 'template-parts/home/arrow', null, array( 'diagonal' => true ) ); ?>
-						</a>
-					<?php endif; ?>
-					<?php if ( '' !== $greendawn_project_url ) : ?>
-						<a class="gd-hero__project" href="<?php echo esc_url( $greendawn_project_url ); ?>">
-							<?php greendawn_the_field( 'greendawn_home_projects_label', 'text', false, __( 'Explore our projects', 'greendawn' ) ); ?>
-							<?php get_template_part( 'template-parts/home/arrow' ); ?>
-						</a>
-					<?php endif; ?>
-				</div>
-			<?php endif; ?>
+			<div class="gd-hero__actions">
+				<?php if ( '' !== $greendawn_enquiry_url ) : ?>
+					<a class="gd-home-button" href="<?php echo esc_url( $greendawn_enquiry_url ); ?>">
+						<?php echo esc_html( '' !== $greendawn_enquiry_label ? $greendawn_enquiry_label : __( 'Discuss your site', 'greendawn' ) ); ?>
+						<?php get_template_part( 'template-parts/home/arrow', null, array( 'diagonal' => true ) ); ?>
+					</a>
+				<?php endif; ?>
+				<a class="gd-hero__project" href="<?php echo esc_url( $greendawn_project_url ); ?>">
+					<?php greendawn_the_field( 'greendawn_home_projects_label', 'text', false, __( 'Explore our projects', 'greendawn' ) ); ?>
+					<?php get_template_part( 'template-parts/home/arrow' ); ?>
+				</a>
+			</div>
 			<ul class="gd-hero__assurances">
 				<li><?php greendawn_the_field( 'greendawn_home_assurance_requirements', 'text', false, __( 'Site requirements first', 'greendawn' ) ); ?></li>
 				<li><?php greendawn_the_field( 'greendawn_home_assurance_equipment', 'text', false, __( 'Equipment chosen for the operation', 'greendawn' ) ); ?></li>

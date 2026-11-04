@@ -7,6 +7,11 @@
 
 defined( 'ABSPATH' ) || exit;
 
+/** Returns the original utility-bar wording. */
+function greendawn_utility_text_default(): string {
+	return __( 'Commercial EV infrastructure across England, Scotland & Wales', 'greendawn' );
+}
+
 /**
  * Registers opt-in header settings in the core Customizer.
  *
@@ -35,6 +40,52 @@ function greendawn_customize_header( WP_Customize_Manager $customizer ): void {
 			'label'   => __( 'Keep the header visible while scrolling', 'greendawn' ),
 		)
 	);
+	$utility_setting = 'greendawn_header_utility_text';
+	$utility_default = greendawn_utility_text_default();
+	$customizer->add_setting(
+		$utility_setting,
+		array(
+			'default'           => $utility_default,
+			'sanitize_callback' => 'sanitize_text_field',
+		)
+	);
+	$customizer->add_control(
+		$utility_setting,
+		array(
+			'section' => 'greendawn_header',
+			'type'    => 'text',
+			'label'   => __( 'Utility bar text', 'greendawn' ),
+		)
+	);
+	add_action(
+		'customize_controls_enqueue_scripts',
+		static function () use ( $utility_setting, $utility_default ): void {
+			$config = wp_json_encode(
+				array(
+					'id'    => $utility_setting,
+					'value' => $utility_default,
+					'label' => __( 'Reset utility bar text', 'greendawn' ),
+				),
+				JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT
+			);
+			wp_add_inline_script(
+				'customize-controls',
+				'(function (config) {
+					wp.customize.control(config.id, function (control) {
+						control.deferred.embedded.done(function () {
+							const button = document.createElement("button");
+							button.type = "button";
+							button.className = "button";
+							button.textContent = config.label;
+							button.addEventListener("click", function () { control.setting.set(config.value); });
+							control.container[0].append(button);
+						});
+					});
+				})(' . $config . ');'
+			);
+		}
+	);
+
 	foreach ( array( 'label', 'url' ) as $field ) {
 		$setting = 'greendawn_header_cta_' . $field;
 		$customizer->add_setting(

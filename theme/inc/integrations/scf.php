@@ -76,3 +76,13 @@ function greendawn_the_field( string $name, string $context = 'text', $post_id =
 			echo esc_html( $value );
 	}
 }
+
+/**
+ * Returns a scalar value supplied by the Greendawn homepage field module.
+ *
+ * @param string $name Short field name.
+ */
+function greendawn_home_field( string $name ): string {
+	$value = apply_filters( 'greendawn_home_field_value', '', $name );
+	return is_scalar( $value ) ? (string) $value : '';
+}

@@ -9,18 +9,18 @@ defined( 'ABSPATH' ) || exit;
 ?>
 <section class="gd-trust gd-home-shell" aria-label="<?php esc_attr_e( 'Commercial EV charging delivery', 'greendawn' ); ?>">
 	<div class="gd-trust__intro">
-		<p class="gd-eyebrow"><?php esc_html_e( 'Commercial delivery', 'greendawn' ); ?></p>
-		<p><?php greendawn_the_field( 'greendawn_home_trust_intro', 'text', false, __( 'Experience across dealership, fleet, workplace and destination sites.', 'greendawn' ) ); ?></p>
+		<p class="gd-eyebrow"><?php echo esc_html( greendawn_home_field( 'trust_label' ) ); ?></p>
+		<p><?php echo esc_html( greendawn_home_field( 'trust_intro' ) ); ?></p>
 	</div>
 
 	<div class="gd-trust__credentials" aria-label="<?php esc_attr_e( 'Greendawn delivery footprint', 'greendawn' ); ?>">
 		<span>
-			<strong><?php esc_html_e( 'GB', 'greendawn' ); ?></strong>
-			<small><?php esc_html_e( 'England, Scotland and Wales', 'greendawn' ); ?></small>
+			<strong><?php echo esc_html( greendawn_home_field( 'footprint_label' ) ); ?></strong>
+			<small><?php echo esc_html( greendawn_home_field( 'footprint_caption' ) ); ?></small>
 		</span>
 		<span>
-			<strong><?php esc_html_e( 'AC–DC', 'greendawn' ); ?></strong>
-			<small><?php esc_html_e( 'Equipment selected around the requirement', 'greendawn' ); ?></small>
+			<strong><?php echo esc_html( greendawn_home_field( 'equipment_label' ) ); ?></strong>
+			<small><?php echo esc_html( greendawn_home_field( 'equipment_caption' ) ); ?></small>
 		</span>
 	</div>
 

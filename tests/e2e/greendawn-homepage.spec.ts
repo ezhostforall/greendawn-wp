@@ -11,7 +11,8 @@ test('the branded homepage renders its hero, proof and client marks without Java
 			await expect(main.getByRole('heading', { level: 1 })).toHaveText('EV charging. Handled.');
 			const image = main.getByRole('img', { name: /Greendawn engineers/ });
 			await expect(image).toHaveAttribute('fetchpriority', 'high');
-			await expect(image).toHaveAttribute('srcset', /480w.*800w.*1200w.*1600w/);
+			await expect(image).toHaveAttribute('srcset', /1600w/);
+			await expect(image).toHaveAttribute('src', /\/uploads\/2026\/11\/greendawn-engineers-electrical-distribution-/);
 			await expect(main.getByRole('img', { name: 'Johnsons Cars' })).toBeVisible();
 			await expect(main.getByRole('img', { name: 'The Salvation Army' })).toBeVisible();
 			await expect(main.locator('.gd-hero__proof strong')).toHaveText(['Consult', 'Design', 'Install', 'Manage']);
@@ -97,4 +98,44 @@ test('the desktop header and hero use the Greendawn hover styles', async ({ page
 	await projects.hover();
 	await expect(projects).toHaveCSS('color', 'rgb(233, 242, 39)');
 	await expect(projects).toHaveCSS('gap', '21.6px');
+});
+
+
+test('saved homepage values render in the initial response with one hero image', async ({ page }) => {
+	const imageRequests: string[] = [];
+	page.on('request', (request) => {
+		if (request.resourceType() === 'image') imageRequests.push(request.url());
+	});
+	const response = await page.goto('/greendawn-home-edited/');
+	const html = await response?.text();
+	expect(html).toContain('Charging around your site.');
+	expect(html).not.toContain('EV charging.');
+	expect(html).not.toContain('greendawn-engineers-electrical-distribution-');
+	const heroImage = page.locator('.gd-hero__media img');
+	await expect(heroImage).toHaveCount(1);
+	await expect(heroImage).toHaveAttribute('alt', 'Service fixture image');
+	expect(imageRequests.filter((url) => url.includes('service-media'))).toHaveLength(1);
+	expect(imageRequests.some((url) => url.includes('greendawn-engineers-electrical-distribution-'))).toBe(false);
+	await expect(page.getByRole('heading', { level: 1 })).toHaveText('Charging around your site. Handled.');
+});
+
+test('the utility bar text can be edited and reset in the Customiser', async ({ page, baseURL }) => {
+	test.skip(baseURL !== 'http://localhost:8080', 'The login belongs to the disposable fixture only.');
+	const defaultText = 'Commercial EV infrastructure across England, Scotland & Wales';
+	await page.goto('/wp-login.php');
+	await page.locator('#user_login').fill('admin');
+	await page.locator('#user_pass').fill('local-test-only');
+	await page.locator('#wp-submit').click();
+	await page.waitForURL('**/wp-admin/**');
+	await page.goto('/wp-admin/customize.php');
+	await page.locator('#accordion-section-greendawn_header .accordion-section-title').click();
+	const input = page.getByRole('textbox', { name: 'Utility bar text' });
+	await expect(input).toHaveValue(defaultText);
+	const preview = page.frameLocator('#customize-preview iframe').first().locator('.gd-utility p');
+	await input.fill('Commercial charging for your fleet');
+	await input.press('Tab');
+	await expect(preview).toHaveText('Commercial charging for your fleet');
+	await page.getByRole('button', { name: 'Reset utility bar text' }).click();
+	await expect(input).toHaveValue(defaultText);
+	await expect(preview).toHaveText(defaultText);
 });

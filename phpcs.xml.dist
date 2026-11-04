@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<ruleset name="WP Starter">
+<ruleset name="Greendawn">
 	<description>WordPress Coding Standards for the theme, plugin and MU plugin.</description>
 
 	<file>theme</file>
@@ -30,8 +30,8 @@
 	<rule ref="WordPress.WP.I18n">
 		<properties>
 			<property name="text_domain" type="array">
-				<element value="wp-starter"/>
-				<element value="agency-core"/>
+				<element value="greendawn"/>
+				<element value="greendawn-core"/>
 				<element value="ezhost-updater"/>
 			</property>
 		</properties>
@@ -40,10 +40,10 @@
 	<rule ref="WordPress.NamingConventions.PrefixAllGlobals">
 		<properties>
 			<property name="prefixes" type="array">
-				<element value="wp_starter"/>
-				<element value="WP_STARTER"/>
-				<element value="agency_core"/>
-				<element value="Agency_Core"/>
+				<element value="greendawn"/>
+				<element value="GREENDAWN"/>
+				<element value="greendawn_core"/>
+				<element value="Greendawn_Core"/>
 				<element value="ezhost_updater"/>
 				<element value="EZHOST_UPDATER"/>
 				<element value="EZHost_Updater"/>

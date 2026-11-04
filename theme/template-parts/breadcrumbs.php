@@ -2,9 +2,9 @@
 /**
  * Breadcrumbs (Rank Math when available).
  *
- * @package WP_Starter
+ * @package Greendawn
  */
 
 defined( 'ABSPATH' ) || exit;
 
-wp_starter_breadcrumbs();
+greendawn_breadcrumbs();

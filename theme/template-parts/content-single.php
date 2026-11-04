@@ -2,7 +2,7 @@
 /**
  * Single post content.
  *
- * @package WP_Starter
+ * @package Greendawn
  */
 
 defined( 'ABSPATH' ) || exit;

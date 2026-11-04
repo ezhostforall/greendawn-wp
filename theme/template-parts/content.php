@@ -2,7 +2,7 @@
 /**
  * Post summary card used in loops.
  *
- * @package WP_Starter
+ * @package Greendawn
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -19,6 +19,6 @@ defined( 'ABSPATH' ) || exit;
 		</a>
 	<?php endif; ?>
 	<h2 class="card__title type-subheading"><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h2>
-	<p class="entry-meta"><?php wp_starter_posted_on(); ?></p>
+	<p class="entry-meta"><?php greendawn_posted_on(); ?></p>
 	<div class="entry-summary"><?php the_excerpt(); ?></div>
 </article>

@@ -1,19 +1,19 @@
 <?php
 /**
- * Plugin Name: Agency Core Environment
+ * Plugin Name: Greendawn Core Environment
  * Description: Development/staging safeguards: routes mail to Mailpit and blocks outbound agency integrations outside production.
  * Version: 0.1.0
  * Author: EZ Host For All
  * License: GPL-2.0-or-later
  *
- * @package Agency_Core
+ * @package Greendawn_Core
  */
 
 defined( 'ABSPATH' ) || exit;
 
 // Never allow agency integrations (webhooks etc.) to fire from non-production environments.
 if ( 'production' !== wp_get_environment_type() ) {
-	add_filter( 'agency_core_allow_outbound', '__return_false' );
+	add_filter( 'greendawn_core_allow_outbound', '__return_false' );
 }
 
 // Capture all mail in Mailpit when the local environment provides an SMTP host.

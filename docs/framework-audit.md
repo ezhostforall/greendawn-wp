@@ -6,7 +6,7 @@ Scope: M0 and the first v0.4.0 foundation PRs. This is a source audit, not appro
 
 - Default branch `main`: `81924c7cb445e51df46e38c466964c3726c0a0e6`.
 - Source package, theme constant/header and both plugin constants/headers: **0.3.0**. README previously said 0.2.0; this documentation PR corrects that drift.
-- GitHub release **v0.3.0** is published, non-draft and stable. Assets: theme, Agency Core and EZ Host Updater ZIPs, `updates.json`, `checksums.sha256`.
+- GitHub release **v0.3.0** is published, non-draft and stable. Assets: theme, Greendawn Core and EZ Host Updater ZIPs, `updates.json`, `checksums.sha256`.
 - GitHub's latest main CI and manual promotion runs passed. A hosted staging smoke run also passed. These are historical workflow results, not new staging verification.
 - The brief reports all three native WordPress updates installed successfully. Installed staging versions, current candidate pins, backups, editor behaviour and rollback were not independently inspected in this audit.
 - No open PRs or equivalent roadmap issues existed when checked. Issue #7 is closed; do not revive Codespaces WordPress as a daily development requirement.
@@ -138,26 +138,26 @@ M1 requires two independently initialised projects to build/package with correct
 - Initial `pnpm check` stopped on the Node test's generated-PHP syntax check because PHP was absent in this runner; it did not establish a PHP code failure. PHP/Composer provisioning and CI verification are recorded in the implementation PRs.
 - No WordPress database, live configuration, production site or Astro source was modified.
 
-References: [baseline CI](https://github.com/ezhostforall/wp-starter/actions/runs/40768246539), [stable promotion](https://github.com/ezhostforall/wp-starter/actions/runs/40768516912), [historical hosted smoke](https://github.com/ezhostforall/wp-starter/actions/runs/40767894006).
+References: [baseline CI](https://github.com/ezhostforall/greendawn-wp/actions/runs/40768246539), [stable promotion](https://github.com/ezhostforall/greendawn-wp/actions/runs/40768516912), [historical hosted smoke](https://github.com/ezhostforall/greendawn-wp/actions/runs/40767894006).
 
 ## First execution cycle — preparation record
 
 The following were prepared as separate PRs and have subsequently been merged; the original verification record is retained below:
 
-- [Audit and decisions, PR #24](https://github.com/ezhostforall/wp-starter/pull/24).
-- [Initialisation hardening, PR #25](https://github.com/ezhostforall/wp-starter/pull/25): 13 Node tests including two independently built/packaged client copies; all source checks passed. [CI passed](https://github.com/ezhostforall/wp-starter/actions/runs/41521037642).
-- [Token authority, PR #26](https://github.com/ezhostforall/wp-starter/pull/26): 9 Node tests, local source/package checks passed; initial CI passed 14 browser tests including authenticated disposable editor parity and two brand overrides. Browser evidence is retained by the updated workflow; inspect the PR's latest run before merging.
-- [Updater lifecycle assessment, PR #27](https://github.com/ezhostforall/wp-starter/pull/27): separate decision-only proposal, no migration.
+- [Audit and decisions, PR #24](https://github.com/ezhostforall/greendawn-wp/pull/24).
+- [Initialisation hardening, PR #25](https://github.com/ezhostforall/greendawn-wp/pull/25): 13 Node tests including two independently built/packaged client copies; all source checks passed. [CI passed](https://github.com/ezhostforall/greendawn-wp/actions/runs/41521037642).
+- [Token authority, PR #26](https://github.com/ezhostforall/greendawn-wp/pull/26): 9 Node tests, local source/package checks passed; initial CI passed 14 browser tests including authenticated disposable editor parity and two brand overrides. Browser evidence is retained by the updated workflow; inspect the PR's latest run before merging.
+- [Updater lifecycle assessment, PR #27](https://github.com/ezhostforall/greendawn-wp/pull/27): separate decision-only proposal, no migration.
 
-After PHP/Composer were provisioned, baseline and implementation `pnpm check`, `composer run syntax`, `pnpm package` and `node scripts/validate-release.mjs` passed locally. PHPUnit: 11 tests, 31 assertions. Frozen JavaScript lockfile install succeeded. CI also verifies locked production dependencies. Composer installation still reports a pre-existing stale lockfile hash; [the tooling backlog](https://github.com/ezhostforall/wp-starter/issues) tracks reconciliation separately from runtime changes.
+After PHP/Composer were provisioned, baseline and implementation `pnpm check`, `composer run syntax`, `pnpm package` and `node scripts/validate-release.mjs` passed locally. PHPUnit: 11 tests, 31 assertions. Frozen JavaScript lockfile install succeeded. CI also verifies locked production dependencies. Composer installation still reports a pre-existing stale lockfile hash; [the tooling backlog](https://github.com/ezhostforall/greendawn-wp/issues) tracks reconciliation separately from runtime changes.
 
 Remaining: review/accept foundation decisions and PRs, resolve configuration/tooling follow-ons, then prepare a 0.4.0 candidate and perform hosted editor/native update/rollback acceptance. Responsive navigation and the reusable UI milestone start after that foundation acceptance. Homecare repository identification and client issue creation remain M3 work; no client repository, production site or WordPress database was changed.
 
 ## Integration and v0.4.0 preparation
 
-PRs #24, #25, #26 and #27 were reviewed/merged by the maintainer. The integrated default branch at `5b54ba2d8221e20e42e85e0fa4fb0fc8dcb40f26` passed [all CI jobs](https://github.com/ezhostforall/wp-starter/actions/runs/41524574506); local checks passed 14 Node tests, 11 PHPUnit tests/31 assertions, builds, packaging and checksums. Issues #10–#13 are complete; hosted release acceptance is a separate gate.
+PRs #24, #25, #26 and #27 were reviewed/merged by the maintainer. The integrated default branch at `5b54ba2d8221e20e42e85e0fa4fb0fc8dcb40f26` passed [all CI jobs](https://github.com/ezhostforall/greendawn-wp/actions/runs/41524574506); local checks passed 14 Node tests, 11 PHPUnit tests/31 assertions, builds, packaging and checksums. Issues #10–#13 are complete; hosted release acceptance is a separate gate.
 
-The remaining foundation fixes are [Composer lock consistency, PR #29](https://github.com/ezhostforall/wp-starter/pull/29) and [client configuration conventions, PR #30](https://github.com/ezhostforall/wp-starter/pull/30). Merge/review both before tagging the 0.4.0 candidate. Configuration checks now evaluate the PHP example through a disposable bootstrap and exercise Git ignore behaviour; no real installation configuration is executed or edited.
+The remaining foundation fixes are [Composer lock consistency, PR #29](https://github.com/ezhostforall/greendawn-wp/pull/29) and [client configuration conventions, PR #30](https://github.com/ezhostforall/greendawn-wp/pull/30). Merge/review both before tagging the 0.4.0 candidate. Configuration checks now evaluate the PHP example through a disposable bootstrap and exercise Git ignore behaviour; no real installation configuration is executed or edited.
 
 The release-preparation change sets source/package headers to 0.4.0 and supplies [the candidate acceptance checklist](releases/0.4.0.md). Publishing the candidate, native hosted updates, saved block/editor checks and rollback are not complete merely because these source changes pass. The existing 0.3.0 release stays stable/latest until explicit promotion of the same tested candidate assets.
 

@@ -5,18 +5,18 @@
  * Args: label (string), start (int). Server-provided config is JSON-encoded into a data
  * attribute and validated again in TypeScript. The inner paragraph is the no-JS fallback.
  *
- * @package WP_Starter
+ * @package Greendawn
  */
 
 defined( 'ABSPATH' ) || exit;
 
-$wp_starter_config = array(
-	'label' => isset( $args['label'] ) ? (string) $args['label'] : __( 'Count', 'wp-starter' ),
+$greendawn_config = array(
+	'label' => isset( $args['label'] ) ? (string) $args['label'] : __( 'Count', 'greendawn' ),
 	'start' => isset( $args['start'] ) ? (int) $args['start'] : 0,
 );
 
-wp_starter_enqueue_entry( 'react-example' );
+greendawn_enqueue_entry( 'react-example' );
 ?>
-<div data-react-root="example" data-config="<?php echo esc_attr( (string) wp_json_encode( $wp_starter_config ) ); ?>">
-	<p><?php esc_html_e( 'This interactive example requires JavaScript.', 'wp-starter' ); ?></p>
+<div data-react-root="example" data-config="<?php echo esc_attr( (string) wp_json_encode( $greendawn_config ) ); ?>">
+	<p><?php esc_html_e( 'This interactive example requires JavaScript.', 'greendawn' ); ?></p>
 </div>

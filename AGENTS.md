@@ -6,9 +6,9 @@
 - Small, surgical changes. Do not add frameworks, CSS frameworks, paid plugins or speculative features.
 
 ## Identifiers (must stay initialisable)
-`scripts/init-project.mjs` rewrites these tokens: `wp-starter` (slug/text domain), `wp_starter` (function prefix), `WP_STARTER` (constants), `WP_Starter` (docblock package), `WP Starter` (name), `wp-starter.localhost`, and the plugin equivalents `agency-core`, `agency_core`, `AGENCY_CORE`, `Agency_Core`, `Agency Core`.
-- Prefix every global PHP function, constant, hook and shortcode with `wp_starter_` / `agency_core_`.
-- Text domain strings must be exactly `'wp-starter'` (single quotes). Do not use it for other quoted values.
+`scripts/init-project.mjs` rewrites these tokens: `greendawn` (slug/text domain), `greendawn` (function prefix), `GREENDAWN` (constants), `Greendawn` (docblock package), `Greendawn` (name), `greendawn.localhost`, and the plugin equivalents `greendawn-core`, `greendawn_core`, `GREENDAWN_CORE`, `Greendawn_Core`, `Greendawn Core`.
+- Prefix every global PHP function, constant, hook and shortcode with `greendawn_` / `greendawn_core_`.
+- Text domain strings must be exactly `'greendawn'` (single quotes). Do not use it for other quoted values.
 - Do not introduce a new project-specific identifier without teaching `init-project.mjs` and `tests/node/init-project.test.mjs` about it.
 - Initialisation records `project.identity.json`, accepts explicit `--repository` and `--staging-url`, and must validate all edits/renames before writing. Dry-run reports the same plan without writing. Preserve `plugins/ezhost-updater/` bytes and author metadata. Run initialisation only on clean source copies without private configuration.
 
@@ -19,8 +19,8 @@
 - The theme must work when Rank Math, SCF and Pressidium are absent. Do not output SEO metadata the theme does not own.
 
 ## Frontend
-- TypeScript strict mode, ESLint clean. Sources in `theme/src`; add new Vite entries to both `vite.config.ts` and `wp_starter_entries()`.
-- Load page-specific code with `wp_starter_enqueue_entry()` or dynamic `import()`; never add always-loaded dependencies casually.
+- TypeScript strict mode, ESLint clean. Sources in `theme/src`; add new Vite entries to both `vite.config.ts` and `greendawn_entries()`.
+- Load page-specific code with `greendawn_enqueue_entry()` or dynamic `import()`; never add always-loaded dependencies casually.
 - Respect `prefers-reduced-motion` and clean up listeners/animations.
 
 ## Before finishing

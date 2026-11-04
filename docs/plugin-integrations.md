@@ -17,10 +17,10 @@ On staging, verify that the notice is visible to an administrator with Contact F
 - Do not add a second SEO system to the theme; extend Rank Math through its filters.
 
 ## Secure Custom Fields (free)
-- Local JSON: the theme loads/saves field groups from `theme/acf-json` (filter `wp_starter_scf_json_path`). Commit the JSON.
+- Local JSON: the theme loads/saves field groups from `theme/acf-json` (filter `greendawn_scf_json_path`). Commit the JSON.
 - **Recommended:** keep a client's content model in a site-specific plugin, point the filter at that plugin's `acf-json` directory, and register post types and options pages there so content survives a theme change.
-- Helpers: `wp_starter_get_field( 'name', $post_id, 'default' )` returns the raw value or a default (and works when SCF is inactive); `wp_starter_the_field( 'name', 'text|html|url|attr' )` echoes escaped scalar values. Always escape raw values from `wp_starter_get_field()` yourself.
-- Options pages: register with `acf_add_options_page()` in the site plugin (guarded by `function_exists`), read with `wp_starter_get_field( 'name', 'option' )`.
+- Helpers: `greendawn_get_field( 'name', $post_id, 'default' )` returns the raw value or a default (and works when SCF is inactive); `greendawn_the_field( 'name', 'text|html|url|attr' )` echoes escaped scalar values. Always escape raw values from `greendawn_get_field()` yourself.
+- Options pages: register with `acf_add_options_page()` in the site plugin (guarded by `function_exists`), read with `greendawn_get_field( 'name', 'option' )`.
 - Do not commit client field groups to the starter.
 
 ## Pressidium Cookie Consent (free)

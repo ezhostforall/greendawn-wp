@@ -2,7 +2,7 @@
 /**
  * Card grid and pagination for post listings.
  *
- * @package WP_Starter
+ * @package Greendawn
  */
 
 defined( 'ABSPATH' ) || exit;

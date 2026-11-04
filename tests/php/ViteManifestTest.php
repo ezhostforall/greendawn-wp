@@ -19,7 +19,7 @@ final class ViteManifestTest extends TestCase {
 	}
 
 	public function test_resolves_file_css_and_static_imports(): void {
-		$resolved = wp_starter_resolve_manifest_entry( $this->manifest(), 'src/scripts/main.ts' );
+		$resolved = greendawn_resolve_manifest_entry( $this->manifest(), 'src/scripts/main.ts' );
 
 		$this->assertSame( 'assets/main-abc.js', $resolved['file'] );
 		$this->assertSame( array( 'assets/main-abc.css', 'assets/shared-def.css' ), $resolved['css'] );
@@ -27,14 +27,14 @@ final class ViteManifestTest extends TestCase {
 	}
 
 	public function test_css_only_entry_is_its_own_stylesheet(): void {
-		$resolved = wp_starter_resolve_manifest_entry( $this->manifest(), 'src/styles/editor.css' );
+		$resolved = greendawn_resolve_manifest_entry( $this->manifest(), 'src/styles/editor.css' );
 
 		$this->assertSame( array( 'assets/editor-ghi.css' ), $resolved['css'] );
 	}
 
 	public function test_missing_entry_returns_null(): void {
-		$this->assertNull( wp_starter_resolve_manifest_entry( $this->manifest(), 'src/missing.ts' ) );
-		$this->assertNull( wp_starter_resolve_manifest_entry( array(), 'src/scripts/main.ts' ) );
+		$this->assertNull( greendawn_resolve_manifest_entry( $this->manifest(), 'src/missing.ts' ) );
+		$this->assertNull( greendawn_resolve_manifest_entry( array(), 'src/scripts/main.ts' ) );
 	}
 
 	public function test_circular_imports_terminate(): void {
@@ -43,7 +43,7 @@ final class ViteManifestTest extends TestCase {
 			'b' => array( 'file' => 'b.js', 'imports' => array( 'a' ) ),
 		);
 
-		$resolved = wp_starter_resolve_manifest_entry( $manifest, 'a' );
+		$resolved = greendawn_resolve_manifest_entry( $manifest, 'a' );
 
 		$this->assertSame( array( 'b.js', 'a.js' ), $resolved['imports'] );
 	}

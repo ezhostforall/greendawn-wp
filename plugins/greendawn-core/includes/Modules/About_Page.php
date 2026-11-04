@@ -2,10 +2,10 @@
 /**
  * Structured content for the opt-in About template.
  *
- * @package Agency_Core
+ * @package Greendawn_Core
  */
 
-namespace Agency_Core\Modules;
+namespace Greendawn_Core\Modules;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -68,7 +68,7 @@ final class About_Page implements Module_Interface {
 		acf_add_local_field_group(
 			array(
 				'key'      => 'group_starter_about',
-				'title'    => __( 'About page', 'agency-core' ),
+				'title'    => __( 'About page', 'greendawn-core' ),
 				'location' => array(
 					array(
 						array(
@@ -82,20 +82,20 @@ final class About_Page implements Module_Interface {
 					array(
 						'key'       => 'field_starter_about_intro',
 						'name'      => 'about_intro',
-						'label'     => __( 'Introduction', 'agency-core' ),
+						'label'     => __( 'Introduction', 'greendawn-core' ),
 						'type'      => 'textarea',
 						'maxlength' => 500,
 					),
 					array(
 						'key'   => 'field_starter_about_story_heading',
 						'name'  => 'about_story_heading',
-						'label' => __( 'Story heading', 'agency-core' ),
+						'label' => __( 'Story heading', 'greendawn-core' ),
 						'type'  => 'text',
 					),
 					array(
 						'key'          => 'field_starter_about_story',
 						'name'         => 'about_story',
-						'label'        => __( 'Story', 'agency-core' ),
+						'label'        => __( 'Story', 'greendawn-core' ),
 						'type'         => 'wysiwyg',
 						'toolbar'      => 'basic',
 						'media_upload' => 0,
@@ -103,20 +103,20 @@ final class About_Page implements Module_Interface {
 					array(
 						'key'           => 'field_starter_about_story_image',
 						'name'          => 'about_story_image',
-						'label'         => __( 'Story image', 'agency-core' ),
+						'label'         => __( 'Story image', 'greendawn-core' ),
 						'type'          => 'image',
 						'return_format' => 'id',
 					),
 					array(
 						'key'   => 'field_starter_about_cta_label',
 						'name'  => 'about_cta_label',
-						'label' => __( 'Contact button label', 'agency-core' ),
+						'label' => __( 'Contact button label', 'greendawn-core' ),
 						'type'  => 'text',
 					),
 					array(
 						'key'   => 'field_starter_about_cta_url',
 						'name'  => 'about_cta_url',
-						'label' => __( 'Contact button URL', 'agency-core' ),
+						'label' => __( 'Contact button URL', 'greendawn-core' ),
 						'type'  => 'url',
 					),
 				),

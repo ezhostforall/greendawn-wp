@@ -1,11 +1,11 @@
 <?php
 /**
- * Agency Core settings screen.
+ * Greendawn Core settings screen.
  *
- * @package Agency_Core
+ * @package Greendawn_Core
  */
 
-namespace Agency_Core;
+namespace Greendawn_Core;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -20,8 +20,8 @@ final class Settings {
 	public static function register(): void {
 		add_action( 'admin_menu', array( self::class, 'add_page' ) );
 		add_action( 'admin_init', array( self::class, 'register_settings' ) );
-		add_action( 'add_option_agency_core_services_enabled', array( self::class, 'invalidate_rewrites' ) );
-		add_action( 'update_option_agency_core_services_enabled', array( self::class, 'invalidate_rewrites' ) );
+		add_action( 'add_option_greendawn_core_services_enabled', array( self::class, 'invalidate_rewrites' ) );
+		add_action( 'update_option_greendawn_core_services_enabled', array( self::class, 'invalidate_rewrites' ) );
 	}
 
 	/**
@@ -29,10 +29,10 @@ final class Settings {
 	 */
 	public static function add_page(): void {
 		add_options_page(
-			__( 'Agency Core', 'agency-core' ),
-			__( 'Agency Core', 'agency-core' ),
+			__( 'Greendawn Core', 'greendawn-core' ),
+			__( 'Greendawn Core', 'greendawn-core' ),
 			'manage_options',
-			'agency-core',
+			'greendawn-core',
 			array( self::class, 'render' )
 		);
 	}
@@ -42,8 +42,8 @@ final class Settings {
 	 */
 	public static function register_settings(): void {
 		register_setting(
-			'agency_core_settings',
-			'agency_core_services_enabled',
+			'greendawn_core_settings',
+			'greendawn_core_services_enabled',
 			array(
 				'type'              => 'boolean',
 				'default'           => false,
@@ -70,10 +70,10 @@ final class Settings {
 		$enabled = in_array( 'services', Plugin::enabled_modules(), true );
 		?>
 		<div class="wrap">
-			<h1><?php esc_html_e( 'Agency Core', 'agency-core' ); ?></h1>
+			<h1><?php esc_html_e( 'Greendawn Core', 'greendawn-core' ); ?></h1>
 			<?php if ( $enabled && ! function_exists( 'acf_add_local_field_group' ) ) : ?>
 				<div class="notice notice-warning">
-					<p><?php esc_html_e( 'Install and activate Secure Custom Fields to edit Service descriptions, benefits, FAQs and calls to action.', 'agency-core' ); ?></p>
+					<p><?php esc_html_e( 'Install and activate Secure Custom Fields to edit Service descriptions, benefits, FAQs and calls to action.', 'greendawn-core' ); ?></p>
 					<p>
 						<?php if ( current_user_can( 'install_plugins' ) ) : ?>
 							<a href="
@@ -89,24 +89,24 @@ final class Settings {
 								)
 							);
 							?>
-										"><?php esc_html_e( 'Find Secure Custom Fields', 'agency-core' ); ?></a>
+										"><?php esc_html_e( 'Find Secure Custom Fields', 'greendawn-core' ); ?></a>
 						<?php endif; ?>
 						<?php if ( current_user_can( 'activate_plugins' ) ) : ?>
-							<a href="<?php echo esc_url( admin_url( 'plugins.php' ) ); ?>"><?php esc_html_e( 'View installed plugins', 'agency-core' ); ?></a>
+							<a href="<?php echo esc_url( admin_url( 'plugins.php' ) ); ?>"><?php esc_html_e( 'View installed plugins', 'greendawn-core' ); ?></a>
 						<?php endif; ?>
 					</p>
 				</div>
 			<?php endif; ?>
 			<form action="options.php" method="post">
-				<?php settings_fields( 'agency_core_settings' ); ?>
+				<?php settings_fields( 'greendawn_core_settings' ); ?>
 				<p>
 					<label>
-						<input type="checkbox" name="agency_core_services_enabled" value="1" <?php checked( get_option( 'agency_core_services_enabled', false ) ); ?> />
-						<?php esc_html_e( 'Enable Services', 'agency-core' ); ?>
+						<input type="checkbox" name="greendawn_core_services_enabled" value="1" <?php checked( get_option( 'greendawn_core_services_enabled', false ) ); ?> />
+						<?php esc_html_e( 'Enable Services', 'greendawn-core' ); ?>
 					</label>
 				</p>
-				<?php if ( $enabled && ! get_option( 'agency_core_services_enabled', false ) ) : ?>
-					<p><?php esc_html_e( 'Services is enabled by this site’s configuration.', 'agency-core' ); ?></p>
+				<?php if ( $enabled && ! get_option( 'greendawn_core_services_enabled', false ) ) : ?>
+					<p><?php esc_html_e( 'Services is enabled by this site’s configuration.', 'greendawn-core' ); ?></p>
 				<?php endif; ?>
 				<?php submit_button(); ?>
 			</form>

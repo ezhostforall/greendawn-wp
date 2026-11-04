@@ -1,0 +1,13 @@
+{
+  "schema": 1,
+  "name": "Greendawn",
+  "slug": "greendawn",
+  "prefix": "greendawn",
+  "textDomain": "greendawn",
+  "hostname": "greendawn.localhost",
+  "author": "Greendawn",
+  "authorUri": "https://greendawn.co.uk/",
+  "repository": "ezhostforall/greendawn-wp",
+  "stagingUrl": "https://gd.ezhostforall.com/",
+  "starterVersion": "0.5.0"
+}

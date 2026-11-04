@@ -2,10 +2,10 @@
 /**
  * Structured content for the opt-in business homepage template.
  *
- * @package Agency_Core
+ * @package Greendawn_Core
  */
 
-namespace Agency_Core\Modules;
+namespace Greendawn_Core\Modules;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -68,7 +68,7 @@ final class Business_Homepage implements Module_Interface {
 		acf_add_local_field_group(
 			array(
 				'key'      => 'group_starter_business_homepage',
-				'title'    => __( 'Business homepage', 'agency-core' ),
+				'title'    => __( 'Business homepage', 'greendawn-core' ),
 				'location' => array(
 					array(
 						array(
@@ -82,22 +82,22 @@ final class Business_Homepage implements Module_Interface {
 					array(
 						'key'          => 'field_starter_home_hero_title',
 						'name'         => 'home_hero_title',
-						'label'        => __( 'Hero headline', 'agency-core' ),
-						'instructions' => __( 'Leave blank to use the Page title.', 'agency-core' ),
+						'label'        => __( 'Hero headline', 'greendawn-core' ),
+						'instructions' => __( 'Leave blank to use the Page title.', 'greendawn-core' ),
 						'type'         => 'text',
 						'maxlength'    => 120,
 					),
 					array(
 						'key'       => 'field_starter_home_hero_text',
 						'name'      => 'home_hero_text',
-						'label'     => __( 'Hero text', 'agency-core' ),
+						'label'     => __( 'Hero text', 'greendawn-core' ),
 						'type'      => 'textarea',
 						'maxlength' => 300,
 					),
 					array(
 						'key'          => 'field_starter_home_intro',
 						'name'         => 'home_intro',
-						'label'        => __( 'Business introduction', 'agency-core' ),
+						'label'        => __( 'Business introduction', 'greendawn-core' ),
 						'type'         => 'wysiwyg',
 						'toolbar'      => 'basic',
 						'media_upload' => 0,
@@ -105,7 +105,7 @@ final class Business_Homepage implements Module_Interface {
 					array(
 						'key'           => 'field_starter_home_services',
 						'name'          => 'home_featured_services',
-						'label'         => __( 'Featured services', 'agency-core' ),
+						'label'         => __( 'Featured services', 'greendawn-core' ),
 						'type'          => 'relationship',
 						'post_type'     => array( 'service' ),
 						'post_status'   => array( 'publish' ),
@@ -115,19 +115,19 @@ final class Business_Homepage implements Module_Interface {
 					array(
 						'key'   => 'field_starter_home_cta_heading',
 						'name'  => 'home_cta_heading',
-						'label' => __( 'Contact heading', 'agency-core' ),
+						'label' => __( 'Contact heading', 'greendawn-core' ),
 						'type'  => 'text',
 					),
 					array(
 						'key'   => 'field_starter_home_cta_label',
 						'name'  => 'home_cta_label',
-						'label' => __( 'Contact button label', 'agency-core' ),
+						'label' => __( 'Contact button label', 'greendawn-core' ),
 						'type'  => 'text',
 					),
 					array(
 						'key'   => 'field_starter_home_cta_url',
 						'name'  => 'home_cta_url',
-						'label' => __( 'Contact button URL', 'agency-core' ),
+						'label' => __( 'Contact button URL', 'greendawn-core' ),
 						'type'  => 'url',
 					),
 				),

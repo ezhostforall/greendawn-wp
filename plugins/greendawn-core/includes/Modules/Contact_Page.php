@@ -2,10 +2,10 @@
 /**
  * Structured content for the opt-in Contact template.
  *
- * @package Agency_Core
+ * @package Greendawn_Core
  */
 
-namespace Agency_Core\Modules;
+namespace Greendawn_Core\Modules;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -68,7 +68,7 @@ final class Contact_Page implements Module_Interface {
 		acf_add_local_field_group(
 			array(
 				'key'      => 'group_starter_contact',
-				'title'    => __( 'Contact details', 'agency-core' ),
+				'title'    => __( 'Contact details', 'greendawn-core' ),
 				'location' => array(
 					array(
 						array(
@@ -82,26 +82,26 @@ final class Contact_Page implements Module_Interface {
 					array(
 						'key'       => 'field_starter_contact_intro',
 						'name'      => 'contact_intro',
-						'label'     => __( 'Introduction', 'agency-core' ),
+						'label'     => __( 'Introduction', 'greendawn-core' ),
 						'type'      => 'textarea',
 						'maxlength' => 500,
 					),
 					array(
 						'key'   => 'field_starter_contact_phone',
 						'name'  => 'contact_phone',
-						'label' => __( 'Phone', 'agency-core' ),
+						'label' => __( 'Phone', 'greendawn-core' ),
 						'type'  => 'text',
 					),
 					array(
 						'key'   => 'field_starter_contact_email',
 						'name'  => 'contact_email',
-						'label' => __( 'Public email address', 'agency-core' ),
+						'label' => __( 'Public email address', 'greendawn-core' ),
 						'type'  => 'email',
 					),
 					array(
 						'key'   => 'field_starter_contact_address',
 						'name'  => 'contact_address',
-						'label' => __( 'Address', 'agency-core' ),
+						'label' => __( 'Address', 'greendawn-core' ),
 						'type'  => 'textarea',
 					),
 				),

@@ -2,7 +2,7 @@
 /**
  * Archive template (categories, tags, dates, authors, post type archives).
  *
- * @package WP_Starter
+ * @package Greendawn
  */
 
 defined( 'ABSPATH' ) || exit;

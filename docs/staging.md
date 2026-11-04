@@ -1,6 +1,6 @@
 # Persistent WordPress staging site
 
-**Current persistent staging URL:** https://wp-starter-theme.ezhostforall.com/. **Initial candidate update walkthrough:** [v0.3.0 checklist](releases/0.3.0.md). The redacted [wp-config template](../wp-config.example.php) is reference material only; retain the actual server's database credentials, salts and table prefix.
+**Current persistent staging URL:** https://gd.ezhostforall.com/. **Initial candidate update walkthrough:** [v0.3.0 checklist](releases/0.3.0.md). The redacted [wp-config template](../wp-config.example.php) is reference material only; retain the actual server's database credentials, salts and table prefix.
 
 **Next candidate preparation:** [v0.5.0 checklist](releases/0.5.0.md) covers the merged header/navigation and layout/typography foundations. v0.4.1 remains approved stable. This is a release plan, not evidence that v0.5.0 has been published or installed. Complete this staging batch before starting the footer foundation.
 
@@ -45,7 +45,7 @@ Record the candidate tag, source commit, installed theme and plugin versions, an
 - Check required-field feedback and confirm the mail destination is a test inbox before a synthetic successful submission. Record both the success message and receipt.
 - Confirm native update discovery and installation for the candidate. Rehearse recovery with the previous known-good packages and reinstall the candidate before promotion.
 
-The hosted smoke workflow covers availability. Use the acceptance record for these wider checks and track any gaps under [#23](https://github.com/ezhostforall/wp-starter/issues/23).
+The hosted smoke workflow covers availability. Use the acceptance record for these wider checks and track any gaps under [#23](https://github.com/ezhostforall/greendawn-wp/issues/23).
 
 ## Test a native WordPress update before releasing it to clients
 

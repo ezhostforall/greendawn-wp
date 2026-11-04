@@ -1,14 +1,14 @@
 # Service detail pages
 
-Agency Core ships the opt-in `services` module. It owns the Service post type and field schema. The theme renders Service entries with `single-service.php`. Client projects can adapt the module in their own Agency Core fork or replace it via `agency_core_available_modules`.
+Greendawn Core ships the opt-in `services` module. It owns the Service post type and field schema. The theme renders Service entries with `single-service.php`. Client projects can adapt the module in their own Greendawn Core fork or replace it via `greendawn_core_available_modules`.
 
 ## Enable on staging
 
-1. Update the theme and Agency Core through **Dashboard → Updates**.
-2. Open **Settings → Agency Core**, tick **Enable Services** and save. The setting refreshes the rewrite rules. If the site uses Plain permalinks, choose a pretty permalink structure to use the path below.
+1. Update the theme and Greendawn Core through **Dashboard → Updates**.
+2. Open **Settings → Greendawn Core**, tick **Enable Services** and save. The setting refreshes the rewrite rules. If the site uses Plain permalinks, choose a pretty permalink structure to use the path below.
 3. Follow the Secure Custom Fields link on that screen if SCF still needs to be installed or activated.
 
-Service entries use `/services/service-name/`, independent of the blog permalink prefix. The post type has no archive, so an ordinary Page can own `/services/`. Existing sites can still use the `agency_core_enabled_modules` filter to manage modules in code.
+Service entries use `/services/service-name/`, independent of the blog permalink prefix. The post type has no archive, so an ordinary Page can own `/services/`. Existing sites can still use the `greendawn_core_enabled_modules` filter to manage modules in code.
 
 When Services is enabled without SCF, the title, excerpt and featured image remain available through WordPress.
 

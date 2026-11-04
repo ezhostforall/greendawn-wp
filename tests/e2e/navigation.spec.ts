@@ -88,7 +88,7 @@ test('the mobile homepage starts with stable geometry while navigation and fonts
 	await page.setViewportSize({ width: 412, height: 823 });
 	let releaseAssets!: () => void;
 	const assetsReady = new Promise<void>((resolve) => { releaseAssets = resolve; });
-	await page.route(/\/wp-starter\/(?:dist\/assets\/main-[^/]+\.js|assets\/fonts\/[^/]+\.woff2)$/, async (route) => {
+	await page.route(/\/greendawn\/(?:dist\/assets\/main-[^/]+\.js|assets\/fonts\/[^/]+\.woff2)$/, async (route) => {
 		await assetsReady;
 		await route.continue();
 	});

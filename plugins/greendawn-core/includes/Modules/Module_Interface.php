@@ -2,10 +2,10 @@
 /**
  * Contract for optional modules.
  *
- * @package Agency_Core
+ * @package Greendawn_Core
  */
 
-namespace Agency_Core\Modules;
+namespace Greendawn_Core\Modules;
 
 defined( 'ABSPATH' ) || exit;
 

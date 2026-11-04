@@ -2,7 +2,7 @@
 /**
  * Service card for grids on business pages.
  *
- * @package WP_Starter
+ * @package Greendawn
  */
 
 defined( 'ABSPATH' ) || exit;

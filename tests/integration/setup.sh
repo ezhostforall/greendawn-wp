@@ -86,13 +86,13 @@ wp cli info
 echo "WordPress database connection and WP-CLI are ready."
 
 if ! wp core is-installed >/dev/null 2>&1; then
-  wp core install --url=http://localhost:8080 --title="WP Starter Test" \
+  wp core install --url=http://localhost:8080 --title="Greendawn Test" \
     --admin_user=admin --admin_password=local-test-only \
     --admin_email=admin@example.test --skip-email
 fi
 
-wp theme activate wp-starter
-wp plugin activate agency-core
+wp theme activate greendawn
+wp plugin activate greendawn-core
 wp plugin activate ezhost-updater
 wp eval 'if ( ! has_filter( "update_plugins_updates.ezhostforall.invalid" ) || ! has_filter( "update_themes_updates.ezhostforall.invalid" ) || ! has_filter( "upgrader_pre_download" ) ) { WP_CLI::error( "EZ Host updater hooks missing" ); } WP_CLI::success( "Updater registered without configuration" );'
 wp rewrite structure '/%postname%/' --hard
@@ -106,7 +106,7 @@ create_page() {
 }
 
 create_page about "About" '<!-- wp:paragraph --><p>Example page content.</p><!-- /wp:paragraph -->'
-create_page react-example "React example" '[wp_starter_react_example label="Clicks" start="0"]'
+create_page react-example "React example" '[greendawn_react_example label="Clicks" start="0"]'
 create_page editor-parity "Editor parity" "$(cat tests/fixtures/editor-parity.html)"
 create_page header-options "Header options" '<!-- wp:paragraph --><p>Optional header fixture.</p><!-- /wp:paragraph --><!-- wp:spacer {"height":"1800px"} --><div style="height:1800px" aria-hidden="true" class="wp-block-spacer"></div><!-- /wp:spacer -->'
 create_page header-empty "No menus" '<!-- wp:paragraph --><p>No assigned menus.</p><!-- /wp:paragraph -->'
@@ -144,7 +144,7 @@ support=$(wp menu item add-custom Utility Support 'http://localhost:8080/about/#
 wp menu item add-custom Utility 'Utility child omitted' 'http://localhost:8080/about/#utility-child' --parent-id="$support"
 wp menu location assign Utility utility
 # Exercise real service routes and native attachment metadata, without requiring SCF.
-wp option update agency_core_services_enabled 1
+wp option update greendawn_core_services_enabled 1
 create_page services "Services" '<p>Services overview fixture.</p>'
 services_page_id=$(wp post list --post_type=page --name=services --field=ID)
 wp post meta update "$services_page_id" _wp_page_template templates/services.php

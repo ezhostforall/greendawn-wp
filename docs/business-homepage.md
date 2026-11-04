@@ -1,6 +1,6 @@
 # Business homepage
 
-1. Install the candidate theme and Agency Core through Dashboard → Updates. Activate Secure Custom Fields. Enable Services in **Settings → Agency Core** to feature service cards.
+1. Install the candidate theme and Greendawn Core through Dashboard → Updates. Activate Secure Custom Fields. Enable Services in **Settings → Greendawn Core** to feature service cards.
 2. Assign the **Business Homepage** template to a Page. Save and reopen it to access the labelled fields.
 3. In **Settings → Reading**, select that Page as the static homepage. Leave the existing posts page assigned if the site has one.
 

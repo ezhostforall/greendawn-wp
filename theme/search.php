@@ -2,7 +2,7 @@
 /**
  * Search results template.
  *
- * @package WP_Starter
+ * @package Greendawn
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -14,7 +14,7 @@ get_template_part( 'template-parts/breadcrumbs' );
 	<h1 class="page-title">
 		<?php
 		/* translators: %s: search query. */
-		printf( esc_html__( 'Search results for: %s', 'wp-starter' ), '<span>' . esc_html( get_search_query() ) . '</span>' );
+		printf( esc_html__( 'Search results for: %s', 'greendawn' ), '<span>' . esc_html( get_search_query() ) . '</span>' );
 		?>
 	</h1>
 </header>

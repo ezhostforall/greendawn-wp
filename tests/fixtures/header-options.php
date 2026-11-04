@@ -8,9 +8,9 @@ if ( ! defined( 'ABSPATH' ) || 'local' !== wp_get_environment_type() || 'http://
 	return;
 }
 
-add_filter( 'theme_mod_wp_starter_header_sticky', static fn( $value ) => is_page( 'header-options' ) ? true : $value );
-add_filter( 'theme_mod_wp_starter_header_cta_label', static fn( $value ) => is_page( 'header-options' ) ? 'Talk to us' : $value );
-add_filter( 'theme_mod_wp_starter_header_cta_url', static fn( $value ) => is_page( 'header-options' ) ? home_url( '/about/' ) : $value );
+add_filter( 'theme_mod_greendawn_header_sticky', static fn( $value ) => is_page( 'header-options' ) ? true : $value );
+add_filter( 'theme_mod_greendawn_header_cta_label', static fn( $value ) => is_page( 'header-options' ) ? 'Talk to us' : $value );
+add_filter( 'theme_mod_greendawn_header_cta_url', static fn( $value ) => is_page( 'header-options' ) ? home_url( '/about/' ) : $value );
 add_filter(
 	'theme_mod_nav_menu_locations',
 	static function ( $locations ) {

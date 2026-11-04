@@ -2,7 +2,7 @@
 /**
  * Site-local brand overrides for shared theme.json roles.
  *
- * @package WP_Starter
+ * @package Greendawn
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -12,7 +12,7 @@ defined( 'ABSPATH' ) || exit;
  *
  * @return string[]
  */
-function wp_starter_brand_colour_roles(): array {
+function greendawn_brand_colour_roles(): array {
 	return array( 'text', 'heading', 'background', 'surface', 'muted', 'accent', 'link', 'focus', 'border', 'on-accent', 'accent-hover' );
 }
 
@@ -22,7 +22,7 @@ function wp_starter_brand_colour_roles(): array {
  * @param array $data Theme JSON data.
  * @return array<string, string>
  */
-function wp_starter_brand_fonts( array $data ): array {
+function greendawn_brand_fonts( array $data ): array {
 	$fonts = array();
 	foreach ( $data['settings']['typography']['fontFamilies']['theme'] ?? array() as $font ) {
 		if ( ! empty( $font['name'] ) && preg_match( '/^[a-z0-9-]+$/D', $font['slug'] ?? '' ) ) {
@@ -38,15 +38,15 @@ function wp_starter_brand_fonts( array $data ): array {
  * @param WP_Theme_JSON_Data $theme_json Active theme data.
  * @return WP_Theme_JSON_Data
  */
-function wp_starter_apply_brand( WP_Theme_JSON_Data $theme_json ): WP_Theme_JSON_Data {
+function greendawn_apply_brand( WP_Theme_JSON_Data $theme_json ): WP_Theme_JSON_Data {
 	$data     = $theme_json->get_data();
 	$palette  = $data['settings']['color']['palette']['theme'] ?? array();
 	$settings = array();
 	$changed  = false;
 
 	foreach ( $palette as &$colour ) {
-		if ( in_array( $colour['slug'], wp_starter_brand_colour_roles(), true ) ) {
-			$value = sanitize_hex_color( (string) get_theme_mod( 'wp_starter_brand_colour_' . $colour['slug'], '' ) );
+		if ( in_array( $colour['slug'], greendawn_brand_colour_roles(), true ) ) {
+			$value = sanitize_hex_color( (string) get_theme_mod( 'greendawn_brand_colour_' . $colour['slug'], '' ) );
 			if ( $value ) {
 				$colour['color'] = $value;
 				$changed         = true;
@@ -59,9 +59,9 @@ function wp_starter_apply_brand( WP_Theme_JSON_Data $theme_json ): WP_Theme_JSON
 		$settings['color']['palette'] = $palette;
 	}
 
-	$fonts = wp_starter_brand_fonts( $data );
+	$fonts = greendawn_brand_fonts( $data );
 	foreach ( array( 'body', 'heading' ) as $role ) {
-		$value = (string) get_theme_mod( 'wp_starter_brand_font_' . $role, '' );
+		$value = (string) get_theme_mod( 'greendawn_brand_font_' . $role, '' );
 		if ( isset( $fonts[ $value ] ) ) {
 			$settings['custom']['brand'][ $role ] = 'var(--wp--preset--font-family--' . $value . ')';
 		}
@@ -77,31 +77,31 @@ function wp_starter_apply_brand( WP_Theme_JSON_Data $theme_json ): WP_Theme_JSON
 	}
 	return $theme_json;
 }
-add_filter( 'wp_theme_json_data_theme', 'wp_starter_apply_brand' );
+add_filter( 'wp_theme_json_data_theme', 'greendawn_apply_brand' );
 
 /**
  * Registers administrator-only brand controls.
  *
  * @param WP_Customize_Manager $customizer Customizer instance.
  */
-function wp_starter_customize_brand( WP_Customize_Manager $customizer ): void {
+function greendawn_customize_brand( WP_Customize_Manager $customizer ): void {
 	$customizer->add_section(
-		'wp_starter_brand',
+		'greendawn_brand',
 		array(
-			'title'       => __( 'Brand', 'wp-starter' ),
+			'title'       => __( 'Brand', 'greendawn' ),
 			'capability'  => 'manage_options',
-			'description' => __( 'Clear a colour or choose Theme default for a font to restore that setting. Check text, links, buttons and focus indicators for contrast before publishing.', 'wp-starter' ),
+			'description' => __( 'Clear a colour or choose Theme default for a font to restore that setting. Check text, links, buttons and focus indicators for contrast before publishing.', 'greendawn' ),
 		)
 	);
 
 	$data     = WP_Theme_JSON_Resolver::get_theme_data()->get_raw_data();
 	$settings = array();
 	foreach ( $data['settings']['color']['palette']['theme'] ?? array() as $colour ) {
-		if ( ! in_array( $colour['slug'], wp_starter_brand_colour_roles(), true ) ) {
+		if ( ! in_array( $colour['slug'], greendawn_brand_colour_roles(), true ) ) {
 			continue;
 		}
 
-		$id = 'wp_starter_brand_colour_' . $colour['slug'];
+		$id = 'greendawn_brand_colour_' . $colour['slug'];
 		$customizer->add_setting(
 			$id,
 			array(
@@ -116,21 +116,21 @@ function wp_starter_customize_brand( WP_Customize_Manager $customizer ): void {
 				$id,
 				array(
 					'label'   => $colour['name'],
-					'section' => 'wp_starter_brand',
+					'section' => 'greendawn_brand',
 				)
 			)
 		);
 		$settings[] = $id;
 	}
 
-	$choices = array( '' => __( 'Theme default', 'wp-starter' ) ) + wp_starter_brand_fonts( $data );
+	$choices = array( '' => __( 'Theme default', 'greendawn' ) ) + greendawn_brand_fonts( $data );
 	$labels  = array(
-		'body'    => __( 'Body font', 'wp-starter' ),
-		'heading' => __( 'Heading font', 'wp-starter' ),
+		'body'    => __( 'Body font', 'greendawn' ),
+		'heading' => __( 'Heading font', 'greendawn' ),
 	);
 
 	foreach ( $labels as $role => $label ) {
-		$id = 'wp_starter_brand_font_' . $role;
+		$id = 'greendawn_brand_font_' . $role;
 		$customizer->add_setting(
 			$id,
 			array(
@@ -147,7 +147,7 @@ function wp_starter_customize_brand( WP_Customize_Manager $customizer ): void {
 				'type'    => 'select',
 				'label'   => $label,
 				'choices' => $choices,
-				'section' => 'wp_starter_brand',
+				'section' => 'greendawn_brand',
 			)
 		);
 		$settings[] = $id;
@@ -162,7 +162,7 @@ function wp_starter_customize_brand( WP_Customize_Manager $customizer ): void {
 			$config = wp_json_encode(
 				array(
 					'ids'   => $settings,
-					'label' => __( 'Reset brand styles', 'wp-starter' ),
+					'label' => __( 'Reset brand styles', 'greendawn' ),
 				),
 				JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT
 			);
@@ -189,7 +189,7 @@ function wp_starter_customize_brand( WP_Customize_Manager $customizer ): void {
 		}
 	);
 }
-add_action( 'customize_register', 'wp_starter_customize_brand' );
+add_action( 'customize_register', 'greendawn_customize_brand' );
 
 // Rebuild the theme data after Customizer settings begin filtering theme mods.
 add_action( 'customize_preview_init', array( 'WP_Theme_JSON_Resolver', 'clean_cached_data' ), 0 );

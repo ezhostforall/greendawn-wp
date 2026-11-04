@@ -3,12 +3,12 @@
  * Diagnostics module: an administrator-only REST status endpoint. It also serves as the
  * reference for secure REST registration (explicit permission callback, no public data).
  *
- * @package Agency_Core
+ * @package Greendawn_Core
  */
 
-namespace Agency_Core\Modules;
+namespace Greendawn_Core\Modules;
 
-use Agency_Core\Plugin;
+use Greendawn_Core\Plugin;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -25,11 +25,11 @@ final class Diagnostics implements Module_Interface {
 	}
 
 	/**
-	 * Registers GET /agency-core/v1/status.
+	 * Registers GET /greendawn-core/v1/status.
 	 */
 	public function register_routes(): void {
 		register_rest_route(
-			'agency-core/v1',
+			'greendawn-core/v1',
 			'/status',
 			array(
 				'methods'             => 'GET',
@@ -45,7 +45,7 @@ final class Diagnostics implements Module_Interface {
 	public function get_status(): \WP_REST_Response {
 		return rest_ensure_response(
 			array(
-				'plugin_version'   => AGENCY_CORE_VERSION,
+				'plugin_version'   => GREENDAWN_CORE_VERSION,
 				'environment'      => wp_get_environment_type(),
 				'php_version'      => PHP_VERSION,
 				'enabled_modules'  => Plugin::enabled_modules(),

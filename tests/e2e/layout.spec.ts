@@ -117,7 +117,7 @@ test('two server-side brand token sets reuse the same markup and compiled CSS', 
 	]) {
 		await page.setViewportSize({ width: 1440, height: 1000 });
 		await page.goto(`/${brand.slug}/`);
-		stylesheets.push(await page.locator('link[href*="/themes/wp-starter/dist/assets/main-"]').getAttribute('href') ?? '');
+		stylesheets.push(await page.locator('link[href*="/themes/greendawn/dist/assets/main-"]').getAttribute('href') ?? '');
 		await expect(page.locator('body')).toHaveCSS('font-family', new RegExp(brand.font));
 		await expect(page.locator('#layout-full')).toHaveCSS('background-color', brand.accent);
 		await expect(page.locator('#layout-row')).toHaveCSS('gap', brand.space);

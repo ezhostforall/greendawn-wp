@@ -5,10 +5,10 @@
  */
 
 define( 'ABSPATH', __DIR__ . '/' );
-define( 'WP_STARTER_DIR', dirname( __DIR__, 2 ) . '/theme' );
+define( 'GREENDAWN_DIR', dirname( __DIR__, 2 ) . '/theme' );
 
 require_once dirname( __DIR__, 2 ) . '/vendor/autoload.php';
-require_once WP_STARTER_DIR . '/inc/vite.php';
+require_once GREENDAWN_DIR . '/inc/vite.php';
 
 // WordPress error object is minimal in pure unit tests; browser tests exercise WordPress itself.
 if ( ! class_exists( 'WP_Error' ) ) {

@@ -3,7 +3,7 @@
  * Front page: shows the static front page content, or the latest posts.
  * The business homepage is opt-in through its Page template.
  *
- * @package WP_Starter
+ * @package Greendawn
  */
 
 defined( 'ABSPATH' ) || exit;

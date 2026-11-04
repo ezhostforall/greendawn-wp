@@ -3,7 +3,7 @@
  * Template Name: Services Overview
  * Template Post Type: page
  *
- * @package WP_Starter
+ * @package Greendawn
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -13,8 +13,8 @@ get_header();
 while ( have_posts() ) :
 	the_post();
 
-	$wp_starter_services_intro = wp_starter_get_field( 'services_intro', false, '' );
-	$wp_starter_services_query = new WP_Query(
+	$greendawn_services_intro = greendawn_get_field( 'services_intro', false, '' );
+	$greendawn_services_query = new WP_Query(
 		array(
 			'post_type'      => 'service',
 			'post_status'    => 'publish',
@@ -34,8 +34,8 @@ while ( have_posts() ) :
 			</div>
 			<div class="container layout-stack feature-hero__copy">
 				<?php the_title( '<h1 class="type-display">', '</h1>' ); ?>
-				<?php if ( is_string( $wp_starter_services_intro ) && '' !== trim( $wp_starter_services_intro ) ) : ?>
-					<div class="type-lead"><?php echo wp_kses_post( wpautop( esc_html( $wp_starter_services_intro ) ) ); ?></div>
+				<?php if ( is_string( $greendawn_services_intro ) && '' !== trim( $greendawn_services_intro ) ) : ?>
+					<div class="type-lead"><?php echo wp_kses_post( wpautop( esc_html( $greendawn_services_intro ) ) ); ?></div>
 				<?php elseif ( get_the_content() ) : ?>
 					<div class="prose"><?php the_content(); ?></div>
 				<?php endif; ?>
@@ -43,18 +43,18 @@ while ( have_posts() ) :
 		</header>
 
 		<div class="container section">
-			<?php if ( $wp_starter_services_query->have_posts() ) : ?>
+			<?php if ( $greendawn_services_query->have_posts() ) : ?>
 				<div class="layout-grid service-grid">
 					<?php
-					while ( $wp_starter_services_query->have_posts() ) {
-						$wp_starter_services_query->the_post();
+					while ( $greendawn_services_query->have_posts() ) {
+						$greendawn_services_query->the_post();
 						get_template_part( 'template-parts/service-card' );
 					}
 					wp_reset_postdata();
 					?>
 				</div>
 			<?php else : ?>
-				<p><?php esc_html_e( 'There are no services to display yet.', 'wp-starter' ); ?></p>
+				<p><?php esc_html_e( 'There are no services to display yet.', 'greendawn' ); ?></p>
 			<?php endif; ?>
 		</div>
 	</article>

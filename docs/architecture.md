@@ -2,7 +2,7 @@
 
 ## Layout
 - `theme/` – presentation only. `functions.php` loads files in `inc/` (setup, Vite manifest, asset enqueueing, template tags, patterns, security, integrations, React helper).
-- `plugins/agency-core/` – optional, independently activatable plugin with a module registry. Nothing runs until a site enables modules via `agency_core_enabled_modules`.
+- `plugins/greendawn-core/` – optional, independently activatable plugin with a module registry. Nothing runs until a site enables modules via `greendawn_core_enabled_modules`.
 - `mu-plugins/` – a single small file, justified because the safeguards must be on even if a plugin is deactivated. Rank Math, SCF and Pressidium are normal plugins and never live here.
 - `scripts/`, `tests/`, `.github/` – tooling (no `.devcontainer/` override).
 
@@ -13,7 +13,7 @@
 - Vite builds three entries (see `vite.config.ts`): `main` (CSS + small TS, every page), `editor` (editor styles) and `react-example` (optional).
 - Production: `theme/dist/manifest.json` is read by `inc/vite.php`; `inc/assets.php` enqueues hashed files with WordPress APIs and marks scripts `type="module"`. Without a build, the theme still renders (unstyled).
 - Development: `pnpm dev` writes `theme/.vite-hot`; when `WP_ENVIRONMENT_TYPE` is `local`/`development`, the theme loads `@vite/client` and sources from the dev server for HMR.
-- Page-specific assets: call `wp_starter_enqueue_entry( 'name' )` from a template/template part, or return names from the `wp_starter_page_entries` filter. Register the entry in `vite.config.ts` and `wp_starter_entries()`.
+- Page-specific assets: call `greendawn_enqueue_entry( 'name' )` from a template/template part, or return names from the `greendawn_page_entries` filter. Register the entry in `vite.config.ts` and `greendawn_entries()`.
 - Code splitting: `main.ts` dynamically imports GSAP only when `[data-animate]` exists.
 - Fonts: place WOFF2 files in `theme/src/assets/fonts/`, declare `@font-face` in a CSS file under `src/styles/` with `font-display: swap`, and reference the file by relative URL so Vite hashes it. Images referenced from CSS are processed the same way. Content images use WordPress responsive images (`srcset`/`sizes`, lazy loading).
 
@@ -24,7 +24,7 @@
 `src/scripts/animations/reveal.ts` shows the pattern: `gsap.matchMedia()` with `prefers-reduced-motion: no-preference`, ScrollTrigger registered only inside the module, cleanup via `revert()`. Add `data-animate="fade-up"` to elements to use it. Add new modules beside it and dynamic-import them from `main.ts` behind a selector check.
 
 ## SEO, accessibility, performance
-Semantic landmarks, skip link, labelled navigation, `aria-expanded` menu toggle, visible focus styles, reduced-motion CSS, `theme.json`-driven editor styling, one `<h1>` per page. SEO output (meta, canonical, Open Graph, sitemaps, schema) is delegated to Rank Math when used; the theme adds none. Extension points: `wp_starter_entries`, `wp_starter_page_entries`, `wp_starter_scf_json_path`. Search/AI crawlers see fully server-rendered HTML. No ranking or Core Web Vitals outcomes are promised; measure each project.
+Semantic landmarks, skip link, labelled navigation, `aria-expanded` menu toggle, visible focus styles, reduced-motion CSS, `theme.json`-driven editor styling, one `<h1>` per page. SEO output (meta, canonical, Open Graph, sitemaps, schema) is delegated to Rank Math when used; the theme adds none. Extension points: `greendawn_entries`, `greendawn_page_entries`, `greendawn_scf_json_path`. Search/AI crawlers see fully server-rendered HTML. No ranking or Core Web Vitals outcomes are promised; measure each project.
 
 ## Security
 Escaping on output, no direct input handling in the theme, `ABSPATH` guards, generator tag removed, dev server file ignored outside local environments, REST example with capability check, local-only credentials in `tests/integration/`, `pnpm audit` / `composer audit` in CI.

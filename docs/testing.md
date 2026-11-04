@@ -13,7 +13,7 @@
 
 `pnpm check` performs the checks that do **not** need WordPress. **Do not install WordPress in Codespaces as part of normal development.**
 
-CI validates Composer's manifest and lock consistency before installing PHP tooling. This repository is a development project, not a published Composer package, so validation uses `--no-check-publish`; a missing package name is not a release requirement. The inherited lock hash described a manifest with `name: ezhostforall/wp-starter`, although the tracked manifest had no name. The foundation fix refreshes that hash using Composer's own `Locker::getContentHash()` without changing any locked package or source reference. Future dependency changes must use Composer and retain a reviewed lockfile diff; do not suppress stale-lock warnings by ignoring validation.
+CI validates Composer's manifest and lock consistency before installing PHP tooling. This repository is a development project, not a published Composer package, so validation uses `--no-check-publish`; a missing package name is not a release requirement. The inherited lock hash described a manifest with `name: ezhostforall/greendawn-wp`, although the tracked manifest had no name. The foundation fix refreshes that hash using Composer's own `Locker::getContentHash()` without changing any locked package or source reference. Future dependency changes must use Composer and retain a reviewed lockfile diff; do not suppress stale-lock warnings by ignoring validation.
 
 ## CI WordPress integration fixture
 

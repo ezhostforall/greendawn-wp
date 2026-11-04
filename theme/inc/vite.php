@@ -5,7 +5,7 @@
  * The functions here that take a manifest array are pure so they can be unit-tested
  * without WordPress (see tests/php).
  *
- * @package WP_Starter
+ * @package Greendawn
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -16,9 +16,9 @@ defined( 'ABSPATH' ) || exit;
  *
  * @return array<string,string>
  */
-function wp_starter_entries(): array {
+function greendawn_entries(): array {
 	return (array) apply_filters(
-		'wp_starter_entries',
+		'greendawn_entries',
 		array(
 			'main'          => 'src/scripts/main.ts',
 			'editor'        => 'src/styles/editor.css',
@@ -34,7 +34,7 @@ function wp_starter_entries(): array {
  * @param string              $source   Manifest key, e.g. src/scripts/main.ts.
  * @return array{file:string,css:string[],imports:string[]}|null Null if the entry is absent.
  */
-function wp_starter_resolve_manifest_entry( array $manifest, string $source ): ?array {
+function greendawn_resolve_manifest_entry( array $manifest, string $source ): ?array {
 	if ( ! isset( $manifest[ $source ]['file'] ) ) {
 		return null;
 	}
@@ -78,10 +78,10 @@ function wp_starter_resolve_manifest_entry( array $manifest, string $source ): ?
  *
  * @return array<string,mixed> Empty when the theme has not been built.
  */
-function wp_starter_manifest(): array {
+function greendawn_manifest(): array {
 	static $manifest = null;
 	if ( null === $manifest ) {
-		$path     = WP_STARTER_DIR . '/dist/manifest.json';
+		$path     = GREENDAWN_DIR . '/dist/manifest.json';
 		$decoded  = is_readable( $path ) ? wp_json_file_decode( $path, array( 'associative' => true ) ) : null;
 		$manifest = is_array( $decoded ) ? $decoded : array();
 	}
@@ -94,11 +94,11 @@ function wp_starter_manifest(): array {
  * The dev server writes theme/.vite-hot (see vite.config.ts). It is only honoured on
  * local/development environments so a stray file can never affect production.
  */
-function wp_starter_dev_server_url(): ?string {
+function greendawn_dev_server_url(): ?string {
 	static $url = false;
 	if ( false === $url ) {
 		$url  = null;
-		$file = WP_STARTER_DIR . '/.vite-hot';
+		$file = GREENDAWN_DIR . '/.vite-hot';
 		if ( in_array( wp_get_environment_type(), array( 'local', 'development' ), true ) && is_readable( $file ) ) {
 			$candidate = untrailingslashit( trim( (string) file_get_contents( $file ) ) ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents -- Local file.
 			if ( preg_match( '#^https?://#', $candidate ) ) {
@@ -112,14 +112,14 @@ function wp_starter_dev_server_url(): ?string {
 /**
  * CSS file paths (relative to dist/) of a named entry, for production builds.
  *
- * @param string $name Entry name from wp_starter_entries().
+ * @param string $name Entry name from greendawn_entries().
  * @return string[]
  */
-function wp_starter_entry_css_paths( string $name ): array {
-	$entries = wp_starter_entries();
+function greendawn_entry_css_paths( string $name ): array {
+	$entries = greendawn_entries();
 	if ( ! isset( $entries[ $name ] ) ) {
 		return array();
 	}
-	$resolved = wp_starter_resolve_manifest_entry( wp_starter_manifest(), $entries[ $name ] );
+	$resolved = greendawn_resolve_manifest_entry( greendawn_manifest(), $entries[ $name ] );
 	return $resolved ? $resolved['css'] : array();
 }

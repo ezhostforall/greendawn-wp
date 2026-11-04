@@ -2,10 +2,10 @@
 /**
  * Optional Service content model for client sites.
  *
- * @package Agency_Core
+ * @package Greendawn_Core
  */
 
-namespace Agency_Core\Modules;
+namespace Greendawn_Core\Modules;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -64,10 +64,10 @@ final class Services implements Module_Interface {
 			'service',
 			array(
 				'labels'       => array(
-					'name'          => __( 'Services', 'agency-core' ),
-					'singular_name' => __( 'Service', 'agency-core' ),
-					'add_new_item'  => __( 'Add Service', 'agency-core' ),
-					'edit_item'     => __( 'Edit Service', 'agency-core' ),
+					'name'          => __( 'Services', 'greendawn-core' ),
+					'singular_name' => __( 'Service', 'greendawn-core' ),
+					'add_new_item'  => __( 'Add Service', 'greendawn-core' ),
+					'edit_item'     => __( 'Edit Service', 'greendawn-core' ),
 				),
 				'public'       => true,
 				'has_archive'  => false,
@@ -93,7 +93,7 @@ final class Services implements Module_Interface {
 		acf_add_local_field_group(
 			array(
 				'key'      => 'group_starter_service',
-				'title'    => __( 'Service details', 'agency-core' ),
+				'title'    => __( 'Service details', 'greendawn-core' ),
 				'location' => array(
 					array(
 						array(
@@ -107,7 +107,7 @@ final class Services implements Module_Interface {
 					array(
 						'key'          => 'field_starter_service_description',
 						'name'         => 'service_description',
-						'label'        => __( 'Description', 'agency-core' ),
+						'label'        => __( 'Description', 'greendawn-core' ),
 						'type'         => 'wysiwyg',
 						'toolbar'      => 'basic',
 						'media_upload' => 0,
@@ -115,14 +115,14 @@ final class Services implements Module_Interface {
 					array(
 						'key'        => 'field_starter_service_benefits',
 						'name'       => 'service_benefits',
-						'label'      => __( 'Benefits', 'agency-core' ),
+						'label'      => __( 'Benefits', 'greendawn-core' ),
 						'type'       => 'repeater',
 						'layout'     => 'row',
 						'sub_fields' => array(
 							array(
 								'key'      => 'field_starter_service_benefit',
 								'name'     => 'benefit',
-								'label'    => __( 'Benefit', 'agency-core' ),
+								'label'    => __( 'Benefit', 'greendawn-core' ),
 								'type'     => 'text',
 								'required' => 1,
 							),
@@ -131,21 +131,21 @@ final class Services implements Module_Interface {
 					array(
 						'key'        => 'field_starter_service_faqs',
 						'name'       => 'service_faqs',
-						'label'      => __( 'FAQs', 'agency-core' ),
+						'label'      => __( 'FAQs', 'greendawn-core' ),
 						'type'       => 'repeater',
 						'layout'     => 'row',
 						'sub_fields' => array(
 							array(
 								'key'      => 'field_starter_service_question',
 								'name'     => 'question',
-								'label'    => __( 'Question', 'agency-core' ),
+								'label'    => __( 'Question', 'greendawn-core' ),
 								'type'     => 'text',
 								'required' => 1,
 							),
 							array(
 								'key'      => 'field_starter_service_answer',
 								'name'     => 'answer',
-								'label'    => __( 'Answer', 'agency-core' ),
+								'label'    => __( 'Answer', 'greendawn-core' ),
 								'type'     => 'textarea',
 								'required' => 1,
 							),
@@ -154,13 +154,13 @@ final class Services implements Module_Interface {
 					array(
 						'key'   => 'field_starter_service_cta_label',
 						'name'  => 'service_cta_label',
-						'label' => __( 'Call to action label', 'agency-core' ),
+						'label' => __( 'Call to action label', 'greendawn-core' ),
 						'type'  => 'text',
 					),
 					array(
 						'key'   => 'field_starter_service_cta_url',
 						'name'  => 'service_cta_url',
-						'label' => __( 'Call to action URL', 'agency-core' ),
+						'label' => __( 'Call to action URL', 'greendawn-core' ),
 						'type'  => 'url',
 					),
 				),
@@ -170,7 +170,7 @@ final class Services implements Module_Interface {
 		acf_add_local_field_group(
 			array(
 				'key'      => 'group_starter_services_overview',
-				'title'    => __( 'Services overview', 'agency-core' ),
+				'title'    => __( 'Services overview', 'greendawn-core' ),
 				'location' => array(
 					array(
 						array(
@@ -184,7 +184,7 @@ final class Services implements Module_Interface {
 					array(
 						'key'   => 'field_starter_services_intro',
 						'name'  => 'services_intro',
-						'label' => __( 'Introduction', 'agency-core' ),
+						'label' => __( 'Introduction', 'greendawn-core' ),
 						'type'  => 'textarea',
 					),
 				),

@@ -58,7 +58,7 @@ For private repositories, use a fine-grained token with repository **Contents: R
 
 The update plugin checks only components that appear in this allowlist and have an `Update URI: https://updates.ezhostforall.invalid/<slug>` header. The `.invalid` hostname is an intentional local identifier for WordPress's update hooks, **not** an internet update server.
 
-The `wp-starter` theme and current `agency-core` plugin already declare these headers. `scripts/init-project.mjs` rewrites the theme and client plugin slugs when creating a new client repository. The `ezhost-updater` plugin is **never renamed** by that script.
+The `greendawn` theme and current `greendawn-core` plugin already declare these headers. `scripts/init-project.mjs` rewrites the theme and client plugin slugs when creating a new client repository. The `ezhost-updater` plugin is **never renamed** by that script.
 
 ## Candidate release, staging verification and promotion
 

@@ -2,7 +2,7 @@
 
 1. Run the init command (see README) once per project.
 2. Branding: edit `theme/theme.json` (palette, typography, spacing, layout and custom values). `theme/src/styles/tokens.css` contains aliases, not a second set of values. See [design tokens](design-tokens.md).
-3. Remove what you do not need: example patterns (`theme/patterns`), `components.css`, React (`src/react`, `inc/react.php`, template part, entry in `vite.config.ts` and `wp_starter_entries()`), GSAP module, `consent.css`.
+3. Remove what you do not need: example patterns (`theme/patterns`), `components.css`, React (`src/react`, `inc/react.php`, template part, entry in `vite.config.ts` and `greendawn_entries()`), GSAP module, `consent.css`.
 
 ## Initialise an independent client project
 
@@ -35,13 +35,13 @@ Real host configurations stay outside Git. Copy only reviewed environment/update
 Template-created projects do not inherit later starter fixes automatically. Record reviewed upstream patches in client PRs, adapt identifiers and validate against each client's own staging and release lifecycle. Updater source is shared, but the current packages remain versioned in lockstep within each project until a separately reviewed migration changes that contract.
 
 ## Bespoke templates
-- Add `page-{slug}.php`, `single-{post_type}.php`, `archive-{post_type}.php`, or a template with a `/* Template Name: ... */` header. Use `get_header()`/`get_footer()`, put markup in `template-parts/`, and call `wp_starter_enqueue_entry()` for page-specific assets.
+- Add `page-{slug}.php`, `single-{post_type}.php`, `archive-{post_type}.php`, or a template with a `/* Template Name: ... */` header. Use `get_header()`/`get_footer()`, put markup in `template-parts/`, and call `greendawn_enqueue_entry()` for page-specific assets.
 - Keep one `<h1>` and the existing landmarks.
 
 ## Site-specific plugin
-Agency Core owns the generic Services post type and its fields. Enable **Services** in **Settings → Agency Core** if the project uses the generic model. The theme renders its detail route and Services overview. See [Services](services.md) for the editing and routing contract.
+Greendawn Core owns the generic Services post type and its fields. Enable **Services** in **Settings → Greendawn Core** if the project uses the generic model. The theme renders its detail route and Services overview. See [Services](services.md) for the editing and routing contract.
 
-Place client-specific models, fields, integrations and business logic in the client site plugin or the project's Agency Core fork. If a project replaces the Services model, replace the module through `agency_core_available_modules` or disable it before registering a replacement. Keep a single owner of the `service` post type and its routes.
+Place client-specific models, fields, integrations and business logic in the client site plugin or the project's Greendawn Core fork. If a project replaces the Services model, replace the module through `greendawn_core_available_modules` or disable it before registering a replacement. Keep a single owner of the `service` post type and its routes.
 
 A site plugin can append a module while preserving any earlier module selections. In an initialised project, use its renamed hook prefix.
 
@@ -53,7 +53,7 @@ A site plugin can append a module while preserving any earlier module selections
 defined( 'ABSPATH' ) || exit;
 
 add_filter(
-	'agency_core_enabled_modules',
+	'greendawn_core_enabled_modules',
 	static function ( array $modules ): array {
 		$modules[] = 'diagnostics';
 		return array_values( array_unique( $modules ) );
@@ -66,7 +66,7 @@ Packaging picks up every directory in `plugins/` that contains `<dir>/<dir>.php`
 ## Secure patterns
 - Forms/AJAX: nonce (`wp_create_nonce` / `check_ajax_referer`), capability check, sanitise input, escape output.
 - REST: always set `permission_callback` (see `Diagnostics`).
-- Outbound webhooks: check `Agency_Core\Plugin::outbound_allowed()` so development and staging never call production services.
+- Outbound webhooks: check `Greendawn_Core\Plugin::outbound_allowed()` so development and staging never call production services.
 
 ## Preview and release
 

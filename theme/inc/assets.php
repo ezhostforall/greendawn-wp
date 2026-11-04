@@ -3,10 +3,10 @@
  * Asset enqueueing.
  *
  * `main` is loaded on every page. Everything else is opt-in per page by calling
- * wp_starter_enqueue_entry() (e.g. from a template or template part), or by returning
- * extra entry names from the `wp_starter_page_entries` filter.
+ * greendawn_enqueue_entry() (e.g. from a template or template part), or by returning
+ * extra entry names from the `greendawn_page_entries` filter.
  *
- * @package WP_Starter
+ * @package Greendawn
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -14,32 +14,32 @@ defined( 'ABSPATH' ) || exit;
 /**
  * Enqueues a Vite entry by name, from the dev server or the production manifest.
  *
- * @param string $name Entry name from wp_starter_entries().
+ * @param string $name Entry name from greendawn_entries().
  */
-function wp_starter_enqueue_entry( string $name ): void {
-	$entries = wp_starter_entries();
+function greendawn_enqueue_entry( string $name ): void {
+	$entries = greendawn_entries();
 	if ( ! isset( $entries[ $name ] ) ) {
 		return;
 	}
-	$handle = 'wp-starter-' . $name;
-	$dev    = wp_starter_dev_server_url();
+	$handle = 'greendawn-' . $name;
+	$dev    = greendawn_dev_server_url();
 
 	if ( $dev ) {
 		static $client_loaded = false;
 		if ( ! $client_loaded ) {
 			$client_loaded = true;
-			wp_enqueue_script( 'wp-starter-vite-client', $dev . '/@vite/client', array(), null, array( 'in_footer' => true ) );
-			wp_script_add_data( 'wp-starter-vite-client', 'wp_starter_module', true );
+			wp_enqueue_script( 'greendawn-vite-client', $dev . '/@vite/client', array(), null, array( 'in_footer' => true ) );
+			wp_script_add_data( 'greendawn-vite-client', 'greendawn_module', true );
 		}
 		if ( 'react-example' === $name ) {
-			add_action( 'wp_footer', 'wp_starter_print_react_refresh_preamble', 5 );
+			add_action( 'wp_footer', 'greendawn_print_react_refresh_preamble', 5 );
 		}
 		wp_enqueue_script( $handle, $dev . '/' . $entries[ $name ], array(), null, array( 'in_footer' => true ) );
-		wp_script_add_data( $handle, 'wp_starter_module', true );
+		wp_script_add_data( $handle, 'greendawn_module', true );
 		return;
 	}
 
-	$resolved = wp_starter_resolve_manifest_entry( wp_starter_manifest(), $entries[ $name ] );
+	$resolved = greendawn_resolve_manifest_entry( greendawn_manifest(), $entries[ $name ] );
 	if ( ! $resolved ) {
 		return; // Not built yet.
 	}
@@ -50,7 +50,7 @@ function wp_starter_enqueue_entry( string $name ): void {
 	}
 	if ( ! str_ends_with( $resolved['file'], '.css' ) ) {
 		wp_enqueue_script( $handle, $base . $resolved['file'], array(), null, array( 'in_footer' => true ) );
-		wp_script_add_data( $handle, 'wp_starter_module', true );
+		wp_script_add_data( $handle, 'greendawn_module', true );
 		foreach ( $resolved['imports'] as $import ) {
 			add_action(
 				'wp_head',
@@ -65,14 +65,14 @@ function wp_starter_enqueue_entry( string $name ): void {
 /**
  * Enqueues theme assets for the front end.
  */
-function wp_starter_enqueue_assets(): void {
-	wp_starter_enqueue_entry( 'main' );
+function greendawn_enqueue_assets(): void {
+	greendawn_enqueue_entry( 'main' );
 
-	foreach ( (array) apply_filters( 'wp_starter_page_entries', array() ) as $name ) {
-		wp_starter_enqueue_entry( (string) $name );
+	foreach ( (array) apply_filters( 'greendawn_page_entries', array() ) as $name ) {
+		greendawn_enqueue_entry( (string) $name );
 	}
 }
-add_action( 'wp_enqueue_scripts', 'wp_starter_enqueue_assets' );
+add_action( 'wp_enqueue_scripts', 'greendawn_enqueue_assets' );
 
 /**
  * Marks Vite scripts as ES modules.
@@ -81,19 +81,19 @@ add_action( 'wp_enqueue_scripts', 'wp_starter_enqueue_assets' );
  * @param string $handle Script handle.
  * @return string
  */
-function wp_starter_module_script_tag( string $tag, string $handle ): string {
-	if ( wp_scripts()->get_data( $handle, 'wp_starter_module' ) ) {
+function greendawn_module_script_tag( string $tag, string $handle ): string {
+	if ( wp_scripts()->get_data( $handle, 'greendawn_module' ) ) {
 		return preg_replace( '/<script /', '<script type="module" ', $tag, 1 ) ?? $tag;
 	}
 	return $tag;
 }
-add_filter( 'script_loader_tag', 'wp_starter_module_script_tag', 10, 2 );
+add_filter( 'script_loader_tag', 'greendawn_module_script_tag', 10, 2 );
 
 /**
  * React Fast Refresh preamble, required by @vitejs/plugin-react in dev mode only.
  */
-function wp_starter_print_react_refresh_preamble(): void {
-	$dev = wp_starter_dev_server_url();
+function greendawn_print_react_refresh_preamble(): void {
+	$dev = greendawn_dev_server_url();
 	if ( ! $dev ) {
 		return;
 	}

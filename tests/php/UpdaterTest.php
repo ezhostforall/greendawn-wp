@@ -2,7 +2,7 @@
 /**
  * Test pure update metadata/validation logic without a WordPress installation.
  *
- * @package WP_Starter
+ * @package Greendawn
  */
 
 use EZHost_Updater\Updater;
@@ -25,7 +25,7 @@ if ( ! function_exists( 'get_bloginfo' ) ) {
 // Candidate release tests emulate the WordPress staging environment.
 if ( ! function_exists( 'wp_get_environment_type' ) ) {
 	function wp_get_environment_type() {
-		return $GLOBALS['wp_starter_test_env'] ?? 'production';
+		return $GLOBALS['greendawn_test_env'] ?? 'production';
 	}
 }
 
@@ -87,14 +87,14 @@ final class UpdaterTest extends TestCase {
 				),
 			)
 		);
-		$GLOBALS['wp_starter_test_env'] = 'staging';
+		$GLOBALS['greendawn_test_env'] = 'staging';
 		self::assertSame(
 			'v0.3.0',
 			Updater::source( 'theme', 'example-client' )['candidate_tag']
 		);
 		self::assertNull( Updater::source( 'theme', 'bad-tag' ) );
 
-		$GLOBALS['wp_starter_test_env'] = 'production';
+		$GLOBALS['greendawn_test_env'] = 'production';
 		self::assertNull( Updater::source( 'theme', 'example-client' ) );
 	}
 

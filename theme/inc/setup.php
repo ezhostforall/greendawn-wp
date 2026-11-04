@@ -2,7 +2,7 @@
 /**
  * Theme setup: supports, menus, image sizes.
  *
- * @package WP_Starter
+ * @package Greendawn
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -10,8 +10,8 @@ defined( 'ABSPATH' ) || exit;
 /**
  * Registers theme features.
  */
-function wp_starter_setup(): void {
-	load_theme_textdomain( 'wp-starter', WP_STARTER_DIR . '/languages' );
+function greendawn_setup(): void {
+	load_theme_textdomain( 'greendawn', GREENDAWN_DIR . '/languages' );
 
 	add_theme_support( 'automatic-feed-links' );
 	add_theme_support( 'title-tag' );
@@ -34,29 +34,29 @@ function wp_starter_setup(): void {
 
 	register_nav_menus(
 		array(
-			'primary'          => __( 'Primary menu', 'wp-starter' ),
-			'utility'          => __( 'Utility menu', 'wp-starter' ),
-			'footer'           => __( 'Footer menu', 'wp-starter' ),
-			'footer_secondary' => __( 'Footer secondary menu', 'wp-starter' ),
-			'footer_social'    => __( 'Footer social links', 'wp-starter' ),
-			'footer_legal'     => __( 'Footer legal links', 'wp-starter' ),
+			'primary'          => __( 'Primary menu', 'greendawn' ),
+			'utility'          => __( 'Utility menu', 'greendawn' ),
+			'footer'           => __( 'Footer menu', 'greendawn' ),
+			'footer_secondary' => __( 'Footer secondary menu', 'greendawn' ),
+			'footer_social'    => __( 'Footer social links', 'greendawn' ),
+			'footer_legal'     => __( 'Footer legal links', 'greendawn' ),
 		)
 	);
 
-	add_image_size( 'wp-starter-card', 640, 360, true );
+	add_image_size( 'greendawn-card', 640, 360, true );
 
 	// Editor styles are compiled by Vite; skip silently until `pnpm build` has run.
-	$editor_css = wp_starter_entry_css_paths( 'editor' );
+	$editor_css = greendawn_entry_css_paths( 'editor' );
 	if ( $editor_css ) {
 		add_editor_style( 'dist/' . $editor_css[0] );
 	}
 }
-add_action( 'after_setup_theme', 'wp_starter_setup' );
+add_action( 'after_setup_theme', 'greendawn_setup' );
 
 /**
  * Sets the default content width for embeds.
  */
-function wp_starter_content_width(): void {
+function greendawn_content_width(): void {
 	$GLOBALS['content_width'] = 800;
 }
-add_action( 'after_setup_theme', 'wp_starter_content_width', 0 );
+add_action( 'after_setup_theme', 'greendawn_content_width', 0 );

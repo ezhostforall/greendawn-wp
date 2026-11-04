@@ -2,7 +2,7 @@
 /**
  * Footer content settings and menu rendering.
  *
- * @package WP_Starter
+ * @package Greendawn
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -12,24 +12,24 @@ defined( 'ABSPATH' ) || exit;
  *
  * @param WP_Customize_Manager $customizer Customizer instance.
  */
-function wp_starter_customize_footer( WP_Customize_Manager $customizer ): void {
+function greendawn_customize_footer( WP_Customize_Manager $customizer ): void {
 	$customizer->add_section(
-		'wp_starter_footer',
+		'greendawn_footer',
 		array(
-			'title'       => __( 'Footer', 'wp-starter' ),
-			'description' => __( 'Add footer content here and assign links under Menus.', 'wp-starter' ),
+			'title'       => __( 'Footer', 'greendawn' ),
+			'description' => __( 'Add footer content here and assign links under Menus.', 'greendawn' ),
 		)
 	);
 
 	$fields = array(
-		'summary'   => array( __( 'Business summary', 'wp-starter' ), 'textarea', 'sanitize_textarea_field' ),
-		'contact'   => array( __( 'Contact details', 'wp-starter' ), 'textarea', 'sanitize_textarea_field' ),
-		'cta_label' => array( __( 'Call-to-action text', 'wp-starter' ), 'text', 'sanitize_text_field' ),
-		'cta_url'   => array( __( 'Call-to-action destination', 'wp-starter' ), 'url', 'esc_url_raw' ),
+		'summary'   => array( __( 'Business summary', 'greendawn' ), 'textarea', 'sanitize_textarea_field' ),
+		'contact'   => array( __( 'Contact details', 'greendawn' ), 'textarea', 'sanitize_textarea_field' ),
+		'cta_label' => array( __( 'Call-to-action text', 'greendawn' ), 'text', 'sanitize_text_field' ),
+		'cta_url'   => array( __( 'Call-to-action destination', 'greendawn' ), 'url', 'esc_url_raw' ),
 	);
 
 	foreach ( $fields as $key => list( $label, $type, $sanitize ) ) {
-		$setting = 'wp_starter_footer_' . $key;
+		$setting = 'greendawn_footer_' . $key;
 		$customizer->add_setting(
 			$setting,
 			array(
@@ -40,14 +40,14 @@ function wp_starter_customize_footer( WP_Customize_Manager $customizer ): void {
 		$customizer->add_control(
 			$setting,
 			array(
-				'section' => 'wp_starter_footer',
+				'section' => 'greendawn_footer',
 				'label'   => $label,
 				'type'    => $type,
 			)
 		);
 	}
 }
-add_action( 'customize_register', 'wp_starter_customize_footer' );
+add_action( 'customize_register', 'greendawn_customize_footer' );
 
 /**
  * Renders an assigned footer menu.
@@ -55,7 +55,7 @@ add_action( 'customize_register', 'wp_starter_customize_footer' );
  * @param string $location Menu location.
  * @param string $label Accessible navigation label.
  */
-function wp_starter_footer_menu( string $location, string $label ): void {
+function greendawn_footer_menu( string $location, string $label ): void {
 	if ( ! has_nav_menu( $location ) ) {
 		return;
 	}

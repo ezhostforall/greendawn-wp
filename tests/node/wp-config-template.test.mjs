@@ -46,11 +46,11 @@ test('evaluated configuration defaults to staging and stable-only explicit sourc
       assert.deepEqual(settings.sources, { themes: [], plugins: [] });
     } else {
       const slug = JSON.parse(readFileSync(join(root, 'package.json'), 'utf8')).name;
-      const plugin = identity ? `${identity.slug}-core` : 'agency-core';
+      const plugin = identity ? `${identity.slug}-core` : 'greendawn-core';
       assert.deepEqual(Object.keys(settings.sources.themes), [slug]);
       assert.deepEqual(Object.keys(settings.sources.plugins).sort(), [`${plugin}/${plugin}.php`, 'ezhost-updater/ezhost-updater.php'].sort());
       for (const source of [...Object.values(settings.sources.themes), ...Object.values(settings.sources.plugins)]) {
-        assert.deepEqual(source, { repo: identity?.repository ?? 'ezhostforall/wp-starter', token_env: 'EZHOST_GITHUB_TOKEN' });
+        assert.deepEqual(source, { repo: identity?.repository ?? 'ezhostforall/greendawn-wp', token_env: 'EZHOST_GITHUB_TOKEN' });
         assert.ok(!Object.hasOwn(source, 'candidate_tag'));
       }
     }

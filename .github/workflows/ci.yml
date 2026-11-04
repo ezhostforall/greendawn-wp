@@ -1,0 +1,124 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  php:
+    name: PHP (syntax, WPCS, unit tests)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          tools: composer
+      - run: composer validate --no-check-publish
+      - run: composer install --no-interaction --prefer-dist
+      - run: composer run syntax
+      - run: composer run lint
+      - run: composer run test
+
+  frontend:
+    name: Frontend (lint, typecheck, build, tooling tests)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm lint
+      - run: pnpm typecheck
+      - run: pnpm test:node
+      - run: pnpm build
+
+  e2e:
+    name: Playwright (temporary WordPress)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm build
+      - name: Start and seed disposable WordPress
+        run: bash tests/integration/setup.sh
+      - run: pnpm exec playwright install --with-deps chromium
+      - run: pnpm test:e2e
+      - name: Preserve browser verification evidence
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: browser-evidence
+          path: |
+            playwright-report/
+            test-results/
+          retention-days: 14
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: playwright-report
+          path: playwright-report/
+      - name: Container logs
+        if: failure()
+        run: docker compose -f tests/integration/compose.yml logs --no-color
+      - name: Stop disposable WordPress
+        if: always()
+        run: docker compose -f tests/integration/compose.yml down -v --remove-orphans
+
+  audit:
+    name: Dependency audit
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          tools: composer
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm audit --prod
+      - run: composer audit --locked
+
+  package:
+    name: Release packages
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm package
+      - run: node scripts/validate-release.mjs
+      - uses: actions/upload-artifact@v4
+        with:
+          name: packages
+          path: |
+            build/*.zip
+            build/updates.json
+            build/checksums.sha256

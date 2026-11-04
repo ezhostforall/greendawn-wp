@@ -1,0 +1,44 @@
+name: Staging smoke test
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  smoke:
+    name: Read-only WordPress staging browser checks
+    runs-on: ubuntu-latest
+    environment: staging
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - name: Check staging URL configuration
+        env:
+          BASE_URL: ${{ vars.WP_STAGING_URL }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          [[ "$BASE_URL" =~ ^https://[a-zA-Z0-9.-]+(:[0-9]+)?(/.*)?$ ]] || {
+            echo 'Configure staging environment variable WP_STAGING_URL with the HTTPS WordPress staging URL.'
+            exit 1
+          }
+          [[ "$BASE_URL" != *'localhost'* ]] || exit 1
+      - run: pnpm exec playwright install --with-deps chromium
+      - name: Verify non-destructive staging frontend and login page
+        env:
+          BASE_URL: ${{ vars.WP_STAGING_URL }}
+          STAGING_BASIC_AUTH_USERNAME: ${{ secrets.STAGING_BASIC_AUTH_USERNAME }}
+          STAGING_BASIC_AUTH_PASSWORD: ${{ secrets.STAGING_BASIC_AUTH_PASSWORD }}
+        run: pnpm test:staging
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: staging-playwright-report
+          path: playwright-report/

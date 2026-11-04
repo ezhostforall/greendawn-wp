@@ -1,0 +1,58 @@
+name: Promote tested release
+
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Candidate GitHub release tag (vX.Y.Z)'
+        type: string
+        required: true
+      staging_verified:
+        description: 'I have installed and tested this exact candidate on staging'
+        type: boolean
+        required: true
+        default: false
+
+permissions:
+  contents: write
+
+jobs:
+  promote:
+    name: Approve candidate for production update discovery
+    if: ${{ inputs.staging_verified }}
+    runs-on: ubuntu-latest
+    environment: production
+    concurrency:
+      group: release-promotion
+      cancel-in-progress: false
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.tag }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Confirm candidate tag and prerelease state
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TAG: ${{ inputs.tag }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          [[ "$TAG" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]] || { echo 'Invalid version tag'; exit 1; }
+          test "v$(node -p "require('./package.json').version")" = "$TAG"
+          gh api "repos/$GITHUB_REPOSITORY/releases/tags/$TAG" --jq '.prerelease' | grep -qx true
+      - name: Download exact candidate release packages
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TAG: ${{ inputs.tag }}
+        run: |
+          mkdir -p build
+          gh release download "$TAG" --dir build
+      - name: Validate checksums, package identity and component compatibility metadata
+        run: node scripts/validate-release.mjs
+      - name: Promote approved candidate to stable latest
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TAG: ${{ inputs.tag }}
+        run: gh release edit "$TAG" --prerelease=false --latest

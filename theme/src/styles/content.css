@@ -1,0 +1,57 @@
+/* Shared saved-content defaults: loaded by both the frontend and block editor. */
+/* Keep linked titles in the heading colour, including in the editor. */
+:where(h1, h2, h3, h4, h5, h6) a:not(.has-text-color, .wp-element-button) {
+	color: inherit;
+}
+
+.wp-block-quote:not(.is-style-plain) {
+	border: 0;
+	border-inline-start: 0.25rem solid currentColor;
+	padding-inline: var(--space-m);
+}
+
+.wp-block-quote.is-style-plain {
+	border: 0;
+	padding-inline: 0;
+}
+
+/* Resolve retired preset references in saved content to the current brand roles. */
+body {
+	--wp--preset--font-family--system: var(--wp--custom--brand--body);
+	--wp--preset--font-family--humanist: var(--wp--custom--brand--body);
+	--wp--preset--font-family--serif: var(--wp--custom--brand--heading);
+}
+
+.has-system-font-family,
+.has-humanist-font-family {
+	font-family: var(--wp--custom--brand--body);
+}
+
+.has-serif-font-family {
+	font-family: var(--wp--custom--brand--heading);
+}
+
+:where(code, kbd, pre, samp) {
+	font-family: var(--font-mono);
+}
+
+.wp-block-code {
+	border: 1px solid var(--color-border);
+	border-radius: var(--radius);
+	padding: var(--space-s) var(--space-m);
+	font-family: var(--font-mono);
+	font-size: 1em;
+	line-height: var(--line-height-body);
+	overflow-wrap: anywhere;
+}
+
+.wp-block-pullquote:not(.is-style-solid-color) {
+	border-inline: 0;
+	border-block: 0.25rem solid currentColor;
+}
+
+.wp-block-pullquote cite {
+	font-size: var(--type-small);
+	font-style: normal;
+	text-transform: uppercase;
+}

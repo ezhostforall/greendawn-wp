@@ -1,0 +1,64 @@
+<?xml version="1.0"?>
+<ruleset name="WP Starter">
+	<description>WordPress Coding Standards for the theme, plugin and MU plugin.</description>
+
+	<file>theme</file>
+	<file>plugins</file>
+	<file>mu-plugins</file>
+	<exclude-pattern>*/node_modules/*</exclude-pattern>
+	<exclude-pattern>*/vendor/*</exclude-pattern>
+	<exclude-pattern>*/dist/*</exclude-pattern>
+	<exclude-pattern>*/src/*</exclude-pattern>
+
+	<arg name="extensions" value="php"/>
+	<arg name="colors"/>
+	<arg value="ps"/>
+	<arg name="cache" value=".phpcs-cache"/>
+
+	<config name="testVersion" value="8.1-"/>
+	<config name="minimum_wp_version" value="6.6"/>
+
+	<rule ref="WordPress"/>
+	<rule ref="PHPCompatibilityWP"/>
+
+	<!-- Built assets have content-hashed filenames, so a version query string is unnecessary. -->
+	<rule ref="WordPress.WP.EnqueuedResourceParameters.MissingVersion">
+		<exclude-pattern>*/theme/inc/assets.php</exclude-pattern>
+	</rule>
+
+
+	<rule ref="WordPress.WP.I18n">
+		<properties>
+			<property name="text_domain" type="array">
+				<element value="wp-starter"/>
+				<element value="agency-core"/>
+				<element value="ezhost-updater"/>
+			</property>
+		</properties>
+	</rule>
+
+	<rule ref="WordPress.NamingConventions.PrefixAllGlobals">
+		<properties>
+			<property name="prefixes" type="array">
+				<element value="wp_starter"/>
+				<element value="WP_STARTER"/>
+				<element value="agency_core"/>
+				<element value="Agency_Core"/>
+				<element value="ezhost_updater"/>
+				<element value="EZHOST_UPDATER"/>
+				<element value="EZHost_Updater"/>
+			</property>
+		</properties>
+	</rule>
+
+	<!-- Namespaced classes in includes/ follow PSR-4 file names instead of class-*.php. -->
+	<rule ref="WordPress.Files.FileName">
+		<exclude-pattern>*/plugins/*/includes/*</exclude-pattern>
+	</rule>
+	<rule ref="WordPress.Files.FileName.InvalidClassFileName">
+		<exclude-pattern>*/plugins/*/includes/*</exclude-pattern>
+	</rule>
+	<rule ref="WordPress.Files.FileName.NotHyphenatedLowercase">
+		<exclude-pattern>*/plugins/*/includes/*</exclude-pattern>
+	</rule>
+</ruleset>

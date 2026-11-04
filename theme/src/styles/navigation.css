@@ -1,0 +1,247 @@
+/* Header presentation uses the shared theme.json aliases. */
+.site-header {
+	position: relative;
+	z-index: 20;
+	background: var(--color-surface);
+}
+
+.site-header__inner > * {
+	min-width: 0;
+	max-width: 100%;
+}
+
+.site-title,
+.primary-nav a,
+.utility-nav a,
+.header-cta {
+	overflow-wrap: anywhere;
+}
+
+.custom-logo-link {
+	display: block;
+	max-width: min(14rem, 100%);
+}
+
+.custom-logo {
+	display: block;
+	width: auto;
+	max-height: 3.25rem;
+}
+
+.primary-nav {
+	margin-inline-start: auto;
+}
+
+.primary-nav ul,
+.utility-nav ul {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+.primary-nav > ul,
+.utility-nav ul {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: var(--space-s);
+}
+
+.primary-nav li {
+	position: relative;
+	display: grid;
+	grid-template-columns: minmax(0, 1fr) auto;
+	align-items: center;
+}
+
+.primary-nav a,
+.utility-nav a {
+	display: block;
+	padding: var(--space-xs);
+	text-underline-offset: 0.2em;
+}
+
+.primary-nav a {
+	color: var(--color-text);
+	font-weight: 600;
+	text-decoration: none;
+}
+
+.primary-nav a:hover,
+.primary-nav a[aria-current] {
+	text-decoration: underline;
+	text-decoration-thickness: 0.12em;
+}
+
+.primary-nav .sub-menu {
+	grid-column: 1 / -1;
+	padding-inline-start: var(--space-m);
+}
+
+.primary-nav.is-enhanced > ul > li > .sub-menu {
+	position: absolute;
+	inset-block-start: 100%;
+	inset-inline-end: 0;
+	z-index: 1;
+	width: min(20rem, calc(100vw - 2 * var(--space-m)));
+	max-height: 60vh;
+	padding: var(--space-xs);
+	overflow-y: auto;
+	border: 1px solid var(--color-border);
+	border-radius: var(--radius);
+	background: var(--color-background);
+}
+
+.submenu-toggle {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	min-width: 2.75rem;
+	min-height: 2.75rem;
+	padding: var(--space-xs);
+	border: 1px solid transparent;
+	border-radius: var(--radius);
+	color: var(--color-text);
+	background: transparent;
+	cursor: pointer;
+}
+
+.submenu-toggle::before {
+	width: 0.45rem;
+	height: 0.45rem;
+	border-right: 2px solid currentColor;
+	border-bottom: 2px solid currentColor;
+	content: '';
+	transform: translateY(-0.12rem) rotate(45deg);
+}
+
+.submenu-toggle:hover,
+.submenu-toggle[aria-expanded='true'] {
+	background: var(--color-background);
+}
+
+.submenu-toggle[aria-expanded='true']::before {
+	transform: translateY(0.12rem) rotate(225deg);
+}
+
+/* The native disclosure controls the adjacent menu before scripts run. */
+.primary-nav .sub-menu[hidden] {
+	display: none;
+}
+
+.nav-toggle {
+	list-style: none;
+}
+
+.nav-toggle::-webkit-details-marker {
+	display: none;
+}
+
+.utility-nav {
+	max-width: var(--wide-width);
+	margin: 0 auto var(--space-xs);
+	border-bottom: 1px solid var(--color-border);
+	font-size: var(--type-small);
+}
+
+.utility-nav ul {
+	justify-content: flex-end;
+}
+
+.utility-nav a {
+	padding: 0 0 var(--space-xs);
+}
+
+.header-cta {
+	font-family: var(--font-body);
+	letter-spacing: normal;
+}
+
+.site-header--sticky {
+	--header-admin-offset: 0px;
+	position: sticky;
+	top: var(--header-admin-offset);
+}
+
+.admin-bar .site-header--sticky {
+	--header-admin-offset: 32px;
+}
+
+@media (max-width: 782px) {
+	.admin-bar .site-header--sticky {
+		--header-admin-offset: 46px;
+	}
+}
+
+@media (max-width: 600px) {
+	.admin-bar .site-header--sticky {
+		--header-admin-offset: 0px;
+	}
+}
+
+/* Keep focused controls visible across the breakpoint until focus can move. */
+@media (width > 60rem) {
+	.nav-disclosure:not(:focus-within) {
+		display: none;
+	}
+}
+
+@media (max-width: 60rem) {
+	.nav-disclosure:not([open]) + .primary-nav:not(:focus-within) {
+		display: none;
+	}
+
+	.site-header .site-title,
+	.site-header .custom-logo-link {
+		flex: 1 1 45%;
+	}
+
+	.primary-nav {
+		width: 100%;
+		margin-inline-start: 0;
+	}
+
+	.primary-nav > ul {
+		display: block;
+	}
+
+	.primary-nav.is-enhanced > ul > li > .sub-menu {
+		position: static;
+		width: auto;
+		max-height: none;
+		padding-inline-start: var(--space-m);
+		border: 0;
+	}
+
+	.site-header--sticky {
+		max-height: calc(100dvh - var(--header-admin-offset));
+		overflow-y: auto;
+	}
+}
+
+/* Prefer an ordinary scrolling header when the viewport is too short. */
+@media (max-height: 30rem) {
+	.site-header--sticky {
+		position: relative;
+		top: auto;
+		max-height: none;
+		overflow: visible;
+	}
+}
+
+/* Reserve the CTA row so font swaps cannot move the page below the header. */
+@media (max-width: 30rem) {
+	.site-header__inner:has(> .nav-disclosure) {
+		display: grid;
+		grid-template-columns: minmax(0, 1fr) auto;
+	}
+
+	.nav-disclosure + .primary-nav,
+	.nav-disclosure ~ .header-cta {
+		grid-column: 1 / -1;
+	}
+
+	.nav-disclosure ~ .header-cta {
+		justify-self: start;
+	}
+}

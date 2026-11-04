@@ -1,0 +1,11 @@
+/* Loaded inside the block editor via add_editor_style(). */
+@import './tokens.css';
+@import './primitives.css';
+@import './components.css';
+@import './content.css';
+
+.editor-styles-wrapper {
+	font-family: var(--font-body);
+	line-height: var(--line-height-body);
+	color: var(--color-text);
+}

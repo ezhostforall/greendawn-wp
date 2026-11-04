@@ -1,0 +1,79 @@
+.feature-hero:has(> .service-breadcrumbs > *) {
+	padding-block-start: 0;
+}
+
+.service-breadcrumbs:has(> *) {
+	padding-block: var(--space-s) clamp(var(--space-m), 2.5vw, var(--space-l));
+}
+
+.service-breadcrumbs .breadcrumbs ol {
+	margin: 0;
+}
+
+.service-grid {
+	grid-template-columns: minmax(0, 1fr);
+	gap: var(--space-m);
+}
+
+@media (min-width: 42rem) {
+	.service-grid {
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+	}
+}
+
+.service-card {
+	gap: var(--space-s);
+}
+
+.service-card img {
+	display: block;
+	width: 100%;
+	aspect-ratio: 16 / 9;
+	border-radius: var(--radius);
+	object-fit: cover;
+}
+
+.service-card .entry-summary > :first-child {
+	margin-block-start: 0;
+}
+
+.service-card .entry-summary > :last-child {
+	margin-block-end: 0;
+}
+
+.service-detail__content {
+	gap: var(--space-l);
+}
+
+.service-detail__content > .prose > :first-child {
+	margin-block-start: 0;
+}
+
+.service-detail__content > .prose > :last-child {
+	margin-block-end: 0;
+}
+
+.service-detail__benefits {
+	margin: 0;
+	padding-inline-start: var(--space-l);
+}
+
+.service-detail__benefits li + li {
+	margin-block-start: var(--space-xs);
+}
+
+.service-detail__faq details {
+	padding: var(--space-s) var(--space-m);
+	border: 1px solid var(--color-border);
+	border-radius: var(--radius);
+	background: var(--color-surface);
+}
+
+.service-detail__faq summary {
+	font-weight: 600;
+	cursor: pointer;
+}
+
+.service-detail__faq details p {
+	margin-block: var(--space-s) 0;
+}

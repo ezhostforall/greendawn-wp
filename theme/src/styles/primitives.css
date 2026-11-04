@@ -1,0 +1,111 @@
+/* Shared PHP/block compositions. Values are aliases of theme.json tokens. */
+.container {
+	box-sizing: border-box;
+	width: 100%;
+	max-width: var(--wide-width);
+	margin-inline: auto;
+	padding-inline: var(--space-m);
+}
+
+.container--narrow {
+	max-width: var(--content-width);
+}
+
+.container--wide {
+	max-width: var(--wide-width);
+}
+
+.container--full {
+	max-width: none;
+}
+
+.section {
+	padding-block: clamp(var(--space-l), 4vw, var(--space-xl));
+}
+
+.layout-grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(min(100%, var(--grid-min)), 1fr));
+	gap: var(--space-l);
+}
+
+.layout-row,
+.layout-media {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: var(--space-m);
+}
+
+.layout-media {
+	gap: var(--space-l);
+}
+
+.layout-media > * {
+	flex: 1 1 var(--media-min);
+}
+
+.layout-stack {
+	display: flex;
+	flex-direction: column;
+	gap: var(--space-m);
+}
+
+.layout-grid > *,
+.layout-row > *,
+.layout-media > *,
+.layout-stack > * {
+	min-width: 0;
+	max-width: 100%;
+	margin-block: 0;
+}
+
+.layout-grid,
+.layout-row,
+.layout-media,
+.layout-stack,
+.entry-content,
+.prose,
+:where(h1, h2, h3, h4, h5, h6) {
+	overflow-wrap: anywhere;
+}
+
+.prose > * + * {
+	margin-block-start: var(--space-m);
+}
+
+.prose > :where(h2, h3, h4, h5, h6) {
+	margin-block-start: var(--space-l);
+	margin-block-end: var(--space-s);
+}
+
+.type-display,
+.type-heading,
+.type-subheading,
+.type-minor-heading {
+	line-height: var(--line-height-heading);
+	font-weight: 700;
+}
+
+.type-display {
+	font-size: var(--type-display);
+	font-weight: 600;
+}
+.type-heading { font-size: var(--type-heading); }
+.type-subheading { font-size: var(--type-subheading); }
+.type-minor-heading { font-size: var(--type-minor-heading); }
+.type-lead { font-size: var(--type-lead); }
+.type-body { font-size: var(--type-body); }
+.type-small { font-size: var(--type-small); }
+
+/* Preserve preformatted text and wide data without widening the document. */
+.entry-content :where(pre, .wp-block-table),
+.prose :where(pre, .wp-block-table) {
+	overflow-x: auto;
+}
+
+.layout-media :where(img, svg, video) {
+	display: block;
+	width: 100%;
+	height: auto;
+}

@@ -1,0 +1,82 @@
+name: Prepare staging candidate
+
+on:
+  push:
+    tags: ['v*']
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'New version without v (for example 0.5.1)'
+        type: string
+        required: true
+
+permissions:
+  actions: read
+  contents: write
+
+concurrency:
+  group: staging-candidate-publication
+  cancel-in-progress: false
+
+jobs:
+  release:
+    if: github.event_name == 'push' || github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - name: Prepare candidate from verified main
+        if: github.event_name == 'workflow_dispatch'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          VERSION: ${{ inputs.version }}
+        run: |
+          set -euo pipefail
+          number='(0|[1-9][0-9]*)'
+          [[ "$VERSION" =~ ^$number\.$number\.$number$ ]] || { echo 'Enter a version such as 0.5.1'; exit 1; }
+          TAG="v$VERSION"
+
+          result=$(gh run list --workflow ci.yml --commit "$GITHUB_SHA" --branch main --event push --limit 1 --json status,conclusion --jq '.[0] | [.status, .conclusion] | join("/")')
+          [[ "$result" == 'completed/success' ]] || { echo "CI must pass on main at $GITHUB_SHA before preparing a candidate."; exit 1; }
+
+          tags=$(git ls-remote --tags --refs origin 'refs/tags/v*')
+          source_version=$(node -p "require('./package.json').version")
+          highest=$(printf '%s\n' "v$source_version" "$tags" | sed -E 's|^.*refs/tags/||' | awk -v tag="$TAG" '$0 != tag && /^v[0-9]+\.[0-9]+\.[0-9]+$/' | sort -V | tail -n 1)
+          highest=$(printf '%s\n' "v$source_version" "$highest" | sort -V | tail -n 1)
+          [[ "$TAG" != "$highest" && "$(printf '%s\n' "$TAG" "$highest" | sort -V | tail -n 1)" == "$TAG" ]] || {
+            echo "Choose a version newer than $highest."
+            exit 1
+          }
+
+          node scripts/set-version.mjs "$VERSION"
+          git add -u
+          # Keep the version-only commit off main. Identical inputs produce the same commit on retry.
+          source_date=$(git show -s --format=%cI HEAD)
+          commit=$(GIT_AUTHOR_DATE="$source_date" GIT_COMMITTER_DATE="$source_date" \
+            git -c user.name='github-actions[bot]' -c user.email='41898282+github-actions[bot]@users.noreply.github.com' \
+            commit-tree "$(git write-tree)" -p HEAD -m "Prepare staging candidate $TAG")
+          existing=$(printf '%s\n' "$tags" | awk -v ref="refs/tags/$TAG" '$2 == ref { print $1 }')
+          [[ -z "$existing" || "$existing" == "$commit" ]] || { echo "$TAG already points to a different commit."; exit 1; }
+
+          printf 'CANDIDATE_TAG=%s\nCANDIDATE_COMMIT=%s\n' "$TAG" "$commit" >> "$GITHUB_ENV"
+      - name: Check manually pushed tag matches package version
+        if: github.event_name == 'push'
+        run: |
+          test "v$(node -p "require('./package.json').version")" = "${GITHUB_REF_NAME}"
+          echo "CANDIDATE_TAG=$GITHUB_REF_NAME" >> "$GITHUB_ENV"
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm package
+      - run: node scripts/validate-release.mjs
+      - name: Push verified candidate tag
+        if: github.event_name == 'workflow_dispatch'
+        run: git push origin "$CANDIDATE_COMMIT:refs/tags/$CANDIDATE_TAG"
+      - name: Publish candidate prerelease
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release create "$CANDIDATE_TAG" build/*.zip build/updates.json build/checksums.sha256 --verify-tag --prerelease --latest=false --generate-notes
+          printf 'Staging candidate **%s** is published. Set the staging update sources to this candidate tag before checking WordPress Dashboard → Updates.\n' "$CANDIDATE_TAG" >> "$GITHUB_STEP_SUMMARY"

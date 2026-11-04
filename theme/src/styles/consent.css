@@ -1,0 +1,5 @@
+/*
+ * Optional styling hooks for the Pressidium Cookie Consent banner.
+ * Inspect the rendered banner and add selectors/variables here; see docs/plugin-integrations.md.
+ * Loaded for every page, so keep it small or remove it when consent management is not needed.
+ */

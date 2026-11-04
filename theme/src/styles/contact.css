@@ -1,0 +1,63 @@
+.contact-content {
+	grid-template-columns: minmax(0, 1fr);
+	align-items: start;
+}
+
+.contact-content:not(:has(> *)) {
+	display: none;
+}
+
+.contact-content > .card {
+	max-inline-size: var(--content-width);
+}
+
+@media (min-width: 44rem) {
+	.contact-content:has(> .starter-contact-form):has(> .contact-details) {
+		grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+	}
+}
+
+.starter-contact-form .wpcf7-form > p {
+	margin-block: 0 var(--space-m);
+}
+
+.starter-contact-form .wpcf7-form > p:has([type="submit"]) {
+	margin-block-end: 0;
+}
+
+.starter-contact-form :where(input[type="text"], input[type="email"], input[type="tel"], textarea) {
+	display: block;
+	width: 100%;
+	padding: var(--space-xs) var(--space-s);
+	border: 1px solid currentColor;
+	border-radius: var(--radius);
+	background: var(--color-background);
+	color: var(--color-text);
+	font: inherit;
+}
+
+.starter-contact-form textarea {
+	resize: vertical;
+}
+
+.starter-contact-form .wpcf7 form .wpcf7-response-output {
+	margin: var(--space-s) 0 0;
+	padding: var(--space-s);
+	background: var(--color-background);
+	color: var(--color-text);
+}
+
+.starter-contact-form .wpcf7 form:is(.sent, .failed, .aborted, .spam, .invalid, .unaccepted, .payment-required) .wpcf7-response-output {
+	border-color: var(--color-text);
+	border-radius: var(--radius);
+}
+
+.starter-contact-form .wpcf7 form.sent .wpcf7-response-output {
+	border-inline-start-width: 0.35rem;
+	font-weight: 600;
+}
+
+.starter-contact-form .wpcf7-not-valid-tip {
+	color: var(--color-text);
+	font-weight: 600;
+}

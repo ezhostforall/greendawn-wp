@@ -1,0 +1,9 @@
+.example-counter {
+	display: flex;
+	align-items: center;
+	gap: var(--space-m);
+}
+
+.example-counter__button {
+	padding: var(--space-xs) var(--space-m);
+}

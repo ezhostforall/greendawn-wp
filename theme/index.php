@@ -1,0 +1,14 @@
+<?php
+/**
+ * Fallback template.
+ *
+ * @package WP_Starter
+ */
+
+defined( 'ABSPATH' ) || exit;
+
+get_header();
+get_template_part( 'template-parts/breadcrumbs' );
+get_template_part( 'template-parts/post-list' );
+
+get_footer();

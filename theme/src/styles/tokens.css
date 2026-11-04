@@ -1,0 +1,41 @@
+/*
+ * theme.json owns values. WordPress emits these variables on the frontend and
+ * in the editor. Body also scopes correctly when add_editor_style() rewrites it
+ * to the block editor canvas; aliases must not depend on an editor :root rule.
+ */
+body {
+	--color-text: var(--wp--preset--color--text);
+	--color-background: var(--wp--preset--color--background);
+	--color-surface: var(--wp--preset--color--surface);
+	--color-muted: var(--wp--preset--color--muted);
+	--color-accent: var(--wp--preset--color--accent);
+	--color-link: var(--wp--preset--color--link);
+	--color-on-accent: var(--wp--preset--color--on-accent);
+	--color-accent-hover: var(--wp--preset--color--accent-hover);
+	--color-border: var(--wp--preset--color--border);
+	--font-body: var(--wp--custom--brand--body);
+	--font-mono: var(--wp--preset--font-family--jetbrains-mono);
+	--type-small: var(--wp--preset--font-size--small);
+	--type-body: var(--wp--preset--font-size--body);
+	--type-lead: var(--wp--preset--font-size--lead);
+	--type-heading: var(--wp--preset--font-size--heading);
+	--type-subheading: var(--wp--preset--font-size--subheading);
+	--type-minor-heading: var(--wp--preset--font-size--minor-heading);
+	--type-display: var(--wp--preset--font-size--display);
+	--line-height-body: var(--wp--custom--line-height--body);
+	--line-height-heading: var(--wp--custom--line-height--heading);
+	--grid-min: var(--wp--custom--layout--grid-min);
+	--media-min: var(--wp--custom--layout--media-min);
+	--space-xs: var(--wp--preset--spacing--xs);
+	--space-s: var(--wp--preset--spacing--s);
+	--space-m: var(--wp--preset--spacing--m);
+	--space-l: var(--wp--preset--spacing--l);
+	--space-xl: var(--wp--preset--spacing--xl);
+	--content-width: var(--wp--style--global--content-size);
+	--wide-width: var(--wp--style--global--wide-size);
+	--radius: var(--wp--custom--radius--default);
+	--shadow-card: var(--wp--custom--shadow--card);
+	--focus-color: var(--wp--custom--focus--color);
+	--focus-width: var(--wp--custom--focus--width);
+	--focus-offset: var(--wp--custom--focus--offset);
+}

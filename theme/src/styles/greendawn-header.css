@@ -17,7 +17,12 @@
 	--gd-type-secondary: clamp(0.875rem, 0.85rem + 0.12vw, 1rem);
 	--gd-type-lead: clamp(1.125rem, 1.025rem + 0.5vw, 1.5rem);
 	--gd-type-display: clamp(4.5rem, 2.8rem + 7vw, 10rem);
-	--gd-shell: min(100% - 3rem, 92rem);
+	--gd-shell-gutter: 1.5rem;
+	--gd-shell-max: 92rem;
+}
+
+.greendawn-home {
+	--gd-shell: min(100% - 2 * var(--gd-shell-gutter), var(--gd-shell-max));
 }
 
 .gd-home-arrow {
@@ -53,7 +58,10 @@
 }
 
 .site-header {
-	padding: 0;
+	--gd-header-padding: var(--space-m);
+	--gd-header-gutter: max(0px, var(--gd-shell-gutter) - var(--gd-header-padding));
+	--gd-header-width: min(100% - 2 * var(--gd-header-gutter), var(--gd-shell-max));
+	padding: 0 var(--gd-header-padding);
 	border: 0;
 	background: var(--gd-navy-950);
 	color: var(--gd-cream);
@@ -73,7 +81,7 @@
 .gd-utility {
 	position: relative;
 	display: flex;
-	width: var(--gd-shell);
+	width: var(--gd-header-width);
 	min-height: 2.35rem;
 	align-items: center;
 	justify-content: space-between;
@@ -102,7 +110,7 @@
 
 .site-header__inner {
 	display: grid;
-	width: var(--gd-shell);
+	width: var(--gd-header-width);
 	max-width: none;
 	min-height: 5.5rem;
 	grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
@@ -173,7 +181,8 @@
 @media (max-width: 75rem) {
 	.greendawn-home,
 	.site-header {
-		--gd-shell: min(100% - 2.5rem, 76rem);
+		--gd-shell-gutter: 1.25rem;
+		--gd-shell-max: 76rem;
 	}
 
 	.site-header__inner {
@@ -262,14 +271,16 @@
 @media (max-width: 61rem) {
 	.greendawn-home,
 	.site-header {
-		--gd-shell: min(100% - 2rem, 58rem);
+		--gd-shell-gutter: 1rem;
+		--gd-shell-max: 58rem;
 	}
 }
 
 @media (max-width: 42rem) {
 	.greendawn-home,
 	.site-header {
-		--gd-shell: min(100% - 1.5rem, 39rem);
+		--gd-shell-gutter: 0.75rem;
+		--gd-shell-max: 39rem;
 	}
 
 	.gd-utility {
@@ -307,6 +318,7 @@
 @media (max-width: 30rem) {
 	.greendawn-home,
 	.site-header {
-		--gd-shell: min(100% - 1.25rem, 28rem);
+		--gd-shell-gutter: 0.625rem;
+		--gd-shell-max: 28rem;
 	}
 }

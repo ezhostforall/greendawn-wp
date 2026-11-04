@@ -32,7 +32,7 @@ test('the branded homepage renders its hero, proof and client marks without Java
 	}
 });
 
-test('the branded menu closes with focus return and homepage CSS stays page-specific', async ({ page }) => {
+test('the branded header is shared, with the overlay and hero CSS scoped to the homepage', async ({ page }) => {
 	await page.setViewportSize({ width: 1024, height: 700 });
 	await page.goto('/greendawn-home/');
 	const toggle = page.locator('[data-nav-toggle]');
@@ -41,9 +41,21 @@ test('the branded menu closes with focus return and homepage CSS stays page-spec
 	await nav.getByRole('link', { name: 'About' }).press('Escape');
 	await expect(toggle).toBeFocused();
 	await expect(nav).toBeHidden();
+	const header = page.getByRole('banner');
+	await expect(header).toHaveCSS('position', 'absolute');
+	await expect(header).toHaveCSS('background-color', 'rgba(0, 0, 0, 0)');
 	await expect(page.locator('link[id^="greendawn-greendawn-homepage-"]')).toHaveCount(1);
 
 	await page.goto('/about/');
 	await expect(page.locator('link[id^="greendawn-greendawn-homepage-"]')).toHaveCount(0);
 	await expect(page.locator('body')).not.toHaveClass(/greendawn-home/);
+	await expect(header.getByRole('img', { name: 'Greendawn' })).toBeVisible();
+	await expect(header).toHaveCSS('position', 'relative');
+	await expect(header).toHaveCSS('background-color', 'rgb(7, 23, 33)');
+	const headerBox = (await header.boundingBox())!;
+	const mainBox = (await page.getByRole('main').boundingBox())!;
+	expect(mainBox.y).toBeGreaterThanOrEqual(headerBox.y + headerBox.height);
+	await expect(nav).toBeHidden();
+	await toggle.press('Enter');
+	await expect(nav.getByRole('link', { name: 'About' })).toBeVisible();
 });

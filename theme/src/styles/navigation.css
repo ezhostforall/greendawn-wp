@@ -180,13 +180,13 @@
 }
 
 /* Keep focused controls visible across the breakpoint until focus can move. */
-@media (width > 60rem) {
+@media (width > 75rem) {
 	.nav-disclosure:not(:focus-within) {
 		display: none;
 	}
 }
 
-@media (max-width: 60rem) {
+@media (max-width: 75rem) {
 	.nav-disclosure:not([open]) + .primary-nav:not(:focus-within) {
 		display: none;
 	}
@@ -226,22 +226,5 @@
 		top: auto;
 		max-height: none;
 		overflow: visible;
-	}
-}
-
-/* Reserve the CTA row so font swaps cannot move the page below the header. */
-@media (max-width: 30rem) {
-	.site-header__inner:has(> .nav-disclosure) {
-		display: grid;
-		grid-template-columns: minmax(0, 1fr) auto;
-	}
-
-	.nav-disclosure + .primary-nav,
-	.nav-disclosure ~ .header-cta {
-		grid-column: 1 / -1;
-	}
-
-	.nav-disclosure ~ .header-cta {
-		justify-self: start;
 	}
 }

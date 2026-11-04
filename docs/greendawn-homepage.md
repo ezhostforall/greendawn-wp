@@ -1,6 +1,6 @@
 # Greendawn homepage pilot
 
-The Greendawn Homepage template renders the branded header, hero and trust strip from the Astro reference. The layout and proof stages live in PHP. Greendawn Core registers the editable homepage fields when Secure Custom Fields is active.
+The Greendawn Homepage template renders the hero and trust strip from the Astro reference. The branded header is shared across the site, with a transparent overlay on this template and a navy background above inner-page content. The layout and proof stages live in PHP. Greendawn Core registers the editable homepage fields when Secure Custom Fields is active.
 
 ## Set up the staging page
 

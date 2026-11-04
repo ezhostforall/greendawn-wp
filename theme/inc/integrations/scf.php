@@ -54,9 +54,10 @@ function greendawn_get_field( string $name, $post_id = false, $fallback = null )
  * @param string          $name    Field name.
  * @param string          $context One of text, html, url, attr.
  * @param int|string|bool $post_id Post ID, 'option', or false for the current post.
+ * @param string          $fallback Default content when the field is empty.
  */
-function greendawn_the_field( string $name, string $context = 'text', $post_id = false ): void {
-	$value = greendawn_get_field( $name, $post_id );
+function greendawn_the_field( string $name, string $context = 'text', $post_id = false, string $fallback = '' ): void {
+	$value = greendawn_get_field( $name, $post_id, $fallback );
 	if ( ! is_scalar( $value ) ) {
 		return;
 	}

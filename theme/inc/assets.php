@@ -25,6 +25,10 @@ function greendawn_enqueue_entry( string $name ): void {
 	$dev    = greendawn_dev_server_url();
 
 	if ( $dev ) {
+		if ( str_ends_with( $entries[ $name ], '.css' ) ) {
+			wp_enqueue_style( $handle, $dev . '/' . $entries[ $name ], array(), null );
+			return;
+		}
 		static $client_loaded = false;
 		if ( ! $client_loaded ) {
 			$client_loaded = true;
@@ -67,6 +71,9 @@ function greendawn_enqueue_entry( string $name ): void {
  */
 function greendawn_enqueue_assets(): void {
 	greendawn_enqueue_entry( 'main' );
+	if ( is_page_template( 'templates/greendawn-homepage.php' ) ) {
+		greendawn_enqueue_entry( 'greendawn-homepage' );
+	}
 
 	foreach ( (array) apply_filters( 'greendawn_page_entries', array() ) as $name ) {
 		greendawn_enqueue_entry( (string) $name );

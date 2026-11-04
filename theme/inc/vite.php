@@ -20,9 +20,10 @@ function greendawn_entries(): array {
 	return (array) apply_filters(
 		'greendawn_entries',
 		array(
-			'main'          => 'src/scripts/main.ts',
-			'editor'        => 'src/styles/editor.css',
-			'react-example' => 'src/react/index.tsx',
+			'main'               => 'src/scripts/main.ts',
+			'editor'             => 'src/styles/editor.css',
+			'react-example'      => 'src/react/index.tsx',
+			'greendawn-homepage' => 'src/styles/greendawn-homepage.css',
 		)
 	);
 }

@@ -109,6 +109,23 @@
 	font-size: var(--gd-type-secondary);
 }
 
+.site-header .utility-nav ul,
+.site-header .primary-nav > .gd-mobile-utility {
+	gap: 0.8rem;
+}
+
+.site-header .utility-nav li,
+.site-header .primary-nav > .gd-mobile-utility > li {
+	display: flex;
+	align-items: center;
+	gap: 0.8rem;
+}
+
+.site-header .utility-nav li + li::before,
+.site-header .primary-nav > .gd-mobile-utility > li + li::before {
+	content: '·' / '';
+}
+
 .site-header .utility-nav a {
 	padding: 0;
 	color: inherit;

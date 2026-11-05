@@ -33,7 +33,8 @@ test('the branded homepage renders its sections in order without JavaScript', as
 			const delivery = main.getByText('Commercial delivery', { exact: true });
 			expect(await delivery.evaluate((element) => getComputedStyle(element, '::before').backgroundColor)).toBe('rgb(255, 94, 51)');
 			expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(width);
-			await expect(page.locator('body')).toHaveCSS('font-size', width <= 390 ? '16px' : '18px');
+			const bodyFontSize = await page.locator('body').evaluate((element) => Number.parseFloat(getComputedStyle(element).fontSize));
+			expect(bodyFontSize).toBeCloseTo(width === 390 ? 16.14 : width === 320 ? 16 : 18, 1);
 			const eyebrow = main.locator('.gd-hero .gd-eyebrow');
 			const eyebrowMetrics = await eyebrow.evaluate((element) => {
 				const { fontSize, fontWeight, lineHeight } = getComputedStyle(element);

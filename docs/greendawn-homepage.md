@@ -1,6 +1,6 @@
 # Greendawn homepage pilot
 
-The Greendawn Homepage template renders the hero and trust strip from the Astro reference. The branded header is shared across the site, with a transparent overlay on this template and a navy background above inner-page content. The layout and proof stage order live in PHP. Greendawn Core owns the copy and image defaults and registers the editable homepage fields when Secure Custom Fields is active.
+The Greendawn Homepage template renders the Hero, Trust, Problem, System and Process sections from the Astro reference. The branded header is shared across the site, with a transparent overlay on this template and a navy background above inner-page content. The layout and proof stage order live in PHP. Greendawn Core owns the copy and image defaults and registers the editable homepage fields when Secure Custom Fields is active.
 
 ## Set up the staging page
 
@@ -10,6 +10,8 @@ The Greendawn Homepage template renders the hero and trust strip from the Astro 
 4. Assign the Primary menu with About Us, Our Projects, the three Our Solutions children and Aftercare. Point the entries at their existing live destinations until those pages move. Assign the telephone and customer support links to the Utility menu. The supplied raster wordmark is the fallback when no custom logo is configured.
 5. Verify the Page preview and then assign it under **Settings → Reading** when ready. Compare it with the Astro reference at 390px and 1440px, exercise the menu by keyboard and confirm the enquiry and gallery destinations.
 
-This slice uses the starter's accessible native menu disclosure and keeps the hero arc static. The remaining sections, motion and callback drawer follow separately.
+The homepage editor groups fields under Hero, Trust, Problem, System and Process. Edit the four shared stage labels in Hero and their full descriptions in Process. The two System guides default to the existing public guide pages and can be edited when those routes move.
+
+The homepage uses the starter’s native menu disclosure. The coordination model, system arc and process timeline render in the initial HTML. The remaining sections, motion and callback drawer follow separately.
 
 The hero WebPs, wordmark and client marks come from Astro revision `891ed840c7369cb50df3e33232e81de49e2699d6`. The asset provenance and publication notes are maintained with the [Astro image records](https://github.com/ezhostforall/GreenDawn/blob/891ed840c7369cb50df3e33232e81de49e2699d6/docs/image-sources.md).

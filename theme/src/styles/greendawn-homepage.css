@@ -1,4 +1,5 @@
 @import './greendawn-home-sections.css';
+@import './greendawn-home-journey.css';
 
 .greendawn-home {
 	background: var(--gd-cream);
@@ -42,7 +43,8 @@
 	background: transparent;
 }
 
-.gd-hero__project {
+.gd-hero__project,
+.gd-home-text-link {
 	display: inline-flex;
 	min-height: 2rem;
 	align-items: center;
@@ -59,7 +61,8 @@
 	transition: color 180ms ease, gap 180ms ease;
 }
 
-.gd-hero__project:hover {
+.gd-hero__project:hover,
+.gd-home-text-link:hover {
 	gap: 1.35rem;
 	color: var(--gd-lime);
 }

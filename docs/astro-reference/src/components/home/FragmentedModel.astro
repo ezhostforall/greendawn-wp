@@ -1,0 +1,198 @@
+---
+import type { HTMLAttributes } from "astro/types";
+
+type Props = Omit<HTMLAttributes<"div">, "class"> & {
+  class?: string;
+};
+
+const { class: className, ...attributes } = Astro.props;
+---
+
+<div {...attributes} class:list={["problem__model", className]} data-problem-model>
+  <p class="problem__label">What needs to come together</p>
+  <div class="problem__fragments">
+    <span data-fragment>Operational requirements</span>
+    <span data-fragment>Available power</span>
+    <span data-fragment>Groundworks</span>
+    <span data-fragment>Charging equipment</span>
+    <span data-fragment>Software & payments</span>
+    <span data-fragment>Ongoing support</span>
+  </div>
+  <div class="problem__connector" aria-hidden="true"><span data-problem-connector></span></div>
+  <div class="problem__answer" data-answer>
+    <span>The Greendawn approach</span>
+    <strong>One coordinated delivery relationship.</strong>
+    <p>Clear responsibilities from the first site discussion through installation, commissioning and agreed support.</p>
+  </div>
+</div>
+
+<style is:global>
+.problem__model {
+  display: grid;
+  min-height: 0;
+  grid-template-columns: minmax(0, 1fr) 2rem minmax(0, 1fr);
+  grid-template-areas: "label label label"
+      "fragments connector answer";
+  align-items: stretch;
+  overflow: hidden;
+  padding-top: 1rem;
+}
+
+.problem__label {
+  grid-area: label;
+  margin-bottom: 1.5rem;
+  color: var(--slate-500);
+  font-family: var(--font-mono);
+  font-size: var(--type-caption);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.problem__fragments {
+  grid-area: fragments;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.8rem;
+}
+
+.problem__fragments span {
+  min-height: 4.8rem;
+  display: flex;
+  align-items: flex-end;
+  border: 1px solid var(--border-dark);
+  border-radius: var(--radius-md);
+  background: var(--paper);
+  color: var(--slate-600);
+  font-family: var(--font-mono);
+  font-size: var(--type-secondary);
+  padding: 1.1rem;
+  box-shadow: none;
+}
+
+.problem__fragments span:nth-child(2),
+.problem__fragments span:nth-child(5) {
+  background: var(--navy-800);
+  color: var(--cream);
+}
+
+.problem__fragments span:nth-child(3) {
+  background: var(--violet);
+  color: var(--cream);
+}
+
+.problem__connector {
+  grid-area: connector;
+  display: grid;
+  min-width: 2rem;
+  place-items: center;
+}
+
+.problem__connector span {
+  position: relative;
+  width: 100%;
+  height: 1px;
+  background: var(--navy-900);
+}
+
+.problem__connector span::after {
+  position: absolute;
+  top: 50%;
+  right: 0;
+  width: 0.5rem;
+  height: 0.5rem;
+  transform: translateY(-50%) rotate(-45deg);
+  border-right: 1px solid var(--navy-900);
+  border-bottom: 1px solid var(--navy-900);
+  content: "";
+}
+
+.problem__answer {
+  grid-area: answer;
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--radius-lg);
+  background: var(--lime);
+  padding: clamp(1.5rem, 2vw, 2rem);
+  box-shadow: none;
+}
+
+.problem__answer span {
+  display: block;
+  margin-bottom: 1.2rem;
+  font-family: var(--font-mono);
+  font-size: var(--type-caption);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.problem__answer strong {
+  display: block;
+  max-width: none;
+  font-family: var(--font-display);
+  font-size: clamp(1.85rem, 1.45rem + 0.7vw, 2.4rem);
+  letter-spacing: -0.05em;
+  line-height: 0.95;
+}
+
+.problem__answer p {
+  position: relative;
+  z-index: 1;
+  margin: 1.25rem 0 0;
+  font-size: var(--type-body-compact);
+}
+
+@media (max-width: 61rem) {
+  .problem__model {
+    min-height: auto;
+  }
+}
+
+@media (max-width: 42rem) {
+  .problem__fragments {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .problem__label {
+    margin-bottom: 1rem;
+  }
+
+  .problem__fragments span {
+    min-height: 4.25rem;
+    padding: 0.85rem;
+  }
+
+  .problem__model {
+    grid-template-columns: 1fr;
+    grid-template-areas: "label"
+          "fragments"
+          "connector"
+          "answer";
+  }
+
+  .problem__connector {
+    min-width: 0;
+    height: 3rem;
+  }
+
+  .problem__connector span {
+    width: 1px;
+    height: 100%;
+  }
+
+  .problem__connector span::after {
+    top: auto;
+    right: auto;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%) rotate(45deg);
+  }
+
+  .problem__answer {
+    padding: 2rem;
+  }
+
+  .problem__answer strong {
+    max-width: 12ch;
+  }
+}
+</style>

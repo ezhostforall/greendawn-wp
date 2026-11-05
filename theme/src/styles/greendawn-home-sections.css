@@ -21,6 +21,7 @@
 }
 
 .gd-hero__media img {
+  display: block;
   width: 100%;
   height: 112%;
   object-fit: cover;
@@ -72,7 +73,7 @@
   display: grid;
   gap: 0.55rem;
   max-width: 40rem;
-  font-size: var(--gd-type-caption);
+  color: var(--gd-slate-200);
   margin-bottom: 2rem;
 }
 
@@ -309,7 +310,7 @@
     grid-template-columns: repeat(4, minmax(0, 1fr));
     min-height: 5.9rem;
     padding-inline: calc((100% - var(--gd-shell)) / 2);
-    }
+  }
 
   .gd-hero__proof > div,
   .gd-hero__proof > div:first-child {

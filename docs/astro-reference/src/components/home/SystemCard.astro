@@ -1,0 +1,113 @@
+---
+import type { SystemLayer } from "../../types/home";
+import type { HTMLAttributes } from "astro/types";
+
+type Props = Omit<HTMLAttributes<"article">, "class"> & {
+  layer: SystemLayer;
+  tone?: "base" | "violet" | "cream";
+  class?: string;
+};
+
+const { layer, tone = "base", class: className, ...attributes } = Astro.props;
+---
+
+<article
+  {...attributes}
+  class:list={["system-card", className, tone !== "base" && `system-card--${tone}`]}
+  data-system-card
+>
+  <div class="system-card__top">
+    <span>{layer.number}</span>
+    <span>{layer.detail}</span>
+  </div>
+  <h3>{layer.title}</h3>
+  <p>{layer.copy}</p>
+</article>
+
+<style is:global>
+.system-card {
+  min-height: 16rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-md);
+  background: rgba(19, 41, 59, 0.93);
+  padding: clamp(1.6rem, 3vw, 2.6rem);
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.18);
+  backdrop-filter: blur(8px);
+}
+
+.system-card--violet {
+  min-height: 17.5rem;
+  background: var(--violet);
+}
+
+.system-card--cream {
+  min-height: 19rem;
+  background: var(--cream);
+  color: var(--navy-900);
+}
+
+.system-card__top {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: auto;
+  padding-bottom: 2rem;
+  color: var(--slate-300);
+  font-family: var(--font-mono);
+  font-size: var(--type-caption);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.system-card--cream .system-card__top {
+  color: var(--slate-500);
+}
+
+.system-card--violet .system-card__top {
+  color: var(--slate-200);
+}
+
+.system-card h3 {
+  margin-bottom: 0.85rem;
+  font-size: var(--type-card);
+}
+
+.system-card p {
+  margin-bottom: 0;
+  color: var(--slate-200);
+  font-size: var(--type-body-compact);
+  line-height: 1.65;
+}
+
+.system-card--cream p {
+  color: var(--slate-600);
+}
+
+@media (max-width: 75rem) {
+  .system-card,
+  .system-card--violet,
+  .system-card--cream {
+    min-height: 17rem;
+  }
+}
+
+@media (max-width: 61rem) {
+  .system-card,
+  .system-card--violet,
+  .system-card--cream {
+    min-height: 15.5rem;
+  }
+}
+
+@media (max-width: 42rem) {
+  .system-card,
+  .system-card--violet,
+  .system-card--cream {
+    min-height: 12.5rem;
+    padding: 1.5rem;
+  }
+}
+</style>

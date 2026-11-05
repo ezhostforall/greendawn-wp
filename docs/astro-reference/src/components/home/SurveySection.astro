@@ -1,0 +1,266 @@
+---
+import { liveSitePath } from "../../lib/urls";
+import ArrowIcon from "../media/ArrowIcon.astro";
+
+const surveyOutcomes = [
+  "Charging demand and available site capacity",
+  "Charger locations, cable routes and access constraints",
+  "Electrical, civil and network dependencies",
+  "The information needed for the design and proposal",
+] as const;
+---
+
+<section class="surveys section section--paper" id="surveys" aria-labelledby="surveys-title" data-surveys>
+  <div class="page-shell">
+    <div class="surveys__intro" data-reveal>
+      <p class="eyebrow">Technical site surveys</p>
+      <div>
+        <h2 id="surveys-title">Replace assumptions with a buildable plan.</h2>
+        <p>
+          Start with a conversation. If a paid technical survey is the right next step, we agree what needs checking and what you will receive before booking.
+        </p>
+      </div>
+    </div>
+
+    <div class="surveys__overview">
+      <div class="surveys__price" data-reveal>
+        <p class="surveys__price-label">Site surveys from</p>
+        <p class="surveys__price-value"><strong>£200</strong><span>+ VAT</span></p>
+        <p>
+          The scope and final price depend on the site and requirement. Both are confirmed before booking, including any further assessments or third-party costs that may apply.
+        </p>
+      </div>
+
+      <div class="surveys__outcomes" data-reveal>
+        <h3>What the survey helps establish</h3>
+        <ol>
+          {surveyOutcomes.map((outcome, index) => (
+            <li>
+              <span>{String(index + 1).padStart(2, "0")}</span>
+              <p>{outcome}</p>
+            </li>
+          ))}
+        </ol>
+      </div>
+    </div>
+
+    <div class="surveys__footer" data-reveal>
+      <p>A survey is recommended only where it adds useful technical certainty. Its scope sets out what will be checked, what you will receive and which questions may need further assessment.</p>
+      <div class="surveys__actions">
+        <a class="button button--navy" href={liveSitePath("/enquire/")} data-lead-capture-open data-lead-entry-point="pricing">Discuss a site survey <ArrowIcon direction="up-right" /></a>
+        <a class="text-link" href={liveSitePath("/guides/greendawn-ev-charging-survey-pre-installation-guide/")}>What a technical survey should establish <ArrowIcon /></a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style is:global>
+.surveys__intro {
+  display: grid;
+  grid-template-columns: 1fr;
+  align-items: start;
+  gap: 1.25rem;
+  margin-bottom: clamp(2.5rem, 4vw, 3.75rem);
+}
+
+.surveys__intro .eyebrow {
+  color: var(--navy-900);
+}
+
+.surveys__intro > div {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+  align-items: center;
+  gap: clamp(2rem, 4vw, 4rem);
+}
+
+.surveys__intro .eyebrow {
+  margin-bottom: 0;
+}
+
+.surveys__intro h2 {
+  max-width: 14ch;
+  margin-bottom: 0;
+}
+
+.surveys__intro > div > p {
+  max-width: 44rem;
+  margin: 0;
+  color: rgba(11, 29, 42, 0.72);
+  line-height: 1.7;
+}
+
+.surveys__overview {
+  display: grid;
+  grid-template-columns: minmax(18rem, 0.78fr) minmax(0, 1.22fr);
+  border-top: 2px solid var(--navy-900);
+  border-bottom: 2px solid var(--navy-900);
+}
+
+.surveys__price {
+  display: flex;
+  min-width: 0;
+  min-height: 21rem;
+  flex-direction: column;
+  justify-content: space-between;
+  background: var(--navy-900);
+  color: var(--cream);
+  padding: clamp(2rem, 4vw, 4rem);
+}
+
+.surveys__price-label {
+  margin: 0;
+  color: var(--lime);
+  font-family: var(--font-mono);
+  font-size: var(--type-caption);
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+}
+
+.surveys__price-value {
+  display: flex;
+  align-items: baseline;
+  gap: 1rem;
+  margin: auto 0 2rem;
+}
+
+.surveys__price-value strong {
+  font-family: var(--font-mono);
+  font-size: var(--type-price);
+  font-weight: 600;
+  letter-spacing: -0.085em;
+  line-height: 0.82;
+}
+
+.surveys__price-value span {
+  color: var(--lime);
+  font-family: var(--font-mono);
+  font-size: var(--type-secondary);
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+}
+
+.surveys__price > p:last-child {
+  max-width: 31rem;
+  font-size: var(--type-body-compact);
+  margin: 0;
+  color: var(--slate-200);
+  line-height: 1.7;
+}
+
+.surveys__outcomes {
+  min-width: 0;
+  padding: clamp(2rem, 4vw, 4rem);
+}
+
+.surveys__outcomes h3 {
+  max-width: 24ch;
+  margin: 0 0 1.75rem;
+  font-size: var(--type-compact);
+}
+
+.surveys__outcomes ol {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0 2rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.surveys__outcomes li {
+  display: grid;
+  min-width: 0;
+  grid-template-columns: 2rem minmax(0, 1fr);
+  gap: 0.8rem;
+  border-top: 1px solid var(--border-dark);
+  padding: 1.25rem 0;
+}
+
+.surveys__outcomes li > span {
+  color: var(--violet);
+  font-family: var(--font-mono);
+  font-size: var(--type-caption);
+}
+
+.surveys__outcomes li > p {
+  font-size: var(--type-body-compact);
+  margin: 0;
+  line-height: 1.55;
+}
+
+.surveys__actions {
+  display: grid;
+  flex: 0 1 27rem;
+  gap: 1rem;
+}
+
+.surveys__footer {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 2rem;
+  margin-top: 1.6rem;
+}
+
+.surveys__footer p {
+  max-width: 52rem;
+  margin: 0;
+  color: rgba(11, 29, 42, 0.72);
+  font-size: var(--type-secondary);
+  line-height: 1.6;
+}
+
+.surveys__footer .text-link {
+  flex: 0 1 auto;
+}
+
+@media (max-width: 61rem) {
+  .surveys__intro > div,
+  .surveys__intro {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  .surveys__overview {
+    grid-template-columns: 1fr;
+  }
+
+  .surveys__price {
+    min-height: 17.5rem;
+  }
+
+  .surveys__actions {
+    flex-basis: auto;
+  }
+
+  .surveys__footer {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 42rem) {
+  .surveys__price {
+    min-height: 16rem;
+    padding: 2rem 1.5rem;
+  }
+
+  .surveys__price-value {
+    margin-bottom: 1.5rem;
+  }
+
+  .surveys__outcomes {
+    padding: 2.5rem 0 1rem;
+  }
+
+  .surveys__outcomes h3 {
+    margin-bottom: 2rem;
+  }
+
+  .surveys__outcomes ol {
+    grid-template-columns: 1fr;
+  }
+}
+</style>

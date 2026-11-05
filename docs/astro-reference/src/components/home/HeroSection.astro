@@ -1,0 +1,432 @@
+---
+import ResponsiveImage from "../media/ResponsiveImage.astro";
+import ArrowIcon from "../media/ArrowIcon.astro";
+import { homeMedia } from "../../content/media";
+import { liveSitePath } from "../../lib/urls";
+---
+
+<section class="hero" id="top" data-hero>
+  <div class="hero__media" data-hero-image>
+    <ResponsiveImage
+      image={homeMedia.heroEngineers}
+      alt="Greendawn engineers working on commercial electrical distribution equipment"
+      sizes="(max-width: 61rem) 100vw, 60vw"
+      loading="eager"
+      fetchpriority="high"
+    />
+  </div>
+  <div class="hero__shade" aria-hidden="true"></div>
+  <svg class="hero__arc" viewBox="0 0 900 470" fill="none" aria-hidden="true">
+    <path data-arc-path d="M32 438C174 83 602 -77 868 222" />
+  </svg>
+
+  <div class="hero__content page-shell">
+    <div class="hero__copy">
+      <p class="eyebrow eyebrow--light" data-hero-item>
+        <span>Commercial EV charging infrastructure</span>
+        <span>England · Scotland · Wales</span>
+      </p>
+      <h1>
+        <span class="hero-line hero-line--service"><span data-hero-line>EV charging.</span></span>
+        <span class="hero-line hero-line--accent"><span data-hero-line>Handled.</span></span>
+      </h1>
+      <p class="hero__lead" data-hero-item>
+        Greendawn plans, installs and supports commercial EV charging around your vehicles, users and available power—from a single site to a coordinated estate programme.
+      </p>
+      <div class="hero__actions" data-hero-item>
+        <a
+          class="button button--lime"
+          href={liveSitePath("/enquire/")}
+          data-lead-capture-open
+          data-lead-entry-point="hero"
+        >
+          Discuss your site <ArrowIcon direction="up-right" />
+        </a>
+        <a class="text-link text-link--light" href="#projects">
+          Explore our projects <ArrowIcon />
+        </a>
+      </div>
+      <ul class="hero__assurances" data-hero-item>
+        <li>Site requirements first</li>
+        <li>Equipment chosen for the operation</li>
+        <li>Agreed support after installation</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="hero__proof">
+    <div><span>01</span><strong>Consult</strong><small>Understand your requirement</small></div>
+    <div><span>02</span><strong>Design</strong><small>Resolve power, layout and scope</small></div>
+    <div><span>03</span><strong>Install</strong><small>Coordinate works and commissioning</small></div>
+    <div><span>04</span><strong>Manage</strong><small>Support the charging operation</small></div>
+  </div>
+</section>
+
+<style is:global>
+.hero {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-height: min(61rem, 112svh);
+  overflow: hidden;
+  background: var(--navy-950);
+  color: var(--cream);
+}
+
+.hero__media,
+.hero__shade {
+  position: absolute;
+  inset: 0;
+}
+
+.hero__media {
+  left: 42%;
+  overflow: hidden;
+}
+
+.hero__media img {
+  width: 100%;
+  height: 112%;
+  object-fit: cover;
+  object-position: var(--image-position);
+  filter: saturate(0.78) contrast(1.05);
+}
+
+.hero__shade {
+  background: linear-gradient(90deg, var(--navy-950) 0%, var(--navy-950) 34%, rgba(7, 23, 33, 0.91) 49%, rgba(7, 23, 33, 0.22) 75%, rgba(7, 23, 33, 0.48) 100%),
+      linear-gradient(0deg, rgba(7, 23, 33, 0.74) 0%, transparent 45%);
+}
+
+.hero__arc {
+  position: absolute;
+  z-index: 1;
+  top: 8rem;
+  right: -7rem;
+  width: min(54vw, 62rem);
+  opacity: 0.82;
+  pointer-events: none;
+}
+
+.hero__arc path {
+  fill: none;
+  stroke: var(--lime);
+  stroke-linecap: round;
+  stroke-width: 10;
+}
+
+html.js .hero__arc path {
+  stroke-dasharray: 2000;
+  stroke-dashoffset: 2000;
+}
+
+.hero__content {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  flex: 1 0 auto;
+  min-height: 0;
+  grid-template-columns: minmax(0, 1.15fr) minmax(16rem, 0.85fr);
+  align-items: center;
+  gap: 4rem;
+  padding-top: 10rem;
+  padding-bottom: 3rem;
+}
+
+.hero__copy {
+  max-width: 56rem;
+  container-type: inline-size;
+}
+
+.hero .eyebrow {
+  display: grid;
+  gap: 0.55rem;
+  max-width: 40rem;
+  font-size: var(--type-caption);
+  margin-bottom: 2rem;
+}
+
+.hero .eyebrow::before {
+  display: none;
+}
+
+.hero h1 {
+  max-width: 13.5ch;
+  margin-bottom: 2.3rem;
+  font-size: min(var(--type-display), 27cqi);
+  font-weight: 600;
+  letter-spacing: -0.07em;
+  line-height: 0.79;
+}
+
+.hero-line {
+  display: block;
+  overflow: hidden;
+  padding-bottom: 0.1em;
+}
+
+.hero-line > span {
+  display: block;
+}
+
+.hero-line--service {
+  font-size: 0.62em;
+  letter-spacing: -0.055em;
+  line-height: 0.98;
+}
+
+.hero-line--accent {
+  color: var(--lime);
+  font-style: italic;
+}
+
+.hero__lead {
+  max-width: 42rem;
+  margin-bottom: 2.2rem;
+  color: #d6dde1;
+  font-size: var(--type-lead);
+  line-height: 1.55;
+}
+
+.hero__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 2rem;
+}
+
+.hero__assurances {
+  display: grid;
+  gap: 0.65rem;
+  margin: 2.4rem 0 0;
+  padding: 0;
+  color: var(--slate-200);
+  font-family: var(--font-mono);
+  font-size: 0.875rem;
+  list-style: none;
+}
+
+.hero__assurances li {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+}
+
+.hero__assurances li::before {
+  width: 0.45rem;
+  height: 0.45rem;
+  border-radius: 50%;
+  background: var(--lime);
+  content: "";
+}
+
+.hero__proof {
+  position: relative;
+  z-index: 4;
+  flex: 0 0 auto;
+  display: grid;
+  min-height: 9rem;
+  grid-template-columns: repeat(4, 1fr);
+  border-top: 1px solid var(--border-light);
+  background: rgba(7, 23, 33, 0.86);
+  padding-inline: calc((100% - var(--shell)) / 2);
+  backdrop-filter: blur(14px);
+}
+
+.hero__proof > div {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-content: center;
+  gap: 0.25rem 1.1rem;
+  border-right: 1px solid var(--border-light);
+  padding: 1.6rem clamp(1.2rem, 3vw, 2.8rem);
+}
+
+.hero__proof > div:first-child {
+  border-left: 1px solid var(--border-light);
+}
+
+.hero__proof span {
+  grid-row: 1;
+  align-self: center;
+  color: var(--lime);
+  font-family: var(--font-mono);
+  font-size: 0.86rem;
+  font-weight: 600;
+}
+
+.hero__proof strong {
+  font-family: var(--font-body);
+  font-size: 1.35rem;
+  letter-spacing: -0.02em;
+}
+
+.hero__proof small {
+  grid-column: 2;
+  color: var(--slate-300);
+  font-size: 0.875rem;
+}
+
+@media (max-width: 75rem) {
+  .hero__content {
+    grid-template-columns: minmax(0, 1fr) minmax(12rem, 0.35fr);
+  }
+
+  .hero__copy {
+    max-width: 47rem;
+  }
+}
+
+@media (max-width: 61rem) {
+  .hero {
+    min-height: clamp(48rem, 100svh, 55rem);
+  }
+
+  .hero__media {
+    left: 22%;
+  }
+
+  .hero__shade {
+    background: linear-gradient(90deg, var(--navy-950) 0%, rgba(7, 23, 33, 0.9) 50%, rgba(7, 23, 33, 0.38) 100%),
+          linear-gradient(0deg, rgba(7, 23, 33, 0.86) 0%, transparent 50%);
+  }
+
+  .hero__content {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .hero__copy {
+    max-width: 43rem;
+  }
+
+  .hero__proof {
+    min-height: 8rem;
+  }
+}
+
+@media (max-width: 42rem) {
+  .hero {
+    min-height: clamp(46rem, 100svh, 52rem);
+  }
+
+  .hero__media {
+    top: clamp(23rem, 62vw, 26rem);
+    left: 0;
+  }
+
+  .hero__media img {
+    height: 100%;
+    object-position: var(--image-position-mobile);
+  }
+
+  .hero__shade {
+    background: linear-gradient(180deg, var(--navy-950) 0%, var(--navy-950) 46%, rgba(7, 23, 33, 0.5) 70%, rgba(7, 23, 33, 0.84) 100%),
+          linear-gradient(90deg, rgba(7, 23, 33, 0.4), transparent);
+  }
+
+  .hero__arc {
+    top: 31rem;
+    right: -14rem;
+    width: 48rem;
+  }
+
+  .hero__content {
+    min-height: 0;
+    align-items: start;
+    padding-top: 9.65rem;
+    padding-bottom: 3rem;
+  }
+
+  .hero .eyebrow {
+    gap: 0.55rem;
+  }
+
+  .hero .eyebrow span:last-child {
+    display: none;
+  }
+
+  .hero h1 {
+    max-width: 13.5ch;
+    margin-bottom: 1.5rem;
+    font-size: min(clamp(3.9rem, 19vw, 5.8rem), 27cqi);
+  }
+
+  .hero__lead {
+    max-width: 31rem;
+  }
+
+  .hero__actions {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 1.3rem;
+  }
+
+  .hero__actions .text-link--light {
+    border-radius: var(--radius-sm);
+    background: rgba(7, 23, 33, 0.78);
+    padding: 0.55rem 0.7rem;
+    backdrop-filter: blur(8px);
+  }
+
+  .hero__assurances {
+    display: none;
+  }
+
+  .hero__proof {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    min-height: 5.9rem;
+    padding-inline: calc((100% - var(--shell)) / 2);
+    padding-right: 4.5rem;
+  }
+
+  .hero__proof > div,
+  .hero__proof > div:first-child {
+    grid-template-columns: 1fr;
+    border-left: 0;
+    gap: 0.2rem;
+    padding: 0.9rem 0.2rem;
+  }
+
+  .hero__proof span {
+    grid-row: auto;
+    font-size: 0.8rem;
+  }
+
+  .hero__proof strong {
+    font-size: 0.875rem;
+  }
+
+  .hero__proof small {
+    display: none;
+  }
+}
+
+@media (max-height: 44rem) and (min-width: 42.01rem) and (max-width: 75rem) {
+  .hero {
+    min-height: 42rem;
+  }
+
+  .hero__content {
+    min-height: 0;
+    padding-top: 9rem;
+    padding-bottom: 3rem;
+  }
+}
+
+@media (max-width: 30rem) {
+  .hero h1 {
+    font-size: min(clamp(3.8rem, 20vw, 5.2rem), 27cqi);
+  }
+
+  .hero__proof > div,
+  .hero__proof > div:first-child {
+    padding-inline: 0.2rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html.js .hero__arc path {
+    stroke-dasharray: none;
+    stroke-dashoffset: 0;
+  }
+}
+</style>

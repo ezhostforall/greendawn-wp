@@ -19,7 +19,7 @@
 }
 
 .gd-journey-section h2 {
-	font-size: clamp(2.35rem, 2rem + 2vw, 4.25rem);
+	font-size: var(--gd-type-section);
 	line-height: 1;
 	text-wrap: balance;
 }
@@ -37,7 +37,7 @@
 	display: flex;
 	align-items: center;
 	gap: 0.7rem;
-	margin-block-end: 1rem;
+	margin-block-end: 2rem;
 	color: var(--gd-slate-500);
 }
 
@@ -114,7 +114,7 @@
 	display: flex;
 	min-height: 4.8rem;
 	align-items: end;
-	padding: clamp(0.7rem, 1.2vw, 1.1rem);
+	padding: 1.1rem;
 	border: 1px solid var(--gd-border-dark);
 	border-radius: var(--gd-radius-md);
 	background: var(--gd-paper);
@@ -209,6 +209,10 @@
 	background: var(--gd-lime);
 }
 
+.gd-system__header > p:last-child {
+	margin-block-end: 0.3rem;
+}
+
 .gd-system__header > p:last-child,
 .gd-system__decisions p {
 	color: var(--gd-slate-300);
@@ -285,6 +289,15 @@
 	gap: 1rem;
 	margin-block-end: auto;
 	padding-block-end: 2rem;
+	color: var(--gd-slate-300);
+}
+
+.gd-system__card:nth-child(2) .gd-system__card-meta {
+	color: var(--gd-slate-200);
+}
+
+.gd-system__card:nth-child(3) .gd-system__card-meta {
+	color: var(--gd-slate-500);
 }
 
 .gd-system__decisions {
@@ -302,8 +315,17 @@
 	font-size: clamp(1.25rem, 1.15rem + 0.4vw, 1.5rem);
 }
 
+.gd-system__decisions p {
+	margin-block-end: 1.25rem;
+	font-size: 1rem;
+	line-height: 1.65;
+}
+
 .gd-system__decisions .gd-system__decision-label {
+	margin-block-end: 0;
 	color: var(--gd-lime);
+	font-size: var(--gd-type-secondary);
+	line-height: inherit;
 }
 
 /* The static timeline keeps its visual order without a scroll controller. */
@@ -312,12 +334,17 @@
 }
 
 .gd-process__intro {
+	gap: clamp(2rem, 4vw, 4rem);
 	margin-block-end: clamp(2.5rem, 4vw, 3.75rem);
 }
 
 .gd-process__intro h2 {
-	max-width: 17ch;
-	margin-block-end: 0;
+	max-width: 14ch;
+	margin-block-end: 2rem;
+}
+
+.gd-process__intro > p {
+	margin-block-end: 0.4rem;
 }
 
 .gd-process__steps {
@@ -360,9 +387,6 @@
 		gap: 3rem;
 	}
 
-	.gd-problem__intro {
-		position: static;
-	}
 
 	.gd-system__cards {
 		align-items: stretch;
@@ -386,6 +410,15 @@
 }
 
 @media (max-width: 61rem) {
+	.gd-problem__intro {
+		position: static;
+	}
+
+	.gd-process__intro {
+		align-items: start;
+		gap: 1.6rem;
+	}
+
 	.gd-system__header,
 	.gd-system__cards,
 	.gd-process__intro {
@@ -432,6 +465,31 @@
 		transform: translateX(-50%) rotate(45deg);
 	}
 
+	.gd-problem__label {
+		margin-block-end: 1rem;
+	}
+
+	.gd-problem__fragments li {
+		min-height: 4.25rem;
+		padding: 0.85rem;
+	}
+
+	.gd-problem__answer {
+		padding: 2rem;
+	}
+
+	.gd-problem__answer strong {
+		max-width: 12ch;
+	}
+
+	.gd-system__header {
+		padding-block-end: 2.5rem;
+	}
+
+	.gd-system__stage {
+		padding-block-start: 3.5rem;
+	}
+
 	.gd-system__arc {
 		inset: -6.5rem -10rem auto auto;
 		width: 34rem;
@@ -468,6 +526,10 @@
 
 	.gd-process__steps h3 {
 		margin: 0;
+	}
+
+	.gd-process__steps p {
+		line-height: 1.6;
 	}
 }
 

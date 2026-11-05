@@ -1,0 +1,65 @@
+---
+import FragmentedModel from "./FragmentedModel.astro";
+---
+
+<section class="problem section section--cream" data-section="problem">
+  <div class="page-shell problem__layout">
+    <div class="section-intro section-intro--sticky" data-reveal>
+      <p class="eyebrow">Why Greendawn</p>
+      <h2>One charging project. Coordinated from the start.</h2>
+      <p>
+        A charging project brings together electrical work, groundworks, equipment, software and support. Decisions in one area affect the others.
+      </p>
+      <p>Greendawn coordinates the specialists and dependencies, so you have a clear route through the project—not separate conversations to piece together yourself.</p>
+    </div>
+
+    <FragmentedModel />
+  </div>
+</section>
+
+<style is:global>
+.problem {
+  border-top: 1px solid var(--border-dark);
+}
+
+.problem__layout {
+  display: grid;
+  grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.05fr);
+  align-items: start;
+  gap: clamp(2.5rem, 4vw, 4rem);
+}
+
+.section-intro--sticky {
+  position: sticky;
+  top: 8rem;
+  align-self: start;
+}
+
+.section-intro > h2 {
+  max-width: 17ch;
+  margin-bottom: var(--space-5);
+}
+
+.section-intro > p:not(.eyebrow) {
+  max-width: 40rem;
+  color: var(--slate-500);
+  line-height: 1.75;
+}
+
+@media (max-width: 75rem) {
+  .problem__layout {
+    grid-template-columns: 1fr;
+    gap: 3rem;
+  }
+}
+
+@media (max-width: 61rem) {
+  .problem__layout {
+    grid-template-columns: 1fr;
+  }
+
+  .section-intro--sticky {
+    position: static;
+  }
+}
+</style>

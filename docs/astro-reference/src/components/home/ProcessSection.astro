@@ -1,0 +1,65 @@
+---
+import { processSteps } from "../../content/home";
+import ProcessStep from "./ProcessStep.astro";
+---
+
+<section class="process section section--paper" id="process">
+  <div class="page-shell">
+    <div class="section-title-row" data-reveal>
+      <div>
+        <p class="eyebrow">Consult · Design · Install · Manage</p>
+        <h2>A clear route from requirement to operation.</h2>
+      </div>
+      <p>You do not need a finished specification to start. Each stage establishes the decisions and information needed for the next.</p>
+    </div>
+
+    <div class="process__steps" data-process>
+      <div class="process__line" aria-hidden="true"><span data-process-line></span></div>
+      {processSteps.map((step, index) => <ProcessStep step={step} index={index} />)}
+    </div>
+  </div>
+</section>
+
+<style is:global>
+.process__steps {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0;
+  padding-top: 2.4rem;
+}
+
+.process__line {
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  height: 2px;
+  background: var(--slate-200);
+}
+
+.process__line span {
+  display: block;
+  width: 0;
+  height: 100%;
+  background: var(--violet);
+}
+
+@media (max-width: 75rem) {
+  .process__steps {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 42rem) {
+  .process__steps {
+    grid-template-columns: 1fr;
+    padding-top: 1rem;
+  }
+
+  .process__line {
+    display: none;
+  }
+
+}
+</style>

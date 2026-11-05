@@ -15,3 +15,5 @@ The homepage editor groups fields under Hero, Trust, Problem, System and Process
 The homepage uses the starter’s native menu disclosure. The coordination model, system arc and process timeline render in the initial HTML. The remaining sections, motion and callback drawer follow separately.
 
 The hero WebPs, wordmark and client marks come from Astro revision `891ed840c7369cb50df3e33232e81de49e2699d6`. The asset provenance and publication notes are maintained with the [Astro image records](https://github.com/ezhostforall/GreenDawn/blob/891ed840c7369cb50df3e33232e81de49e2699d6/docs/image-sources.md).
+
+The [pinned Astro source snapshot](./astro-reference/) provides the homepage components and style tokens used to check layout and typography.

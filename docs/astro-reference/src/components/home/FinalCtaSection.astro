@@ -1,0 +1,101 @@
+---
+import { siteConfig } from "../../config/site";
+import { liveSitePath } from "../../lib/urls";
+import ArrowIcon from "../media/ArrowIcon.astro";
+---
+
+<section class="final-cta section" data-final-cta>
+  <svg viewBox="0 0 1000 550" fill="none" aria-hidden="true">
+    <path data-final-arc d="M23 526C216 90 740 -71 974 233" />
+  </svg>
+  <div class="page-shell final-cta__inner" data-reveal>
+    <p class="eyebrow">Start with the requirement</p>
+    <h2>Tell us what your site needs.</h2>
+    <p>A rough outline is enough to start. Tell us who needs charging, what you want it to achieve and what you know about the site.</p>
+    <p>We’ll help identify the next step, including whether a technical survey is appropriate.</p>
+    <div class="final-cta__actions">
+      <a
+        class="button button--navy"
+        href={liveSitePath("/enquire/")}
+        data-lead-capture-open
+        data-lead-entry-point="final-cta"
+      >Discuss your site <ArrowIcon direction="up-right" /></a>
+      <p>Prefer to speak first? <a href={siteConfig.phone.href}>{siteConfig.phone.display}</a></p>
+    </div>
+  </div>
+</section>
+
+<style is:global>
+.final-cta > svg path {
+  fill: none;
+  stroke: var(--lime);
+  stroke-linecap: round;
+  stroke-width: 10;
+}
+
+.final-cta {
+  overflow: hidden;
+  background: var(--lime);
+  color: var(--navy-900);
+}
+
+.final-cta > svg {
+  position: absolute;
+  top: -4rem;
+  right: -9rem;
+  width: min(70vw, 67rem);
+  opacity: 0.06;
+}
+
+.final-cta > svg path {
+  stroke: var(--navy-900);
+  stroke-width: 15;
+}
+
+.final-cta__inner {
+  position: relative;
+  z-index: 1;
+}
+
+.final-cta__inner h2 {
+  max-width: 11ch;
+  font-size: var(--type-closing);
+  letter-spacing: -0.07em;
+  line-height: 0.84;
+}
+
+.final-cta__inner > p:not(.eyebrow) {
+  max-width: 42rem;
+  margin: 1rem 0;
+  font-size: var(--type-lead);
+  line-height: 1.55;
+}
+
+.final-cta__inner h2 + p {
+  margin-top: 2rem;
+}
+
+.final-cta__actions {
+  margin-top: 2rem;
+  display: flex;
+  align-items: center;
+  gap: 2.2rem;
+}
+
+.final-cta__actions > p {
+  margin: 0;
+  font-size: var(--type-secondary);
+}
+
+.final-cta__actions > p a {
+  border-bottom: 1px solid currentColor;
+  font-weight: 700;
+}
+
+@media (max-width: 42rem) {
+  .final-cta__actions {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}
+</style>

@@ -1,0 +1,34 @@
+---
+import { supportingProof } from "../../content/home";
+import { liveSitePath } from "../../lib/urls";
+import ArrowIcon from "../media/ArrowIcon.astro";
+import ProofCard from "./ProofCard.astro";
+
+const projectProof = supportingProof.find((item) => item.kind === "project");
+---
+
+<section class="proof-grid section section--cream" aria-labelledby="proof-grid-title" data-proof>
+  <div class="page-shell">
+    <div class="section-title-row section-title-row--compact" data-reveal>
+      <div>
+        <p class="eyebrow">Fleet programme experience</p>
+        <h2 id="proof-grid-title">Different locations. A coordinated programme.</h2>
+      </div>
+      <a class="text-link" href={liveSitePath("/gallery/")}>Explore our project experience <ArrowIcon /></a>
+    </div>
+
+    <div class="proof-grid__items">
+      {projectProof && <ProofCard item={projectProof} compact />}
+    </div>
+  </div>
+</section>
+
+<style is:global>
+.proof-grid .section-title-row h2 {
+  max-width: 17ch;
+}
+
+.proof-grid__items {
+  display: block;
+}
+</style>

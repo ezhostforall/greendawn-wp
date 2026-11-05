@@ -1,0 +1,104 @@
+---
+import type { NumberedContent } from "../../types/home";
+import type { HTMLAttributes } from "astro/types";
+
+type Props = Omit<HTMLAttributes<"article">, "class"> & {
+  step: NumberedContent;
+  index: number;
+  class?: string;
+};
+
+const { step, index, class: className, ...attributes } = Astro.props;
+const position = index + 1;
+---
+
+<article
+  {...attributes}
+  class:list={[
+    "process-step",
+    className,
+    {
+      "process-step--first": position === 1,
+      "process-step--fourth": position === 4,
+      "process-step--odd": position % 2 === 1,
+    },
+  ]}
+  data-process-step
+>
+  <span class="process-step__number">{step.number}</span>
+  <h3>{step.title}</h3>
+  <p>{step.copy}</p>
+</article>
+
+<style is:global>
+.process-step {
+  min-height: 12rem;
+  border-right: 1px solid var(--border-dark);
+  padding: 1.5rem clamp(1.1rem, 2vw, 1.8rem);
+}
+
+.process-step--first {
+  border-left: 1px solid var(--border-dark);
+}
+
+.process-step__number {
+  color: var(--violet);
+  font-family: var(--font-mono);
+  font-size: var(--type-caption);
+}
+
+.process-step h3 {
+  margin: 1.4rem 0 0.75rem;
+  font-size: var(--type-card);
+}
+
+.process-step p {
+  margin-bottom: 0;
+  color: var(--slate-500);
+  font-size: var(--type-body-compact);
+  line-height: 1.7;
+}
+
+@media (max-width: 75rem) {
+  .process-step,
+  .process-step--first,
+  .process-step--fourth {
+    border-left: 0;
+    border-bottom: 1px solid var(--border-dark);
+  }
+
+  .process-step--odd {
+    border-left: 1px solid var(--border-dark);
+  }
+}
+
+@media (max-width: 42rem) {
+  .process-step,
+  .process-step--first,
+  .process-step--fourth,
+  .process-step--odd {
+    min-height: auto;
+    border-right: 0;
+    border-left: 0;
+    display: grid;
+    grid-template-columns: 2.2rem minmax(0, 1fr);
+    gap: 0.55rem 0.9rem;
+    padding: 1.25rem 0;
+  }
+
+  .process-step__number {
+    grid-row: 1 / 3;
+    align-self: start;
+    padding-top: 0.25rem;
+  }
+
+  .process-step h3 {
+    margin: 0;
+  }
+
+  .process-step p {
+    grid-column: 2;
+    line-height: 1.6;
+  }
+}
+</style>

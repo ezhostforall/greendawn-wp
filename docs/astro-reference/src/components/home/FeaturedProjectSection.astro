@@ -1,0 +1,211 @@
+---
+import ResponsiveImage from "../media/ResponsiveImage.astro";
+import ArrowIcon from "../media/ArrowIcon.astro";
+import { homeMedia } from "../../content/media";
+import { liveSitePath } from "../../lib/urls";
+import { approvedClaim, claims } from "../../content/claims";
+
+const programmeClaim = approvedClaim(claims.johnsonsProgramme);
+const programmeReviewed = new Intl.DateTimeFormat("en-GB", { month: "long", year: "numeric" }).format(new Date(claims.johnsonsProgramme.reviewedOn));
+---
+
+<section class="case-study section section--paper" id="projects" data-case-study>
+  <div class="page-shell case-study__layout">
+    <figure class="case-study__media" data-case-image>
+      <ResponsiveImage
+        image={homeMedia.featuredDealership}
+        alt="Vehicle connected to EV charging equipment at a Johnsons Cars dealership"
+        sizes="(max-width: 61rem) calc(100vw - 2rem), 52vw"
+        loading="lazy"
+      />
+      <figcaption>Johnsons Cars · Dealership charging programme</figcaption>
+    </figure>
+
+    <div class="case-study__story">
+      <p class="eyebrow">Commercial project experience</p>
+      <h2>A dealership programme coordinated site by site.</h2>
+      <p class="case-study__lead">
+        Johnsons Cars needed charging across an estate with different electrical constraints, layouts and manufacturer requirements.
+      </p>
+      <div class="case-study__facts" aria-label={programmeClaim}>
+        <div><strong>136</strong><span>sites in the programme</span></div>
+        <div><strong>454</strong><span>chargepoints</span></div>
+        <div><strong>11</strong><span>automotive brands</span></div>
+      </div>
+      <p class="case-study__note">Programme figures reviewed {programmeReviewed}.</p>
+      <p>
+        Greendawn coordinated the programme around those site-specific needs, bringing together infrastructure, charging equipment and installation.
+      </p>
+      <a class="text-link" href={liveSitePath("/gallery/")}>Explore our project experience <ArrowIcon /></a>
+    </div>
+  </div>
+</section>
+
+<style is:global>
+.case-study__layout {
+  display: grid;
+  grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.05fr);
+  align-items: center;
+  gap: clamp(2.5rem, 4vw, 4rem);
+}
+
+.case-study__layout > * {
+  min-width: 0;
+}
+
+.case-study__media {
+  position: sticky;
+  top: 6.25rem;
+  width: 100%;
+  min-width: 0;
+  height: min(78svh, 42rem);
+  max-height: calc(100svh - 8rem);
+  align-self: start;
+  overflow: hidden;
+  margin: 0;
+  border-radius: var(--radius-lg);
+  background: var(--navy-800);
+  box-shadow: var(--shadow-lg);
+}
+
+.case-study__media::after {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(0deg, rgba(7, 23, 33, 0.7), transparent 55%);
+  content: "";
+}
+
+.case-study__media img {
+  position: absolute;
+  inset: 0;
+  top: -10%;
+  width: 100%;
+  height: 120%;
+  object-fit: cover;
+  object-position: var(--image-position);
+}
+
+.case-study__media figcaption {
+  position: absolute;
+  z-index: 2;
+  right: 2rem;
+  bottom: 2rem;
+  left: 2rem;
+  color: var(--cream);
+  font-family: var(--font-mono);
+  font-size: var(--type-caption);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.case-study__story {
+  padding-block: 1rem 1.5rem;
+}
+
+.case-study__story h2 {
+  max-width: 16ch;
+}
+
+.case-study__lead {
+  color: var(--navy-800);
+  font-size: var(--type-lead);
+  line-height: 1.55;
+}
+
+.case-study__facts {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1px;
+  margin-block: 2rem;
+  background: var(--border-dark);
+}
+
+.case-study__facts div {
+  min-height: 7rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+  background: var(--paper);
+  padding: 1.2rem;
+}
+
+.case-study__facts strong {
+  color: var(--violet);
+  font-family: var(--font-mono);
+  font-size: var(--type-card);
+  letter-spacing: -0.05em;
+}
+
+.case-study__facts span {
+  color: var(--slate-500);
+  font-size: var(--type-secondary);
+  line-height: 1.4;
+}
+
+.case-study__story > p:not(.eyebrow):not(.case-study__lead) {
+  color: var(--slate-500);
+  line-height: 1.75;
+}
+
+.case-study__note {
+  margin: -1rem 0 1.25rem;
+  font-family: var(--font-mono);
+  font-size: var(--type-secondary);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+@media (max-width: 75rem) {
+  .case-study__layout {
+    gap: 2.5rem;
+  }
+}
+
+@media (max-width: 61rem) {
+  .case-study__layout {
+    grid-template-columns: 1fr;
+  }
+
+  .case-study__media {
+    position: relative;
+    top: 0;
+    height: auto;
+    max-height: none;
+    aspect-ratio: 16 / 10;
+  }
+}
+
+@media (max-width: 42rem) {
+  .case-study__media {
+    height: auto;
+    aspect-ratio: 4 / 3;
+  }
+
+  .case-study__media img {
+    object-position: var(--image-position-mobile);
+  }
+
+  .case-study__lead {
+    line-height: 1.65;
+  }
+
+  .case-study__facts {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .case-study__facts div {
+    min-height: 6rem;
+    padding: 0.9rem;
+  }
+}
+
+@media (max-height: 44rem) and (max-width: 75rem) {
+  .case-study__media {
+    position: relative;
+    top: 0;
+    height: auto;
+    max-height: min(24rem, 62svh);
+    aspect-ratio: 4 / 3;
+  }
+}
+</style>

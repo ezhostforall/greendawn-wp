@@ -32,7 +32,17 @@ test('the branded homepage renders its sections in order without JavaScript', as
 			await expect(main.getByRole('link', { name: 'Explore our projects' })).toHaveAttribute('href', 'https://greendawn.co.uk/gallery/');
 			const delivery = main.getByText('Commercial delivery', { exact: true });
 			expect(await delivery.evaluate((element) => getComputedStyle(element, '::before').backgroundColor)).toBe('rgb(255, 94, 51)');
-			expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBe(width);
+			expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(width);
+			const bodyFontSize = await page.locator('body').evaluate((element) => Number.parseFloat(getComputedStyle(element).fontSize));
+			expect(bodyFontSize).toBeCloseTo(width === 390 ? 16.14 : width === 320 ? 16 : 18, 1);
+			const eyebrow = main.locator('.gd-hero .gd-eyebrow');
+			const eyebrowMetrics = await eyebrow.evaluate((element) => {
+				const { fontSize, fontWeight, lineHeight } = getComputedStyle(element);
+				return { fontWeight, lineHeightRatio: Number.parseFloat(lineHeight) / Number.parseFloat(fontSize) };
+			});
+			expect(eyebrowMetrics.fontWeight).toBe('400');
+			expect(eyebrowMetrics.lineHeightRatio).toBeCloseTo(1.2, 2);
+			await expect(main.locator('#process h2')).toHaveCSS('margin-block-end', '32px');
 			await testInfo.attach(`greendawn-${width}`, { body: await page.screenshot({ fullPage: true }), contentType: 'image/png' });
 		}
 
@@ -81,7 +91,8 @@ test('the desktop header and hero use the Greendawn hover styles', async ({ page
 	await page.goto('/greendawn-home/');
 	const banner = page.getByRole('banner');
 	const utility = banner.getByRole('navigation', { name: 'Utility' }).getByRole('link', { name: 'Support' });
-	await expect(utility).toHaveCSS('font-size', '15.328px');
+	const utilitySize = await utility.evaluate((element) => Number.parseFloat(getComputedStyle(element).fontSize));
+	expect(utilitySize).toBeCloseTo(15.32, 1);
 	await utility.hover();
 	await expect(utility).toHaveCSS('color', 'rgb(233, 242, 39)');
 

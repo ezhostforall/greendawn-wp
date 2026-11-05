@@ -1,0 +1,95 @@
+---
+import type { HTMLAttributes } from "astro/types";
+import type { SurveyTier } from "../../types/home";
+
+type Props = Omit<HTMLAttributes<"div">, "class"> & {
+  tier: SurveyTier;
+  variant: "desktop" | "mobile";
+  class?: string;
+};
+
+const { tier, variant, class: className, ...attributes } = Astro.props;
+---
+
+<div
+  {...attributes}
+  class:list={[
+    className,
+    variant === "desktop" ? "survey-tier__details" : "survey-tier-mobile__details",
+  ]}
+>
+  <p class="survey-tier__label">The survey considers</p>
+  <ul>{tier.scope.map((item) => <li>{item}</li>)}</ul>
+  <p><b>What you receive</b>{tier.deliverable}</p>
+  <p><b>{tier.benefitLabel}</b>{tier.benefit}</p>
+  <slot />
+</div>
+
+<style is:global>
+.survey-tier__label {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 400;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+}
+
+.survey-tier__details {
+  display: grid;
+  align-content: start;
+  gap: 1.25rem;
+}
+
+.survey-tier__details ul {
+  display: grid;
+  gap: 0.55rem;
+  margin: -0.5rem 0 0;
+  padding-left: 1.15rem;
+}
+
+.survey-tier__details p:not(.survey-tier__label),
+.survey-tier__details li {
+  margin: 0;
+  color: rgba(11, 29, 42, 0.72);
+  font-size: 0.86rem;
+  line-height: 1.6;
+}
+
+.survey-tier__details b {
+  display: block;
+  margin-bottom: 0.2rem;
+  color: var(--navy-900);
+  font-weight: 600;
+}
+
+@media (max-width: 42rem) {
+  .survey-tier-mobile__details {
+    padding: 0.4rem 0 1.4rem;
+  }
+
+  .survey-tier-mobile__details ul {
+    display: grid;
+    gap: 0.45rem;
+    margin: 0.8rem 0 1.3rem;
+    padding-left: 1.15rem;
+  }
+
+  .survey-tier-mobile__details p:not(.survey-tier__label),
+  .survey-tier-mobile__details li {
+    color: rgba(11, 29, 42, 0.72);
+    font-size: 0.88rem;
+    line-height: 1.6;
+  }
+
+  .survey-tier-mobile__details p {
+    margin-bottom: 1rem;
+  }
+
+  .survey-tier-mobile__details p b {
+    display: block;
+    margin-bottom: 0.2rem;
+    color: var(--navy-900);
+  }
+}
+</style>

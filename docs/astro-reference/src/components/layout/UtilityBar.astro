@@ -1,0 +1,76 @@
+---
+import { siteConfig } from "../../config/site";
+import { liveSitePath } from "../../lib/urls";
+---
+
+<div class="utility-bar">
+  <div class="utility-bar__inner page-shell">
+    <p>Commercial EV infrastructure across England, Scotland & Wales</p>
+    <div class="utility-bar__links">
+      <a href={siteConfig.phone.href}>{siteConfig.phone.display}</a>
+      <span aria-hidden="true">·</span>
+      <a href={liveSitePath("/customer-care/")}>Customer support</a>
+    </div>
+  </div>
+</div>
+
+<style is:global>
+.utility-bar {
+  position: absolute;
+  z-index: 100;
+  inset: 0 0 auto;
+  min-height: 2.35rem;
+  border-bottom: 1px solid var(--border-light);
+  color: var(--slate-200);
+  font-family: var(--font-mono);
+  font-size: var(--type-caption);
+  letter-spacing: 0.055em;
+  text-transform: uppercase;
+}
+
+.utility-bar__inner {
+  display: flex;
+  min-height: inherit;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.utility-bar p {
+  margin: 0;
+}
+
+.utility-bar__links {
+  font-size: var(--type-action);
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+}
+
+.utility-bar a {
+  transition: color 180ms ease;
+}
+
+.utility-bar a:hover {
+  color: var(--lime);
+}
+
+@media (max-width: 42rem) {
+  .utility-bar {
+    min-height: 2.65rem;
+    text-align: center;
+  }
+
+  .utility-bar__inner {
+    justify-content: center;
+  }
+
+  .utility-bar p {
+    font-size: var(--type-caption);
+  }
+
+  .utility-bar__links {
+    display: none;
+  }
+}
+</style>

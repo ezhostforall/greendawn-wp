@@ -1,0 +1,134 @@
+---
+import type { InsightSummary } from "../../types/home";
+import type { HTMLAttributes } from "astro/types";
+import { liveSitePath } from "../../lib/urls";
+import ArrowIcon from "../media/ArrowIcon.astro";
+import ResponsiveImage from "../media/ResponsiveImage.astro";
+
+type Props = Omit<HTMLAttributes<"a">, "href" | "class"> & {
+  insight: InsightSummary;
+  tabletWide?: boolean;
+  mobileDefault?: boolean;
+  class?: string;
+};
+
+const {
+  insight,
+  tabletWide = false,
+  mobileDefault = false,
+  class: className,
+  ...attributes
+} = Astro.props;
+---
+
+<a
+  {...attributes}
+  class:list={[
+    "insight-card",
+    className,
+    { "insight-card--tablet-wide": tabletWide, "insight-card--mobile-default": mobileDefault },
+  ]}
+  href={liveSitePath(insight.href)}
+>
+  <figure>
+    <ResponsiveImage
+      image={insight.image}
+      alt={insight.alt}
+      sizes="(max-width: 42rem) calc(100vw - 1.5rem), (max-width: 61rem) calc(50vw - 2rem), 30vw"
+      loading="lazy"
+    />
+    <ArrowIcon direction="up-right" />
+  </figure>
+  <p>{insight.label}</p>
+  <h3>{insight.title}</h3>
+</a>
+
+<style is:global>
+.insight-card figure {
+  position: relative;
+  aspect-ratio: 1.5;
+  overflow: hidden;
+  margin: 0 0 1.5rem;
+  border-radius: var(--radius-md);
+  background: var(--slate-200);
+}
+
+.insight-card figure > span {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  display: grid;
+  width: 3.2rem;
+  aspect-ratio: 1;
+  transform: translateY(100%);
+  place-items: center;
+  background: var(--lime);
+  color: var(--navy-900);
+  font-size: 1.25rem;
+  transition: transform 220ms ease;
+}
+
+.insight-card:hover figure > span {
+  transform: translateY(0);
+}
+
+.insight-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: var(--image-position);
+  transition: transform 650ms cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+.insight-card:hover img {
+  transform: scale(1.055);
+}
+
+.insight-card > p {
+  margin-bottom: 0.7rem;
+  color: var(--violet);
+  font-family: var(--font-mono);
+  font-size: var(--type-caption);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.insight-card h3 {
+  max-width: 18ch;
+  margin-bottom: 0;
+  font-size: var(--type-compact);
+  transition: color 180ms ease;
+}
+
+.insight-card:hover h3 {
+  color: var(--violet);
+}
+
+@media (max-width: 61rem) {
+  .insight-card--tablet-wide {
+    grid-column: 1 / -1;
+    width: auto;
+  }
+}
+
+@media (max-width: 42rem) {
+  .insight-card img {
+    object-position: var(--image-position-mobile);
+  }
+
+  .insight-card--mobile-default {
+    grid-column: auto;
+    width: auto;
+  }
+
+  .insight-card figure {
+    aspect-ratio: 16 / 9;
+  }
+}
+
+@media (hover: none) and (max-width: 61rem) {
+  .insight-card:hover img {
+    transform: none;
+  }
+}
+</style>

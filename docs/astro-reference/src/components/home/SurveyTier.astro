@@ -1,0 +1,109 @@
+---
+import type { HTMLAttributes } from "astro/types";
+import type { SurveyTier as SurveyTierData } from "../../types/home";
+import SurveyTierCta from "./SurveyTierCta.astro";
+import SurveyTierDescription from "./SurveyTierDescription.astro";
+
+type Props = Omit<HTMLAttributes<"article">, "id" | "class"> & {
+  tier: SurveyTierData;
+  index: number;
+  total: number;
+  id?: string;
+  class?: string;
+};
+
+const { tier, index, total, id = tier.id, class: className, ...attributes } = Astro.props;
+const position = index + 1;
+---
+
+<article
+  {...attributes}
+  class:list={[
+    "survey-tier",
+    className,
+    {
+      "survey-tier--even": position % 2 === 0,
+      "survey-tier--second": position === 2,
+      "survey-tier--last": position === total,
+      "survey-tier--first-row": position <= 2,
+      "survey-tier--last-row": position > total - 2,
+    },
+  ]}
+  id={id}
+>
+  <header>
+    <p>{tier.name}</p>
+    <strong>£{tier.price.toLocaleString("en-GB")}</strong>
+    <span>{tier.suitableFor}</span>
+  </header>
+  <SurveyTierDescription tier={tier} variant="desktop" />
+  <SurveyTierCta tier={tier} />
+</article>
+
+<style is:global>
+.survey-tier {
+  min-height: 31rem;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  gap: 2rem;
+  border-right: 1px solid rgba(11, 29, 42, 0.35);
+  border-bottom: 0;
+  padding: clamp(1.75rem, 3vw, 3rem);
+}
+
+.survey-tier--last {
+  border-right: 0;
+}
+
+.survey-tier header {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.survey-tier header > p,
+.survey-tier header > span {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 400;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+}
+
+.survey-tier header > p {
+  color: rgba(11, 29, 42, 0.72);
+}
+
+.survey-tier header strong {
+  font-family: var(--font-mono);
+  font-size: clamp(2.8rem, 4vw, 4.7rem);
+  font-weight: 600;
+  letter-spacing: -0.075em;
+  line-height: 0.9;
+}
+
+@media (max-width: 75rem) {
+  .survey-tier {
+    min-height: 31rem;
+    border-bottom: 1px solid rgba(11, 29, 42, 0.35);
+  }
+
+  .survey-tier--even {
+    border-right: 0;
+  }
+
+  .survey-tier--last-row {
+    border-bottom: 0;
+  }
+}
+
+@media (max-width: 61rem) {
+  .survey-tier--second {
+    border-right: 0;
+  }
+
+  .survey-tier--first-row {
+    border-bottom: 1px solid rgba(11, 29, 42, 0.35);
+  }
+}
+</style>

@@ -1,0 +1,89 @@
+:root {
+  --navy-950: #071721;
+  --navy-900: #0b1d2a;
+  --navy-800: #13293b;
+  --navy-700: #1e3a4f;
+  --slate-700: #2f3b49;
+  --slate-600: #465563;
+  --slate-500: #5c6770;
+  --slate-300: #abb5bd;
+  --slate-200: #d7dde1;
+  --slate-100: #e6eaee;
+  --cream: #faf9f6;
+  --paper: #f2f2ec;
+  --white: #ffffff;
+  --lime: #e9f227;
+  --lime-dark: #cbd317;
+  --lime-soft: #f4f7a4;
+  --violet: #3a22d8;
+  --coral: #ff5e33;
+  --border-dark: rgba(11, 29, 42, 0.16);
+  --border-light: rgba(250, 249, 246, 0.2);
+  --shadow-sm: 0 1px 2px rgba(7, 23, 33, 0.08), 0 8px 24px rgba(7, 23, 33, 0.06);
+  --shadow-lg: 0 24px 70px rgba(7, 23, 33, 0.18), 0 4px 16px rgba(7, 23, 33, 0.1);
+  --font-display: "Bricolage Grotesque", "Arial Narrow", sans-serif;
+  --font-body: "Archivo", Arial, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+  /* Role-based scales remain continuous across layout breakpoints. */
+  --type-caption: clamp(0.75rem, 0.73rem + 0.12vw, 0.875rem);
+  --type-secondary: clamp(0.875rem, 0.85rem + 0.12vw, 1rem);
+  --type-action: var(--type-secondary);
+  --type-body-compact: 1rem;
+  --type-body: clamp(1rem, 0.96rem + 0.2vw, 1.125rem);
+  --type-lead: clamp(1.125rem, 1.025rem + 0.5vw, 1.5rem);
+  /* Retain numbered aliases for existing consumers. */
+  --step--1: var(--type-secondary);
+  --step-0: var(--type-body);
+  --step-1: var(--type-lead);
+  --step-2: clamp(1.6rem, 1.28rem + 1vw, 2.35rem);
+  --step-3: clamp(2.2rem, 1.65rem + 2.2vw, 4rem);
+  --step-4: clamp(3rem, 2rem + 4vw, 6.4rem);
+  --step-5: clamp(4.5rem, 2.8rem + 7vw, 10rem);
+  --type-display: var(--step-5);
+  --type-statement: clamp(2.9rem, 2.2rem + 4.2vw, 7.25rem);
+  --type-closing: clamp(4rem, 3rem + 5.5vw, 9rem);
+  --type-price: clamp(3.8rem, 2.8rem + 8vw, 7.5rem);
+  --type-section: clamp(2.35rem, 2rem + 2vw, 4.25rem);
+  --type-feature: clamp(1.9rem, 1.6rem + 1vw, 2.8rem);
+  --type-card: clamp(1.5rem, 1.4rem + 0.4vw, 1.75rem);
+  --type-compact: clamp(1.25rem, 1.15rem + 0.4vw, 1.5rem);
+  --space-1: 0.5rem;
+  --space-2: 0.75rem;
+  --space-3: 1rem;
+  --space-4: 1.5rem;
+  --space-5: 2rem;
+  --space-6: 3rem;
+  --space-7: 4.5rem;
+  --space-8: 6rem;
+  --space-9: 9rem;
+  --space-10: 12rem;
+  --shell: min(100% - 3rem, 92rem);
+  --radius-sm: 0.35rem;
+  --radius-md: 0.85rem;
+  --radius-lg: 1.35rem;
+  --focus-ring: var(--violet);
+}
+
+@media (max-width: 75rem) {
+  :root {
+    --shell: min(100% - 2.5rem, 76rem);
+  }
+}
+
+@media (max-width: 61rem) {
+  :root {
+    --shell: min(100% - 2rem, 58rem);
+  }
+}
+
+@media (max-width: 42rem) {
+  :root {
+    --shell: min(100% - 1.5rem, 39rem);
+  }
+}
+
+@media (max-width: 30rem) {
+  :root {
+    --shell: min(100% - 1.25rem, 28rem);
+  }
+}

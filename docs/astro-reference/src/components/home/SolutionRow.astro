@@ -1,0 +1,153 @@
+---
+import type { Solution } from "../../types/home";
+import type { HTMLAttributes } from "astro/types";
+import { liveSitePath } from "../../lib/urls";
+import ArrowIcon from "../media/ArrowIcon.astro";
+
+type Props = Omit<HTMLAttributes<"a">, "href" | "class"> & {
+  solution: Solution;
+  index: number;
+  active?: boolean;
+  class?: string;
+};
+
+const { solution, index, active = false, class: className, ...attributes } = Astro.props;
+---
+
+<a
+  {...attributes}
+  class:list={["solution-row", className, { "is-active": active }]}
+  href={liveSitePath(solution.href)}
+  data-solution-row={index}
+>
+  <span class="solution-row__number">{solution.number}</span>
+  <div class="solution-row__body">
+    <div class="solution-row__copy">
+      <h3>{solution.title}</h3>
+      <p>{solution.copy}</p>
+      {solution.linkLabel && <span class="solution-row__destination">{solution.linkLabel}</span>}
+    </div>
+  </div>
+  <span class="solution-row__arrow"><ArrowIcon direction="up-right" /></span>
+</a>
+
+<style is:global>
+.solution-row__body {
+  min-width: 0;
+}
+
+.solution-row {
+  display: grid;
+  min-height: 7.75rem;
+  grid-template-columns: 3.2rem minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 1rem;
+  border-bottom: 1px solid var(--border-dark);
+  padding: 1.1rem 0;
+  position: relative;
+  transition: color 220ms ease, padding 220ms ease;
+}
+
+.solution-row::before {
+  position: absolute;
+  top: 1.3rem;
+  bottom: 1.3rem;
+  left: 0;
+  width: 3px;
+  transform: scaleY(0);
+  transform-origin: center;
+  background: currentColor;
+  content: "";
+  transition: transform 220ms ease;
+}
+
+.solution-row:hover,
+.solution-row.is-active {
+  color: var(--violet);
+  padding-left: 0.6rem;
+}
+
+.solution-row:hover::before,
+.solution-row.is-active::before {
+  transform: scaleY(1);
+}
+
+.solution-row__number {
+  align-self: start;
+  margin-top: 0.85rem;
+  color: var(--slate-500);
+  font-family: var(--font-mono);
+  font-size: var(--type-caption);
+}
+
+.solution-row h3 {
+  margin-bottom: 0.8rem;
+  font-size: var(--type-card);
+}
+
+.solution-row p {
+  max-width: 34rem;
+  margin-bottom: 0;
+  color: var(--slate-500);
+  font-size: var(--type-body-compact);
+  line-height: 1.6;
+}
+
+.solution-row__arrow {
+  align-self: start;
+  margin-top: 0.45rem;
+  font-size: 1.6rem;
+}
+
+.solution-row__destination {
+  display: block;
+  margin-top: 0.7rem;
+  color: var(--navy-900);
+  font-size: var(--type-body-compact);
+  font-weight: 600;
+  line-height: 1.5;
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+
+@media (max-width: 61rem) {
+  .solution-row {
+    min-height: auto;
+    align-items: start;
+    padding-block: 1.5rem;
+  }
+}
+
+@media (max-width: 42rem) {
+  .solution-row {
+    min-height: auto;
+    grid-template-columns: 2.1rem minmax(0, 1fr) auto;
+  }
+
+  .solution-row.is-active::before,
+  .solution-row:hover::before {
+    transform: scaleY(0);
+  }
+}
+
+@media (max-width: 61rem) {
+  .solution-row.is-active {
+    color: inherit;
+    padding-left: 0;
+  }
+}
+
+@media (hover: none) and (max-width: 61rem) {
+  .solution-row:hover {
+    color: inherit;
+    padding-left: 0;
+  }
+}
+
+@media (max-width: 30rem) {
+  .solution-row {
+    grid-template-columns: 1.8rem minmax(0, 1fr) auto;
+    gap: 0.65rem;
+  }
+}
+</style>

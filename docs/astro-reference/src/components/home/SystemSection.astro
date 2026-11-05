@@ -1,0 +1,235 @@
+---
+import { systemLayers } from "../../content/home";
+import { liveSitePath } from "../../lib/urls";
+import ArrowIcon from "../media/ArrowIcon.astro";
+import SystemCard from "./SystemCard.astro";
+---
+
+<section class="system section" id="system" data-system>
+  <div class="system__header page-shell" data-reveal>
+    <p class="eyebrow eyebrow--light">Start with the site</p>
+    <h2>The charger is only one part of the system.</h2>
+    <p>Start with what the charging needs to achieve. Then plan the power, equipment and operating arrangements around it.</p>
+  </div>
+
+  <div class="system__stage page-shell">
+    <svg class="system__arc" viewBox="0 0 1200 490" fill="none" aria-hidden="true">
+      <path data-system-path d="M21 432C190 75 762 -91 1171 241" />
+    </svg>
+    <div class="system__cards">
+      {systemLayers.map((layer, index) => (
+        <SystemCard layer={layer} tone={index === 1 ? "violet" : index === 2 ? "cream" : "base"} />
+      ))}
+    </div>
+    <div class="system__closing">
+      <div class="system__decisions">
+        <article data-reveal>
+          <span>Technology</span>
+          <h3>AC or DC follows the operational need.</h3>
+          <p>Vehicles, energy demand and the time available to charge shape the equipment choice.</p>
+          <a class="text-link text-link--light" href={liveSitePath("/guides/ac-vs-dc-ev-charging/")}>Understand AC and DC charging <ArrowIcon /></a>
+        </article>
+        <article data-reveal>
+          <span>Site power</span>
+          <h3>Make informed decisions about site power.</h3>
+          <p>Assess demand and load management before deciding whether additional supply is needed.</p>
+          <a class="text-link text-link--light" href={liveSitePath("/guides/can-my-building-handle-ev-charging/")}>Explore site power planning <ArrowIcon /></a>
+        </article>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style is:global>
+.system__arc path {
+  fill: none;
+  stroke: var(--lime);
+  stroke-linecap: round;
+  stroke-width: 10;
+}
+
+.system {
+  overflow: clip;
+  background: var(--navy-900);
+  color: var(--cream);
+}
+
+.system__header {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+  align-items: center;
+  gap: 1.25rem clamp(2rem, 4vw, 4rem);
+  padding-bottom: clamp(3rem, 5vw, 4.5rem);
+}
+
+.system__header .eyebrow {
+  grid-column: 1 / -1;
+  align-self: start;
+  margin: 0;
+}
+
+.system__header h2 {
+  max-width: 14ch;
+  margin-bottom: 0;
+}
+
+.system__header > p:last-child {
+  margin-bottom: 0.3rem;
+  color: var(--slate-300);
+  font-size: var(--type-body);
+}
+
+.system__stage {
+  position: relative;
+  min-height: 30rem;
+}
+
+.system__arc {
+  position: absolute;
+  top: -6rem;
+  right: -10rem;
+  width: min(82vw, 82rem);
+  opacity: 0.84;
+}
+
+.system__arc path {
+  stroke-width: 8;
+}
+
+.system__cards {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  align-items: end;
+  gap: clamp(1rem, 2vw, 1.6rem);
+}
+
+.system__closing {
+  margin-top: 2rem;
+  border-top: 1px solid var(--border-light);
+  padding-top: 2rem;
+}
+
+.system__decisions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(1.5rem, 3vw, 3rem);
+  width: 100%;
+}
+
+.system__decisions article {
+  min-width: 0;
+}
+
+.system__decisions article > span {
+  color: var(--lime);
+  font-family: var(--font-mono);
+  font-size: var(--type-action);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.system__decisions h3 {
+  margin: 1rem 0 0.8rem;
+  font-size: var(--type-compact);
+  letter-spacing: -0.03em;
+}
+
+.system__decisions p {
+  margin-bottom: 1.25rem;
+  color: var(--slate-300);
+  font-size: var(--type-body-compact);
+  line-height: 1.65;
+}
+
+.system__decisions .text-link {
+  font-size: var(--type-action);
+}
+
+@media (max-width: 75rem) {
+  .system__header {
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+  }
+
+  .system__header > p:last-child {
+    grid-column: 2;
+  }
+
+  .system__cards {
+    align-items: stretch;
+  }
+}
+
+@media (max-width: 61rem) {
+  .system__header {
+    grid-template-columns: 1fr;
+  }
+
+  .system__header > p:last-child {
+    grid-column: 1;
+  }
+
+  .system__stage {
+    padding-top: 3rem;
+  }
+
+  .system__cards {
+    grid-template-columns: 1fr;
+  }
+
+  .system__decisions {
+    max-width: 48rem;
+    margin-left: 0;
+  }
+
+  .system__arc {
+    top: -7rem;
+    right: -4rem;
+    width: clamp(34rem, 82vw, 44rem);
+    opacity: 0.66;
+  }
+
+  .system__arc path {
+    stroke-width: 6;
+  }
+}
+
+@media (max-width: 42rem) {
+  .system__header {
+    padding-bottom: 2.5rem;
+  }
+
+  .system__stage {
+    padding-top: 3.5rem;
+  }
+
+  .system__arc {
+    top: -6.5rem;
+    right: -10rem;
+    width: 34rem;
+    opacity: 0.46;
+  }
+
+  .system__arc path {
+    stroke-width: 5;
+  }
+
+  .system__decisions {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 30rem) {
+  .system__stage {
+    padding-top: 3.5rem;
+  }
+
+  .system__arc {
+    top: -6rem;
+    right: -11rem;
+    width: 30rem;
+    opacity: 0.36;
+  }
+}
+</style>

@@ -1,0 +1,110 @@
+---
+import type { HTMLAttributes } from "astro/types";
+import type { SurveyTier } from "../../types/home";
+import SurveyTierCta from "./SurveyTierCta.astro";
+import SurveyTierDescription from "./SurveyTierDescription.astro";
+
+type Props = Omit<HTMLAttributes<"details">, "class"> & {
+  tier: SurveyTier;
+  last?: boolean;
+  class?: string;
+};
+
+const { tier, last = false, class: className, ...attributes } = Astro.props;
+---
+
+<details
+  {...attributes}
+  class:list={["survey-tier-mobile", className, { "survey-tier-mobile--last": last }]}
+>
+  <summary>
+    <span>
+      <b>{tier.name}</b>
+      <small>{tier.suitableFor}</small>
+    </span>
+    <strong>£{tier.price.toLocaleString("en-GB")}</strong>
+    <span class="survey-tier-mobile__toggle" aria-hidden="true"></span>
+  </summary>
+  <SurveyTierDescription tier={tier} variant="mobile">
+    <SurveyTierCta tier={tier} mobile />
+  </SurveyTierDescription>
+</details>
+
+<style is:global>
+@media (max-width: 42rem) {
+  .survey-tier-mobile {
+    border-bottom: 1px solid rgba(11, 29, 42, 0.35);
+  }
+
+  .survey-tier-mobile--last {
+    border-bottom: 0;
+  }
+
+  .survey-tier-mobile summary {
+    display: grid;
+    min-height: 5.5rem;
+    grid-template-columns: minmax(0, 1fr) auto 1.4rem;
+    align-items: center;
+    gap: 0.85rem;
+    cursor: pointer;
+    list-style: none;
+    padding: 1rem 0;
+  }
+
+  .survey-tier-mobile summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .survey-tier-mobile summary > span:first-child {
+    display: grid;
+    gap: 0.3rem;
+  }
+
+  .survey-tier-mobile summary b {
+    font-size: 1rem;
+    letter-spacing: -0.025em;
+  }
+
+  .survey-tier-mobile summary small {
+    color: var(--slate-500);
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    line-height: 1.4;
+    text-transform: uppercase;
+  }
+
+  .survey-tier-mobile summary > strong {
+    font-family: var(--font-mono);
+    font-size: 1.35rem;
+    letter-spacing: -0.05em;
+  }
+
+  .survey-tier-mobile__toggle {
+    position: relative;
+    width: 1.1rem;
+    height: 1.1rem;
+  }
+
+  .survey-tier-mobile__toggle::before,
+  .survey-tier-mobile__toggle::after {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0.85rem;
+    height: 1px;
+    transform: translate(-50%, -50%);
+    background: currentColor;
+    content: "";
+  }
+
+  .survey-tier-mobile__toggle::after {
+    transform: translate(-50%, -50%) rotate(90deg);
+    transition: transform 180ms ease;
+  }
+
+  .survey-tier-mobile[open] .survey-tier-mobile__toggle::after {
+    transform: translate(-50%, -50%) rotate(0deg);
+  }
+
+}
+</style>

@@ -1,7 +1,18 @@
 @import './greendawn-home-sections.css';
 @import './greendawn-home-journey.css';
 
+html:has(> .greendawn-home) {
+	scrollbar-gutter: stable;
+}
+
 .greendawn-home {
+	--gd-type-body: clamp(1rem, 0.96rem + 0.2vw, 1.125rem);
+	--gd-type-section: clamp(2.35rem, 2rem + 2vw, 4.25rem);
+	font-size: var(--gd-type-body);
+	font-weight: 400;
+	line-height: 1.6;
+	text-rendering: optimizeLegibility;
+	-webkit-font-smoothing: antialiased;
 	background: var(--gd-cream);
 	color: var(--gd-navy-900);
 }
@@ -30,7 +41,9 @@
 	color: inherit;
 	font-family: var(--font-mono);
 	font-size: var(--gd-type-caption);
-	letter-spacing: 0.06em;
+	font-weight: 400;
+	letter-spacing: 0.1em;
+	line-height: 1.2;
 	text-transform: uppercase;
 }
 

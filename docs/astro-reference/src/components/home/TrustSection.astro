@@ -1,0 +1,144 @@
+---
+import johnsonsLogo from "../../assets/client-logos/johnsons-cars.png";
+import salvationArmyLogo from "../../assets/client-logos/salvation-army.svg";
+import { approvedClaim, claims } from "../../content/claims";
+import TrustClientLogo from "./TrustClientLogo.astro";
+
+const deliveryFootprint = approvedClaim(claims.deliveryFootprint);
+---
+
+<section class="trust page-shell" aria-label="Commercial EV charging delivery">
+  <div class="trust__intro">
+    <p class="eyebrow">Commercial delivery</p>
+    <p>Experience across dealership, fleet, workplace and destination sites.</p>
+  </div>
+
+  <div class="trust__credentials" aria-label="Greendawn delivery footprint">
+    <span>
+      <strong>GB</strong>
+      <small>{deliveryFootprint}</small>
+    </span>
+    <span>
+      <strong>AC–DC</strong>
+      <small>Equipment selected around the requirement</small>
+    </span>
+  </div>
+
+  <ul class="trust__clients" aria-label="Selected Greendawn project experience">
+    <TrustClientLogo src={johnsonsLogo} alt="Johnsons Cars" variant="johnsons" />
+    <TrustClientLogo src={salvationArmyLogo} alt="The Salvation Army" variant="salvation-army" />
+  </ul>
+</section>
+
+<style is:global>
+.trust {
+  display: grid;
+  grid-template-columns: 0.85fr 1.15fr 1fr;
+  align-items: center;
+  gap: clamp(1.5rem, 2.5vw, 2.5rem);
+  padding-block: 3.4rem;
+}
+
+.trust__intro .eyebrow {
+  margin-bottom: 0.75rem;
+}
+
+.trust__intro > p:last-child {
+  max-width: 18rem;
+  margin-bottom: 0;
+  color: var(--slate-500);
+  font-size: var(--type-secondary);
+}
+
+.trust__credentials {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(1.5rem, 3vw, 3rem);
+  border-right: 1px solid var(--border-dark);
+  border-left: 1px solid var(--border-dark);
+  padding-inline: clamp(1rem, 2vw, 2rem);
+}
+
+.trust__credentials > span {
+  display: flex;
+  min-width: 7rem;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.trust__credentials strong {
+  color: var(--navy-900);
+  font-family: var(--font-body);
+  font-size: 1.2rem;
+  letter-spacing: -0.03em;
+}
+
+.trust__credentials small {
+  color: var(--slate-500);
+  font-family: var(--font-mono);
+  font-size: 0.875rem;
+  line-height: 1.45;
+  text-transform: uppercase;
+}
+
+.trust__clients {
+  display: grid;
+  width: min(100%, 24rem);
+  min-width: 0;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  justify-self: end;
+  align-items: stretch;
+  gap: clamp(0.75rem, 1.5vw, 1.15rem);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+@media (max-width: 75rem) {
+  .trust {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .trust__clients {
+    grid-column: 1 / -1;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    justify-self: start;
+    border-top: 1px solid var(--border-dark);
+    padding-top: 2rem;
+  }
+
+  .trust__credentials {
+    border-right: 0;
+  }
+}
+
+@media (max-width: 61rem) {
+  .trust__clients {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 42rem) {
+  .trust {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+    padding-block: 2.5rem 2.1rem;
+  }
+
+  .trust__credentials {
+    justify-content: flex-start;
+    border: 0;
+    border-top: 1px solid var(--border-dark);
+    border-bottom: 1px solid var(--border-dark);
+    padding: 1.6rem 0;
+  }
+
+  .trust__clients {
+    grid-column: auto;
+    justify-self: stretch;
+    border-top: 0;
+    padding-top: 0;
+  }
+}
+</style>

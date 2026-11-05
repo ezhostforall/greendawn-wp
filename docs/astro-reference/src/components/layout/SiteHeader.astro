@@ -1,0 +1,577 @@
+---
+import { siteConfig } from "../../config/site";
+import { primaryNavigation } from "../../config/navigation";
+import { assetPath, liveSitePath } from "../../lib/urls";
+import ArrowIcon from "../media/ArrowIcon.astro";
+
+const indexedNavigation = primaryNavigation.map((item, index) => ({
+  item,
+  number: String(index + 1).padStart(2, "0"),
+}));
+---
+
+<header class="site-header" data-header>
+  <div class="site-header__inner page-shell">
+    <a class="brand" href={liveSitePath("/")} aria-label={`${siteConfig.name} homepage`}>
+      <img src={assetPath("/brand/greendawn-wordmark-480.png")} alt={siteConfig.name} width="480" height="132" />
+    </a>
+
+    <nav class="desktop-nav" aria-label="Primary navigation">
+      {primaryNavigation.map((item) => item.kind === "link" ? (
+        <a href={liveSitePath(item.path)}>{item.label}</a>
+      ) : (
+        <details class="desktop-nav__group" data-nav-disclosure>
+          <summary>
+            {item.label}
+            <svg viewBox="0 0 12 8" aria-hidden="true" focusable="false"><path d="m1 1 5 5 5-5" /></svg>
+          </summary>
+          <div class="desktop-nav__menu">
+            {item.children.map((child) => (
+              <a href={liveSitePath(child.path)}>{child.label}<ArrowIcon /></a>
+            ))}
+          </div>
+        </details>
+      ))}
+    </nav>
+
+    <a
+      class="header-cta"
+      href={liveSitePath("/enquire/")}
+      data-lead-capture-open
+      data-lead-entry-point="header"
+    >
+      Discuss your site
+      <ArrowIcon direction="up-right" />
+    </a>
+
+    <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="mobile-navigation">
+      <span class="sr-only">Open navigation</span>
+      <span></span>
+      <span></span>
+    </button>
+  </div>
+
+  <div class="mobile-nav" id="mobile-navigation" aria-hidden="true" inert>
+    <nav aria-label="Mobile navigation">
+      {indexedNavigation.map(({ item, number }) => item.kind === "link" ? (
+        <a href={liveSitePath(item.path)}><span aria-hidden="true">{number}</span>{item.label}</a>
+      ) : (
+        <details class="mobile-nav__group" data-nav-disclosure>
+          <summary>
+            <span aria-hidden="true">{number}</span>
+            {item.label}
+            <svg viewBox="0 0 12 8" aria-hidden="true" focusable="false"><path d="m1 1 5 5 5-5" /></svg>
+          </summary>
+          <div class="mobile-nav__submenu">
+            {item.children.map((child) => (
+              <a href={liveSitePath(child.path)}>{child.label}<ArrowIcon /></a>
+            ))}
+          </div>
+        </details>
+      ))}
+    </nav>
+    <a
+      class="button button--lime"
+      href={liveSitePath("/enquire/")}
+      data-lead-capture-open
+      data-lead-entry-point="header"
+    >Discuss your site <ArrowIcon direction="up-right" /></a>
+    <p><a href={siteConfig.phone.href}>{siteConfig.phone.display}</a> · <a href={liveSitePath("/customer-care/")}>Support</a></p>
+  </div>
+
+  <noscript>
+    <details class="no-js-nav">
+      <summary>Navigation</summary>
+      <nav aria-label="Primary navigation without JavaScript">
+        {primaryNavigation.map((item) => item.kind === "link" ? (
+          <a href={liveSitePath(item.path)}>{item.label}</a>
+        ) : (
+          <details class="no-js-nav__group">
+            <summary>{item.label}</summary>
+            <div>
+              {item.children.map((child) => (
+                <a href={liveSitePath(child.path)}>{child.label}</a>
+              ))}
+            </div>
+          </details>
+        ))}
+        <a href={liveSitePath("/enquire/")}>Discuss your site</a>
+      </nav>
+    </details>
+  </noscript>
+</header>
+
+<style is:global>
+body.menu-open {
+  overflow: hidden;
+}
+
+.site-header {
+  position: absolute;
+  z-index: 90;
+  top: 2.35rem;
+  right: 0;
+  left: 0;
+  min-height: 5.5rem;
+  border-bottom: 1px solid var(--border-light);
+  color: var(--cream);
+  transition: min-height 240ms ease, background-color 240ms ease, box-shadow 240ms ease, transform 240ms ease;
+}
+
+.site-header__inner {
+  display: grid;
+  min-height: inherit;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: clamp(1.5rem, 4vw, 4rem);
+}
+
+.site-header.is-scrolled {
+  position: fixed;
+  top: 0;
+  min-height: 4.7rem;
+  border-bottom-color: rgba(250, 249, 246, 0.11);
+  background: rgba(7, 23, 33, 0.94);
+  box-shadow: 0 9px 35px rgba(7, 23, 33, 0.22);
+  backdrop-filter: blur(16px);
+}
+
+.desktop-nav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(1.35rem, 2.4vw, 2.7rem);
+}
+
+.desktop-nav > a,
+.desktop-nav__group > summary {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  cursor: pointer;
+  font-family: var(--font-mono);
+  font-size: 0.875rem;
+  font-weight: 400;
+  letter-spacing: 0.015em;
+  list-style: none;
+}
+
+.desktop-nav__group > summary::-webkit-details-marker {
+  display: none;
+}
+
+.desktop-nav > a::after,
+.desktop-nav__group > summary::after {
+  position: absolute;
+  right: 0;
+  bottom: -0.55rem;
+  left: 0;
+  height: 2px;
+  transform: scaleX(0);
+  transform-origin: right;
+  background: var(--lime);
+  content: "";
+  transition: transform 220ms ease;
+}
+
+.desktop-nav > a:hover::after,
+.desktop-nav__group > summary:hover::after,
+.desktop-nav__group[open] > summary::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
+.desktop-nav__group {
+  position: relative;
+}
+
+.desktop-nav__group > summary > svg,
+.mobile-nav__group > summary > svg {
+  width: 0.68rem;
+  height: 0.46rem;
+  overflow: visible;
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 1.5;
+  transition: transform 180ms ease;
+}
+
+.desktop-nav__group[open] > summary > svg,
+.mobile-nav__group[open] > summary > svg {
+  transform: rotate(180deg);
+}
+
+.desktop-nav__menu {
+  position: absolute;
+  top: calc(100% + 1.35rem);
+  left: 50%;
+  display: grid;
+  width: 15.5rem;
+  transform: translateX(-50%);
+  border: 1px solid rgba(7, 23, 33, 0.12);
+  border-radius: var(--radius-sm);
+  background: var(--cream);
+  box-shadow: var(--shadow-lg);
+  color: var(--navy-900);
+  overflow: hidden;
+}
+
+.desktop-nav__menu::before {
+  position: absolute;
+  top: -0.42rem;
+  left: 50%;
+  width: 0.8rem;
+  height: 0.8rem;
+  transform: translateX(-50%) rotate(45deg);
+  border-top: 1px solid rgba(7, 23, 33, 0.12);
+  border-left: 1px solid rgba(7, 23, 33, 0.12);
+  background: var(--cream);
+  content: "";
+}
+
+.desktop-nav__menu a {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  min-height: 3.4rem;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  border-bottom: 1px solid rgba(7, 23, 33, 0.1);
+  font-family: var(--font-mono);
+  font-size: var(--type-action);
+  padding: 0.8rem 1rem;
+  transition: background-color 180ms ease;
+}
+
+.desktop-nav__menu a:last-child {
+  border-bottom: 0;
+}
+
+.desktop-nav__menu a:hover,
+.desktop-nav__menu a:focus-visible {
+  background: var(--lime);
+}
+
+.header-cta {
+  display: inline-flex;
+  min-height: 2.7rem;
+  align-items: center;
+  justify-content: space-between;
+  justify-self: end;
+  gap: 2.2rem;
+  border-radius: var(--radius-sm);
+  background: var(--cream);
+  color: var(--navy-900);
+  font-family: var(--font-mono);
+  font-size: var(--type-action);
+  font-weight: 600;
+  padding: 0.65rem 0.85rem;
+  transition: background-color 180ms ease, transform 180ms ease;
+}
+
+.header-cta:hover {
+  transform: translateY(-2px);
+  background: var(--lime);
+}
+
+.menu-toggle,
+.mobile-nav,
+.no-js-nav {
+  display: none;
+}
+
+@media (max-width: 75rem) {
+  .site-header__inner {
+    z-index: 130;
+    grid-template-columns: 1fr auto;
+  }
+
+  .site-header.menu-active {
+    position: fixed;
+    top: 0;
+    min-height: 5.5rem;
+    border-bottom-color: transparent;
+    background: transparent;
+    box-shadow: none;
+    backdrop-filter: none;
+  }
+
+  .site-header .brand {
+    position: relative;
+    z-index: 102;
+  }
+
+  .desktop-nav,
+  .header-cta {
+    display: none;
+  }
+
+  .menu-toggle {
+    position: relative;
+    z-index: 102;
+    display: block;
+    width: 2.8rem;
+    height: 2.8rem;
+    justify-self: end;
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius-sm);
+    background: transparent;
+    cursor: pointer;
+  }
+
+  html.no-js .menu-toggle {
+    display: none;
+  }
+
+  .no-js-nav {
+    position: absolute;
+    z-index: 102;
+    top: 50%;
+    right: max(1.25rem, calc((100% - var(--shell)) / 2));
+    display: block;
+    transform: translateY(-50%);
+    font-family: var(--font-mono);
+    font-size: var(--type-action);
+  }
+
+  .no-js-nav > summary {
+    min-width: 7.5rem;
+    min-height: 2.8rem;
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius-sm);
+    background: var(--navy-950);
+    cursor: pointer;
+    list-style-position: inside;
+    padding: 0.72rem 0.85rem;
+  }
+
+  .no-js-nav > nav {
+    position: absolute;
+    top: calc(100% + 0.5rem);
+    right: 0;
+    display: grid;
+    width: min(20rem, calc(100vw - 2rem));
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius-sm);
+    background: var(--navy-950);
+    box-shadow: var(--shadow-lg);
+    overflow: hidden;
+  }
+
+  .no-js-nav > nav > a,
+  .no-js-nav__group > summary {
+    display: flex;
+    min-height: 3rem;
+    align-items: center;
+    border-bottom: 1px solid var(--border-light);
+    cursor: pointer;
+    list-style: none;
+    padding: 0.85rem 1rem;
+  }
+
+  .no-js-nav__group > summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .no-js-nav__group > summary::after {
+    margin-left: auto;
+    content: "+";
+  }
+
+  .no-js-nav__group[open] > summary::after {
+    content: "−";
+  }
+
+  .no-js-nav__group > div {
+    display: grid;
+    border-bottom: 1px solid var(--border-light);
+    background: rgba(255, 255, 255, 0.04);
+  }
+
+  .no-js-nav__group a {
+    min-height: 2.75rem;
+    padding: 0.72rem 1rem 0.72rem 1.75rem;
+  }
+
+  .no-js-nav > nav > a:last-child {
+    border-bottom: 0;
+  }
+
+  .menu-toggle > span:not(.sr-only) {
+    position: absolute;
+    left: 50%;
+    width: 1.1rem;
+    height: 1px;
+    transform: translateX(-50%);
+    background: currentColor;
+    transition: transform 220ms ease, top 220ms ease;
+  }
+
+  .menu-toggle > span:nth-child(2) {
+    top: 1.08rem;
+  }
+
+  .menu-toggle > span:nth-child(3) {
+    top: 1.65rem;
+  }
+
+  .menu-toggle[aria-expanded="true"] > span:nth-child(2) {
+    top: 1.35rem;
+    transform: translateX(-50%) rotate(45deg);
+  }
+
+  .menu-toggle[aria-expanded="true"] > span:nth-child(3) {
+    top: 1.35rem;
+    transform: translateX(-50%) rotate(-45deg);
+  }
+
+  .mobile-nav {
+    position: fixed;
+    z-index: 100;
+    inset: 0;
+    display: flex;
+    height: 100dvh;
+    min-height: 100dvh;
+    transform: translateY(-1.5rem);
+    flex-direction: column;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    background: var(--navy-950);
+    color: var(--cream);
+    opacity: 0;
+    padding: max(7rem, calc(env(safe-area-inset-top) + 6rem)) max(2rem, env(safe-area-inset-right)) max(2rem, env(safe-area-inset-bottom)) max(2rem, env(safe-area-inset-left));
+    pointer-events: none;
+    visibility: hidden;
+    transition: opacity 220ms ease, transform 320ms cubic-bezier(0.2, 0.7, 0.2, 1), visibility 0s linear 320ms;
+  }
+
+  .mobile-nav.is-open {
+    transform: translateY(0);
+    opacity: 1;
+    pointer-events: auto;
+    visibility: visible;
+    transition-delay: 0s;
+  }
+
+  .mobile-nav nav {
+    display: flex;
+    flex-direction: column;
+    border-top: 1px solid var(--border-light);
+  }
+
+  .mobile-nav nav > a,
+  .mobile-nav__group > summary {
+    display: flex;
+    min-height: 4.75rem;
+    align-items: center;
+    gap: 1.5rem;
+    border-bottom: 1px solid var(--border-light);
+    font-family: var(--font-body);
+    font-size: clamp(2rem, 6vw, 4rem);
+    font-weight: 600;
+    letter-spacing: -0.04em;
+    line-height: 1;
+    cursor: pointer;
+    list-style: none;
+    padding-block: 0.8rem;
+  }
+
+  .mobile-nav__group > summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .mobile-nav nav > a > span,
+  .mobile-nav__group > summary > span {
+    color: var(--lime);
+    font-family: var(--font-mono);
+    font-size: var(--type-caption);
+    letter-spacing: 0;
+  }
+
+  .mobile-nav__group > summary > svg {
+    width: 0.9rem;
+    height: 0.6rem;
+    margin-left: auto;
+  }
+
+  .mobile-nav__submenu {
+    display: grid;
+    border-bottom: 1px solid var(--border-light);
+    background: rgba(255, 255, 255, 0.035);
+  }
+
+  .mobile-nav__submenu a {
+    display: flex;
+    min-height: 3.6rem;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    border-bottom: 1px solid rgba(250, 249, 246, 0.09);
+    color: var(--slate-200);
+    font-family: var(--font-mono);
+    font-size: var(--type-action);
+    font-weight: 500;
+    letter-spacing: 0;
+    line-height: 1.3;
+    padding: 0.75rem 0.9rem 0.75rem 2.2rem;
+  }
+
+  .mobile-nav__submenu a:last-child {
+    border-bottom: 0;
+  }
+
+  .mobile-nav .button {
+    align-self: flex-start;
+    margin-top: 2rem;
+  }
+
+  .mobile-nav > p {
+    margin: auto 0 0;
+    color: var(--slate-300);
+    font-size: var(--type-secondary);
+  }
+}
+
+@media (max-width: 42rem) {
+  .site-header {
+    top: 2.65rem;
+    min-height: 4.7rem;
+  }
+
+  .site-header.menu-active {
+    top: 0;
+    min-height: 4.7rem;
+  }
+
+  .mobile-nav {
+    padding-inline: max(1.25rem, env(safe-area-inset-left)) max(1.25rem, env(safe-area-inset-right));
+  }
+
+  .mobile-nav nav > a,
+  .mobile-nav__group > summary {
+    min-height: 4.3rem;
+    font-size: clamp(1.75rem, 8vw, 2.75rem);
+  }
+}
+
+@media (max-height: 44rem) and (max-width: 75rem) {
+  .mobile-nav {
+    padding-top: max(5.5rem, calc(env(safe-area-inset-top) + 5rem));
+  }
+
+  .mobile-nav nav > a,
+  .mobile-nav__group > summary {
+    min-height: 3.5rem;
+    font-size: clamp(1.45rem, 5.2vh, 2.2rem);
+  }
+
+  .mobile-nav .button {
+    min-height: 3rem;
+    margin-top: 1.2rem;
+  }
+}
+</style>

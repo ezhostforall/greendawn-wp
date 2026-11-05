@@ -1,0 +1,44 @@
+---
+import type { HTMLAttributes } from "astro/types";
+import type { SurveyTier } from "../../types/home";
+import { liveSitePath } from "../../lib/urls";
+import ArrowIcon from "../media/ArrowIcon.astro";
+
+type Props = Omit<HTMLAttributes<"a">, "href" | "class"> & {
+  tier: SurveyTier;
+  mobile?: boolean;
+  class?: string;
+};
+
+const { tier, mobile = false, class: className, ...attributes } = Astro.props;
+---
+
+<a
+  {...attributes}
+  class:list={["survey-tier__cta", className, { "survey-tier__cta--mobile": mobile }]}
+  href={liveSitePath(`/enquire/?survey=${tier.id}`)}
+>
+  Enquire about this survey <ArrowIcon direction="up-right" />
+</a>
+
+<style is:global>
+.survey-tier__cta {
+  display: inline-flex;
+  min-height: 3rem;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  border-top: 1px solid rgba(11, 29, 42, 0.35);
+  font-family: var(--font-mono);
+  font-size: 0.76rem;
+  font-weight: 600;
+  padding-top: 1.25rem;
+}
+
+@media (max-width: 42rem) {
+  .survey-tier__cta--mobile {
+    display: flex;
+    margin-top: 1.4rem;
+  }
+}
+</style>

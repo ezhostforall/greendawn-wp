@@ -1,6 +1,6 @@
 # Greendawn homepage pilot
 
-The Greendawn Homepage template renders the Hero, Trust, Problem, System, Process, Featured Project, Technical Site Surveys and Services sections from the Astro reference. The branded header is shared across the site, with a transparent overlay on this template and a navy background above inner-page content. The layout and proof stage order live in PHP. Greendawn Core owns the copy and image defaults and registers the editable homepage fields when Secure Custom Fields is active.
+The Greendawn Homepage template renders the Hero, Trust, Problem, System, Process, Featured Project, Technical Site Surveys, Services and Aftercare sections from the Astro reference. The branded header is shared across the site, with a transparent overlay on this template and a navy background above inner-page content. The layout and proof stage order live in PHP. Greendawn Core owns the copy and image defaults and registers the editable homepage fields when Secure Custom Fields is active.
 
 ## Set up the staging page
 
@@ -10,7 +10,7 @@ The Greendawn Homepage template renders the Hero, Trust, Problem, System, Proces
 4. Assign the Primary menu with About Us, Our Projects, the three Our Solutions children and Aftercare. Point the entries at their existing live destinations until those pages move. Assign the telephone and customer support links to the Utility menu. The supplied raster wordmark is the fallback when no custom logo is configured.
 5. Verify the Page preview and then assign it under **Settings → Reading** when ready. Compare it with the Astro reference at 390px and 1440px, exercise the menu by keyboard and confirm the enquiry and gallery destinations.
 
-The homepage editor groups fields under Hero, Trust, Problem, System, Process, Featured project, Surveys and Services. Edit the four shared stage labels in Hero and their full descriptions in Process. The System and survey guides default to internal routes on the current WordPress site. Imported homepage URLs saved with `greendawn.co.uk` or `www.greendawn.co.uk` are resolved on the current site, retaining their paths, query strings and fragments. Other explicitly saved external destinations remain unchanged.
+The homepage editor groups fields under Hero, Trust, Problem, System, Process, Featured project, Surveys, Services and Aftercare. Edit the four shared stage labels in Hero and their full descriptions in Process. The System and survey guides default to internal routes on the current WordPress site. Imported homepage URLs saved with `greendawn.co.uk` or `www.greendawn.co.uk` are resolved on the current site, retaining their paths, query strings and fragments. Other explicitly saved external destinations remain unchanged.
 
 Upload [the approved Johnsons project photograph](astro-reference/media/johnsons-dealership-ev-charging-1200.webp) to the Media Library and set its alt text to “Vehicle connected to EV charging equipment at a Johnsons Cars dealership”. Select it under **Featured project → Project photograph**. The default resolves the uploaded attachment at `2026/11/johnsons-dealership-ev-charging-1200.webp`; select it explicitly if WordPress uses a different month or filename. The theme renders the selected attachment with responsive sizes, dimensions and lazy loading. If no attachment resolves, the project story renders in one column without an empty image frame. No remote or bundled photograph is rendered as a fallback.
 
@@ -36,6 +36,14 @@ Upload these photographs and select them under their respective fields. Defaults
 
 The first available photograph is shown initially. Hovering or keyboard-focusing a row previews its selected photograph through CSS, with keyboard focus taking priority over hover. All rows remain normal links and work without JavaScript. With normal browser lazy loading, hidden previews are deferred until displayed. Browsers may eagerly fetch lazy images when JavaScript is disabled, under the [HTML lazy-loading privacy rules](https://html.spec.whatwg.org/multipage/urls-and-fetching.html#lazy-loading-attributes); content and previews still work. A row without a selected/resolvable photograph retains the initial preview; if no photographs resolve, the list uses the full width without an empty frame. GSAP scroll animation remains a later stage.
 
+## Aftercare section
+
+The **Aftercare** tab supplies the eyebrow, heading, two copy paragraphs, button label/destination, customer support prompt/link and closing statement. The four fixed support rows have editable headings: Monitoring & reporting, Inspection & testing, Maintenance & fault support, and Driver & user support. Their numbering and layout remain in the template.
+
+The section follows the pinned Astro navy/lime styling and italic Bricolage Grotesque closing statement. It renders in the initial HTML without JavaScript and requires no new media uploads. The button defaults to the internal `/aftercare/` page and customer support defaults to `/customer-care/`; both routes were checked on staging. Existing Greendawn public-domain URLs saved in these fields resolve internally through the homepage field module.
+
+After updating the theme and Greendawn Core together, review the new Aftercare tab and compare the section at 320px, 390px and 1440px. Check both destinations, keyboard focus on the dark background, button hover, the closing statement spacing, and saved/blank field behaviour. Empty text fields use the pinned defaults.
+
 The homepage uses the starter’s native menu disclosure. The coordination model, system arc and process timeline render in the initial HTML. The remaining sections, motion and callback drawer follow separately.
 
 The hero WebPs, wordmark and client marks come from Astro revision `891ed840c7369cb50df3e33232e81de49e2699d6`. The asset provenance and publication notes are maintained with the [Astro image records](https://github.com/ezhostforall/GreenDawn/blob/891ed840c7369cb50df3e33232e81de49e2699d6/docs/image-sources.md).
@@ -44,4 +52,4 @@ The [pinned Astro source snapshot](./astro-reference/) provides the homepage com
 
 ## Remaining homepage sequence
 
-After these eight sections, port Aftercare, Supporting Proof, Insights and the final enquiry section, in that order from the pinned Astro `src/pages/index.astro`. Complete the sitewide footer and enquiry interaction, then add the planned GSAP enhancement with reduced-motion and no-JavaScript fallbacks. Final acceptance compares typography, spacing, media, keyboard behaviour and performance across the complete page.
+After these nine sections, port Supporting Proof, Insights and the final enquiry section, in that order from the pinned Astro `src/pages/index.astro`. Complete the sitewide footer and enquiry interaction, then add the planned GSAP enhancement with reduced-motion and no-JavaScript fallbacks. Final acceptance compares typography, spacing, media, keyboard behaviour and performance across the complete page.

@@ -186,6 +186,20 @@ final class Greendawn_Homepage implements Module_Interface {
 			'solution_dealership_copy'      => array( __( 'Dealerships & motor retail: description', 'greendawn-core' ), __( 'Plan for vehicle preparation, workshops, demonstrators, handovers and customer charging.', 'greendawn-core' ), 240, 'textarea' ),
 			'solution_dealership_link'      => array( __( 'Dealerships & motor retail: link text', 'greendawn-core' ), __( 'Read the dealership planning guide', 'greendawn-core' ), 70 ),
 			'solution_dealership_url'       => array( __( 'Dealerships & motor retail: destination', 'greendawn-core' ), home_url( '/guides/ev-charging-for-car-dealership/' ), 0, 'url' ),
+			'aftercare_eyebrow'             => array( __( 'Aftercare eyebrow', 'greendawn-core' ), __( 'Aftercare', 'greendawn-core' ), 60 ),
+			'aftercare_title'               => array( __( 'Aftercare heading', 'greendawn-core' ), __( 'EV infrastructure needs to keep working.', 'greendawn-core' ), 100 ),
+			'aftercare_intro'               => array( __( 'Aftercare introduction', 'greendawn-core' ), __( 'Installation is the start of the charging operation, not the end of the relationship.', 'greendawn-core' ), 240, 'textarea' ),
+			'aftercare_copy'                => array( __( 'Aftercare scope', 'greendawn-core' ), __( 'With an agreed aftercare package, Greendawn coordinates monitoring, maintenance and fault support. Your proposal makes clear what is included and how to get help.', 'greendawn-core' ), 340, 'textarea' ),
+			'aftercare_cta_label'           => array( __( 'Aftercare link text', 'greendawn-core' ), __( 'Explore aftercare', 'greendawn-core' ), 60 ),
+			'aftercare_cta_url'             => array( __( 'Aftercare destination', 'greendawn-core' ), home_url( '/aftercare/' ), 0, 'url' ),
+			'aftercare_support_prompt'      => array( __( 'Customer support prompt', 'greendawn-core' ), __( 'Need help with an existing charger?', 'greendawn-core' ), 160 ),
+			'aftercare_support_label'       => array( __( 'Customer support link text', 'greendawn-core' ), __( 'Contact customer support', 'greendawn-core' ), 80 ),
+			'aftercare_support_url'         => array( __( 'Customer support destination', 'greendawn-core' ), home_url( '/customer-care/' ), 0, 'url' ),
+			'aftercare_monitoring_title'    => array( __( 'Monitoring service title', 'greendawn-core' ), __( 'Monitoring & reporting', 'greendawn-core' ), 80 ),
+			'aftercare_testing_title'       => array( __( 'Testing service title', 'greendawn-core' ), __( 'Inspection & testing', 'greendawn-core' ), 80 ),
+			'aftercare_maintenance_title'   => array( __( 'Maintenance service title', 'greendawn-core' ), __( 'Maintenance & fault support', 'greendawn-core' ), 80 ),
+			'aftercare_users_title'         => array( __( 'User support service title', 'greendawn-core' ), __( 'Driver & user support', 'greendawn-core' ), 80 ),
+			'aftercare_statement'           => array( __( 'Aftercare closing statement', 'greendawn-core' ), __( 'Support that continues beyond installation.', 'greendawn-core' ), 140 ),
 		);
 
 		$solution_images = array(
@@ -332,6 +346,7 @@ final class Greendawn_Homepage implements Module_Interface {
 			'featured_image'    => __( 'Featured project', 'greendawn-core' ),
 			'survey_eyebrow'    => __( 'Surveys', 'greendawn-core' ),
 			'solutions_eyebrow' => __( 'Services', 'greendawn-core' ),
+			'aftercare_eyebrow' => __( 'Aftercare', 'greendawn-core' ),
 		);
 		$fields = array();
 		foreach ( $this->fields() as $name => $field ) {

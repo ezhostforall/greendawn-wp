@@ -23,12 +23,23 @@ test('the branded homepage renders its sections in order without JavaScript', as
 				'A dealership programme coordinated site by site.',
 				'Replace assumptions with a buildable plan.',
 				'Charging built around your operation.',
+				'EV infrastructure needs to keep working.',
 			]);
 			await expect(main.locator('#problem li')).toHaveCount(6);
 			await expect(main.locator('#system .gd-system__cards h3')).toHaveText([
 				'Power & infrastructure', 'Charging equipment', 'Software & operation',
 			]);
 			await expect(main.locator('#process h3')).toHaveText(['Consult', 'Design', 'Install', 'Manage']);
+			const aftercare = main.locator('#aftercare');
+			await expect(aftercare.getByRole('heading', { level: 3 })).toHaveText([
+				'Monitoring & reporting', 'Inspection & testing', 'Maintenance & fault support', 'Driver & user support',
+			]);
+			await expect(aftercare.getByRole('link', { name: 'Explore aftercare' })).toHaveAttribute('href', `${baseURL}/aftercare/`);
+			await expect(aftercare.getByRole('link', { name: 'Contact customer support' })).toHaveAttribute('href', `${baseURL}/customer-care/`);
+			await expect(aftercare.locator('.gd-aftercare__quote')).toHaveText('Support that continues beyond installation.');
+			await expect(aftercare.locator('.gd-aftercare__quote')).toHaveCSS('font-style', 'italic');
+			await expect(aftercare.locator('.gd-aftercare__quote')).toHaveCSS('font-family', /Bricolage Grotesque/);
+			expect(await aftercare.locator('.gd-aftercare__quote').evaluate((quote) => Number.parseFloat(getComputedStyle(quote).marginTop))).toBeGreaterThan(0);
 			await expect(main.locator('#who-we-help h3')).toHaveText([
 				'Fleet & depot charging', 'Workplace charging', 'Public & destination charging',
 				'Multi-site programmes', 'Dealerships & motor retail',
@@ -87,6 +98,13 @@ test('the branded homepage renders its sections in order without JavaScript', as
 			await testInfo.attach(`greendawn-${width}`, { body: await page.screenshot({ fullPage: true }), contentType: 'image/png' });
 			await testInfo.attach(`greendawn-project-${width}`, { body: await main.locator('#projects').screenshot(), contentType: 'image/png' });
 			await testInfo.attach(`greendawn-surveys-${width}`, { body: await main.locator('#surveys').screenshot(), contentType: 'image/png' });
+			await testInfo.attach(`greendawn-aftercare-${width}`, { body: await aftercare.screenshot({ animations: 'disabled' }), contentType: 'image/png' });
+			const aftercareLink = aftercare.getByRole('link', { name: 'Explore aftercare' });
+			await aftercareLink.focus();
+			await aftercareLink.press('Tab');
+			const supportLink = aftercare.getByRole('link', { name: 'Contact customer support' });
+			await expect(supportLink).toBeFocused();
+			await expect(supportLink).toHaveCSS('outline-color', 'rgb(233, 242, 39)');
 		}
 
 		await page.setViewportSize({ width: 390, height: 844 });
@@ -173,6 +191,11 @@ test('the desktop header and hero use the Greendawn hover styles', async ({ page
 	await surveyCta.hover();
 	await expect(surveyCta).toHaveCSS('background-color', 'rgb(58, 34, 216)');
 	await expect(surveyCta).toHaveCSS('transform', 'matrix(1, 0, 0, 1, 0, -3)');
+	const aftercareCta = main.getByRole('link', { name: 'Explore aftercare' });
+	await expect(aftercareCta).toHaveCSS('background-color', 'rgb(233, 242, 39)');
+	await aftercareCta.hover();
+	await expect(aftercareCta).toHaveCSS('background-color', 'rgb(250, 249, 246)');
+	await expect(aftercareCta).toHaveCSS('transform', 'matrix(1, 0, 0, 1, 0, -3)');
 });
 
 
@@ -213,6 +236,15 @@ test('saved homepage values render in the initial response with one hero image',
 	expect(html).toContain('Charging for your fleet');
 	await expect(page.getByRole('link', { name: 'Explore our projects' })).toHaveAttribute('href', `${baseURL}/gallery/?view=estate#projects`);
 	await expect(page.getByRole('link', { name: 'Understand AC and DC charging' })).toHaveAttribute('href', `${baseURL}/guides/ac-vs-dc-ev-charging/`);
+	const aftercare = page.locator('#aftercare');
+	await expect(aftercare.getByRole('heading', { level: 2 })).toHaveText('Support around your charging operation.');
+	await expect(aftercare.locator('.gd-aftercare__intro')).toHaveText('Installation is the start of the charging operation, not the end of the relationship.');
+	await expect(aftercare.getByRole('heading', { level: 3 }).first()).toHaveText('Charger monitoring and reporting');
+	await expect(aftercare.locator('.gd-aftercare__quote')).toHaveText('Clear support for every stage of operation.');
+	await expect(aftercare.getByRole('link', { name: 'Review our aftercare' })).toHaveAttribute('href', `${baseURL}/aftercare/?view=plans#scope`);
+	await expect(aftercare.getByRole('link', { name: 'Speak to customer care' })).toHaveAttribute('href', `${baseURL}/customer-care/?from=home#help`);
+	expect(html).toContain('Support around your charging operation.');
+	expect(html).not.toContain('EV infrastructure needs to keep working.');
 });
 
 test('the utility bar text can be edited and reset in the Customiser', async ({ page, baseURL }) => {

@@ -244,6 +244,8 @@
 }
 
 .gd-solution-image figcaption span {
+  flex: 0 0 auto;
+  white-space: nowrap;
   color: var(--gd-lime);
   font-family: var(--font-mono);
   font-size: 0.75rem;

@@ -261,7 +261,9 @@ test('service photographs follow hover and keyboard focus without JavaScript', a
 		await expect(workplaceImage).toBeVisible();
 		await expect.poll(() => workplaceImage.evaluate((image: HTMLImageElement) => image.naturalWidth)).toBeGreaterThan(0);
 		await workplaceImage.evaluate((image: HTMLImageElement) => image.decode());
-		await expect(workplaceImage).toHaveAttribute('src', /workplace-charging-1200-scaled/);
+		await expect(workplaceImage).toHaveAttribute('src', /workplace-charging-1200/);
+		await expect(workplaceImage).toHaveAttribute('width', /\d+/);
+		await expect(workplaceImage).toHaveAttribute('height', /\d+/);
 
 		await fleet.focus();
 		await fleet.press('Tab');
@@ -293,6 +295,11 @@ test('service photographs follow hover and keyboard focus without JavaScript', a
 		await fleetImage.evaluate((image: HTMLImageElement) => image.decode());
 		expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(320);
 		await expect(services.locator('.gd-solution-row')).toHaveCount(5);
+		expect(await services.locator('.gd-solution-image--fleet figcaption span').evaluate((label) => {
+			const range = document.createRange();
+			range.selectNodeContents(label);
+			return range.getClientRects().length;
+		})).toBe(1);
 		await testInfo.attach('greendawn-services-320', { body: await services.screenshot(), contentType: 'image/png' });
 	} finally {
 		await context.close();

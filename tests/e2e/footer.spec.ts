@@ -29,6 +29,13 @@ test('the reference footer renders sitewide without JavaScript at mobile, tablet
 				if (href === 'https://www.linkedin.com/company/greendawnpower/') continue;
 				expect(new URL(href).origin).toBe(new URL(baseURL!).origin);
 			}
+			if (width === 800) {
+				expect(await footer.locator('.gd-footer__social a').evaluate((link) => {
+					const range = document.createRange();
+					range.selectNodeContents(link.firstChild!);
+					return range.getClientRects().length;
+				})).toBe(1);
+			}
 			const columns = await footer.locator('.gd-footer__grid').evaluate((element) => getComputedStyle(element).gridTemplateColumns.split(' ').length);
 			expect(columns).toBe(width <= 480 ? 1 : width <= 976 ? 2 : 4);
 			const logo = footer.locator('.gd-footer__brand img');
@@ -145,6 +152,7 @@ test('the footer Customiser is prefilled, previews changes and resets to supplie
 	const preview = page.frameLocator('#customize-preview iframe').first();
 	await expect(preview.locator('.gd-footer__lead p')).toHaveText('Charging for your operation.');
 	await expect(preview.locator('.gd-footer__phone')).toHaveAttribute('href', 'tel:03001234567');
+	await expect(preview.locator('#final-enquiry a[href^="tel:"]')).toHaveAttribute('href', 'tel:03001234567');
 	await page.getByRole('button', { name: 'Reset footer content' }).click();
 	await expect(tagline).toHaveValue('EV charging. Handled.');
 	await expect(phone).toHaveValue('0345 512 0044');

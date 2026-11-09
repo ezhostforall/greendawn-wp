@@ -244,7 +244,7 @@ test('saved homepage values render in the initial response with one hero image',
 	const response = await page.goto('/greendawn-home-edited/');
 	const html = await response?.text();
 	expect(html).toContain('Charging around your site.');
-	expect(html).not.toContain('EV charging.');
+	expect(html).not.toContain('<span>EV charging.</span>');
 	expect(html).not.toContain('greendawn-engineers-electrical-distribution-');
 	const heroImage = page.locator('.gd-hero__media img');
 	await expect(heroImage).toHaveCount(1);

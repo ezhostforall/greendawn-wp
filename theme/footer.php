@@ -15,7 +15,11 @@ $greendawn_footer_image     = $greendawn_footer_logo ? wp_get_attachment_image(
 	$greendawn_footer_logo,
 	'medium',
 	false,
-	array( 'alt' => '', 'loading' => 'lazy', 'fetchpriority' => 'low' )
+	array(
+		'alt'           => '',
+		'loading'       => 'lazy',
+		'fetchpriority' => 'low',
+	)
 ) : '';
 $greendawn_footer_address   = greendawn_footer_value( 'contact' );
 $greendawn_footer_cta_label = greendawn_footer_value( 'cta_label' );

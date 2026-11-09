@@ -51,32 +51,71 @@ final class Greendawn_Footer implements Module_Interface {
 	public function links( array $links, string $location ): array {
 		$menus = array(
 			'footer'           => array(
-				array( 'label' => __( 'About Us', 'greendawn-core' ), 'url' => home_url( '/about-us/' ) ),
-				array( 'label' => __( 'Our Projects', 'greendawn-core' ), 'url' => home_url( '/gallery/' ) ),
+				array(
+					'label' => __( 'About Us', 'greendawn-core' ),
+					'url'   => home_url( '/about-us/' ),
+				),
+				array(
+					'label' => __( 'Our Projects', 'greendawn-core' ),
+					'url'   => home_url( '/gallery/' ),
+				),
 			),
 			'footer_secondary' => array(
-				array( 'label' => __( 'Workplace Charging', 'greendawn-core' ), 'url' => home_url( '/workplace-charging/' ) ),
-				array( 'label' => __( 'Fleet Charging', 'greendawn-core' ), 'url' => home_url( '/fleet-charging-solutions/' ) ),
-				array( 'label' => __( 'Public Charging', 'greendawn-core' ), 'url' => home_url( '/public-charging/' ) ),
+				array(
+					'label' => __( 'Workplace Charging', 'greendawn-core' ),
+					'url'   => home_url( '/workplace-charging/' ),
+				),
+				array(
+					'label' => __( 'Fleet Charging', 'greendawn-core' ),
+					'url'   => home_url( '/fleet-charging-solutions/' ),
+				),
+				array(
+					'label' => __( 'Public Charging', 'greendawn-core' ),
+					'url'   => home_url( '/public-charging/' ),
+				),
 			),
 			'footer_support'   => array(
-				array( 'label' => __( 'Aftercare', 'greendawn-core' ), 'url' => home_url( '/aftercare/' ) ),
-				array( 'label' => __( 'Customer support', 'greendawn-core' ), 'url' => home_url( '/customer-care/' ) ),
-				array( 'label' => __( 'Insights', 'greendawn-core' ), 'url' => home_url( '/blog/' ) ),
+				array(
+					'label' => __( 'Aftercare', 'greendawn-core' ),
+					'url'   => home_url( '/aftercare/' ),
+				),
+				array(
+					'label' => __( 'Customer support', 'greendawn-core' ),
+					'url'   => home_url( '/customer-care/' ),
+				),
+				array(
+					'label' => __( 'Insights', 'greendawn-core' ),
+					'url'   => home_url( '/blog/' ),
+				),
 			),
 			'footer_legal'     => array(
-				array( 'label' => __( 'Privacy', 'greendawn-core' ), 'url' => home_url( '/privacy-policy/' ) ),
-				array( 'label' => __( 'Terms', 'greendawn-core' ), 'url' => home_url( '/terms-and-conditions/' ) ),
-				array( 'label' => __( 'Modern Slavery', 'greendawn-core' ), 'url' => home_url( '/modern-slavery-statements/' ) ),
+				array(
+					'label' => __( 'Privacy', 'greendawn-core' ),
+					'url'   => home_url( '/privacy-policy/' ),
+				),
+				array(
+					'label' => __( 'Terms', 'greendawn-core' ),
+					'url'   => home_url( '/terms-and-conditions/' ),
+				),
+				array(
+					'label' => __( 'Modern Slavery', 'greendawn-core' ),
+					'url'   => home_url( '/modern-slavery-statements/' ),
+				),
 			),
 			'footer_social'    => array(
-				array( 'label' => __( 'LinkedIn', 'greendawn-core' ), 'url' => 'https://www.linkedin.com/company/greendawnpower/' ),
+				array(
+					'label' => __( 'LinkedIn', 'greendawn-core' ),
+					'url'   => 'https://www.linkedin.com/company/greendawnpower/',
+				),
 			),
 		);
 
 		$enquiry = esc_url_raw( (string) get_theme_mod( 'greendawn_header_cta_url', '' ) );
 		if ( '' !== $enquiry && '#' !== $enquiry ) {
-			$menus['footer_support'][] = array( 'label' => __( 'Discuss your site', 'greendawn-core' ), 'url' => $enquiry );
+			$menus['footer_support'][] = array(
+				'label' => __( 'Discuss your site', 'greendawn-core' ),
+				'url'   => $enquiry,
+			);
 		}
 
 		return $menus[ $location ] ?? $links;

@@ -30,9 +30,6 @@ foreach ( $greendawn_footer_test_values as $greendawn_footer_test_key => $greend
 			if ( is_page( 'footer-empty' ) ) {
 				return '';
 			}
-			if ( is_page( 'greendawn-home-global-phone' ) && 'phone' === $greendawn_footer_test_key ) {
-				return '0300 123 4567';
-			}
 			if ( is_page( 'footer-long' ) ) {
 				$long = array(
 					'summary'    => 'A coordinated commercial charging programme for a long and varied estate.',
@@ -58,3 +55,14 @@ add_filter(
 );
 add_filter( 'greendawn_footer_defaults', static fn( $defaults ) => is_page( 'footer-no-core' ) ? array_fill_keys( array_keys( $defaults ), '' ) : $defaults, 20 );
 add_filter( 'greendawn_footer_links', static fn( $links ) => is_page( array( 'footer-empty', 'footer-no-core' ) ) ? array() : $links, 20 );
+
+// Exercise a setting change after the homepage field schema has been cached.
+add_action(
+	'wp',
+	static function () {
+		if ( is_page( 'greendawn-home-global-phone' ) ) {
+			apply_filters( 'greendawn_home_field_value', '', 'headline' );
+			add_filter( 'theme_mod_greendawn_footer_phone', static fn() => '0300 123 4567', 20 );
+		}
+	}
+);

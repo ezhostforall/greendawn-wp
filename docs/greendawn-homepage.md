@@ -90,4 +90,4 @@ The [pinned Astro source snapshot](./astro-reference/) provides the homepage com
 
 ## Remaining homepage sequence
 
-With all twelve static sections from the pinned Astro `src/pages/index.astro` ported, with the sitewide footer now shared across all templates, add the enquiry interaction next, then the planned GSAP enhancement with reduced-motion and no-JavaScript fallbacks. Final acceptance compares typography, spacing, media, keyboard behaviour and performance across the complete page.
+The twelve static sections from the pinned Astro `src/pages/index.astro` and the shared sitewide footer are now ported. Add the enquiry interaction next, then the planned GSAP enhancement with reduced-motion and no-JavaScript fallbacks. Final acceptance compares typography, spacing, media, keyboard behaviour and performance across the complete page.

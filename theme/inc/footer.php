@@ -67,14 +67,24 @@ function greendawn_customize_footer( WP_Customize_Manager $customizer ): void {
 				'sanitize_callback' => $sanitize,
 			)
 		);
-		$customizer->add_control( $setting, array( 'section' => 'greendawn_footer', 'label' => $label, 'type' => $type ) );
+		$customizer->add_control(
+			$setting,
+			array(
+				'section' => 'greendawn_footer',
+				'label'   => $label,
+				'type'    => $type,
+			)
+		);
 	}
 
 	add_action(
 		'customize_controls_enqueue_scripts',
 		static function () use ( $defaults ): void {
 			$config = wp_json_encode(
-				array( 'defaults' => $defaults, 'label' => __( 'Reset footer content', 'greendawn' ) ),
+				array(
+					'defaults' => $defaults,
+					'label'    => __( 'Reset footer content', 'greendawn' ),
+				),
 				JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT
 			);
 			wp_add_inline_script(

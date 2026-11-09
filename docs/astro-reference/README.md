@@ -5,7 +5,8 @@ Source revision [891ed840c7369cb50df3e33232e81de49e2699d6](https://github.com/ez
 - [Homepage components](src/components/home) contain the section markup and component-level styles.
 - [Homepage content and media definitions](src/content) supply the pinned copy, routes and focal positions.
 - [Shared styles](src/styles) contain typography, spacing tokens and common layout primitives.
-- [Header and utility bar](src/components/layout) record the layout components used in the homepage comparison.
+- [Header, utility bar and sitewide footer](src/components/layout) record the shared layout components.
+- [Site and navigation configuration](src/config) records the pinned footer contact/company details and menu labels/routes.
 
 The files are an unmodified documentation snapshot. Their Astro imports refer to the upstream project. Refresh this snapshot from one upstream revision when the design reference changes. The [published Astro homepage](https://ezhostforall.github.io/GreenDawn/) provides the rendered comparison.
 

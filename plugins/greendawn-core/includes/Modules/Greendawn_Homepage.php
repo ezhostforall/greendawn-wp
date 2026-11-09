@@ -226,7 +226,7 @@ final class Greendawn_Homepage implements Module_Interface {
 			'closing_copy'                  => array( __( 'Final enquiry next step', 'greendawn-core' ), __( 'We’ll help identify the next step, including whether a technical survey is appropriate.', 'greendawn-core' ), 240, 'textarea' ),
 			'closing_cta_label'             => array( __( 'Enquiry button text', 'greendawn-core' ), __( 'Discuss your site', 'greendawn-core' ), 70 ),
 			'closing_phone_prompt'          => array( __( 'Telephone prompt', 'greendawn-core' ), __( 'Prefer to speak first?', 'greendawn-core' ), 100 ),
-			'closing_phone'                 => array( __( 'Telephone number', 'greendawn-core' ), __( '0345 512 0044', 'greendawn-core' ), 40 ),
+			'closing_phone'                 => array( __( 'Telephone number', 'greendawn-core' ), Greendawn_Footer::defaults()['phone'], 40 ),
 		);
 
 		$solution_images = array(
@@ -307,7 +307,7 @@ final class Greendawn_Homepage implements Module_Interface {
 				$fields[ $name ]['instructions'] = __( 'Uses the shared enquiry destination under Appearance → Customise → Header.', 'greendawn-core' );
 			}
 			if ( 'closing_phone' === $name ) {
-				$fields[ $name ]['instructions'] = __( 'Use a telephone number with an optional leading + and country code. The call link is generated from its digits.', 'greendawn-core' );
+				$fields[ $name ]['instructions'] = __( 'Defaults to the sitewide Footer telephone number. Save a different number only for a homepage-specific override. Use an optional leading + and country code.', 'greendawn-core' );
 			}
 			if ( 'proof_link' === $name ) {
 				$fields[ $name ]['instructions'] = __( 'Uses the Projects destination in the Hero tab.', 'greendawn-core' );
@@ -378,6 +378,11 @@ final class Greendawn_Homepage implements Module_Interface {
 			// WordPress scales photographs larger than its big-image threshold on upload.
 			$scaled_upload = preg_replace( '/(\.[^\/.]+)$/', '-scaled$1', $default_upload );
 			return attachment_url_to_postid( trailingslashit( $uploads['baseurl'] ) . $scaled_upload );
+		}
+
+		// SCF may supply its schema default before this hook; only saved metadata is an override.
+		if ( 'greendawn_home_closing_phone' === $field['name'] && '' === get_post_meta( (int) $post_id, $field['name'], true ) ) {
+			return get_theme_mod( 'greendawn_footer_phone', $field['default_value'] );
 		}
 
 		if ( null === $value || false === $value || '' === $value || ( 'url' === $field['type'] && '#' === $value ) ) {

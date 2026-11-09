@@ -23,21 +23,13 @@
 	margin-inline: auto;
 }
 
-.site-header,
-.site-footer {
+.site-header {
 	padding-inline: var(--space-m);
 }
 
 .site-header {
 	padding-block: var(--space-s);
 	border-bottom: 1px solid var(--color-border);
-}
-
-.site-footer {
-	padding-block: clamp(var(--space-l), 5vw, var(--space-xl)) var(--space-l);
-	background: var(--color-surface);
-	border-top: 1px solid var(--color-border);
-	color: var(--color-muted);
 }
 
 .site-header__inner {
@@ -48,99 +40,6 @@
 	gap: var(--space-m);
 	max-width: var(--wide-width);
 	margin-inline: auto;
-}
-
-.site-footer__inner {
-	display: grid;
-	gap: var(--space-l);
-	max-width: var(--wide-width);
-	margin-inline: auto;
-	overflow-wrap: anywhere;
-	font-size: var(--type-small);
-}
-
-.site-footer__columns {
-	display: grid;
-	grid-template-columns: repeat(auto-fit, minmax(min(100%, 12rem), 1fr));
-	align-items: start;
-	gap: var(--space-l);
-}
-
-.site-footer__identity,
-.site-footer__contact {
-	display: grid;
-	justify-items: start;
-	gap: var(--space-s);
-}
-
-.site-footer__brand {
-	display: grid;
-	gap: var(--space-xs);
-	color: var(--color-text);
-	font-size: var(--type-lead);
-	font-weight: 700;
-	text-decoration: none;
-}
-
-.site-footer__brand img {
-	width: auto;
-	max-width: 100%;
-	max-height: 3rem;
-	height: auto;
-	object-fit: contain;
-	object-position: left;
-}
-
-.site-footer__copy {
-	max-inline-size: 36ch;
-	white-space: pre-line;
-}
-
-.site-footer__meta {
-	display: flex;
-	flex-wrap: wrap;
-	gap: var(--space-s) var(--space-l);
-	align-items: baseline;
-	justify-content: space-between;
-	padding-top: var(--space-m);
-	border-top: 1px solid var(--color-border);
-}
-
-.site-footer p,
-.footer-nav ul {
-	margin: 0;
-}
-
-.footer-nav a {
-	text-underline-offset: 0.2em;
-}
-
-.footer-nav ul {
-	display: grid;
-	gap: var(--space-xs);
-	padding: 0;
-	list-style: none;
-}
-
-.site-footer__meta .footer-nav ul {
-	display: flex;
-	flex-wrap: wrap;
-	gap: var(--space-xs) var(--space-m);
-}
-
-.site-footer__cta {
-	display: inline-block;
-	padding: var(--space-xs) var(--space-s);
-	border-radius: var(--radius);
-	background: var(--color-accent);
-	color: var(--color-on-accent);
-	font-weight: 600;
-	text-decoration: none;
-}
-
-.site-footer__cta:hover {
-	background: var(--color-accent-hover);
-	color: var(--color-on-accent);
 }
 
 .site-title {

@@ -343,3 +343,38 @@ wp rewrite flush
 
 echo "Disposable WordPress integration environment ready at http://localhost:8080"
 echo "This local-only server is for CI/integration tests, not a persistent development site."
+
+# Sitewide footer scenarios: no persistent site content or menu assignments are changed.
+docker cp tests/fixtures/footer-options.php "$container_id:/var/www/html/wp-content/plugins/footer-test-fixture.php"
+wp plugin activate footer-test-fixture
+wp eval '
+  foreach ( array( "footer-options", "footer-long", "footer-empty", "footer-no-core", "greendawn-home-global-phone" ) as $slug ) {
+    $page = get_page_by_path( $slug );
+    $id = $page ? $page->ID : wp_insert_post( array( "post_type" => "page", "post_status" => "publish", "post_name" => $slug, "post_title" => "Footer integration fixture", "post_content" => "<p>Footer content fixture.</p>" ) );
+    if ( "greendawn-home-global-phone" === $slug ) {
+      update_post_meta( $id, "_wp_page_template", "templates/greendawn-homepage.php" );
+    }
+  }
+  $menus = array(
+    "footer" => array( array( "Company overview", "https://www.greendawn.co.uk/about/?from=footer#team" ), array( "Our people", home_url( "/about/#people" ) ) ),
+    "footer_secondary" => array( array( "Charge your workplace", home_url( "/services/" ) ) ),
+    "footer_support" => array( array( "Customer care", home_url( "/contact/" ) ) ),
+    "footer_legal" => array( array( "Policy details", home_url( "/policy-example/" ) ) ),
+    "footer_social" => array( array( "Company network", "https://www.linkedin.com/company/greendawnpower/" ) ),
+  );
+  $locations = array();
+  foreach ( $menus as $location => $items ) {
+    $name = "Fixture " . $location;
+    $existing = wp_get_nav_menu_object( $name );
+    if ( $existing ) { wp_delete_nav_menu( $existing->term_id ); }
+    $menu = wp_create_nav_menu( $name );
+    $locations[ $location ] = $menu;
+    $first = 0;
+    foreach ( $items as $item ) {
+      $id = wp_update_nav_menu_item( $menu, 0, array( "menu-item-title" => $item[0], "menu-item-url" => $item[1], "menu-item-type" => "custom", "menu-item-status" => "publish" ) );
+      if ( ! $first ) { $first = $id; }
+    }
+    wp_update_nav_menu_item( $menu, 0, array( "menu-item-title" => "Nested footer item omitted", "menu-item-url" => home_url( "/about/#nested" ), "menu-item-parent-id" => $first, "menu-item-type" => "custom", "menu-item-status" => "publish" ) );
+  }
+  update_option( "greendawn_footer_test_menus", $locations );
+'

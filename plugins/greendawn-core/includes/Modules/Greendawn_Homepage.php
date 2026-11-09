@@ -368,7 +368,7 @@ final class Greendawn_Homepage implements Module_Interface {
 			'survey_eyebrow'    => __( 'Surveys', 'greendawn-core' ),
 			'solutions_eyebrow' => __( 'Services', 'greendawn-core' ),
 			'aftercare_eyebrow' => __( 'Aftercare', 'greendawn-core' ),
-			'proof_image'      => __( 'Supporting proof', 'greendawn-core' ),
+			'proof_image'       => __( 'Supporting proof', 'greendawn-core' ),
 		);
 		$fields = array();
 		foreach ( $this->fields() as $name => $field ) {

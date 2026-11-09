@@ -19,5 +19,8 @@ for (const root of document.querySelectorAll<HTMLElement>('[data-gd-articles]'))
 	const observer = new ResizeObserver(update);
 	observer.observe(track);
 	update();
-	window.addEventListener('pagehide', () => { controller.abort(); observer.disconnect(); }, { once: true });
+	// Retain controls when the browser stores this page in its back/forward cache.
+	window.addEventListener('pagehide', event => {
+		if (!event.persisted) { controller.abort(); observer.disconnect(); }
+	});
 }

@@ -38,3 +38,7 @@ Public Charging uses only the homepage's current Consult → Design → Install 
 ## Verification
 
 CI tests registration without SCF, imports a representative WXR charger, checks raw metadata and references, activates pinned SCF 6.9.8, checks field resolution/editing, capabilities and rewrite refresh idempotence, then deactivates SCF before the existing browser suite. These are disposable fixtures and never touch persistent staging or production. Final attachment/content reconciliation follows Neel's actual import.
+
+## About template implementation
+
+The new **Greendawn About Us** template and shared presentation primitives are available in the next page-template change. See [setup and acceptance checks](greendawn-about.md). The content foundation and Neel-owned charger/team intake are complete as reported; the six audience charger URLs were checked publicly and Neel confirmed the saved specification values. Assign the new template to the existing About Us record after staging installation, then review its team/form/image/article selections.

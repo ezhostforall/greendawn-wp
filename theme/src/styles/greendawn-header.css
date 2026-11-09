@@ -1,31 +1,4 @@
-.greendawn-home,
-.site-header,
-.site-footer,
-.gd-utility-bar {
-	--gd-navy-950: #071721;
-	--gd-navy-900: #0b1d2a;
-	--gd-cream: #faf9f6;
-	--gd-white: #fff;
-	--gd-lime: #e9f227;
-	--gd-coral: #ff5e33;
-	--gd-slate-500: #5c6770;
-	--gd-slate-300: #abb5bd;
-	--gd-slate-200: #d7dde1;
-	--gd-border-dark: rgb(11 29 42 / 16%);
-	--gd-border-light: rgb(250 249 246 / 20%);
-	--gd-radius-sm: 0.35rem;
-	--gd-radius-md: 0.85rem;
-	--gd-type-caption: clamp(0.75rem, 0.73rem + 0.12vw, 0.875rem);
-	--gd-type-secondary: clamp(0.875rem, 0.85rem + 0.12vw, 1rem);
-	--gd-type-lead: clamp(1.125rem, 1.025rem + 0.5vw, 1.5rem);
-	--gd-type-display: clamp(4.5rem, 2.8rem + 7vw, 10rem);
-	--gd-shell-gutter: 1.5rem;
-	--gd-shell-max: 92rem;
-}
 
-.greendawn-home {
-	--gd-shell: min(100% - 2 * var(--gd-shell-gutter), var(--gd-shell-max));
-}
 
 .gd-home-arrow {
 	display: block;
@@ -71,16 +44,6 @@
 	min-height: var(--gd-header-expanded-height);
 }
 
-.site-header {
-	--gd-header-width: min(100% - 2 * var(--gd-shell-gutter), var(--gd-shell-max));
-	min-height: var(--gd-header-expanded-height);
-	padding: 0;
-	border: 0;
-	background: var(--gd-navy-950);
-	color: var(--gd-cream);
-	--focus-color: var(--gd-lime);
-}
-
 .site-header::after,
 .gd-utility-bar::after {
 	position: absolute;
@@ -89,12 +52,6 @@
 	border-bottom: 1px solid var(--gd-border-light);
 	content: '';
 	pointer-events: none;
-}
-
-.gd-utility-bar {
-	position: relative;
-	z-index: 21;
-	background: var(--gd-navy-950);
 }
 
 .gd-utility {
@@ -288,13 +245,6 @@
 }
 
 @media (max-width: 75rem) {
-	.greendawn-home,
-	.site-header,
-	.site-footer,
-	.gd-utility-bar {
-		--gd-shell-gutter: 1.25rem;
-		--gd-shell-max: 76rem;
-	}
 
 	.site-header__inner {
 		grid-template-columns: minmax(0, 1fr) auto;
@@ -400,24 +350,7 @@
 	}
 }
 
-@media (max-width: 61rem) {
-	.greendawn-home,
-	.site-header,
-	.site-footer,
-	.gd-utility-bar {
-		--gd-shell-gutter: 1rem;
-		--gd-shell-max: 58rem;
-	}
-}
-
 @media (max-width: 42rem) {
-	.greendawn-home,
-	.site-header,
-	.site-footer,
-	.gd-utility-bar {
-		--gd-shell-gutter: 0.75rem;
-		--gd-shell-max: 39rem;
-	}
 
 	.gd-utility {
 		min-height: 2.65rem;
@@ -464,16 +397,6 @@
 	.site-header .primary-nav > ul > li > a {
 		min-height: 3.5rem;
 		font-size: clamp(1.45rem, 5.2vh, 2.2rem);
-	}
-}
-
-@media (max-width: 30rem) {
-	.greendawn-home,
-	.site-header,
-	.site-footer,
-	.gd-utility-bar {
-		--gd-shell-gutter: 0.625rem;
-		--gd-shell-max: 28rem;
 	}
 }
 

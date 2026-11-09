@@ -95,7 +95,7 @@ wp theme activate greendawn
 wp plugin activate greendawn-core
 wp plugin activate ezhost-updater
 wp plugin install contact-form-7 --version=6.2.4.1 --activate
-wp eval '\Greendawn_Core\Modules\Lead_Capture::provision(); update_option( "greendawn_core_callback_enabled", true );'
+wp eval '$previous = get_option( "greendawn_core_callback_form", 0 ); if ( ! $previous ) { update_option( "greendawn_core_callback_enabled", true ); } $id = \Greendawn_Core\Modules\Lead_Capture::provision(); if ( ! $id || ( ! $previous && get_option( "greendawn_core_callback_enabled" ) ) || $id !== \Greendawn_Core\Modules\Lead_Capture::provision() ) { WP_CLI::error( "Callback provisioning must be idempotent and new forms must remain disabled for review." ); } update_option( "greendawn_core_callback_enabled", true );'
 docker cp tests/fixtures/lead-capture.php "$container_id:/var/www/html/wp-content/plugins/lead-capture-test-fixture.php"
 wp plugin activate lead-capture-test-fixture
 wp eval 'if ( ! has_filter( "update_plugins_updates.ezhostforall.invalid" ) || ! has_filter( "update_themes_updates.ezhostforall.invalid" ) || ! has_filter( "upgrader_pre_download" ) ) { WP_CLI::error( "EZ Host updater hooks missing" ); } WP_CLI::success( "Updater registered without configuration" );'

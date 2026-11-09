@@ -174,6 +174,8 @@ final class Lead_Capture implements Module_Interface {
 			)
 		);
 		$id = $form->save();
+		// A newly created/replacement form needs a fresh recipient review.
+		update_option( 'greendawn_core_callback_enabled', false );
 		update_option( 'greendawn_core_callback_form', $id, false );
 		return (int) $id;
 	}

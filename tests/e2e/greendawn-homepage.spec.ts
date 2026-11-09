@@ -13,19 +13,47 @@ test('the branded homepage renders its sections in order without JavaScript', as
 			await expect(image).toHaveAttribute('fetchpriority', 'high');
 			await expect(image).toHaveAttribute('srcset', /1600w/);
 			await expect(image).toHaveAttribute('src', /\/uploads\/2026\/11\/greendawn-engineers-electrical-distribution-/);
-			await expect(main.getByRole('img', { name: 'Johnsons Cars' })).toBeVisible();
+			await expect(main.getByRole('img', { name: 'Johnsons Cars', exact: true })).toBeVisible();
 			await expect(main.getByRole('img', { name: 'The Salvation Army' })).toBeVisible();
 			await expect(main.locator('.gd-hero__proof strong')).toHaveText(['Consult', 'Design', 'Install', 'Manage']);
 			await expect(main.getByRole('heading', { level: 2 })).toHaveText([
 				'One charging project. Coordinated from the start.',
 				'The charger is only one part of the system.',
 				'A clear route from requirement to operation.',
+				'A dealership programme coordinated site by site.',
+				'Replace assumptions with a buildable plan.',
 			]);
 			await expect(main.locator('#problem li')).toHaveCount(6);
 			await expect(main.locator('#system .gd-system__cards h3')).toHaveText([
 				'Power & infrastructure', 'Charging equipment', 'Software & operation',
 			]);
 			await expect(main.locator('#process h3')).toHaveText(['Consult', 'Design', 'Install', 'Manage']);
+			const projectImage = main.locator('#projects figure img');
+			await expect(projectImage).toHaveAttribute('loading', 'lazy');
+			await expect(projectImage).toHaveAttribute('src', /johnsons-dealership-ev-charging-/);
+			await expect(projectImage).toHaveAttribute('width', /\d+/);
+			await expect(projectImage).toHaveAttribute('height', /\d+/);
+			await projectImage.scrollIntoViewIfNeeded();
+			await expect.poll(() => projectImage.evaluate((image: HTMLImageElement) => image.naturalWidth)).toBeGreaterThan(0);
+			await projectImage.evaluate((image: HTMLImageElement) => image.decode());
+			await expect(main.locator('#projects figure')).toHaveCSS('position', width > 976 ? 'sticky' : 'relative');
+			await expect(main.locator('#projects .gd-case-study__facts strong')).toHaveText(['136', '454', '11']);
+			const chargepoints = main.locator('#projects .gd-case-study__facts span').nth(1);
+			expect(await chargepoints.evaluate((label) => {
+				const range = document.createRange();
+				range.selectNodeContents(label);
+				return range.getClientRects().length;
+			})).toBe(1);
+			await expect(main.locator('#surveys .gd-surveys__price-value')).toHaveText('£200+ VAT');
+			await expect(main.locator('#surveys li p')).toHaveText([
+				'Charging demand and available site capacity',
+				'Charger locations, cable routes and access constraints',
+				'Electrical, civil and network dependencies',
+				'The information needed for the design and proposal',
+			]);
+			await expect(main.getByRole('link', { name: 'Explore our project experience' })).toHaveAttribute('href', 'https://greendawn.co.uk/gallery/');
+			await expect(main.getByRole('link', { name: 'Discuss a site survey' })).toHaveAttribute('href', /\/about\/$/);
+			await expect(main.getByRole('link', { name: 'What a technical survey should establish' })).toHaveAttribute('href', /\/guides\/greendawn-ev-charging-survey-pre-installation-guide\/$/);
 			await expect(main.getByRole('link', { name: 'Understand AC and DC charging' })).toHaveAttribute('href', /\/guides\/ac-vs-dc-ev-charging\/$/);
 			await expect(main.getByRole('link', { name: 'Explore site power planning' })).toHaveAttribute('href', /\/guides\/can-my-building-handle-ev-charging\/$/);
 			await expect(main.getByRole('link', { name: 'Discuss your site' })).toHaveAttribute('href', /\/about\/$/);
@@ -44,6 +72,8 @@ test('the branded homepage renders its sections in order without JavaScript', as
 			expect(eyebrowMetrics.lineHeightRatio).toBeCloseTo(1.2, 2);
 			await expect(main.locator('#process h2')).toHaveCSS('margin-block-end', '32px');
 			await testInfo.attach(`greendawn-${width}`, { body: await page.screenshot({ fullPage: true }), contentType: 'image/png' });
+			await testInfo.attach(`greendawn-project-${width}`, { body: await main.locator('#projects').screenshot(), contentType: 'image/png' });
+			await testInfo.attach(`greendawn-surveys-${width}`, { body: await main.locator('#surveys').screenshot(), contentType: 'image/png' });
 		}
 
 		await page.setViewportSize({ width: 390, height: 844 });
@@ -121,6 +151,15 @@ test('the desktop header and hero use the Greendawn hover styles', async ({ page
 	await projects.hover();
 	await expect(projects).toHaveCSS('color', 'rgb(233, 242, 39)');
 	await expect(projects).toHaveCSS('gap', '21.6px');
+	const projectLink = main.getByRole('link', { name: 'Explore our project experience' });
+	await expect(projectLink).toHaveCSS('color', 'rgb(11, 29, 42)');
+	await projectLink.hover();
+	await expect(projectLink).toHaveCSS('color', 'rgb(58, 34, 216)');
+	const surveyCta = main.getByRole('link', { name: 'Discuss a site survey' });
+	await expect(surveyCta).toHaveCSS('background-color', 'rgb(11, 29, 42)');
+	await surveyCta.hover();
+	await expect(surveyCta).toHaveCSS('background-color', 'rgb(58, 34, 216)');
+	await expect(surveyCta).toHaveCSS('transform', 'matrix(1, 0, 0, 1, 0, -3)');
 });
 
 
@@ -143,6 +182,14 @@ test('saved homepage values render in the initial response with one hero image',
 	await expect(page.locator('.gd-hero__proof strong').first()).toHaveText('Assess');
 	await expect(page.locator('#process h3').first()).toHaveText('Assess');
 	await expect(page.locator('#process .gd-eyebrow')).toHaveText('Assess · Design · Install · Manage');
+	expect(html).toContain('A programme shaped around your estate.');
+	expect(html).not.toContain('A dealership programme coordinated site by site.');
+	expect(html).not.toContain('johnsons-dealership-ev-charging-');
+	await expect(page.locator('#projects figure img')).toHaveAttribute('alt', 'Service fixture image');
+	await expect(page.locator('#projects .gd-case-study__facts strong').first()).toHaveText('150');
+	await expect(page.locator('#surveys .gd-surveys__price-value strong')).toHaveText('£250');
+	await expect(page.locator('#surveys li p').first()).toHaveText('Assess the electrical capacity at your site');
+	await expect(page.getByRole('link', { name: 'What a technical survey should establish' })).toHaveAttribute('href', 'https://example.com/survey-guide/');
 });
 
 test('the utility bar text can be edited and reset in the Customiser', async ({ page, baseURL }) => {

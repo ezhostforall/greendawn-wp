@@ -200,6 +200,13 @@ final class Greendawn_Homepage implements Module_Interface {
 			'aftercare_maintenance_title'   => array( __( 'Maintenance service title', 'greendawn-core' ), __( 'Maintenance & fault support', 'greendawn-core' ), 80 ),
 			'aftercare_users_title'         => array( __( 'User support service title', 'greendawn-core' ), __( 'Driver & user support', 'greendawn-core' ), 80 ),
 			'aftercare_statement'           => array( __( 'Aftercare closing statement', 'greendawn-core' ), __( 'Support that continues beyond installation.', 'greendawn-core' ), 140 ),
+			'proof_eyebrow'                 => array( __( 'Supporting proof eyebrow', 'greendawn-core' ), __( 'Fleet programme experience', 'greendawn-core' ), 60 ),
+			'proof_title'                   => array( __( 'Supporting proof heading', 'greendawn-core' ), __( 'Different locations. A coordinated programme.', 'greendawn-core' ), 100 ),
+			'proof_link'                    => array( __( 'Gallery link text', 'greendawn-core' ), __( 'Explore our project experience', 'greendawn-core' ), 70 ),
+			'proof_caption'                 => array( __( 'Project photograph caption', 'greendawn-core' ), __( 'Fleet programme experience', 'greendawn-core' ), 100 ),
+			'proof_project_title'           => array( __( 'Supporting project name', 'greendawn-core' ), __( 'The Salvation Army', 'greendawn-core' ), 80 ),
+			'proof_result'                  => array( __( 'Project result and figures', 'greendawn-core' ), __( '50 sites · 71 chargepoints', 'greendawn-core' ), 100 ),
+			'proof_copy'                    => array( __( 'Supporting project description', 'greendawn-core' ), __( 'Fleet charging across a varied estate, with different site requirements brought together within one coordinated programme.', 'greendawn-core' ), 280, 'textarea' ),
 		);
 
 		$solution_images = array(
@@ -221,6 +228,17 @@ final class Greendawn_Homepage implements Module_Interface {
 					'type'           => 'image',
 					'return_format'  => 'id',
 					'default_upload' => '2026/11/johnsons-dealership-ev-charging-1200.webp',
+				);
+			}
+			if ( 'proof_eyebrow' === $name ) {
+				$fields['proof_image'] = array(
+					'key'            => 'field_greendawn_home_proof_image',
+					'name'           => 'greendawn_home_proof_image',
+					'label'          => __( 'Supporting project photograph', 'greendawn-core' ),
+					'instructions'   => __( 'Upload the supplied Salvation Army photograph and select it here. Set its alt text in the Media Library.', 'greendawn-core' ),
+					'type'           => 'image',
+					'return_format'  => 'id',
+					'default_upload' => '2026/11/salvation-army-ev-charging-666.webp',
 				);
 			}
 			if ( isset( $solution_images[ $name ] ) ) {
@@ -245,6 +263,9 @@ final class Greendawn_Homepage implements Module_Interface {
 				'maxlength'     => $settings[2],
 				'type'          => $settings[3] ?? 'text',
 			);
+			if ( 'proof_link' === $name ) {
+				$fields[ $name ]['instructions'] = __( 'Uses the Projects destination in the Hero tab.', 'greendawn-core' );
+			}
 		}
 		$fields = array(
 			'hero_image' => array(
@@ -347,6 +368,7 @@ final class Greendawn_Homepage implements Module_Interface {
 			'survey_eyebrow'    => __( 'Surveys', 'greendawn-core' ),
 			'solutions_eyebrow' => __( 'Services', 'greendawn-core' ),
 			'aftercare_eyebrow' => __( 'Aftercare', 'greendawn-core' ),
+			'proof_image'       => __( 'Supporting proof', 'greendawn-core' ),
 		);
 		$fields = array();
 		foreach ( $this->fields() as $name => $field ) {

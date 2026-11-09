@@ -1,7 +1,7 @@
 .lead-capture {
- --navy-950:#071721; --navy-900:#0b1d2a; --navy-800:#162e3f; --navy-700:#254255;
+ --navy-950:#071721; --navy-900:#0b1d2a; --navy-800:#13293b; --navy-700:#1e3a4f;
  --cream:#faf9f6; --white:#fff; --lime:#e9f227; --violet:#3a22d8;
- --slate-200:#d7dde1; --slate-300:#abb5bd; --slate-500:#5c6770; --slate-600:#47535e; --slate-700:#354450;
+ --slate-200:#d7dde1; --slate-300:#abb5bd; --slate-500:#5c6770; --slate-600:#465563; --slate-700:#2f3b49;
  --type-secondary:clamp(.875rem,.85rem + .12vw,1rem); --type-body-compact:1rem;
  font-family:var(--font-body); font-weight:400; line-height:1.5;
 }

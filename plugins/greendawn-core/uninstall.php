@@ -1,6 +1,6 @@
 <?php
 /**
- * Uninstall routine. The core plugin stores no data; modules must clean up after themselves.
+ * Preserve site configuration and managed CF7 forms when uninstalling the plugin.
  *
  * @package Greendawn_Core
  */

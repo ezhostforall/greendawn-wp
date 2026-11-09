@@ -7,6 +7,7 @@ export interface LeadConfig {
 	phone: string;
 	phoneUrl: string;
 	source: string;
+	fallbackUrl: string;
 }
 
 const component = document.querySelector<HTMLElement>('[data-lead-capture]');
@@ -22,6 +23,7 @@ if (component && transport && mount && typeof HTMLDialogElement !== 'undefined')
 		const lifecycle = new AbortController();
 		async function initialise() {
 			const { mountLeadCapture } = await import('./mount');
+			if (lifecycle.signal.aborted) throw new Error('Page has closed');
 			return mountLeadCapture(mount!, transport!, config);
 		}
 		const ready = (): boolean => 'wpcf7' in transport;
@@ -44,11 +46,9 @@ if (component && transport && mount && typeof HTMLDialogElement !== 'undefined')
 				app.open(mobile && toggle ? toggle : trigger, trigger.dataset.leadEntryPoint ?? 'floating-launcher');
 			}).catch(() => {
 				loading = undefined;
+				if (lifecycle.signal.aborted) return;
 				if (trigger instanceof HTMLAnchorElement) window.location.assign(trigger.href);
-				else {
-					const fallback = document.querySelector<HTMLAnchorElement>('.header-cta');
-					if (fallback) window.location.assign(fallback.href);
-				}
+				else window.location.assign(config.fallbackUrl);
 			}).finally(() => trigger.removeAttribute('aria-busy'));
 		}, { signal: lifecycle.signal });
 		window.addEventListener('pagehide', (event) => {

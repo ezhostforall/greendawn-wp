@@ -1,4 +1,5 @@
 import { expect, test, type Page } from '@playwright/test';
+import AxeBuilder from '@axe-core/playwright';
 
 async function direct(page: Page, path = '/callback-home/') {
 	await page.goto(path);
@@ -25,9 +26,10 @@ test('qualified React flow uses native CF7 delivery and emits no personal data i
 		(window as unknown as { funnel: unknown[] }).funnel = [];
 		document.addEventListener('greendawn:lead-funnel', (event) => (window as unknown as { funnel: unknown[] }).funnel.push((event as CustomEvent).detail));
 	});
-	await page.goto('/callback-home/?utm_source=qa&utm_campaign=callback');
 	const loaded: string[] = [];
 	page.on('request', (request) => loaded.push(request.url()));
+	await page.goto('/callback-home/?utm_source=qa&utm_campaign=callback');
+	expect(loaded.some((url) => /(?:mount-|jsx-runtime-).*\.js/.test(url))).toBe(false);
 	await page.locator('.gd-hero__actions [data-lead-capture-open]').click();
 	const dialog = page.getByRole('dialog');
 	await dialog.getByRole('button', { name: 'EV charging', exact: true }).click();
@@ -147,4 +149,48 @@ test('direct HTTP requests cannot bypass required fields, controlled choices, sp
 	}
 	const throttled = await (await request.post(endpoint, { multipart: good })).json();
 	expect(throttled.status).toBe('spam');
+});
+
+test('the mobile drawer has no axe violations and restores the mobile menu trigger', async ({ page }) => {
+	await page.setViewportSize({ width: 390, height: 850 });
+	await page.goto('/callback-home/');
+	const toggle = page.locator('[data-nav-toggle]');
+	await toggle.click();
+	await page.locator('.gd-mobile-enquiry').click();
+	const dialog = page.getByRole('dialog');
+	await expect(dialog).toBeVisible();
+	await dialog.getByRole('button', { name: 'Just request a callback' }).click();
+	const results = await new AxeBuilder({ page }).include('.lead-capture__dialog').withTags(['wcag2a', 'wcag2aa', 'wcag21aa']).analyze();
+	expect(results.violations).toEqual([]);
+	await page.keyboard.press('Escape');
+	await expect(toggle).toBeFocused();
+	await expect(page.locator('.primary-nav')).toBeHidden();
+});
+
+test('the administrator can disable and re-enable the drawer without changing the contact form', async ({ page, baseURL, browser }) => {
+	test.skip(baseURL !== 'http://localhost:8080', 'Disposable administrator only.');
+	await page.goto('/wp-login.php');
+	await page.locator('#user_login').fill('admin');
+	await page.locator('#user_pass').fill('local-test-only');
+	await page.locator('#wp-submit').click();
+	await page.waitForURL('**/wp-admin/**');
+	await page.goto('/wp-admin/options-general.php?page=greendawn-core');
+	await expect(page.getByRole('link', { name: 'Review callback email recipient and delivery settings' })).toHaveAttribute('href', /page=wpcf7&post=\d+&action=edit/);
+	const enabled = page.getByRole('checkbox', { name: 'Enable the sitewide callback drawer' });
+	await expect(enabled).toBeChecked();
+	const visitor = await browser.newContext({ baseURL });
+	try {
+		await enabled.uncheck();
+		await page.getByRole('button', { name: 'Save callback settings' }).click();
+		await expect(page.getByRole('checkbox', { name: 'Enable the sitewide callback drawer' })).not.toBeChecked();
+		const front = await visitor.newPage();
+		await front.goto('/callback-inner/');
+		await expect(front.locator('[data-lead-capture]')).toHaveCount(0);
+		await expect(front.locator('.header-cta')).toHaveAttribute('href', `${baseURL}/about/`);
+	} finally {
+		await page.getByRole('checkbox', { name: 'Enable the sitewide callback drawer' }).check();
+		await page.getByRole('button', { name: 'Save callback settings' }).click();
+		await visitor.close();
+	}
+	await expect(page.getByRole('checkbox', { name: 'Enable the sitewide callback drawer' })).toBeChecked();
 });

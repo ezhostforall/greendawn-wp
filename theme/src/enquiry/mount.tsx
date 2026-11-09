@@ -77,8 +77,8 @@ function App({ config, transport, handleRef }: { config: LeadConfig; transport: 
 		else go(name === 'projectStage' ? 'location' : 'stage');
 	}
 	function field(name: string, label: string, type = 'text', autoComplete = '', maxLength = 120) {
-		return <label className="lead-capture__field"><span>{label}</span>
-			<input name={name} type={type} autoComplete={autoComplete} maxLength={maxLength} value={contact[name] ?? ''} required={['firstName', 'phone', 'company', 'email'].includes(name)} aria-invalid={!!errors[name]} aria-describedby={errors[name] ? `lead-error-${name}` : undefined} onChange={(e) => { setContact({ ...contact, [name]: e.target.value }); setErrors({ ...errors, [name]: '' }); }} />
+		return <label className="lead-capture__field"><span id={`lead-label-${name}`}>{label}</span>
+			<input name={name} type={type} autoComplete={autoComplete} maxLength={maxLength} value={contact[name] ?? ''} required={['firstName', 'phone', 'company', 'email'].includes(name)} aria-labelledby={`lead-label-${name}`} aria-invalid={!!errors[name]} aria-describedby={errors[name] ? `lead-error-${name}` : undefined} onChange={(e) => { setContact({ ...contact, [name]: e.target.value }); setErrors({ ...errors, [name]: '' }); }} />
 			{errors[name] && <span className="lead-capture__error" id={`lead-error-${name}`}>{errors[name]}</span>}
 		</label>;
 	}
@@ -123,7 +123,7 @@ function App({ config, transport, handleRef }: { config: LeadConfig; transport: 
 	const choiceName = step === 'intent' ? 'intent' : step === 'context' ? (context ?? 'siteType') : 'projectStage';
 	return <dialog ref={dialog} className="lead-capture__dialog" id="lead-capture-dialog" aria-labelledby="lead-capture-title" onClose={() => { document.body.classList.remove('lead-capture-open'); setOpened(false); opener.current?.focus(); }} onClick={(e) => { if (e.target === e.currentTarget) close(); }}>
 		<section className="lead-capture__panel" style={{ '--lead-progress': progress } as CSSProperties}>
-			<form ref={form} className="lead-capture__form" noValidate onSubmit={(e) => { e.preventDefault(); if (step === 'contact') void submit(); }}>
+			<form ref={form} className="lead-capture__form" noValidate onSubmit={(e) => { e.preventDefault(); if (step === 'contact') void submit(); else if (step === 'location') { startCallback(); go('contact'); } }}>
 				<header className="lead-capture__header">
 					{history.length > 0 && step !== 'success' && <button className="lead-capture__icon-button" data-lead-back type="button" disabled={submitting} onClick={() => { setStep(history[history.length - 1] ?? 'intent'); setHistory(history.slice(0, -1)); setErrors({}); setMessage(''); }}><span aria-hidden="true">←</span><span>Back</span></button>}
 					<div className="lead-capture__brand"><span>Greendawn</span><strong id="lead-capture-title">Request a callback</strong></div>
@@ -157,10 +157,13 @@ function App({ config, transport, handleRef }: { config: LeadConfig; transport: 
 export function mountLeadCapture(element: HTMLElement, transport: HTMLFormElement, config: LeadConfig) {
 	const root = createRoot(element);
 	const handle = createRef<Handle>();
-	const fallback = document.querySelector<HTMLAnchorElement>('.header-cta')?.href ?? config.privacyUrl;
+	const fallback = config.fallbackUrl;
 	flushSync(() => root.render(<Boundary fallback={fallback}><App config={config} transport={transport} handleRef={handle} /></Boundary>));
 	return {
-		open: (trigger: HTMLElement, entry: string) => handle.current?.open(trigger, entry),
+		open: (trigger: HTMLElement, entry: string) => {
+			if (!handle.current) throw new Error('Callback form is unavailable');
+			handle.current.open(trigger, entry);
+		},
 		close: () => handle.current?.close(),
 		destroy: () => root.unmount(),
 	};

@@ -10,6 +10,8 @@ if ( ! defined( 'ABSPATH' ) || 'local' !== wp_get_environment_type() || 'http://
 
 add_filter( 'greendawn_lead_config', static fn( $config ) => is_page( array( 'callback-home', 'callback-inner' ) ) ? $config : array(), 30 );
 add_filter( 'theme_mod_greendawn_header_cta_url', static fn( $value ) => is_page( array( 'callback-home', 'callback-inner' ) ) ? home_url( '/about/' ) : $value, 30 );
+add_filter( 'theme_mod_greendawn_footer_cta_url', static fn( $value ) => is_page( array( 'callback-home', 'callback-inner' ) ) ? home_url( '/about/' ) : $value, 30 );
+add_filter( 'theme_mod_greendawn_footer_cta_label', static fn( $value ) => is_page( array( 'callback-home', 'callback-inner' ) ) ? 'Discuss your site' : $value, 30 );
 add_filter( 'pre_wp_mail', static function ( $result, $atts ) {
 	update_option( 'greendawn_test_callback_mail', $atts, false );
 	return ! str_contains( $atts['message'], 'failure@example.test' );

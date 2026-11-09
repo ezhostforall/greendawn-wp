@@ -36,10 +36,13 @@ function greendawn_lead_render(): void {
 	if ( ! $config ) {
 		return;
 	}
-	$config['privacyUrl'] = get_privacy_policy_url() ?: home_url( '/privacy-policy/' );
-	$config['phone']      = greendawn_footer_value( 'phone' );
-	$config['phoneUrl']   = greendawn_phone_uri( $config['phone'] );
-	$config['source']     = is_page_template( 'templates/greendawn-homepage.php' ) ? 'homepage' : 'website';
+	$privacy_url           = get_privacy_policy_url();
+	$config['privacyUrl']  = '' !== $privacy_url ? $privacy_url : home_url( '/privacy-policy/' );
+	$config['phone']       = greendawn_footer_value( 'phone' );
+	$config['phoneUrl']    = greendawn_phone_uri( $config['phone'] );
+	$config['source']      = is_page_template( 'templates/greendawn-homepage.php' ) ? 'homepage' : 'website';
+	$fallback_url          = esc_url_raw( (string) get_theme_mod( 'greendawn_header_cta_url', '' ) );
+	$config['fallbackUrl'] = '' !== $fallback_url && '#' !== $fallback_url ? $fallback_url : home_url( '/contact/' );
 	?>
 	<aside class="lead-capture" data-lead-capture data-config="<?php echo esc_attr( wp_json_encode( $config ) ); ?>" aria-label="<?php esc_attr_e( 'Request a callback', 'greendawn' ); ?>">
 		<button class="lead-capture__launcher" type="button" data-lead-capture-open data-lead-entry-point="floating-launcher" aria-label="<?php esc_attr_e( 'Request a callback', 'greendawn' ); ?>" aria-haspopup="dialog" hidden>

@@ -28,7 +28,11 @@ final class Lead_Capture implements Module_Interface {
 		register_setting(
 			'greendawn_core_callback_settings',
 			'greendawn_core_callback_enabled',
-			array( 'type' => 'boolean', 'default' => false, 'sanitize_callback' => 'wp_validate_boolean' )
+			array(
+				'type'              => 'boolean',
+				'default'           => false,
+				'sanitize_callback' => 'wp_validate_boolean',
+			)
 		);
 	}
 
@@ -39,12 +43,50 @@ final class Lead_Capture implements Module_Interface {
 	 */
 	public static function choices(): array {
 		return array(
-			'intent'             => array( 'ev-charging' => 'EV charging', 'power' => 'Power / grid capacity', 'solar-battery' => 'Solar & battery', 'aftercare' => 'Existing chargers / aftercare', 'unsure' => 'Not sure yet' ),
-			'projectStage'       => array( 'exploring' => 'Just exploring', 'planning' => 'Planning a project', 'quote' => 'Need a quote', 'existing' => 'Already have infrastructure', 'problem' => 'Something isn’t working' ),
-			'callbackPreference' => array( 'asap' => 'As soon as possible', 'today' => 'Today', 'tomorrow' => 'Tomorrow', 'scheduled' => 'Suggest a time' ),
-			'siteType'           => array( 'workplace' => 'Workplace', 'fleet-depot' => 'Fleet / depot', 'public-destination' => 'Public / destination', 'motor-dealership' => 'Motor dealership', 'other' => 'Other', 'unsure' => 'Not sure' ),
-			'aftercareIssue'     => array( 'offline' => 'Chargers offline', 'slow-charging' => 'Charging too slowly', 'payment-software' => 'Payment / software issue', 'maintenance' => 'Maintenance', 'other' => 'Something else', 'unsure' => 'Not sure' ),
-			'powerReason'        => array( 'capacity' => 'Not enough capacity', 'grid-upgrade' => 'Grid upgrade', 'expansion' => 'Future expansion', 'ev-demand' => 'EV charging demand', 'other' => 'Something else', 'unsure' => 'Not sure' ),
+			'intent'             => array(
+				'ev-charging'   => 'EV charging',
+				'power'         => 'Power / grid capacity',
+				'solar-battery' => 'Solar & battery',
+				'aftercare'     => 'Existing chargers / aftercare',
+				'unsure'        => 'Not sure yet',
+			),
+			'projectStage'       => array(
+				'exploring' => 'Just exploring',
+				'planning'  => 'Planning a project',
+				'quote'     => 'Need a quote',
+				'existing'  => 'Already have infrastructure',
+				'problem'   => 'Something isn’t working',
+			),
+			'callbackPreference' => array(
+				'asap'      => 'As soon as possible',
+				'today'     => 'Today',
+				'tomorrow'  => 'Tomorrow',
+				'scheduled' => 'Suggest a time',
+			),
+			'siteType'           => array(
+				'workplace'          => 'Workplace',
+				'fleet-depot'        => 'Fleet / depot',
+				'public-destination' => 'Public / destination',
+				'motor-dealership'   => 'Motor dealership',
+				'other'              => 'Other',
+				'unsure'             => 'Not sure',
+			),
+			'aftercareIssue'     => array(
+				'offline'          => 'Chargers offline',
+				'slow-charging'    => 'Charging too slowly',
+				'payment-software' => 'Payment / software issue',
+				'maintenance'      => 'Maintenance',
+				'other'            => 'Something else',
+				'unsure'           => 'Not sure',
+			),
+			'powerReason'        => array(
+				'capacity'     => 'Not enough capacity',
+				'grid-upgrade' => 'Grid upgrade',
+				'expansion'    => 'Future expansion',
+				'ev-demand'    => 'EV charging demand',
+				'other'        => 'Something else',
+				'unsure'       => 'Not sure',
+			),
 		);
 	}
 
@@ -54,7 +96,22 @@ final class Lead_Capture implements Module_Interface {
 	 * @return array<string,int>
 	 */
 	public static function limits(): array {
-		return array( 'firstName' => 80, 'company' => 120, 'phone' => 40, 'email' => 160, 'location' => 120, 'preferredCallbackTime' => 30, 'notes' => 1500, 'pagePath' => 240, 'entryPoint' => 30, 'source' => 30, 'utmSource' => 120, 'utmMedium' => 120, 'utmCampaign' => 120, 'website' => 200 );
+		return array(
+			'firstName'             => 80,
+			'company'               => 120,
+			'phone'                 => 40,
+			'email'                 => 160,
+			'location'              => 120,
+			'preferredCallbackTime' => 30,
+			'notes'                 => 1500,
+			'pagePath'              => 240,
+			'entryPoint'            => 30,
+			'source'                => 30,
+			'utmSource'             => 120,
+			'utmMedium'             => 120,
+			'utmCampaign'           => 120,
+			'website'               => 200,
+		);
 	}
 
 	/**
@@ -68,7 +125,10 @@ final class Lead_Capture implements Module_Interface {
 		if ( ! get_option( 'greendawn_core_callback_enabled', false ) || ! function_exists( 'wpcf7_contact_form' ) || ! wpcf7_contact_form( $id ) ) {
 			return $config;
 		}
-		return array( 'formId' => $id, 'choices' => self::choices() );
+		return array(
+			'formId'  => $id,
+			'choices' => self::choices(),
+		);
 	}
 
 	/**
@@ -95,19 +155,24 @@ final class Lead_Capture implements Module_Interface {
 			$type     = 'callbackPreference' === $name ? 'select*' : 'select';
 			$markup[] = sprintf( '<label>%1$s [%2$s %1$s include_blank "%3$s"]</label>', $name, $type, implode( '" "', array_keys( $choices ) ) );
 		}
-		$markup[] = '[submit "Request callback"]';
-		$mail     = $form->prop( 'mail' );
-		$mail['recipient'] = get_option( 'admin_email' );
-		$mail['subject']   = '[Greendawn] Commercial callback request';
+		$markup[]                   = '[submit "Request callback"]';
+		$mail                       = $form->prop( 'mail' );
+		$mail['recipient']          = get_option( 'admin_email' );
+		$mail['subject']            = '[Greendawn] Commercial callback request';
 		$mail['additional_headers'] = 'Reply-To: [email]';
-		$mail['body'] = "Commercial callback request\n\n";
+		$mail['body']               = "Commercial callback request\n\n";
 		foreach ( array_merge( array_keys( self::choices() ), array_keys( self::limits() ) ) as $name ) {
 			if ( 'website' !== $name ) {
 				$mail['body'] .= $name . ': [' . $name . "]\n";
 			}
 		}
 		$mail['body'] .= "\nReceived: [_date] [_time]\nSuggested callback times are preferences, not confirmed appointments.";
-		$form->set_properties( array( 'form' => implode( "\n", $markup ), 'mail' => $mail ) );
+		$form->set_properties(
+			array(
+				'form' => implode( "\n", $markup ),
+				'mail' => $mail,
+			)
+		);
 		$id = $form->save();
 		update_option( 'greendawn_core_callback_form', $id, false );
 		return (int) $id;
@@ -115,7 +180,7 @@ final class Lead_Capture implements Module_Interface {
 
 	/** Handles the nonce-protected administrator setup button. */
 	public function create_form(): void {
-		if ( ! current_user_can( 'manage_options' ) || ! current_user_can( 'wpcf7_edit_contact_forms' ) ) {
+		if ( ! current_user_can( 'manage_options' ) || ! current_user_can( 'wpcf7_edit_contact_forms' ) ) { // phpcs:ignore WordPress.WP.Capabilities.Unknown -- CF7 maps its own form-edit capability.
 			wp_die( esc_html__( 'You cannot configure callback forms.', 'greendawn-core' ) );
 		}
 		check_admin_referer( 'greendawn_core_create_callback' );
@@ -136,25 +201,25 @@ final class Lead_Capture implements Module_Interface {
 	 * Additional server-side validation for the qualified callback contract.
 	 *
 	 * @param \WPCF7_Validation $result CF7 validation result.
-	 * @param array            $tags Form tags.
+	 * @param array             $tags Form tags.
 	 * @return \WPCF7_Validation
 	 */
 	public function validate( $result, array $tags ) {
 		if ( ! $this->is_managed() ) {
 			return $result;
 		}
-		$submission = \WPCF7_Submission::get_instance();
-		$data       = $submission ? $submission->get_posted_data() : array();
-		$choices    = self::choices();
-		$choices['source'] = array_fill_keys( array( 'homepage', 'website' ), '' );
+		$submission            = \WPCF7_Submission::get_instance();
+		$data                  = $submission ? $submission->get_posted_data() : array();
+		$choices               = self::choices();
+		$choices['source']     = array_fill_keys( array( 'homepage', 'website' ), '' );
 		$choices['entryPoint'] = array_fill_keys( array( 'floating-launcher', 'header', 'hero', 'services', 'pricing', 'final-cta', 'footer-cta' ), '' );
-		$limits     = self::limits();
+		$limits                = self::limits();
 		foreach ( $tags as $tag ) {
 			$name  = $tag->name;
 			$value = $data[ $name ] ?? '';
-			// CF7 represents single select values as one-element arrays.
-			if ( isset( $choices[ $name ] ) && is_array( $value ) && count( $value ) === 1 ) {
-				$value = reset( $value );
+			// CF7 represents empty optional selects as [], answered selects as [value].
+			if ( isset( $choices[ $name ] ) && is_array( $value ) && count( $value ) <= 1 ) {
+				$value = $value ? reset( $value ) : '';
 			}
 			if ( ! is_scalar( $value ) || ( isset( $limits[ $name ] ) && strlen( (string) $value ) > $limits[ $name ] * 4 ) || ( isset( $choices[ $name ] ) && '' !== $value && ! isset( $choices[ $name ][ $value ] ) ) ) {
 				$result->invalidate( $tag, __( 'Please check this value.', 'greendawn-core' ) );

@@ -65,6 +65,7 @@ export default defineConfig(({ command }) => ({
 				enquiry: resolve(root, 'src/enquiry/launcher.ts'),
 				'greendawn-home-motion': resolve(root, 'src/scripts/home/loader.ts'),
 				'greendawn-homepage': resolve(root, 'src/styles/greendawn-homepage.css'),
+				'greendawn-pages': resolve(root, 'src/scripts/greendawn-pages.ts'),
 			},
 		},
 	},

@@ -403,3 +403,11 @@ wp eval '
   }
   update_option( "greendawn_footer_test_menus", $locations );
 '
+
+# Exercise SCF editing first, then render native fallback without SCF in the browser suite.
+wp plugin activate secure-custom-fields
+docker cp tests/integration/about-page.php "$container_id:/tmp/about-page.php"
+wp eval-file /tmp/about-page.php
+wp plugin deactivate secure-custom-fields
+docker cp tests/fixtures/about-options.php "$container_id:/var/www/html/wp-content/plugins/about-test-fixture.php"
+wp plugin activate about-test-fixture

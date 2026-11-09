@@ -26,6 +26,7 @@ function greendawn_entries(): array {
 			'enquiry'               => 'src/enquiry/launcher.ts',
 			'greendawn-home-motion' => 'src/scripts/home/loader.ts',
 			'greendawn-homepage'    => 'src/styles/greendawn-homepage.css',
+			'greendawn-pages'       => 'src/scripts/greendawn-pages.ts',
 		)
 	);
 }

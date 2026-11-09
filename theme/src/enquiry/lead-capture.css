@@ -14,6 +14,7 @@
 .lead-capture :focus-visible { outline:3px solid var(--violet); outline-offset:3px; }
 .lead-capture__field input:focus-visible, .lead-capture__field textarea:focus-visible { outline-offset:1px; }
 .lead-capture__launcher[aria-busy="true"] { cursor:wait; }
+html:has(.lead-capture__dialog[open]) { scrollbar-gutter:auto; overflow:hidden; }
 
 html.no-js .lead-capture {
   display: none;

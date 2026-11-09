@@ -22,6 +22,7 @@ async function fillContact(page: Page, email = 'visitor@example.test') {
 test.beforeEach(async ({ request }) => { await request.post('/wp-json/greendawn-test/v1/callback/reset'); });
 
 test('qualified React flow uses native CF7 delivery and emits no personal data in funnel events', async ({ page, request }, testInfo) => {
+	await page.setViewportSize({ width: 1440, height: 900 });
 	await page.addInitScript(() => {
 		(window as unknown as { funnel: unknown[] }).funnel = [];
 		document.addEventListener('greendawn:lead-funnel', (event) => (window as unknown as { funnel: unknown[] }).funnel.push((event as CustomEvent).detail));
@@ -38,6 +39,7 @@ test('qualified React flow uses native CF7 delivery and emits no personal data i
 	await dialog.getByRole('textbox', { name: /Town, city/ }).fill('Birmingham');
 	await dialog.getByRole('button', { name: 'Continue', exact: true }).click();
 	await fillContact(page);
+	await dialog.locator('.lead-capture__body').evaluate((element) => { element.scrollTop = 0; });
 	await testInfo.attach('callback-contact-1440', { body: await page.screenshot(), contentType: 'image/png' });
 	await dialog.getByRole('button', { name: 'Request callback', exact: true }).click();
 	await expect(dialog.getByRole('heading', { name: 'Thank you. Your request has been sent.' })).toBeVisible();
@@ -91,6 +93,7 @@ test('back navigation, branching, short viewports and all CTA entry points remai
 		await dialog.locator('input[type="datetime-local"]').fill('2027-01-20T10:30');
 		await expect(dialog.getByRole('button', { name: 'Request callback', exact: true })).toBeInViewport();
 		expect(await dialog.evaluate((el) => el.scrollWidth <= el.clientWidth)).toBe(true);
+		expect(await dialog.evaluate((el) => Math.round(el.getBoundingClientRect().right))).toBe(width);
 		await testInfo.attach(`callback-contact-${width}`, { body: await page.screenshot(), contentType: 'image/png' });
 		await page.keyboard.press('Escape');
 	}
@@ -180,13 +183,18 @@ test('the administrator can disable and re-enable the drawer without changing th
 	await expect(enabled).toBeChecked();
 	const visitor = await browser.newContext({ baseURL });
 	try {
+		const front = await visitor.newPage();
+		await front.goto('/callback-inner/');
+		const oldFields = await front.locator('[data-lead-transport] input[type="hidden"]').evaluateAll((inputs) => Object.fromEntries(inputs.map((input) => [(input as HTMLInputElement).name, (input as HTMLInputElement).value])));
+		const config = JSON.parse(await front.locator('[data-lead-capture]').getAttribute('data-config') ?? '{}');
 		await enabled.uncheck();
 		await page.getByRole('button', { name: 'Save callback settings' }).click();
 		await expect(page.getByRole('checkbox', { name: 'Enable the sitewide callback drawer' })).not.toBeChecked();
-		const front = await visitor.newPage();
 		await front.goto('/callback-inner/');
 		await expect(front.locator('[data-lead-capture]')).toHaveCount(0);
 		await expect(front.locator('.header-cta')).toHaveAttribute('href', `${baseURL}/about/`);
+		const disabled = await visitor.request.post(`/wp-json/contact-form-7/v1/contact-forms/${config.formId}/feedback`, { multipart: { ...oldFields, firstName: 'Disabled test', company: 'Test Company', phone: '0121 555 0100', email: 'disabled@example.test', callbackPreference: 'today' } });
+		expect((await disabled.json()).status).toBe('spam');
 	} finally {
 		await page.getByRole('checkbox', { name: 'Enable the sitewide callback drawer' }).check();
 		await page.getByRole('button', { name: 'Save callback settings' }).click();

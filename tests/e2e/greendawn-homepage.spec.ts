@@ -239,12 +239,7 @@ test('the utility bar text can be edited and reset in the Customiser', async ({ 
 test('service photographs follow hover and keyboard focus without JavaScript', async ({ browser, baseURL }, testInfo) => {
 	const context = await browser.newContext({ baseURL, javaScriptEnabled: false });
 	const page = await context.newPage();
-	const serviceImages: string[] = [];
-	page.on('request', (request) => {
-		if (request.resourceType() === 'image' && /commercial-ev-(fleet|workplace|destination|multi-site|dealership)/.test(request.url())) {
-			serviceImages.push(request.url());
-		}
-	});
+
 	try {
 		await page.setViewportSize({ width: 1440, height: 900 });
 		await page.goto('/greendawn-home/');
@@ -258,8 +253,6 @@ test('service photographs follow hover and keyboard focus without JavaScript', a
 		await expect(fleetImage).toHaveAttribute('loading', 'lazy');
 		await expect(fleetImage).toHaveAttribute('alt', '');
 		await expect(fleetImage).toHaveAttribute('srcset', /1200w/);
-		expect(serviceImages.some((url) => url.includes('fleet-charging-bays'))).toBe(true);
-		expect(serviceImages.some((url) => /workplace|destination|multi-site|dealership/.test(url))).toBe(false);
 
 		const workplace = services.locator('.gd-solution-row--workplace');
 		await workplace.hover();
@@ -277,6 +270,10 @@ test('service photographs follow hover and keyboard focus without JavaScript', a
 		const box = (await media.boundingBox())!;
 		const topPreview = await page.evaluate(({ x, y }) => document.elementFromPoint(x, y)?.closest('figure')?.className, { x: box.x + box.width / 2, y: box.y + box.height / 2 });
 		expect(topPreview).toContain('gd-solution-image--workplace');
+		const captionBox = (await services.locator('.gd-solution-image--workplace figcaption').boundingBox())!;
+		const topCaption = await page.evaluate(({ x, y }) => document.elementFromPoint(x, y)?.closest('figure')?.querySelector('figcaption')?.textContent, { x: captionBox.x + captionBox.width / 2, y: captionBox.y + captionBox.height / 2 });
+		expect(topCaption).toBe('02Workplace charging');
+		await testInfo.attach('greendawn-services-keyboard-preview', { body: await services.screenshot(), contentType: 'image/png' });
 
 		for (const key of ['public', 'multi_site', 'dealership']) {
 			await page.keyboard.press('Tab');
@@ -300,4 +297,28 @@ test('service photographs follow hover and keyboard focus without JavaScript', a
 	} finally {
 		await context.close();
 	}
+});
+
+
+test('service previews defer unused image requests with browser lazy loading enabled', async ({ page }) => {
+	const serviceImages: string[] = [];
+	page.on('request', (request) => {
+		if (request.resourceType() === 'image' && /commercial-ev-(fleet|workplace|destination|multi-site|dealership)/.test(request.url())) {
+			serviceImages.push(request.url());
+		}
+	});
+	await page.setViewportSize({ width: 1440, height: 900 });
+	await page.goto('/greendawn-home/');
+	const services = page.locator('#who-we-help');
+	const fleetImage = services.locator('.gd-solution-image--fleet img');
+	await fleetImage.scrollIntoViewIfNeeded();
+	await expect.poll(() => fleetImage.evaluate((image: HTMLImageElement) => image.naturalWidth)).toBeGreaterThan(0);
+	await fleetImage.evaluate((image: HTMLImageElement) => image.decode());
+	expect(serviceImages.some((url) => url.includes('fleet-charging-bays'))).toBe(true);
+	expect(serviceImages.some((url) => /workplace|destination|multi-site|dealership/.test(url))).toBe(false);
+	await services.locator('.gd-solution-row--workplace').hover();
+	const workplaceImage = services.locator('.gd-solution-image--workplace img');
+	await expect.poll(() => workplaceImage.evaluate((image: HTMLImageElement) => image.naturalWidth)).toBeGreaterThan(0);
+	expect(serviceImages.some((url) => url.includes('workplace'))).toBe(true);
+	expect(serviceImages.some((url) => /destination|multi-site|dealership/.test(url))).toBe(false);
 });

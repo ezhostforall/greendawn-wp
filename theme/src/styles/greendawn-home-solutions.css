@@ -263,12 +263,12 @@
 }
 
 @media (min-width: 61.001rem) {
-  .gd-solutions__layout:not(:has(.gd-solution-row:is(:hover, :focus-visible))) .gd-solution-row--default[href] {
+  .gd-solutions__layout:not(.gd-solutions--motion):not(:has(.gd-solution-row:is(:hover, :focus-visible))) .gd-solution-row--default[href] {
     color: var(--gd-violet);
     padding-left: 0.6rem;
   }
 
-  .gd-solutions__layout:not(:has(.gd-solution-row:is(:hover, :focus-visible))) .gd-solution-row--default[href]::before {
+  .gd-solutions__layout:not(.gd-solutions--motion):not(:has(.gd-solution-row:is(:hover, :focus-visible))) .gd-solution-row--default[href]::before {
     transform: scaleY(1);
   }
 }
@@ -281,52 +281,52 @@
 
 /* Only the default and requested previews are displayed; the browser controls lazy requests. */
 
-.gd-solutions__layout:has(.gd-solution-row--fleet[href]:hover) .gd-solution-image--fleet {
+.gd-solutions__layout:not(.gd-solutions--motion):has(.gd-solution-row--fleet[href]:hover) .gd-solution-image--fleet {
   z-index: 1;
   display: block;
 }
 
-.gd-solutions__layout:has(.gd-solution-row--fleet[href]:focus-visible) .gd-solution-image--fleet {
+.gd-solutions__layout:not(.gd-solutions--motion):has(.gd-solution-row--fleet[href]:focus-visible) .gd-solution-image--fleet {
   z-index: 2;
   display: block;
 }
 
-.gd-solutions__layout:has(.gd-solution-row--workplace[href]:hover) .gd-solution-image--workplace {
+.gd-solutions__layout:not(.gd-solutions--motion):has(.gd-solution-row--workplace[href]:hover) .gd-solution-image--workplace {
   z-index: 1;
   display: block;
 }
 
-.gd-solutions__layout:has(.gd-solution-row--workplace[href]:focus-visible) .gd-solution-image--workplace {
+.gd-solutions__layout:not(.gd-solutions--motion):has(.gd-solution-row--workplace[href]:focus-visible) .gd-solution-image--workplace {
   z-index: 2;
   display: block;
 }
 
-.gd-solutions__layout:has(.gd-solution-row--public[href]:hover) .gd-solution-image--public {
+.gd-solutions__layout:not(.gd-solutions--motion):has(.gd-solution-row--public[href]:hover) .gd-solution-image--public {
   z-index: 1;
   display: block;
 }
 
-.gd-solutions__layout:has(.gd-solution-row--public[href]:focus-visible) .gd-solution-image--public {
+.gd-solutions__layout:not(.gd-solutions--motion):has(.gd-solution-row--public[href]:focus-visible) .gd-solution-image--public {
   z-index: 2;
   display: block;
 }
 
-.gd-solutions__layout:has(.gd-solution-row--multi_site[href]:hover) .gd-solution-image--multi_site {
+.gd-solutions__layout:not(.gd-solutions--motion):has(.gd-solution-row--multi_site[href]:hover) .gd-solution-image--multi_site {
   z-index: 1;
   display: block;
 }
 
-.gd-solutions__layout:has(.gd-solution-row--multi_site[href]:focus-visible) .gd-solution-image--multi_site {
+.gd-solutions__layout:not(.gd-solutions--motion):has(.gd-solution-row--multi_site[href]:focus-visible) .gd-solution-image--multi_site {
   z-index: 2;
   display: block;
 }
 
-.gd-solutions__layout:has(.gd-solution-row--dealership[href]:hover) .gd-solution-image--dealership {
+.gd-solutions__layout:not(.gd-solutions--motion):has(.gd-solution-row--dealership[href]:hover) .gd-solution-image--dealership {
   z-index: 1;
   display: block;
 }
 
-.gd-solutions__layout:has(.gd-solution-row--dealership[href]:focus-visible) .gd-solution-image--dealership {
+.gd-solutions__layout:not(.gd-solutions--motion):has(.gd-solution-row--dealership[href]:focus-visible) .gd-solution-image--dealership {
   z-index: 2;
   display: block;
 }

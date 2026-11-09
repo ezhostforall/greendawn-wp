@@ -6,6 +6,7 @@ Source revision [891ed840c7369cb50df3e33232e81de49e2699d6](https://github.com/ez
 - [Homepage content and media definitions](src/content) supply the pinned copy, routes and focal positions.
 - [Shared styles](src/styles) contain typography, spacing tokens and common layout primitives.
 - [Header, utility bar and sitewide footer](src/components/layout) record the shared layout components.
+- [Animation modules](src/scripts/animations), [motion runtime](src/scripts/motion/runtime.ts) and [homepage composition](src/scripts/home.ts) record timings, scroll ranges and responsive conditions.
 - [Navigation script](src/scripts/navigation.ts) records the 72px compact-header threshold and scroll-state behaviour.
 - [Lead capture component](src/components/lead), [choices](src/content/lead-capture.ts), [types](src/types/lead.ts), [controller/transport](src/scripts/lead-capture) and [handoff notes](docs/lead-capture-stage-03.md) record the callback reference. The upstream submission remains a demonstration; the WordPress implementation uses native CF7 delivery.
 - [Site and navigation configuration](src/config) records the pinned footer contact/company details and menu labels/routes.

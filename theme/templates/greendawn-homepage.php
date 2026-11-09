@@ -13,7 +13,7 @@ get_header();
 while ( have_posts() ) :
 	the_post();
 	?>
-	<article <?php post_class( 'gd-home' ); ?>>
+	<article <?php post_class( 'gd-home' ); ?> data-gd-home-motion>
 		<?php get_template_part( 'template-parts/home/hero' ); ?>
 		<?php get_template_part( 'template-parts/home/trust' ); ?>
 		<?php get_template_part( 'template-parts/home/problem' ); ?>

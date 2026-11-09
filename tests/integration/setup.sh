@@ -233,6 +233,8 @@ wp eval '
     "commercial-ev-destination-hospitality-1200.webp" => "EV chargers installed outside a hotel",
     "commercial-ev-multi-site-charging-768.webp" => "Completed EV charging installation with multiple marked bays",
     "commercial-ev-dealership-charging-1200.webp" => "EV charging equipment installed at a Ford dealership",
+    "commercial-ev-electrical-connection-1200.webp" => "New electrical connection for a commercial EV charging project",
+    "commercial-ev-site-survey-1024.webp" => "Completed paving and ducting area for an EV charging installation",
     "salvation-army-ev-charging-666.webp" => "Commercial EV chargers installed for The Salvation Army",
   );
   $uploads = wp_get_upload_dir();
@@ -290,6 +292,17 @@ wp post meta update "$greendawn_edited_id" greendawn_home_proof_caption "Fleet p
 wp post meta update "$greendawn_edited_id" greendawn_home_proof_copy "A coordinated programme for a varied fleet estate."
 wp post meta update "$greendawn_edited_id" greendawn_home_proof_link "See our fleet projects"
 wp post meta update "$greendawn_edited_id" greendawn_home_proof_image "$hero_id"
+wp post meta update "$greendawn_edited_id" greendawn_home_insights_title "Guidance for your charging project."
+wp post meta update "$greendawn_edited_id" greendawn_home_insights_link "Read our charging guides"
+wp post meta update "$greendawn_edited_id" greendawn_home_insights_url "https://www.greendawn.co.uk/blog/?from=home#guides"
+wp post meta update "$greendawn_edited_id" greendawn_home_insight_power_title "Plan your site power"
+wp post meta update "$greendawn_edited_id" greendawn_home_insight_power_label ""
+wp post meta update "$greendawn_edited_id" greendawn_home_insight_power_url "https://greendawn.co.uk/guides/load-balancing-explained/?from=home#capacity"
+wp post meta update "$greendawn_edited_id" greendawn_home_insight_power_image "$hero_id"
+wp post meta update "$greendawn_edited_id" greendawn_home_insight_survey_label "Survey planning"
+wp post meta update "$greendawn_edited_id" greendawn_home_insight_survey_url "https://example.com/technical-guide/"
+wp post meta update "$greendawn_edited_id" greendawn_home_insight_fleet_title "Charging around your fleet"
+
 
 # Simulate an unavailable photograph on one disposable fixture page only.
 docker cp tests/fixtures/missing-proof-media.php "$container_id:/var/www/html/wp-content/plugins/greendawn-test-media.php"
@@ -297,6 +310,10 @@ wp plugin activate greendawn-test-media
 create_page greendawn-home-no-proof-image "Greendawn proof without a photograph" ''
 greendawn_no_proof_id=$(wp post list --post_type=page --name=greendawn-home-no-proof-image --field=ID)
 wp post meta update "$greendawn_no_proof_id" _wp_page_template templates/greendawn-homepage.php
+create_page greendawn-home-no-insight-images "Greendawn insights without photographs" ''
+greendawn_no_insights_id=$(wp post list --post_type=page --name=greendawn-home-no-insight-images --field=ID)
+wp post meta update "$greendawn_no_insights_id" _wp_page_template templates/greendawn-homepage.php
+
 
 # Exercise WordPress's assigned Posts page and published editorial templates.
 create_page starter-home "Starter home" '<p>Static homepage fixture.</p>'

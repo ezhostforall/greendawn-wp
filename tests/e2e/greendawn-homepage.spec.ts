@@ -25,6 +25,7 @@ test('the branded homepage renders its sections in order without JavaScript', as
 				'Charging built around your operation.',
 				'EV infrastructure needs to keep working.',
 				'Different locations. A coordinated programme.',
+				'Make better-informed charging decisions.',
 			]);
 			await expect(main.locator('#problem li')).toHaveCount(6);
 			await expect(main.locator('#system .gd-system__cards h3')).toHaveText([
@@ -85,7 +86,7 @@ test('the branded homepage renders its sections in order without JavaScript', as
 			]);
 			await expect(main.locator('#projects').getByRole('link', { name: 'Explore our project experience' })).toHaveAttribute('href', `${baseURL}/gallery/`);
 			await expect(main.getByRole('link', { name: 'Discuss a site survey' })).toHaveAttribute('href', /\/about\/$/);
-			await expect(main.getByRole('link', { name: 'What a technical survey should establish' })).toHaveAttribute('href', /\/guides\/greendawn-ev-charging-survey-pre-installation-guide\/$/);
+			await expect(main.locator('#surveys').getByRole('link', { name: 'What a technical survey should establish' })).toHaveAttribute('href', /\/guides\/greendawn-ev-charging-survey-pre-installation-guide\/$/);
 			await expect(main.getByRole('link', { name: 'Understand AC and DC charging' })).toHaveAttribute('href', /\/guides\/ac-vs-dc-ev-charging\/$/);
 			await expect(main.getByRole('link', { name: 'Explore site power planning' })).toHaveAttribute('href', /\/guides\/can-my-building-handle-ev-charging\/$/);
 			await expect(main.getByRole('link', { name: 'Discuss your site' })).toHaveAttribute('href', /\/about\/$/);
@@ -246,7 +247,7 @@ test('saved homepage values render in the initial response with one hero image',
 	await expect(page.locator('#projects .gd-case-study__facts strong').first()).toHaveText('150');
 	await expect(page.locator('#surveys .gd-surveys__price-value strong')).toHaveText('£250');
 	await expect(page.locator('#surveys li p').first()).toHaveText('Assess the electrical capacity at your site');
-	await expect(page.getByRole('link', { name: 'What a technical survey should establish' })).toHaveAttribute('href', 'https://example.com/survey-guide/');
+	await expect(page.locator('#surveys').getByRole('link', { name: 'What a technical survey should establish' })).toHaveAttribute('href', 'https://example.com/survey-guide/');
 	const services = page.locator('#who-we-help');
 	await expect(services.getByRole('heading', { name: 'Charging for your fleet' })).toBeVisible();
 	await expect(services.locator('.gd-solution-row--fleet p')).toHaveText('A charging plan for your vehicles and operating hours.');
@@ -276,6 +277,20 @@ test('saved homepage values render in the initial response with one hero image',
 	await expect(proof.getByRole('link', { name: 'See our fleet projects' })).toHaveAttribute('href', `${baseURL}/gallery/?view=estate#projects`);
 	expect(html).toContain('Coordinated charging across your sites.');
 	expect(html).not.toContain('salvation-army-ev-charging-');
+	const insights = page.locator('#insights');
+	await expect(insights.getByRole('heading', { level: 2 })).toHaveText('Guidance for your charging project.');
+	await expect(insights.getByRole('link', { name: 'Read our charging guides' })).toHaveAttribute('href', `${baseURL}/blog/?from=home#guides`);
+	const powerGuide = insights.getByRole('link', { name: 'Plan your site power' });
+	await expect(powerGuide).toHaveAttribute('href', `${baseURL}/guides/load-balancing-explained/?from=home#capacity`);
+	await expect(powerGuide.locator('p')).toHaveText('Power & capacity');
+	await expect(powerGuide.getByRole('img')).toHaveAttribute('src', /service-media/);
+	await expect(insights.getByRole('link', { name: 'What a technical survey should establish' })).toHaveAttribute('href', 'https://example.com/technical-guide/');
+	await expect(insights.locator('.gd-insight-card--survey p')).toHaveText('Survey planning');
+	await expect(insights.getByRole('link', { name: 'Charging around your fleet' })).toHaveAttribute('href', `${baseURL}/guides/transitioning-to-electric-fleets/`);
+	expect(html).toContain('Guidance for your charging project.');
+	expect(html).not.toContain('Make better-informed charging decisions.');
+	expect(html).not.toContain('commercial-ev-electrical-connection-');
+
 });
 
 test('the utility bar text can be edited and reset in the Customiser', async ({ page, baseURL }) => {
@@ -407,5 +422,98 @@ test('supporting proof retains its content and full-width card when the photogra
 		const body = (await proof.locator('.gd-proof-card__body').boundingBox())!;
 		expect(body.width).toBeGreaterThan(card.width - 4);
 		expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(width);
+	}
+});
+
+
+test('insights match the curated guide layout on mobile, tablet and desktop without JavaScript', async ({ browser, baseURL }, testInfo) => {
+	const context = await browser.newContext({ baseURL, javaScriptEnabled: false });
+	const page = await context.newPage();
+	try {
+		for (const width of [320, 390, 800, 1440]) {
+			await page.setViewportSize({ width, height: 900 });
+			await page.goto('/greendawn-home/');
+			const insights = page.locator('#insights');
+			const cards = insights.locator('.gd-insight-card');
+			await expect(cards).toHaveCount(3);
+			await expect(insights.getByRole('heading', { level: 3 })).toHaveText([
+				'Understanding load management', 'What a technical survey should establish', 'Planning the transition to an electric fleet',
+			]);
+			await expect(insights.getByRole('link', { name: 'Browse commercial charging guidance' })).toHaveAttribute('href', `${baseURL}/blog/`);
+			expect(await cards.evaluateAll((links) => links.map((link) => (link as HTMLAnchorElement).href))).toEqual([
+				`${baseURL}/guides/load-balancing-explained/`, `${baseURL}/guides/greendawn-ev-charging-survey-pre-installation-guide/`, `${baseURL}/guides/transitioning-to-electric-fleets/`,
+			]);
+			await expect(cards.locator(':scope > p')).toHaveText(['Power & capacity', 'Project planning', 'Fleet planning']);
+			const images = cards.getByRole('img');
+			await expect(images).toHaveCount(3);
+			for (const image of await images.all()) {
+				await expect(image).toHaveAttribute('loading', 'lazy');
+				await expect(image).toHaveAttribute('srcset', /\d+w/);
+				await expect(image).toHaveAttribute('width', /\d+/);
+				await expect(image).toHaveAttribute('height', /\d+/);
+				await image.scrollIntoViewIfNeeded();
+				await image.evaluate((element: HTMLImageElement) => element.decode());
+			}
+			await expect(images.first()).toHaveCSS('object-position', width <= 672 ? '62% 50%' : '66% 50%');
+			await expect(insights.locator('.gd-eyebrow')).toHaveCSS('margin-bottom', '32px');
+			const boxes = await cards.evaluateAll((elements) => elements.map((element) => {
+				const { x, y, width } = element.getBoundingClientRect();
+				return { x, y, width };
+			}));
+			if (width <= 672) {
+				expect(boxes[0]!.x).toBeCloseTo(boxes[1]!.x, 0);
+				expect(boxes[1]!.y).toBeGreaterThan(boxes[0]!.y);
+				expect(boxes[2]!.y).toBeGreaterThan(boxes[1]!.y);
+			} else if (width <= 976) {
+				expect(boxes[0]!.y).toBeCloseTo(boxes[1]!.y, 0);
+				expect(boxes[2]!.y).toBeGreaterThan(boxes[1]!.y);
+				expect(boxes[2]!.width).toBeGreaterThan(boxes[0]!.width * 2);
+				await expect(images.last()).toHaveAttribute('sizes', /61rem\) calc\(100vw/);
+			} else {
+				expect(boxes[0]!.y).toBeCloseTo(boxes[2]!.y, 0);
+				expect(boxes[0]!.x).toBeLessThan(boxes[1]!.x);
+				expect(boxes[1]!.x).toBeLessThan(boxes[2]!.x);
+			}
+			expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(width);
+			await testInfo.attach(`greendawn-insights-${width}`, { body: await insights.screenshot({ animations: 'disabled' }), contentType: 'image/png' });
+		}
+	} finally {
+		await context.close();
+	}
+});
+
+test('insight cards support hover, keyboard focus and reduced motion', async ({ page }) => {
+	await page.setViewportSize({ width: 1440, height: 900 });
+	await page.goto('/greendawn-home/');
+	const insights = page.locator('#insights');
+	const power = insights.getByRole('link', { name: 'Understanding load management' });
+	await power.hover();
+	await expect(power.locator('h3')).toHaveCSS('color', 'rgb(58, 34, 216)');
+	await expect(power.locator('img')).toHaveCSS('transform', 'matrix(1.055, 0, 0, 1.055, 0, 0)');
+	await expect(power.locator('figure > span')).toHaveCSS('transform', 'matrix(1, 0, 0, 1, 0, 0)');
+	await insights.getByRole('link', { name: 'Browse commercial charging guidance' }).focus();
+	await page.keyboard.press('Tab');
+	await expect(power).toBeFocused();
+	await expect(power).toHaveCSS('outline-color', 'rgb(58, 34, 216)');
+	await page.keyboard.press('Tab');
+	const survey = insights.getByRole('link', { name: 'What a technical survey should establish' });
+	await expect(survey).toBeFocused();
+	await expect(survey.locator('figure > span')).toHaveCSS('transform', 'matrix(1, 0, 0, 1, 0, 0)');
+	await page.emulateMedia({ reducedMotion: 'reduce' });
+	const duration = await survey.locator('img').evaluate((element) => Number.parseFloat(getComputedStyle(element).transitionDuration));
+	expect(duration).toBeLessThanOrEqual(0.001);
+});
+
+test('insight guide links remain available when their photographs are missing', async ({ page }, testInfo) => {
+	for (const width of [320, 1440]) {
+		await page.setViewportSize({ width, height: 900 });
+		await page.goto('/greendawn-home-no-insight-images/');
+		const insights = page.locator('#insights');
+		await expect(insights.locator('figure')).toHaveCount(0);
+		await expect(insights.locator('.gd-insight-card')).toHaveCount(3);
+		await expect(insights.getByRole('link', { name: 'Understanding load management' })).toHaveAttribute('href', /\/guides\/load-balancing-explained\/$/);
+		await expect(insights.getByRole('heading', { level: 3 })).toHaveCount(3);
+		expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(width);
+		await testInfo.attach(`greendawn-insights-no-media-${width}`, { body: await insights.screenshot(), contentType: 'image/png' });
 	}
 });

@@ -1,0 +1,165 @@
+/* Curated guide cards from the pinned Astro Insights section. */
+.gd-insights {
+  --focus-color: var(--gd-violet);
+  background: var(--gd-cream);
+}
+
+.gd-insights__header {
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) auto;
+  align-items: end;
+  gap: clamp(2rem, 4vw, 4rem);
+  margin-bottom: clamp(2.5rem, 4vw, 4rem);
+}
+
+.gd-insights__header .gd-eyebrow {
+  margin-bottom: 2rem;
+}
+
+.gd-insights__header h2 {
+  max-width: 17ch;
+  margin-bottom: 2rem;
+}
+
+.gd-insights__header .gd-home-text-link {
+  max-width: 100%;
+  align-self: end;
+  margin-bottom: 0.6rem;
+}
+
+.gd-insights__grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(1.4rem, 2.5vw, 2.4rem);
+}
+
+.gd-insight-card {
+  min-width: 0;
+  color: var(--gd-navy-900);
+  text-decoration: none;
+}
+
+.gd-insight-card figure {
+  position: relative;
+  aspect-ratio: 1.5;
+  overflow: hidden;
+  margin: 0 0 1.5rem;
+  border-radius: var(--gd-radius-md);
+  background: var(--gd-slate-200);
+}
+
+.gd-insight-card figure > span {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  display: grid;
+  width: 3.2rem;
+  aspect-ratio: 1;
+  transform: translateY(100%);
+  place-items: center;
+  background: var(--gd-lime);
+  color: var(--gd-navy-900);
+  transition: transform 220ms ease;
+}
+
+.gd-insight-card:is(:hover, :focus-visible) figure > span {
+  transform: translateY(0);
+}
+
+.gd-insight-card img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: var(--gd-insight-position);
+  transition: transform 650ms cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+.gd-insight-card:is(:hover, :focus-visible) img {
+  transform: scale(1.055);
+}
+
+.gd-insight-card--power {
+  --gd-insight-position: 66% 50%;
+  --gd-insight-position-mobile: 62% 50%;
+}
+
+.gd-insight-card--survey {
+  --gd-insight-position: 50% 57%;
+  --gd-insight-position-mobile: 50% 57%;
+}
+
+.gd-insight-card--fleet {
+  --gd-insight-position: 50% 56%;
+  --gd-insight-position-mobile: 50% 56%;
+}
+
+.gd-insight-card > p {
+  margin-bottom: 0.7rem;
+  color: var(--gd-violet);
+  font-family: var(--font-mono);
+  font-size: var(--gd-type-caption);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.gd-insight-card h3 {
+  max-width: 18ch;
+  margin-bottom: 0;
+  font-size: clamp(1.25rem, 1.15rem + 0.4vw, 1.5rem);
+  transition: color 180ms ease;
+}
+
+.gd-insight-card:is(:hover, :focus-visible) h3 {
+  color: var(--gd-violet);
+}
+
+@media (max-width: 75rem) {
+  .gd-insights__grid {
+    gap: 1.3rem;
+  }
+}
+
+@media (max-width: 61rem) {
+  .gd-insights__header {
+    grid-template-columns: minmax(0, 1fr);
+    align-items: start;
+    gap: 1.6rem;
+  }
+
+  .gd-insights__header .gd-home-text-link {
+    justify-self: start;
+  }
+
+  .gd-insights__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .gd-insight-card--fleet {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 42rem) {
+  .gd-insights__grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .gd-insight-card--fleet {
+    grid-column: auto;
+  }
+
+  .gd-insight-card figure {
+    aspect-ratio: 16 / 9;
+  }
+
+  .gd-insight-card img {
+    object-position: var(--gd-insight-position-mobile);
+  }
+}
+
+@media (hover: none) and (max-width: 61rem) {
+  .gd-insight-card:is(:hover, :focus-visible) img {
+    transform: none;
+  }
+}

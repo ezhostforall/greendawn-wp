@@ -207,6 +207,19 @@ final class Greendawn_Homepage implements Module_Interface {
 			'proof_project_title'           => array( __( 'Supporting project name', 'greendawn-core' ), __( 'The Salvation Army', 'greendawn-core' ), 80 ),
 			'proof_result'                  => array( __( 'Project result and figures', 'greendawn-core' ), __( '50 sites · 71 chargepoints', 'greendawn-core' ), 100 ),
 			'proof_copy'                    => array( __( 'Supporting project description', 'greendawn-core' ), __( 'Fleet charging across a varied estate, with different site requirements brought together within one coordinated programme.', 'greendawn-core' ), 280, 'textarea' ),
+			'insights_eyebrow'              => array( __( 'Insights eyebrow', 'greendawn-core' ), __( 'Commercial EV charging guidance', 'greendawn-core' ), 70 ),
+			'insights_title'                => array( __( 'Insights heading', 'greendawn-core' ), __( 'Make better-informed charging decisions.', 'greendawn-core' ), 100 ),
+			'insights_link'                 => array( __( 'Guidance index link text', 'greendawn-core' ), __( 'Browse commercial charging guidance', 'greendawn-core' ), 80 ),
+			'insights_url'                  => array( __( 'Guidance index destination', 'greendawn-core' ), home_url( '/blog/' ), 0, 'url' ),
+			'insight_power_label'           => array( __( 'Power guide: label', 'greendawn-core' ), __( 'Power & capacity', 'greendawn-core' ), 60 ),
+			'insight_power_title'           => array( __( 'Power guide: title', 'greendawn-core' ), __( 'Understanding load management', 'greendawn-core' ), 100 ),
+			'insight_power_url'             => array( __( 'Power guide: destination', 'greendawn-core' ), home_url( '/guides/load-balancing-explained/' ), 0, 'url' ),
+			'insight_survey_label'          => array( __( 'Survey guide: label', 'greendawn-core' ), __( 'Project planning', 'greendawn-core' ), 60 ),
+			'insight_survey_title'          => array( __( 'Survey guide: title', 'greendawn-core' ), __( 'What a technical survey should establish', 'greendawn-core' ), 100 ),
+			'insight_survey_url'            => array( __( 'Survey guide: destination', 'greendawn-core' ), home_url( '/guides/greendawn-ev-charging-survey-pre-installation-guide/' ), 0, 'url' ),
+			'insight_fleet_label'           => array( __( 'Fleet guide: label', 'greendawn-core' ), __( 'Fleet planning', 'greendawn-core' ), 60 ),
+			'insight_fleet_title'           => array( __( 'Fleet guide: title', 'greendawn-core' ), __( 'Planning the transition to an electric fleet', 'greendawn-core' ), 100 ),
+			'insight_fleet_url'             => array( __( 'Fleet guide: destination', 'greendawn-core' ), home_url( '/guides/transitioning-to-electric-fleets/' ), 0, 'url' ),
 		);
 
 		$solution_images = array(
@@ -215,6 +228,12 @@ final class Greendawn_Homepage implements Module_Interface {
 			'solution_public_title'     => array( 'solution_public_image', __( 'Public & destination charging: photograph', 'greendawn-core' ), 'commercial-ev-destination-hospitality-1200.webp' ),
 			'solution_multi_site_title' => array( 'solution_multi_site_image', __( 'Multi-site programmes: photograph', 'greendawn-core' ), 'commercial-ev-multi-site-charging-768.webp' ),
 			'solution_dealership_title' => array( 'solution_dealership_image', __( 'Dealerships & motor retail: photograph', 'greendawn-core' ), 'commercial-ev-dealership-charging-1200.webp' ),
+		);
+
+		$insight_images = array(
+			'insight_power_label'  => array( 'insight_power_image', __( 'Power guide: photograph', 'greendawn-core' ), 'commercial-ev-electrical-connection-1200.webp' ),
+			'insight_survey_label' => array( 'insight_survey_image', __( 'Survey guide: photograph', 'greendawn-core' ), 'commercial-ev-site-survey-1024.webp' ),
+			'insight_fleet_label'  => array( 'insight_fleet_image', __( 'Fleet guide: photograph', 'greendawn-core' ), 'commercial-ev-fleet-charging-bays-1200.webp' ),
 		);
 
 		$fields = array();
@@ -250,6 +269,20 @@ final class Greendawn_Homepage implements Module_Interface {
 					'name'           => 'greendawn_home_' . $image_name,
 					'label'          => $image[1],
 					'instructions'   => __( 'Upload the supplied service photograph and select it here. The homepage preview is decorative; its caption follows the service title.', 'greendawn-core' ),
+					'type'           => 'image',
+					'return_format'  => 'id',
+					'default_upload' => '2026/11/' . $image[2],
+				);
+			}
+			if ( isset( $insight_images[ $name ] ) ) {
+				$image      = $insight_images[ $name ];
+				$image_name = $image[0];
+
+				$fields[ $image_name ] = array(
+					'key'            => 'field_greendawn_home_' . $image_name,
+					'name'           => 'greendawn_home_' . $image_name,
+					'label'          => $image[1],
+					'instructions'   => __( 'Upload the supplied guide photograph and select it here. Set its alt text in the Media Library.', 'greendawn-core' ),
 					'type'           => 'image',
 					'return_format'  => 'id',
 					'default_upload' => '2026/11/' . $image[2],
@@ -369,6 +402,7 @@ final class Greendawn_Homepage implements Module_Interface {
 			'solutions_eyebrow' => __( 'Services', 'greendawn-core' ),
 			'aftercare_eyebrow' => __( 'Aftercare', 'greendawn-core' ),
 			'proof_image'       => __( 'Supporting proof', 'greendawn-core' ),
+			'insights_eyebrow'  => __( 'Insights', 'greendawn-core' ),
 		);
 		$fields = array();
 		foreach ( $this->fields() as $name => $field ) {

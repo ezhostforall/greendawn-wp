@@ -14,3 +14,5 @@ The `media/` directory holds the approved Johnsons project photograph for upload
 The five `commercial-ev-*` photographs under `media/` are the service previews referenced by the pinned `src/content/home.ts` and `src/content/media.ts`. They were copied byte-for-byte from the matching files under upstream `public/images/optimized/` and are provided for Media Library upload, rather than runtime theme fallbacks.
 
 The `salvation-army-ev-charging-666.webp` photograph is the Supporting Proof project image from the same revision. It is provided for Media Library upload with the same upstream provenance records.
+
+The Insights cards also use `commercial-ev-electrical-connection-1200.webp` and `commercial-ev-site-survey-1024.webp`, copied byte-for-byte from the same pinned upstream revision. Their fleet photograph is shared with the Services preview. All three are Media Library content, with provenance maintained in the same upstream image sources.

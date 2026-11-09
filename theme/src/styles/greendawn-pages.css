@@ -110,3 +110,12 @@
 }
 
 .gd-form-panel :is(input, textarea)::placeholder { color: var(--gd-slate-500); opacity: 1; }
+
+/* Native CF7 fields replace the former third-party row/column shortcodes. */
+.gd-form-panel .gd-contact-fields { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.25rem; }
+.gd-form-panel .gd-contact-fields > * { min-width: 0; }
+.gd-form-panel .gd-contact-fields .wpcf7-form-control-wrap { display: block; margin-block-start: 0.45rem; }
+.gd-form-panel .gd-contact-field--wide { grid-column: 1 / -1; }
+@media (max-width: 42rem) {
+	.gd-form-panel .gd-contact-fields { grid-template-columns: minmax(0, 1fr); }
+}

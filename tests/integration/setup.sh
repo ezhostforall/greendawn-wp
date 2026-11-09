@@ -407,6 +407,7 @@ wp eval '
 # Exercise SCF editing first, then render native fallback without SCF in the browser suite.
 wp plugin activate secure-custom-fields
 docker cp tests/integration/about-page.php "$container_id:/tmp/about-page.php"
+docker cp docs/cf7-project-enquiry-form.html "$container_id:/tmp/cf7-project-enquiry-form.html"
 wp eval-file /tmp/about-page.php
 wp plugin deactivate secure-custom-fields
 docker cp tests/fixtures/about-options.php "$container_id:/var/www/html/wp-content/plugins/about-test-fixture.php"

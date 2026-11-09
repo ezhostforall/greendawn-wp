@@ -26,7 +26,7 @@ test('About renders complete structured content without JavaScript or SCF', asyn
 			await expect(page.locator('.gd-article-track .gd-insight-card')).toHaveCount(10);
 			await expect(page.getByRole('button', { name: 'Next articles' })).toBeHidden();
 			await expect(page.locator('.gd-cta-band a')).toHaveAttribute('href', `${baseURL}/enquire/`);
-			await expect(page.getByRole('button', { name: 'Send fixture enquiry' })).toBeVisible();
+			await expect(page.getByRole('button', { name: 'Send enquiry' })).toBeVisible();
 			expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBe(width);
 			expect(await page.locator('[id]').evaluateAll(elements => elements.map(e => e.id).filter((id, index, ids) => ids.indexOf(id) !== index))).toEqual([]);
 			await testInfo.attach(`about-${width}`, { body: await page.screenshot(), contentType: 'image/png' });
@@ -60,7 +60,7 @@ test('About has accessible contrast and form feedback without loading homepage m
 	await page.setViewportSize({ width: 375, height: 900 });
 	await page.goto('/gd-about-default/');
 	await expect(page.locator('script[src*="greendawn-home-motion"], script[src*="ScrollTrigger"]')).toHaveCount(0);
-	await page.getByRole('button', { name: 'Send fixture enquiry' }).click();
+	await page.getByRole('button', { name: 'Send enquiry' }).click();
 	await expect(page.locator('.gd-form-panel [aria-invalid="true"]').first()).toBeVisible();
 	await expect(page.locator('.gd-form-panel .wpcf7-response-output')).toBeVisible();
 	const results = await new AxeBuilder({ page }).include('main').withTags(['wcag2a', 'wcag2aa', 'wcag21aa']).analyze();

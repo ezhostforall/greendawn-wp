@@ -32,3 +32,21 @@ About’s small page entry adds optional article-track buttons. Native scrolling
 - Check 320/375px, tablet and desktop for overflow and spacing. Check the homepage’s process animation, edited defaults, insight accessible names, header/footer and enquiry drawer after installing both packages.
 
 Automated CI fixtures cover SCF field defaults/explicit blanks, import-backup preservation, editor scope, form selection and relationship restrictions. Browser tests cover rendering without SCF/JavaScript, responsive layout, unique IDs, ordering/visibility, empty media, invalid form IDs, optional controls and accessibility. These fixtures are restricted to the disposable local WordPress environment and never touch persistent staging content.
+
+## Native CF7 enquiry markup and attribution
+
+Paste `docs/cf7-project-enquiry-form.html` into the chosen form's **Form** tab. It preserves `fullname`, `project-name`, `tel-758`, `your-email`, `company`, `Projecttype` and `your-message`, along with the three existing tracking names. The native `.gd-contact-fields` grid uses two columns where space permits and one on mobile. The theme disables CF7 auto-paragraph formatting only for forms containing this grid; other forms and HTML-email formatting keep their existing behaviour.
+
+The small theme script records the first landing page and incoming referrer for the current tab in `sessionStorage`, including an entry page with no form. It fills only existing CF7 hidden inputs: `page-url` is the page being submitted, `first_landing` is the first page seen in that tab and `first_referrer` is its original incoming referrer. Later page views do not overwrite first-touch values. URLs retain origin/path only: query strings and fragments are discarded. Referrers may be absent or limited by the browser's referrer policy; direct entries remain blank. Storage denial falls back to the current page/referrer and never blocks the form. No cookies, analytics requests or third-party scripts are added.
+
+Values refresh before serialisation and following resets/back-forward navigation. These are browser-supplied enquiry context, not trusted evidence or an access-control mechanism. Without JavaScript, the enquiry form still renders/submits and tracking fields remain blank.
+
+Include the following in the selected form's **Mail → Message body** if the recipient needs this context:
+
+```text
+Submitted from: [page-url]
+First landing page: [first_landing]
+First referrer: [first_referrer]
+```
+
+This does not change recipients or automatically rewrite existing live form definitions or email bodies.

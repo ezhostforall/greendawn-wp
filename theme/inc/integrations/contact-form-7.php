@@ -105,3 +105,18 @@ function greendawn_customize_contact_form( WP_Customize_Manager $customizer ): v
 	);
 }
 add_action( 'customize_register', 'greendawn_customize_contact_form' );
+
+/**
+ * Keeps the opt-in native field grid free of CF7's paragraph/line-break wrappers.
+ *
+ * @param bool  $autop Existing formatting choice.
+ * @param array $options CF7 formatting context.
+ */
+function greendawn_contact_form_autop( bool $autop, array $options ): bool {
+	if ( 'form' !== ( $options['for'] ?? 'form' ) || ! function_exists( 'wpcf7_get_current_contact_form' ) ) {
+		return $autop;
+	}
+	$form = wpcf7_get_current_contact_form();
+	return $form && str_contains( (string) $form->prop( 'form' ), 'class="gd-contact-fields"' ) ? false : $autop;
+}
+add_filter( 'wpcf7_autop_or_not', 'greendawn_contact_form_autop', 10, 2 );

@@ -1,0 +1,27 @@
+<div class="gd-contact-fields">
+  <label>Full Name (required)
+    [text* fullname autocomplete:name placeholder "e.g. John Smith"]
+  </label>
+  <label>Project Name (required)
+    [text* project-name placeholder "e.g. Head Office Installation"]
+  </label>
+  <label>Phone Number (required)
+    [tel* tel-758 autocomplete:tel placeholder "e.g. 07123 456789"]
+  </label>
+  <label>Email Address (required)
+    [email* your-email autocomplete:email placeholder "e.g. name@company.com"]
+  </label>
+  <label>Company Name
+    [text company autocomplete:organization placeholder "e.g. Greendawn Ltd"]
+  </label>
+  <label>Project Type (required)
+    [select* Projecttype include_blank "Workplace" "Fleet" "Public parking" "Showroom" "Gym" "Public sector" "Other"]
+  </label>
+  <label class="gd-contact-field--wide">Tell us about your project
+    [textarea your-message placeholder "Give us a rough idea of your site, number of chargers, or anything important..."]
+  </label>
+  <div class="gd-contact-field--wide">[submit "Send enquiry"]</div>
+</div>
+[hidden page-url]
+[hidden first_referrer]
+[hidden first_landing]

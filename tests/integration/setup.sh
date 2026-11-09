@@ -302,6 +302,14 @@ wp post meta update "$greendawn_edited_id" greendawn_home_insight_power_image "$
 wp post meta update "$greendawn_edited_id" greendawn_home_insight_survey_label "Survey planning"
 wp post meta update "$greendawn_edited_id" greendawn_home_insight_survey_url "https://example.com/technical-guide/"
 wp post meta update "$greendawn_edited_id" greendawn_home_insight_fleet_title "Charging around your fleet"
+wp post meta update "$greendawn_edited_id" greendawn_home_closing_eyebrow "Your next charging project"
+wp post meta update "$greendawn_edited_id" greendawn_home_closing_title "Start your charging project."
+wp post meta update "$greendawn_edited_id" greendawn_home_closing_intro "Tell us about your vehicles, site and operating hours."
+wp post meta update "$greendawn_edited_id" greendawn_home_closing_copy ""
+wp post meta update "$greendawn_edited_id" greendawn_home_closing_cta_label "Plan your project"
+wp post meta update "$greendawn_edited_id" greendawn_home_closing_phone_prompt "Call our team"
+wp post meta update "$greendawn_edited_id" greendawn_home_closing_phone "+44 345 512 0044"
+
 
 
 # Simulate an unavailable photograph on one disposable fixture page only.
@@ -310,6 +318,8 @@ wp plugin activate greendawn-test-media
 create_page greendawn-home-no-proof-image "Greendawn proof without a photograph" ''
 greendawn_no_proof_id=$(wp post list --post_type=page --name=greendawn-home-no-proof-image --field=ID)
 wp post meta update "$greendawn_no_proof_id" _wp_page_template templates/greendawn-homepage.php
+# An unusable phone value must not create an empty or invalid call link.
+wp post meta update "$greendawn_no_proof_id" greendawn_home_closing_phone "Ask the team"
 create_page greendawn-home-no-insight-images "Greendawn insights without photographs" ''
 greendawn_no_insights_id=$(wp post list --post_type=page --name=greendawn-home-no-insight-images --field=ID)
 wp post meta update "$greendawn_no_insights_id" _wp_page_template templates/greendawn-homepage.php

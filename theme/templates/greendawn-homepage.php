@@ -25,6 +25,7 @@ while ( have_posts() ) :
 		<?php get_template_part( 'template-parts/home/aftercare' ); ?>
 		<?php get_template_part( 'template-parts/home/supporting-proof' ); ?>
 		<?php get_template_part( 'template-parts/home/insights' ); ?>
+		<?php get_template_part( 'template-parts/home/final-enquiry' ); ?>
 	</article>
 	<?php
 endwhile;

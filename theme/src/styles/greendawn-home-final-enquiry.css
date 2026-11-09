@@ -1,0 +1,83 @@
+/* Static closing panel from the pinned Astro FinalCtaSection. */
+.gd-final-cta {
+  --focus-color: var(--gd-navy-900);
+  position: relative;
+  overflow: hidden;
+  background: var(--gd-lime);
+  color: var(--gd-navy-900);
+}
+
+.gd-final-cta > svg {
+  position: absolute;
+  top: -4rem;
+  right: -9rem;
+  width: min(70vw, 67rem);
+  height: auto;
+  opacity: 0.06;
+  pointer-events: none;
+}
+
+.gd-final-cta > svg path {
+  fill: none;
+  stroke: var(--gd-navy-900);
+  stroke-linecap: round;
+  stroke-width: 15;
+}
+
+.gd-final-cta__inner {
+  position: relative;
+  z-index: 1;
+}
+
+.gd-final-cta__inner .gd-eyebrow {
+  margin-bottom: 2rem;
+}
+
+.gd-final-cta__inner h2 {
+  max-width: 11ch;
+  margin-bottom: 0.83em;
+  font-size: clamp(4rem, 3rem + 5.5vw, 9rem);
+  letter-spacing: -0.07em;
+  line-height: 0.84;
+}
+
+.gd-final-cta__inner > p:not(.gd-eyebrow) {
+  max-width: 42rem;
+  margin: 1rem 0;
+  font-size: var(--gd-type-lead);
+  line-height: 1.55;
+}
+
+.gd-final-cta__inner h2 + p {
+  margin-top: 2rem;
+}
+
+.gd-final-cta__actions {
+  display: flex;
+  align-items: center;
+  gap: 2.2rem;
+  margin-top: 2rem;
+}
+
+.gd-final-cta__actions .gd-home-button {
+  max-width: 100%;
+}
+
+.gd-final-cta__actions > p {
+  margin: 0;
+  font-size: var(--gd-type-secondary);
+}
+
+.gd-final-cta__actions > p a {
+  border-bottom: 1px solid currentColor;
+  color: inherit;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+@media (max-width: 42rem) {
+  .gd-final-cta__actions {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}

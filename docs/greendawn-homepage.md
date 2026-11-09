@@ -1,16 +1,16 @@
 # Greendawn homepage pilot
 
-The Greendawn Homepage template renders the Hero, Trust, Problem, System, Process, Featured Project, Technical Site Surveys, Services, Aftercare, Supporting Proof and Insights sections from the Astro reference. The branded header is shared across the site, with a transparent overlay on this template and a navy background above inner-page content. The layout and proof stage order live in PHP. Greendawn Core owns the copy and image defaults and registers the editable homepage fields when Secure Custom Fields is active.
+The Greendawn Homepage template renders the Hero, Trust, Problem, System, Process, Featured Project, Technical Site Surveys, Services, Aftercare, Supporting Proof, Insights and Final Enquiry sections from the Astro reference. The branded header is shared across the site, with a transparent overlay on this template and a navy background above inner-page content. The layout and proof stage order live in PHP. Greendawn Core owns the copy and image defaults and registers the editable homepage fields when Secure Custom Fields is active.
 
 ## Set up the staging page
 
 1. Install the candidate theme and Greendawn Core together. Activate Secure Custom Fields for the editing fields.
 2. Create a Page, select **Greendawn Homepage** as its template and preview it before assigning it as the static homepage. Empty copy fields show the Greendawn defaults. The hero defaults to the Media Library attachment at `2026/11/greendawn-engineers-electrical-distribution-1600.webp` relative to the site’s uploads folder. If the file was uploaded under a different path, select it in **Hero photograph**. Set its alt text in the Media Library.
-3. In **Appearance → Customise → Header**, set **Discuss your site** and the current live enquiry destination. The header and hero use this setting together. Use **Utility bar text** to edit the message and **Reset utility bar text** to restore the original wording, then publish the change. The Explore our projects link defaults to the gallery on the current WordPress site. Use the Projects destination field to choose another internal destination when needed.
+3. In **Appearance → Customise → Header**, set **Discuss your site** and the current live enquiry destination. The header, hero, survey enquiry button and final enquiry button use this destination together. Use **Utility bar text** to edit the message and **Reset utility bar text** to restore the original wording, then publish the change. The Explore our projects link defaults to the gallery on the current WordPress site. Use the Projects destination field to choose another internal destination when needed.
 4. Assign the Primary menu with About Us, Our Projects, the three Our Solutions children and Aftercare. Point the entries at their existing live destinations until those pages move. Assign the telephone and customer support links to the Utility menu. The supplied raster wordmark is the fallback when no custom logo is configured.
 5. Verify the Page preview and then assign it under **Settings → Reading** when ready. Compare it with the Astro reference at 390px and 1440px, exercise the menu by keyboard and confirm the enquiry and gallery destinations.
 
-The homepage editor groups fields under Hero, Trust, Problem, System, Process, Featured project, Surveys, Services, Aftercare, Supporting proof and Insights. Edit the four shared stage labels in Hero and their full descriptions in Process. The System and survey guides default to internal routes on the current WordPress site. Imported homepage URLs saved with `greendawn.co.uk` or `www.greendawn.co.uk` are resolved on the current site, retaining their paths, query strings and fragments. Other explicitly saved external destinations remain unchanged.
+The homepage editor groups fields under Hero, Trust, Problem, System, Process, Featured project, Surveys, Services, Aftercare, Supporting proof, Insights and Final enquiry. Edit the four shared stage labels in Hero and their full descriptions in Process. The System and survey guides default to internal routes on the current WordPress site. Imported homepage URLs saved with `greendawn.co.uk` or `www.greendawn.co.uk` are resolved on the current site, retaining their paths, query strings and fragments. Other explicitly saved external destinations remain unchanged.
 
 Upload [the approved Johnsons project photograph](astro-reference/media/johnsons-dealership-ev-charging-1200.webp) to the Media Library and set its alt text to “Vehicle connected to EV charging equipment at a Johnsons Cars dealership”. Select it under **Featured project → Project photograph**. The default resolves the uploaded attachment at `2026/11/johnsons-dealership-ev-charging-1200.webp`; select it explicitly if WordPress uses a different month or filename. The theme renders the selected attachment with responsive sizes, dimensions and lazy loading. If no attachment resolves, the project story renders in one column without an empty image frame. No remote or bundled photograph is rendered as a fallback.
 
@@ -72,7 +72,17 @@ The index defaults to `/blog/`. Card destinations default to `/guides/load-balan
 
 After updating the theme and Greendawn Core together, check 320px/390px mobile, 800px tablet and 1440px desktop. The fleet card spans both columns on tablet. Check image crops, index-link wrapping, hover, keyboard focus, saved/blank field defaults and no-JavaScript rendering.
 
-The homepage uses the starter’s native menu disclosure. The coordination model, system arc and process timeline render in the initial HTML. The remaining sections, motion and callback drawer follow separately.
+## Final enquiry section
+
+The **Final enquiry** tab supplies the eyebrow, large closing heading, two paragraphs, button label, telephone prompt and display number. Copy defaults come from the pinned `FinalCtaSection.astro`; the default `0345 512 0044` number comes from the same revision’s `src/config/site.ts`. Layout, lime background, typography and decorative arc remain controlled by the theme.
+
+The enquiry button shares **Appearance → Customise → Header → Call-to-action destination** with the header, hero and survey button. Set it to the current WordPress enquiry/contact page; this section navigates normally and works without JavaScript. A blank or `#` destination hides the button. The callback/enquiry drawer and arc animation are separate planned enhancements.
+
+The telephone link is derived from the display number’s digits and optional leading `+`. Use a normal local number or an international number such as `+44 345 512 0044`; set the contact page consistently. A value without a usable telephone number omits the telephone prompt/link rather than producing an empty `tel:` link. Empty content fields restore their pinned defaults, as in the other homepage sections.
+
+After updating the theme and Greendawn Core together, review the panel at 320px, 390px, 800px and 1440px. Check the shared enquiry destination, telephone display/call link, saved copy and blank-field defaults, mobile action stacking, button hover, keyboard focus and rendering without JavaScript. No further photographs need uploading for this section.
+
+The homepage uses the starter’s native menu disclosure. The coordination model, system arc and process timeline render in the initial HTML. All twelve static homepage sections are now ported. The sitewide footer, motion and callback drawer follow separately.
 
 The hero WebPs, wordmark and client marks come from Astro revision `891ed840c7369cb50df3e33232e81de49e2699d6`. The asset provenance and publication notes are maintained with the [Astro image records](https://github.com/ezhostforall/GreenDawn/blob/891ed840c7369cb50df3e33232e81de49e2699d6/docs/image-sources.md).
 
@@ -80,4 +90,4 @@ The [pinned Astro source snapshot](./astro-reference/) provides the homepage com
 
 ## Remaining homepage sequence
 
-After these eleven sections, port the final enquiry section from the pinned Astro `src/pages/index.astro`. Complete the sitewide footer and enquiry interaction, then add the planned GSAP enhancement with reduced-motion and no-JavaScript fallbacks. Final acceptance compares typography, spacing, media, keyboard behaviour and performance across the complete page.
+With all twelve static sections from the pinned Astro `src/pages/index.astro` ported, complete the sitewide footer next. Add the enquiry interaction, then the planned GSAP enhancement with reduced-motion and no-JavaScript fallbacks. Final acceptance compares typography, spacing, media, keyboard behaviour and performance across the complete page.

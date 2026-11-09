@@ -31,6 +31,7 @@ test('the branded homepage renders its sections in order without JavaScript', as
 			]);
 			await expect(main.locator('#process h3')).toHaveText(['Consult', 'Design', 'Install', 'Manage']);
 			const aftercare = main.locator('#aftercare');
+			expect(await aftercare.locator('.gd-eyebrow').evaluate((eyebrow) => Number.parseFloat(getComputedStyle(eyebrow).marginBottom))).toBeGreaterThan(0);
 			await expect(aftercare.getByRole('heading', { level: 3 })).toHaveText([
 				'Monitoring & reporting', 'Inspection & testing', 'Maintenance & fault support', 'Driver & user support',
 			]);

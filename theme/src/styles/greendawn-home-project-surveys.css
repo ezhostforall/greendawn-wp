@@ -410,3 +410,9 @@
   background: var(--gd-violet);
   color: var(--gd-cream);
 }
+
+@media (max-width: 30rem) {
+  .gd-case-study__facts div {
+    padding-inline: 0.4rem;
+  }
+}

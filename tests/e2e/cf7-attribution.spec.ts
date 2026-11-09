@@ -2,8 +2,8 @@ import { expect, test } from '@playwright/test';
 
 test('native CF7 grid retains first-touch context through navigation and serialisation', async ({ page, baseURL }) => {
 	await page.setViewportSize({ width: 375, height: 900 });
-	await page.goto('/about/?private=discard#discard', { referer: 'https://referrer.example/campaign/?token=discard#discard' });
-	await page.goto('/gd-about-default/?private=discard#discard');
+	await page.goto('/about/?utm_source=search&utm_medium=cpc&utm_campaign=charging&utm_term=fleet&utm_content=ad-one&private=discard#discard', { referer: 'https://referrer.example/campaign/?token=discard#discard' });
+	await page.goto('/gd-about-default/?utm_source=internal&utm_campaign=replace&private=discard#discard');
 	const form = page.locator('.gd-form-panel form');
 	const fields = form.locator('.gd-contact-fields');
 	await expect(fields).toBeVisible();
@@ -11,6 +11,7 @@ test('native CF7 grid retains first-touch context through navigation and seriali
 	await expect(form.locator('[name="page-url"]')).toHaveValue(`${baseURL}/gd-about-default/`);
 	await expect(form.locator('[name="first_landing"]')).toHaveValue(`${baseURL}/about/`);
 	await expect(form.locator('[name="first_referrer"]')).toHaveValue(/^https:\/\/referrer\.example\/(?:campaign\/)?$/);
+	for (const [name, value] of Object.entries({ utm_source: 'search', utm_medium: 'cpc', utm_campaign: 'charging', utm_term: 'fleet', utm_content: 'ad-one' })) await expect(form.locator(`[name="${name}"]`)).toHaveValue(value);
 	expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBe(375);
 	await form.getByRole('textbox', { name: 'Full Name (required)', exact: true }).fill('Form test');
 	await form.getByRole('textbox', { name: 'Project Name (required)', exact: true }).fill('Office installation');
@@ -28,6 +29,8 @@ test('native CF7 grid retains first-touch context through navigation and seriali
 	expect(payload).toContain(`${baseURL}/about/`);
 	expect(payload).toContain('https://referrer.example/');
 	expect(payload).not.toMatch(/private=|token=|another=|#discard|stale/);
+	for (const value of ['search', 'cpc', 'charging', 'fleet', 'ad-one']) expect(payload).toContain(value);
+	expect(payload).not.toContain('internal');
 	await expect(form.locator('.wpcf7-response-output')).toBeVisible();
 	await form.evaluate((element: HTMLFormElement) => element.reset());
 	await expect(form.locator('[name="first_landing"]')).toHaveValue(`${baseURL}/about/`);

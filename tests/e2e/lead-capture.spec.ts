@@ -29,7 +29,8 @@ test('qualified React flow uses native CF7 delivery and emits no personal data i
 	});
 	const loaded: string[] = [];
 	page.on('request', (request) => loaded.push(request.url()));
-	await page.goto('/callback-home/?utm_source=qa&utm_campaign=callback');
+	await page.goto('/about/?utm_source=qa&utm_medium=cpc&utm_campaign=callback&utm_term=fleet&utm_content=ad-one', { referer: 'https://referrer.example/campaign/' });
+	await page.goto('/callback-home/');
 	expect(loaded.some((url) => /(?:mount-|jsx-runtime-).*\.js/.test(url))).toBe(false);
 	await page.locator('.gd-hero__actions [data-lead-capture-open]').click();
 	const dialog = page.getByRole('dialog');
@@ -51,6 +52,13 @@ test('qualified React flow uses native CF7 delivery and emits no personal data i
 	expect(mail.message).toContain('location: Birmingham');
 	expect(mail.message).toContain('entryPoint: hero');
 	expect(mail.message).toContain('utmSource: qa');
+	expect(mail.message).toContain('utmMedium: cpc');
+	expect(mail.message).toContain('utmCampaign: callback');
+	expect(mail.message).toContain('utmTerm: fleet');
+	expect(mail.message).toContain('utmContent: ad-one');
+	expect(mail.message).toContain('page-url: http://localhost:8080/callback-home/');
+	expect(mail.message).toContain('first_landing: http://localhost:8080/about/');
+	expect(mail.message).toContain('first_referrer: https://referrer.example/');
 	expect(mail.message).not.toContain('?utm_');
 	expect(loaded.some((url) => /mount-.*\.js/.test(url))).toBe(true);
 	const events = await page.evaluate(() => (window as unknown as { funnel: unknown[] }).funnel);
@@ -60,7 +68,7 @@ test('qualified React flow uses native CF7 delivery and emits no personal data i
 		expect.objectContaining({ event: 'lead_callback_started', projectStage: 'planning' }),
 		expect.objectContaining({ event: 'lead_callback_submitted' }),
 	]);
-	expect(JSON.stringify(events)).not.toMatch(/Test visitor|0121|visitor@example|Birmingham|Callback Test/);
+	expect(JSON.stringify(events)).not.toMatch(/Test visitor|0121|visitor@example|Birmingham|Callback Test|referrer\.example|ad-one|utm/ );
 	await dialog.getByRole('button', { name: 'Start another request' }).click();
 	await dialog.getByRole('button', { name: 'Just request a callback' }).click();
 	await expect(dialog.getByRole('textbox', { name: 'First name', exact: true })).toHaveValue('');

@@ -15,8 +15,8 @@ export function setupSolutions(root: HTMLElement, media: gsap.MatchMedia): void 
 		let version = 0;
 		let active = initial;
 		let scroll = initial;
-		let hovered: string | undefined;
-		let focused: string | undefined;
+		let hovered = rows.find((row) => row.matches(':hover'))?.dataset.gdSolutionRow;
+		let focused = rows.find((row) => row.contains(document.activeElement))?.dataset.gdSolutionRow;
 		let frame = 0;
 		const transforms = new Map([...pictures.values()].map((figure) => [figure, figure.style.transform]));
 		layout.classList.add('gd-solutions--motion');
@@ -59,6 +59,7 @@ export function setupSolutions(root: HTMLElement, media: gsap.MatchMedia): void 
 				focused = undefined; activate();
 			}, { signal: events.signal });
 		});
+		activate();
 		return () => {
 			disposed = true; version++;
 			events.abort();

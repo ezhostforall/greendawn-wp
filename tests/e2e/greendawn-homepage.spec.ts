@@ -202,6 +202,16 @@ test('the desktop header and hero use the Greendawn hover styles', async ({ page
 	await expect(projects).toHaveCSS('gap', '21.6px');
 	const projectLink = main.locator('#projects').getByRole('link', { name: 'Explore our project experience' });
 	await expect(projectLink).toHaveCSS('color', 'rgb(11, 29, 42)');
+	await projectLink.scrollIntoViewIfNeeded();
+	// A programmatic jump starts the scroll parallax after Playwright's first stability check.
+	let previousTop = Number.NaN;
+	let stableSamples = 0;
+	await expect.poll(async () => {
+		const top = (await projectLink.boundingBox())!.y;
+		stableSamples = Math.abs(top - previousTop) < 0.05 ? stableSamples + 1 : 0;
+		previousTop = top;
+		return stableSamples;
+	}, { intervals: [100, 150, 200] }).toBeGreaterThanOrEqual(2);
 	await projectLink.hover();
 	await expect(projectLink).toHaveCSS('color', 'rgb(58, 34, 216)');
 	const surveyCta = main.getByRole('link', { name: 'Discuss a site survey' });

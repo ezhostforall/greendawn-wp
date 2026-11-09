@@ -17,7 +17,7 @@ async function transformY(page: Page, selector: string) {
 	return page.locator(selector).evaluate((element) => new DOMMatrixReadOnly(getComputedStyle(element).transform).m42);
 }
 
-test('CSS hero entrances finish and scroll arcs/process progress follow the page', async ({ page }, testInfo) => {
+async function measureLayoutShift(page: Page) {
 	await page.addInitScript(() => {
 		const state = window as unknown as { motionCls: number };
 		state.motionCls = 0;
@@ -28,6 +28,10 @@ test('CSS hero entrances finish and scroll arcs/process progress follow the page
 			}
 		}).observe({ type: 'layout-shift', buffered: true });
 	});
+}
+
+test('CSS hero entrances finish and scroll arcs/process progress follow the page', async ({ page }, testInfo) => {
+	await measureLayoutShift(page);
 	await page.setViewportSize({ width: 1440, height: 900 });
 	await page.goto('/greendawn-home/');
 	await ready(page);
@@ -74,12 +78,15 @@ test('reduced motion avoids GSAP downloads and live preference changes restore s
 	await expect(page.locator('.gd-system__arc path')).toHaveCSS('stroke-dashoffset', '0px');
 	await expect(page.locator('.gd-final-cta > svg path')).toHaveCSS('stroke-dashoffset', '0px');
 	await testInfo.attach('motion-reduced-1440', { body: await page.screenshot(), contentType: 'image/png' });
+	await page.locator('.gd-solution-row--workplace').focus();
 	await page.emulateMedia({ reducedMotion: 'no-preference' });
 	await ready(page);
 	await expect(page.locator('.gd-solutions--motion')).toHaveCount(1);
+	await expect(page.locator('.gd-solution-image--workplace')).toBeVisible();
 });
 
 test('motion stays contained at narrow, tablet, desktop and short viewport sizes', async ({ page }, testInfo) => {
+	await measureLayoutShift(page);
 	for (const [width, height] of [[320, 850], [390, 850], [800, 900], [1440, 900], [1280, 500]]) {
 		await page.setViewportSize({ width: width!, height: height! });
 		await page.goto('/greendawn-home/');
@@ -89,6 +96,9 @@ test('motion stays contained at narrow, tablet, desktop and short viewport sizes
 		expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(await page.evaluate(() => document.documentElement.clientWidth));
 		await expect.poll(() => page.locator('.gd-problem__fragments > li:first-child').evaluate((element) => element.style.transform)).toBe('');
 		await expect(page.locator('.gd-problem__answer')).toHaveCSS('clip-path', 'none');
+		const cls = await page.evaluate(() => (window as unknown as { motionCls: number }).motionCls);
+		expect(cls).toBeLessThanOrEqual(0.1);
+		await testInfo.attach(`motion-layout-shift-${width}-${height}`, { body: JSON.stringify({ width, height, cls }), contentType: 'application/json' });
 		expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(await page.evaluate(() => document.documentElement.clientWidth));
 		if (width! < 992 || height! < 705) await expect(page.locator('.gd-hero__parallax')).toHaveCSS('transform', 'none');
 		await testInfo.attach(`motion-problem-${width}-${height}`, { body: await page.locator('#problem').screenshot(), contentType: 'image/png' });

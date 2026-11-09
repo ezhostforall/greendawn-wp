@@ -35,8 +35,15 @@ test('the branded homepage renders its sections in order without JavaScript', as
 			await expect(projectImage).toHaveAttribute('height', /\d+/);
 			await projectImage.scrollIntoViewIfNeeded();
 			await expect.poll(() => projectImage.evaluate((image: HTMLImageElement) => image.naturalWidth)).toBeGreaterThan(0);
+			await projectImage.evaluate((image: HTMLImageElement) => image.decode());
 			await expect(main.locator('#projects figure')).toHaveCSS('position', width > 976 ? 'sticky' : 'relative');
 			await expect(main.locator('#projects .gd-case-study__facts strong')).toHaveText(['136', '454', '11']);
+			const chargepoints = main.locator('#projects .gd-case-study__facts span').nth(1);
+			expect(await chargepoints.evaluate((label) => {
+				const range = document.createRange();
+				range.selectNodeContents(label);
+				return range.getClientRects().length;
+			})).toBe(1);
 			await expect(main.locator('#surveys .gd-surveys__price-value')).toHaveText('£200+ VAT');
 			await expect(main.locator('#surveys li p')).toHaveText([
 				'Charging demand and available site capacity',
@@ -65,6 +72,8 @@ test('the branded homepage renders its sections in order without JavaScript', as
 			expect(eyebrowMetrics.lineHeightRatio).toBeCloseTo(1.2, 2);
 			await expect(main.locator('#process h2')).toHaveCSS('margin-block-end', '32px');
 			await testInfo.attach(`greendawn-${width}`, { body: await page.screenshot({ fullPage: true }), contentType: 'image/png' });
+			await testInfo.attach(`greendawn-project-${width}`, { body: await main.locator('#projects').screenshot(), contentType: 'image/png' });
+			await testInfo.attach(`greendawn-surveys-${width}`, { body: await main.locator('#surveys').screenshot(), contentType: 'image/png' });
 		}
 
 		await page.setViewportSize({ width: 390, height: 844 });

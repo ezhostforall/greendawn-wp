@@ -415,4 +415,8 @@
   .gd-case-study__facts div {
     padding-inline: 0.4rem;
   }
+
+  .gd-case-study__facts span {
+    font-size: var(--gd-type-caption);
+  }
 }

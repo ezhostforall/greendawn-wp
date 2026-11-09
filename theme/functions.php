@@ -23,3 +23,4 @@ require_once GREENDAWN_DIR . '/inc/integrations/contact-form-7.php';
 require_once GREENDAWN_DIR . '/inc/integrations/rank-math.php';
 require_once GREENDAWN_DIR . '/inc/integrations/scf.php';
 require_once GREENDAWN_DIR . '/inc/react.php';
+require_once GREENDAWN_DIR . '/inc/lead-capture.php';

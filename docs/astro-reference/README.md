@@ -7,6 +7,7 @@ Source revision [891ed840c7369cb50df3e33232e81de49e2699d6](https://github.com/ez
 - [Shared styles](src/styles) contain typography, spacing tokens and common layout primitives.
 - [Header, utility bar and sitewide footer](src/components/layout) record the shared layout components.
 - [Navigation script](src/scripts/navigation.ts) records the 72px compact-header threshold and scroll-state behaviour.
+- [Lead capture component](src/components/lead), [choices](src/content/lead-capture.ts), [types](src/types/lead.ts), [controller/transport](src/scripts/lead-capture) and [handoff notes](docs/lead-capture-stage-03.md) record the callback reference. The upstream submission remains a demonstration; the WordPress implementation uses native CF7 delivery.
 - [Site and navigation configuration](src/config) records the pinned footer contact/company details and menu labels/routes.
 
 The files are an unmodified documentation snapshot. Their Astro imports refer to the upstream project. Refresh this snapshot from one upstream revision when the design reference changes. The [published Astro homepage](https://ezhostforall.github.io/GreenDawn/) provides the rendered comparison.

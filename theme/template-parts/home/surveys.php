@@ -42,7 +42,7 @@ $greendawn_guide_url   = esc_url( greendawn_home_field( 'survey_guide_url' ) );
 			<p><?php echo esc_html( greendawn_home_field( 'survey_summary' ) ); ?></p>
 			<div class="gd-surveys__actions">
 				<?php if ( '' !== $greendawn_enquiry_url ) : ?>
-					<a class="gd-home-button gd-home-button--navy" href="<?php echo esc_url( $greendawn_enquiry_url ); ?>">
+					<a class="gd-home-button gd-home-button--navy" data-lead-capture-open data-lead-entry-point="pricing" href="<?php echo esc_url( $greendawn_enquiry_url ); ?>">
 						<?php echo esc_html( greendawn_home_field( 'survey_cta_label' ) ); ?>
 						<?php get_template_part( 'template-parts/home/arrow', null, array( 'diagonal' => true ) ); ?>
 					</a>

@@ -10,7 +10,7 @@
 [Barebones](https://github.com/benchmarkstudios/barebones) (Benchmark Studios, GPL-2.0-or-later) is a lightweight, conventional starter theme with Sass and block support. We evaluated its approach and chose a **lightweight equivalent** instead, because this starter needs a Vite/TypeScript/React pipeline, `theme.json`, default Codespaces support, a disposable integration-test stack and a rename script, and adapting an existing Sass/Webpack-oriented structure would add more change than starting small. No Barebones code is copied; its conventions (conventional templates, `inc/` organisation) informed the layout. If code is ever borrowed, retain its licence and attribution.
 
 ## Asset pipeline
-- Vite builds three entries (see `vite.config.ts`): `main` (CSS + small TS, every page), `editor` (editor styles) and `react-example` (optional).
+- Vite builds named entries (see `vite.config.ts`): `main` (CSS + small TS, every page), `editor` (editor styles) and `react-example` (optional).
 - Production: `theme/dist/manifest.json` is read by `inc/vite.php`; `inc/assets.php` enqueues hashed files with WordPress APIs and marks scripts `type="module"`. Without a build, the theme still renders (unstyled).
 - Development: `pnpm dev` writes `theme/.vite-hot`; when `WP_ENVIRONMENT_TYPE` is `local`/`development`, the theme loads `@vite/client` and sources from the dev server for HMR.
 - Page-specific assets: call `greendawn_enqueue_entry( 'name' )` from a template/template part, or return names from the `greendawn_page_entries` filter. Register the entry in `vite.config.ts` and `greendawn_entries()`.
@@ -32,3 +32,5 @@ Escaping on output, no direct input handling in the theme, `ABSPATH` guards, gen
 ## Developer environment
 
 The starter deliberately uses the default GitHub Codespaces environment: no custom `.devcontainer` and no forced container user. WordPress is not automatically provisioned when a Codespace starts. The Docker Compose stack under `tests/integration/` is disposable and intended for CI/browser integration tests only. Development **targets a persistent, separately hosted WordPress staging installation** for previews, WordPress Admin and update validation. CI continues to use the disposable container for regression checks; there is no need for WordPress/MariaDB in Codespaces. Version tags create candidate prereleases that must be verified on staging before manual promotion.
+
+The optional `enquiry` entry supplies only the callback launcher and scoped CSS until first interaction. It dynamically imports the React drawer. Greendawn Core owns its managed CF7 form, administrator opt-in and validation/spam policy; the theme renders a native CF7 transport form and leaves ordinary enquiry links as the progressive fallback. See `docs/greendawn-homepage.md` for setup and delivery checks.

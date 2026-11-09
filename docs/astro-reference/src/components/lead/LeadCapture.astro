@@ -1,0 +1,941 @@
+---
+import {
+  leadCallbackChoices,
+  leadConditionalQuestions,
+  leadIntentChoices,
+  leadProjectStageChoices,
+} from "../../content/lead-capture";
+import { siteConfig } from "../../config/site";
+import { liveSitePath } from "../../lib/urls";
+import type { LeadIntent, LeadSource } from "../../types/lead";
+
+interface Props {
+  source?: LeadSource;
+  initialIntent?: LeadIntent;
+}
+
+const { source = "homepage", initialIntent } = Astro.props;
+const dialogId = "lead-capture-dialog";
+const conditionalQuestions = Object.values(leadConditionalQuestions);
+---
+
+<aside
+  class="lead-capture"
+  data-lead-capture
+  data-source={source}
+  data-initial-intent={initialIntent}
+  aria-label="Request a callback"
+>
+  <button
+    class="lead-capture__launcher"
+    type="button"
+    data-lead-capture-open
+    data-lead-entry-point="floating-launcher"
+    aria-label="Request a callback"
+    aria-haspopup="dialog"
+    aria-controls={dialogId}
+  >
+    <span class="lead-capture__launcher-label">Request a callback</span>
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M5 5h14a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-8l-5 3v-3H5a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2Z" />
+      <path d="M8 10h8M8 14h5" />
+    </svg>
+  </button>
+
+  <dialog class="lead-capture__dialog" id={dialogId} data-lead-dialog aria-labelledby="lead-capture-dialog-title">
+    <section class="lead-capture__panel" data-lead-panel>
+      <form class="lead-capture__form" data-lead-form novalidate>
+        <header class="lead-capture__header">
+          <button class="lead-capture__icon-button" type="button" data-lead-back hidden aria-label="Go back">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m14.5 5-7 7 7 7" /></svg>
+            <span>Back</span>
+          </button>
+          <div class="lead-capture__brand">
+            <span>Greendawn</span>
+            <strong id="lead-capture-dialog-title">Request a callback</strong>
+          </div>
+          <button class="lead-capture__icon-button" type="button" data-lead-close aria-label="Close callback form">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18" /></svg>
+          </button>
+        </header>
+
+        <div class="lead-capture__progress" aria-hidden="true">
+          <svg viewBox="0 0 180 30" preserveAspectRatio="none">
+            <path class="lead-capture__progress-track" d="M3 27C35 3 125 3 177 27" pathLength="100" />
+            <path class="lead-capture__progress-value" d="M3 27C35 3 125 3 177 27" pathLength="100" />
+          </svg>
+          <span data-lead-progress-label>Your requirement</span>
+        </div>
+
+        <p class="sr-only" data-lead-live aria-live="polite" aria-atomic="true"></p>
+
+        <div class="lead-capture__body">
+          <section class="lead-capture__step" data-lead-step="intent">
+            <fieldset>
+              <legend tabindex="-1">What can we help with?</legend>
+              <p class="lead-capture__intro">Choose the closest match to continue. You can add detail before requesting your callback.</p>
+              <div class="lead-capture__choices lead-capture__choices--stacked">
+                {leadIntentChoices.map((choice) => (
+                  <label class="lead-capture__option">
+                    <input
+                      type="radio"
+                      name="intent"
+                      value={choice.value}
+                      aria-describedby="lead-error-intent"
+                    />
+                    <span>{choice.label}</span>
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 5 7 7-7 7" /></svg>
+                  </label>
+                ))}
+              </div>
+              <p class="lead-capture__error" id="lead-error-intent" data-lead-error-for="intent" hidden></p>
+            </fieldset>
+            <div class="lead-capture__step-actions">
+              <button class="lead-capture__text-button" type="button" data-lead-direct>Just request a callback</button>
+            </div>
+          </section>
+
+          <section class="lead-capture__step" data-lead-step="context" hidden>
+            {conditionalQuestions.map((question) => (
+              <fieldset data-lead-context={question.name} hidden>
+                <legend tabindex="-1">{question.legend}</legend>
+                <p class="lead-capture__intro">Choose an answer to continue. This helps us put the right person on the call.</p>
+                <div class="lead-capture__choices lead-capture__choices--stacked">
+                  {question.choices.map((choice) => (
+                    <label class="lead-capture__option">
+                      <input
+                        type="radio"
+                        name={question.name}
+                        value={choice.value}
+                        aria-describedby={`lead-error-${question.name}`}
+                      />
+                      <span>{choice.label}</span>
+                      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 5 7 7-7 7" /></svg>
+                    </label>
+                  ))}
+                </div>
+                <p
+                  class="lead-capture__error"
+                  id={`lead-error-${question.name}`}
+                  data-lead-error-for={question.name}
+                  hidden
+                ></p>
+              </fieldset>
+            ))}
+          </section>
+
+          <section class="lead-capture__step" data-lead-step="stage" hidden>
+            <fieldset>
+              <legend tabindex="-1">Where are you in the process?</legend>
+              <p class="lead-capture__intro">Choose the closest answer to continue. A rough answer is fine.</p>
+              <div class="lead-capture__choices lead-capture__choices--stacked">
+                {leadProjectStageChoices.map((choice) => (
+                  <label class="lead-capture__option">
+                    <input
+                      type="radio"
+                      name="projectStage"
+                      value={choice.value}
+                      aria-describedby="lead-error-project-stage"
+                    />
+                    <span>{choice.label}</span>
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 5 7 7-7 7" /></svg>
+                  </label>
+                ))}
+              </div>
+              <p class="lead-capture__error" id="lead-error-project-stage" data-lead-error-for="projectStage" hidden></p>
+            </fieldset>
+          </section>
+
+          <section class="lead-capture__step" data-lead-step="location" hidden>
+            <div class="lead-capture__heading-group">
+              <h2 tabindex="-1">Where is the site?</h2>
+              <p class="lead-capture__intro">Optional, but useful for routing your enquiry.</p>
+            </div>
+            <label class="lead-capture__field">
+              <span>Town, city or postcode <small>Optional</small></span>
+              <input name="location" type="text" autocomplete="postal-code" maxlength="120" />
+            </label>
+            <div class="lead-capture__step-actions">
+              <button class="lead-capture__primary" type="button" data-lead-next>Continue</button>
+              <button class="lead-capture__text-button" type="button" data-lead-next>Skip for now</button>
+            </div>
+          </section>
+
+          <section class="lead-capture__step" data-lead-step="contact" hidden>
+            <div class="lead-capture__heading-group">
+              <h2 tabindex="-1">How should we reach you?</h2>
+              <p class="lead-capture__intro">Greendawn supports commercial sites. All four contact fields are required so we can route the enquiry.</p>
+            </div>
+
+            <div class="lead-capture__field-grid">
+              <label class="lead-capture__field">
+                <span>First name</span>
+                <input name="name" type="text" autocomplete="given-name" maxlength="80" aria-describedby="lead-error-name" required />
+                <span class="lead-capture__error" id="lead-error-name" data-lead-error-for="name" hidden></span>
+              </label>
+              <label class="lead-capture__field">
+                <span>Telephone number</span>
+                <input name="phone" type="tel" autocomplete="tel" inputmode="tel" maxlength="40" aria-describedby="lead-error-phone" required />
+                <span class="lead-capture__error" id="lead-error-phone" data-lead-error-for="phone" hidden></span>
+              </label>
+              <label class="lead-capture__field">
+                <span>Company name</span>
+                <input name="company" type="text" autocomplete="organization" maxlength="120" aria-describedby="lead-error-company" required />
+                <span class="lead-capture__error" id="lead-error-company" data-lead-error-for="company" hidden></span>
+              </label>
+              <label class="lead-capture__field">
+                <span>Email</span>
+                <input name="email" type="email" autocomplete="email" maxlength="160" aria-describedby="lead-error-email" required />
+                <span class="lead-capture__error" id="lead-error-email" data-lead-error-for="email" hidden></span>
+              </label>
+            </div>
+
+            <fieldset class="lead-capture__callback-fieldset">
+              <legend>When would you prefer a call?</legend>
+              <div class="lead-capture__choices lead-capture__choices--compact">
+                {leadCallbackChoices.map((choice) => (
+                  <label class="lead-capture__option lead-capture__option--compact">
+                    <input
+                      type="radio"
+                      name="callbackPreference"
+                      value={choice.value}
+                      aria-describedby="lead-error-callback-preference"
+                      required
+                    />
+                    <span>{choice.label}</span>
+                  </label>
+                ))}
+              </div>
+              <p
+                class="lead-capture__error"
+                id="lead-error-callback-preference"
+                data-lead-error-for="callbackPreference"
+                hidden
+              ></p>
+            </fieldset>
+
+            <label class="lead-capture__field" data-lead-schedule hidden>
+              <span id="lead-schedule-label">Suggested date and time <small>Optional</small></span>
+              <input name="preferredCallbackTime" type="datetime-local" aria-labelledby="lead-schedule-label" aria-describedby="lead-schedule-help" disabled />
+              <small class="lead-capture__schedule-help" id="lead-schedule-help">You’re welcome to suggest a time. We’ll confirm availability.</small>
+            </label>
+
+            <details class="lead-capture__details" data-lead-details>
+              <summary>Add project details <span>Optional</span></summary>
+              <div class="lead-capture__details-body">
+                <label class="lead-capture__field">
+                  <span>Anything useful for us to know?</span>
+                  <textarea name="notes" rows="4" maxlength="1500"></textarea>
+                </label>
+              </div>
+            </details>
+
+            <p class="lead-capture__privacy">
+              We’ll use these details only to respond to this enquiry. Read our <a href={liveSitePath("/privacy-policy/")}>privacy policy</a>.
+            </p>
+            <p class="lead-capture__submit-error" data-lead-submit-error tabindex="-1" hidden></p>
+          </section>
+
+          <section class="lead-capture__step lead-capture__success" data-lead-step="success" hidden>
+            <span class="lead-capture__success-mark" aria-hidden="true">
+              <svg viewBox="0 0 48 48"><path d="m13 25 7 7 15-17" /></svg>
+            </span>
+            <h2 tabindex="-1">Your callback details are ready.</h2>
+            <p>This prototype has validated the information, but it has not sent or stored a request. The production endpoint will be connected during the WordPress integration.</p>
+            <div class="lead-capture__step-actions">
+              <button class="lead-capture__primary" type="button" data-lead-close>Close</button>
+              <button class="lead-capture__text-button" type="button" data-lead-reset>Start another request</button>
+            </div>
+          </section>
+        </div>
+        <footer class="lead-capture__contact-actions" data-lead-contact-actions hidden>
+          <button class="lead-capture__primary" type="submit" data-lead-submit>Request callback</button>
+          <a class="lead-capture__text-button" href={siteConfig.phone.href}>Or call {siteConfig.phone.display}</a>
+        </footer>
+      </form>
+    </section>
+  </dialog>
+</aside>
+
+<style is:global>
+html.no-js .lead-capture {
+  display: none;
+}
+
+.lead-capture__launcher {
+  position: fixed;
+  z-index: 80;
+  right: clamp(1rem, 2.5vw, 2rem);
+  bottom: clamp(1rem, 2.5vw, 2rem);
+  display: inline-flex;
+  min-height: 3.35rem;
+  align-items: center;
+  gap: 0.75rem;
+  border: 1px solid rgba(236, 250, 0, 0.48);
+  border-radius: 999px;
+  background: var(--navy-950);
+  box-shadow: 0 0.75rem 2.5rem rgba(7, 23, 33, 0.24);
+  color: var(--white);
+  cursor: pointer;
+  font: 700 0.82rem/1 var(--font-body);
+  padding: 0.85rem 1rem 0.85rem 1.25rem;
+}
+
+.lead-capture__launcher svg {
+  width: 1.35rem;
+  height: 1.35rem;
+  fill: none;
+  stroke: var(--lime);
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 1.8;
+}
+
+.lead-capture__launcher:hover {
+  border-color: var(--lime);
+  transform: translateY(-2px);
+}
+
+.lead-capture__dialog {
+  position: fixed;
+  inset: 0 0 0 auto;
+  width: min(100%, 34rem);
+  max-width: none;
+  height: 100dvh;
+  max-height: none;
+  margin: 0;
+  overflow: hidden;
+  border: 0;
+  background: transparent;
+  color: var(--navy-950);
+  padding: 0;
+}
+
+.lead-capture__dialog:not([open]) {
+  display: none;
+}
+
+.lead-capture [hidden] {
+  display: none !important;
+}
+
+.lead-capture__dialog::backdrop {
+  background: rgba(7, 23, 33, 0.7);
+  backdrop-filter: blur(3px);
+}
+
+.lead-capture__panel,
+.lead-capture__form {
+  height: 100%;
+}
+
+.lead-capture__panel {
+  --lead-progress: 25;
+  overflow: hidden;
+  background: var(--cream);
+  box-shadow: -1.5rem 0 4rem rgba(7, 23, 33, 0.2);
+}
+
+.lead-capture__form {
+  display: flex;
+  flex-direction: column;
+}
+
+.lead-capture__header {
+  display: grid;
+  min-height: 5.25rem;
+  flex: 0 0 auto;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  align-items: center;
+  gap: 0.75rem;
+  border-bottom: 1px solid var(--slate-200);
+  padding: 0.85rem clamp(1rem, 4vw, 1.5rem);
+}
+
+.lead-capture__header [data-lead-back] {
+  display: inline-flex;
+  width: auto;
+  min-width: 2.75rem;
+  grid-column: 1;
+  grid-row: 1;
+  align-items: center;
+  gap: 0.3rem;
+  justify-self: start;
+  border-radius: 999px;
+  font: 700 0.875rem/1 var(--font-body);
+  padding: 0 0.65rem 0 0.35rem;
+}
+
+.lead-capture__header [data-lead-back] span {
+  white-space: nowrap;
+}
+
+.lead-capture__brand {
+  display: grid;
+  min-width: 0;
+  grid-column: 2;
+  grid-row: 1;
+  justify-items: center;
+  gap: 0.18rem;
+}
+
+.lead-capture__header [data-lead-close] {
+  grid-column: 3;
+  grid-row: 1;
+  justify-self: end;
+}
+
+.lead-capture__brand span {
+  color: var(--violet);
+  font-family: var(--font-mono);
+  font-size: var(--type-secondary);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.lead-capture__brand strong {
+  font-size: 0.94rem;
+  white-space: nowrap;
+}
+
+.lead-capture__icon-button {
+  display: grid;
+  width: 2.75rem;
+  height: 2.75rem;
+  place-items: center;
+  border: 1px solid transparent;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--navy-950);
+  cursor: pointer;
+}
+
+.lead-capture__icon-button:hover {
+  border-color: var(--slate-300);
+  background: var(--white);
+}
+
+.lead-capture__icon-button svg {
+  width: 1.35rem;
+  height: 1.35rem;
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 1.8;
+}
+
+.lead-capture__progress {
+  display: grid;
+  flex: 0 0 auto;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.75rem clamp(1.25rem, 5vw, 2rem) 0.4rem;
+}
+
+.lead-capture__progress svg {
+  width: 100%;
+  height: 1.8rem;
+  overflow: visible;
+}
+
+.lead-capture__progress path {
+  fill: none;
+  stroke-linecap: round;
+  stroke-width: 2;
+}
+
+.lead-capture__progress-track {
+  stroke: var(--slate-200);
+}
+
+.lead-capture__progress-value {
+  stroke: var(--violet);
+  stroke-dasharray: 100;
+  stroke-dashoffset: calc(100 - var(--lead-progress));
+  transition: stroke-dashoffset 260ms ease;
+}
+
+.lead-capture__progress span {
+  color: var(--slate-600);
+  font-family: var(--font-mono);
+  font-size: var(--type-secondary);
+  white-space: nowrap;
+}
+
+.lead-capture__body {
+  min-height: 0;
+  flex: 1 1 auto;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: clamp(1.2rem, 4vh, 2.2rem) clamp(1.25rem, 5vw, 2.2rem) max(1.5rem, env(safe-area-inset-bottom));
+}
+
+.lead-capture__step fieldset {
+  min-width: 0;
+  margin: 0;
+  border: 0;
+  padding: 0;
+}
+
+.lead-capture__step h2,
+.lead-capture__step legend {
+  max-width: 22ch;
+  color: var(--navy-950);
+  font-size: clamp(2rem, 3vw, 2.5rem);
+  font-weight: 600;
+  letter-spacing: -0.055em;
+  line-height: 1.05;
+}
+
+.lead-capture__step legend {
+  width: 100%;
+  margin-bottom: 0.75rem;
+}
+
+.lead-capture__heading-group {
+  margin-bottom: 1.4rem;
+}
+
+.lead-capture__heading-group h2 {
+  margin-bottom: 0;
+}
+
+.lead-capture__intro {
+  max-width: 37rem;
+  margin: 0 0 1.5rem;
+  color: var(--slate-700);
+  font-size: var(--type-body-compact);
+  line-height: 1.55;
+}
+
+.lead-capture__heading-group .lead-capture__intro {
+  margin-top: 0.75rem;
+}
+
+.lead-capture__choices {
+  display: grid;
+  gap: 0.55rem;
+}
+
+.lead-capture__option {
+  position: relative;
+  display: grid;
+  min-height: 3.35rem;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: 1rem;
+  border: 1px solid var(--slate-300);
+  border-radius: 0.55rem;
+  background: var(--white);
+  cursor: pointer;
+  font-size: 0.94rem;
+  font-weight: 700;
+  padding: 0.8rem 1rem;
+}
+
+.lead-capture__option:hover {
+  border-color: var(--navy-700);
+}
+
+.lead-capture__option:has(input:checked) {
+  border-color: var(--violet);
+  background: rgba(58, 34, 216, 0.07);
+  box-shadow: inset 0 0 0 1px var(--violet);
+}
+
+.lead-capture__option:focus-within {
+  outline: 3px solid var(--lime);
+  outline-offset: 2px;
+}
+
+.lead-capture__option input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+}
+
+.lead-capture__option > svg {
+  width: 1.1rem;
+  height: 1.1rem;
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 1.8;
+}
+
+.lead-capture__choices--compact {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.lead-capture__option--compact {
+  grid-template-columns: 1fr;
+  font-weight: 600;
+}
+
+.lead-capture__step-actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.lead-capture__primary,
+.lead-capture__text-button {
+  display: inline-flex;
+  min-height: 3rem;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0.2rem;
+  cursor: pointer;
+  font: 700 0.94rem/1.2 var(--font-body);
+}
+
+.lead-capture__primary {
+  border: 1px solid var(--navy-950);
+  background: var(--navy-950);
+  color: var(--white);
+  padding: 0.85rem 1.25rem;
+}
+
+.lead-capture__primary:hover {
+  border-color: var(--violet);
+  background: var(--violet);
+}
+
+.lead-capture__primary:disabled {
+  cursor: wait;
+  opacity: 0.62;
+}
+
+.lead-capture__text-button {
+  border: 0;
+  background: transparent;
+  color: var(--navy-800);
+  padding: 0.75rem 0.25rem;
+  text-decoration: underline;
+  text-decoration-color: var(--slate-500);
+  text-underline-offset: 0.3em;
+}
+
+.lead-capture__field-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+}
+
+.lead-capture__field-grid .lead-capture__field {
+  margin-bottom: 0;
+}
+
+.lead-capture__field {
+  display: grid;
+  gap: 0.45rem;
+  margin-bottom: 1rem;
+  color: var(--navy-900);
+  font-size: var(--type-secondary);
+  font-weight: 700;
+}
+
+.lead-capture__field > span:first-child {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.lead-capture__field small,
+.lead-capture__details summary span {
+  color: var(--slate-600);
+  font-family: var(--font-mono);
+  font-size: var(--type-secondary);
+  font-weight: 500;
+  text-transform: uppercase;
+}
+
+.lead-capture__field input,
+.lead-capture__field textarea {
+  width: 100%;
+  min-height: 3.2rem;
+  border: 1px solid var(--slate-500);
+  border-radius: 0.35rem;
+  background: var(--white);
+  color: var(--navy-950);
+  font: 400 1rem/1.4 var(--font-body);
+  padding: 0.78rem 0.85rem;
+}
+
+.lead-capture__field textarea {
+  min-height: 7rem;
+  resize: vertical;
+}
+
+.lead-capture__field input[aria-invalid="true"],
+.lead-capture__field textarea[aria-invalid="true"] {
+  border-color: #b42318;
+}
+
+.lead-capture__callback-fieldset {
+  margin-top: 0.4rem !important;
+}
+
+.lead-capture__callback-fieldset legend {
+  max-width: none;
+  margin-bottom: 0.7rem;
+  font-size: var(--type-secondary);
+  font-weight: 700;
+  letter-spacing: 0;
+  line-height: 1.3;
+}
+
+.lead-capture__field .lead-capture__schedule-help {
+  font-family: var(--font-body);
+  font-size: var(--type-secondary);
+  line-height: 1.5;
+  text-transform: none;
+}
+
+[data-lead-schedule] {
+  margin-top: 1rem;
+}
+
+.lead-capture__contact-actions {
+  display: grid;
+  flex: 0 0 auto;
+  gap: 0.35rem;
+  border-top: 1px solid var(--slate-300);
+  background: var(--cream);
+  padding: 0.85rem clamp(1.25rem, 5vw, 2.2rem) max(0.85rem, env(safe-area-inset-bottom));
+}
+
+.lead-capture__contact-actions[hidden] {
+  display: none;
+}
+
+.lead-capture__error,
+.lead-capture__submit-error {
+  margin: 0.55rem 0 0;
+  color: #9f2119;
+  font-size: var(--type-secondary);
+  font-weight: 700;
+  line-height: 1.4;
+}
+
+.lead-capture__submit-error {
+  border-left: 3px solid #b42318;
+  background: #fff1f0;
+  padding: 0.85rem 1rem;
+}
+
+.lead-capture__details {
+  margin-top: 1rem;
+  border-block: 1px solid var(--slate-300);
+}
+
+.lead-capture__details summary {
+  display: flex;
+  min-height: 3.7rem;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  cursor: pointer;
+  font-size: var(--type-secondary);
+  font-weight: 700;
+}
+
+.lead-capture__details-body {
+  padding: 0.5rem 0 0.75rem;
+}
+
+.lead-capture__privacy {
+  margin: 1.1rem 0 0;
+  color: var(--slate-700);
+  font-size: var(--type-secondary);
+  line-height: 1.55;
+}
+
+.lead-capture__privacy a {
+  font-weight: 700;
+  text-decoration: underline;
+}
+
+.lead-capture__success {
+  padding-top: clamp(1rem, 8vh, 4rem);
+}
+
+.lead-capture__success-mark {
+  display: grid;
+  width: 4rem;
+  height: 4rem;
+  place-items: center;
+  margin-bottom: 1.5rem;
+  border-radius: 50%;
+  background: var(--lime);
+}
+
+.lead-capture__success-mark svg {
+  width: 2.2rem;
+  height: 2.2rem;
+  fill: none;
+  stroke: var(--navy-950);
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 3;
+}
+
+.lead-capture__success p {
+  max-width: 33rem;
+  margin: 1.2rem 0 0;
+  color: var(--slate-700);
+  line-height: 1.6;
+}
+
+body.lead-capture-open {
+  overflow: hidden;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .lead-capture__launcher,
+  .lead-capture__option,
+  .lead-capture__primary {
+    transition: border-color 180ms ease, background-color 180ms ease, color 180ms ease, transform 180ms ease;
+  }
+
+  .lead-capture__dialog[open] .lead-capture__panel {
+    animation: lead-panel-in 280ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+  }
+
+  @keyframes lead-panel-in {
+    from { transform: translateX(100%); }
+    to { transform: translateX(0); }
+  }
+}
+
+@media (max-width: 42rem) {
+  .lead-capture__launcher-label {
+    display: none;
+  }
+
+  .lead-capture__launcher {
+    min-height: 2.85rem;
+    width: 2.85rem;
+    justify-content: center;
+    padding: 0.65rem;
+  }
+
+  .lead-capture__dialog {
+    inset: auto 0 0;
+    width: 100%;
+    height: min(90dvh, 49rem);
+    max-height: calc(100dvh - 1rem);
+  }
+
+  .lead-capture__panel {
+    border-radius: 1rem 1rem 0 0;
+    box-shadow: 0 -1.5rem 4rem rgba(7, 23, 33, 0.24);
+  }
+
+  .lead-capture__header {
+    min-height: 4.25rem;
+    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+    gap: 0.5rem;
+    padding: 0.65rem 0.85rem;
+  }
+
+  .lead-capture__progress {
+    padding-top: 0.45rem;
+  }
+
+  .lead-capture__progress svg {
+    height: 1.35rem;
+  }
+
+  .lead-capture__body {
+    padding-top: 1rem;
+  }
+
+  .lead-capture__heading-group {
+    margin-bottom: 1rem;
+  }
+
+  .lead-capture__heading-group .lead-capture__intro {
+    margin-top: 0.6rem;
+  }
+
+  .lead-capture__step h2,
+  .lead-capture__step legend {
+    font-size: clamp(1.75rem, 7vw, 2rem);
+  }
+
+  .lead-capture__callback-fieldset legend {
+    font-size: var(--type-secondary);
+  }
+
+  .lead-capture__field-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .lead-capture__dialog[open] .lead-capture__panel {
+      animation-name: lead-sheet-in;
+    }
+
+    @keyframes lead-sheet-in {
+      from { transform: translateY(100%); }
+      to { transform: translateY(0); }
+    }
+  }
+}
+
+@media (max-width: 24rem) {
+  .lead-capture__launcher span {
+    max-width: 8.5rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .lead-capture__choices--compact {
+    grid-template-columns: 1fr;
+  }
+
+  .lead-capture__step-actions {
+    align-items: stretch;
+    flex-direction: column;
+  }
+}
+
+@media (max-height: 38rem) and (min-width: 42.01rem) {
+  .lead-capture__header {
+    min-height: 4.25rem;
+  }
+
+  .lead-capture__progress {
+    padding-top: 0.4rem;
+  }
+
+  .lead-capture__body {
+    padding-top: 1rem;
+  }
+
+  .lead-capture__step h2,
+  .lead-capture__step legend {
+    font-size: 2rem;
+  }
+
+  .lead-capture__callback-fieldset legend {
+    font-size: var(--type-secondary);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lead-capture__progress-value {
+    transition: none;
+  }
+}
+</style>

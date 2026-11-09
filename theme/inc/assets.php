@@ -35,7 +35,7 @@ function greendawn_enqueue_entry( string $name ): void {
 			wp_enqueue_script( 'greendawn-vite-client', $dev . '/@vite/client', array(), null, array( 'in_footer' => true ) );
 			wp_script_add_data( 'greendawn-vite-client', 'greendawn_module', true );
 		}
-		if ( 'react-example' === $name ) {
+		if ( in_array( $name, array( 'react-example', 'enquiry' ), true ) ) {
 			add_action( 'wp_footer', 'greendawn_print_react_refresh_preamble', 5 );
 		}
 		wp_enqueue_script( $handle, $dev . '/' . $entries[ $name ], array(), null, array( 'in_footer' => true ) );

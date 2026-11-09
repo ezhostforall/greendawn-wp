@@ -23,7 +23,7 @@ $greendawn_closing_tel   = greendawn_phone_uri( $greendawn_closing_phone );
 		<p><?php echo esc_html( greendawn_home_field( 'closing_copy' ) ); ?></p>
 		<div class="gd-final-cta__actions">
 			<?php if ( '' !== $greendawn_closing_url ) : ?>
-				<a class="gd-home-button gd-home-button--navy" href="<?php echo esc_url( $greendawn_closing_url ); ?>">
+				<a class="gd-home-button gd-home-button--navy" data-lead-capture-open data-lead-entry-point="final-cta" href="<?php echo esc_url( $greendawn_closing_url ); ?>">
 					<?php echo esc_html( greendawn_home_field( 'closing_cta_label' ) ); ?>
 					<?php get_template_part( 'template-parts/home/arrow', null, array( 'diagonal' => true ) ); ?>
 				</a>

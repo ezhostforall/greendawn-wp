@@ -110,6 +110,29 @@ final class Settings {
 				<?php endif; ?>
 				<?php submit_button(); ?>
 			</form>
+			<h2><?php esc_html_e( 'Callback enquiry drawer', 'greendawn-core' ); ?></h2>
+			<?php if ( ! class_exists( '\WPCF7_ContactForm' ) ) : ?>
+				<p><?php esc_html_e( 'Activate Contact Form 7 to configure callback requests.', 'greendawn-core' ); ?></p>
+			<?php else : ?>
+				<?php $callback_id = absint( get_option( 'greendawn_core_callback_form', 0 ) ); ?>
+				<?php if ( ! $callback_id || ! wpcf7_contact_form( $callback_id ) ) : ?>
+					<p><?php esc_html_e( 'Create the dedicated callback form, check its Mail recipient in Contact Form 7, then enable the drawer. Existing contact forms are preserved.', 'greendawn-core' ); ?></p>
+					<form action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" method="post">
+						<input type="hidden" name="action" value="greendawn_core_create_callback">
+						<?php wp_nonce_field( 'greendawn_core_create_callback' ); ?>
+						<?php submit_button( __( 'Create callback form', 'greendawn-core' ), 'secondary' ); ?>
+					</form>
+				<?php else : ?>
+					<p><a href="<?php echo esc_url( admin_url( 'admin.php?page=wpcf7&post=' . $callback_id . '&action=edit' ) ); ?>"><?php esc_html_e( 'Review callback email recipient and delivery settings', 'greendawn-core' ); ?></a></p>
+					<p><?php esc_html_e( 'Enable callback requests only after checking the recipient, sender and privacy policy. The initial recipient is the WordPress administration email. Delivery uses the existing Contact Form 7 mail and spam integrations.', 'greendawn-core' ); ?></p>
+					<form action="options.php" method="post">
+						<?php settings_fields( 'greendawn_core_callback_settings' ); ?>
+						<input type="hidden" name="greendawn_core_callback_enabled" value="0">
+						<label><input type="checkbox" name="greendawn_core_callback_enabled" value="1" <?php checked( get_option( 'greendawn_core_callback_enabled', false ) ); ?>> <?php esc_html_e( 'Enable the sitewide callback drawer', 'greendawn-core' ); ?></label>
+						<?php submit_button( __( 'Save callback settings', 'greendawn-core' ) ); ?>
+					</form>
+				<?php endif; ?>
+			<?php endif; ?>
 		</div>
 		<?php
 	}

@@ -94,6 +94,10 @@ fi
 wp theme activate greendawn
 wp plugin activate greendawn-core
 wp plugin activate ezhost-updater
+wp plugin install contact-form-7 --version=6.2.4.1 --activate
+wp eval '\Greendawn_Core\Modules\Lead_Capture::provision(); update_option( "greendawn_core_callback_enabled", true );'
+docker cp tests/fixtures/lead-capture.php "$container_id:/var/www/html/wp-content/plugins/lead-capture-test-fixture.php"
+wp plugin activate lead-capture-test-fixture
 wp eval 'if ( ! has_filter( "update_plugins_updates.ezhostforall.invalid" ) || ! has_filter( "update_themes_updates.ezhostforall.invalid" ) || ! has_filter( "upgrader_pre_download" ) ) { WP_CLI::error( "EZ Host updater hooks missing" ); } WP_CLI::success( "Updater registered without configuration" );'
 wp rewrite structure '/%postname%/' --hard
 
@@ -107,6 +111,10 @@ create_page() {
 
 create_page about "About" '<!-- wp:paragraph --><p>Example page content.</p><!-- /wp:paragraph -->'
 create_page react-example "React example" '[greendawn_react_example label="Clicks" start="0"]'
+create_page callback-home "Callback homepage" ''
+callback_page_id=$(wp post list --post_type=page --name=callback-home --field=ID)
+wp post meta update "$callback_page_id" _wp_page_template templates/greendawn-homepage.php
+create_page callback-inner "Callback inner page" '<p>Enquiry test page.</p>'
 create_page editor-parity "Editor parity" "$(cat tests/fixtures/editor-parity.html)"
 create_page header-options "Header options" '<!-- wp:paragraph --><p>Optional header fixture.</p><!-- /wp:paragraph --><!-- wp:spacer {"height":"1800px"} --><div style="height:1800px" aria-hidden="true" class="wp-block-spacer"></div><!-- /wp:spacer -->'
 create_page header-empty "No menus" '<!-- wp:paragraph --><p>No assigned menus.</p><!-- /wp:paragraph -->'

@@ -108,8 +108,11 @@ test('back navigation, branching, short viewports and all CTA entry points remai
 	}
 	await page.locator('.lead-capture__launcher').click();
 	const dialog = page.getByRole('dialog');
+	await dialog.getByRole('button', { name: 'Just request a callback' }).click();
+	await dialog.getByRole('button', { name: 'Back', exact: true }).click();
 	await dialog.getByRole('button', { name: 'Power / grid capacity' }).click();
 	await expect(dialog.getByText('What’s prompted the enquiry?')).toBeVisible();
+	await expect(dialog.locator('.lead-capture__panel')).toHaveAttribute('style', /--lead-progress: 40/);
 	await dialog.getByRole('button', { name: 'Back', exact: true }).click();
 	await dialog.getByRole('button', { name: 'Existing chargers / aftercare' }).click();
 	await expect(dialog.getByText('What are you experiencing?')).toBeVisible();

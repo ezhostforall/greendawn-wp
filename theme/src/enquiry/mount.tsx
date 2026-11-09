@@ -71,7 +71,7 @@ function App({ config, transport, handleRef }: { config: LeadConfig; transport: 
 	function startCallback(): void { if (!started) { emit('lead_callback_started'); setStarted(true); } }
 	function choose(name: string, value: string): void {
 		const next = { ...answers, [name]: value };
-		if (name === 'intent') { delete next.siteType; delete next.aftercareIssue; delete next.powerReason; }
+		if (name === 'intent') { setDirect(false); delete next.siteType; delete next.aftercareIssue; delete next.powerReason; }
 		setAnswers(next);
 		if (name === 'intent') { emit('lead_intent_selected', next); go(contexts[value] ? 'context' : 'stage'); }
 		else go(name === 'projectStage' ? 'location' : 'stage');

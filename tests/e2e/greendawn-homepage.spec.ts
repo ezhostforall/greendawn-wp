@@ -290,7 +290,6 @@ test('saved homepage values render in the initial response with one hero image',
 	expect(html).toContain('Guidance for your charging project.');
 	expect(html).not.toContain('Make better-informed charging decisions.');
 	expect(html).not.toContain('commercial-ev-electrical-connection-');
-
 });
 
 test('the utility bar text can be edited and reset in the Customiser', async ({ page, baseURL }) => {

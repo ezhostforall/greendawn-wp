@@ -59,6 +59,7 @@
   place-items: center;
   background: var(--gd-lime);
   color: var(--gd-navy-900);
+  font-size: 1.25rem;
   transition: transform 220ms ease;
 }
 

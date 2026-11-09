@@ -28,4 +28,4 @@ The [pinned Astro source snapshot](./astro-reference/) provides the homepage com
 
 ## Remaining homepage sequence
 
-After these seven static sections, port Services, Supporting Proof, Aftercare, FAQ and the final enquiry section in their Astro order. Complete the sitewide footer and enquiry interaction, then add the planned GSAP enhancement with reduced-motion and no-JavaScript fallbacks. Final acceptance compares typography, spacing, media, keyboard behaviour and performance across the complete page.
+After these seven static sections, port Services (Solutions), Aftercare, Supporting Proof, Insights and the final enquiry section, in that order from the pinned Astro `src/pages/index.astro`. Complete the sitewide footer and enquiry interaction, then add the planned GSAP enhancement with reduced-motion and no-JavaScript fallbacks. Final acceptance compares typography, spacing, media, keyboard behaviour and performance across the complete page.

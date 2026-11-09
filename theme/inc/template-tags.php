@@ -70,3 +70,13 @@ function greendawn_breadcrumbs(): void {
 	</nav>
 	<?php
 }
+
+/**
+ * Builds a call URI from a display number without accepting other URI schemes.
+ *
+ * @param string $phone Display number.
+ */
+function greendawn_phone_uri( string $phone ): string {
+	$number = preg_replace( '/[^0-9+]/', '', $phone );
+	return preg_match( '/^\+?[0-9]{3,15}$/', $number ) ? 'tel:' . $number : '';
+}

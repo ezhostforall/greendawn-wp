@@ -1,0 +1,211 @@
+/* Sitewide footer from the pinned Astro layout, with native WordPress menus. */
+.gd-footer {
+  --gd-shell: min(100% - 2 * var(--gd-shell-gutter), var(--gd-shell-max));
+  --focus-color: var(--gd-lime);
+  padding: clamp(4rem, 7vw, 6rem) 0 2rem;
+  border: 0;
+  background: var(--gd-navy-950);
+  color: var(--gd-cream);
+  overflow-wrap: anywhere;
+}
+
+.gd-footer__shell {
+  width: var(--gd-shell);
+  margin-inline: auto;
+}
+
+.gd-footer__lead {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 2rem;
+  padding-bottom: 2.75rem;
+  border-bottom: 1px solid var(--gd-border-light);
+}
+
+.gd-footer__brand {
+  display: block;
+  flex: 0 1 auto;
+  width: clamp(13rem, 20vw, 20rem);
+  max-width: 100%;
+}
+
+.gd-footer__brand img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.gd-footer p,
+.gd-footer ul {
+  margin: 0;
+}
+
+.gd-footer__lead p {
+  min-width: 0;
+  color: var(--gd-lime);
+  font-family: var(--wp--preset--font-family--bricolage-grotesque);
+  font-size: var(--gd-type-lead);
+  font-style: italic;
+  font-weight: 600;
+}
+
+.gd-footer__grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1.5fr);
+  gap: clamp(2rem, 4vw, 4.5rem);
+  padding-block: 3.25rem;
+}
+
+.gd-footer__column,
+.gd-footer__contact,
+.gd-footer__column .gd-footer__links {
+  display: flex;
+  min-width: 0;
+  align-items: flex-start;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
+.gd-footer__column > span,
+.gd-footer__contact > span {
+  margin-bottom: 0.7rem;
+  color: var(--gd-lime);
+  font-family: var(--font-mono);
+  font-size: var(--gd-type-caption);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.gd-footer__links {
+  padding: 0;
+  list-style: none;
+}
+
+.gd-footer__links li {
+  min-width: 0;
+  max-width: 100%;
+}
+
+.gd-footer a {
+  text-decoration: none;
+}
+
+.gd-footer__grid a,
+.gd-footer__grid p {
+  color: var(--gd-slate-300);
+  font-size: 0.875rem;
+  line-height: 1.7;
+  transition: color 180ms ease;
+}
+
+.gd-footer__grid a:is(:hover, :focus-visible) {
+  color: var(--gd-cream);
+}
+
+.gd-footer__contact .gd-footer__phone {
+  color: var(--gd-cream);
+  font-family: var(--font-body);
+  font-size: var(--gd-type-lead);
+  font-weight: 600;
+}
+
+.gd-footer__contact p {
+  margin-top: 0.7rem;
+  white-space: pre-line;
+}
+
+.gd-footer__base {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  gap: 1.6rem;
+  padding-top: 1.7rem;
+  border-top: 1px solid var(--gd-border-light);
+  color: var(--gd-slate-300);
+  font-family: var(--font-mono);
+  font-size: 0.875rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.gd-footer__base > span {
+  min-width: 0;
+}
+
+.gd-footer__base .gd-footer__links {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1.6rem;
+}
+
+.gd-footer__base a {
+  color: inherit;
+  transition: color 180ms ease;
+}
+
+.gd-footer__base a:is(:hover, :focus-visible) {
+  color: var(--gd-lime);
+}
+
+.gd-footer__social {
+  min-width: 0;
+  margin-left: auto;
+}
+
+.gd-footer__social a {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.gd-footer__disclosure {
+  padding-bottom: 1.7rem;
+  color: var(--gd-slate-300);
+  font-size: 0.875rem;
+}
+
+@media (max-width: 61rem) {
+  .gd-footer__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 42rem) {
+  .gd-footer__lead {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .gd-footer__grid {
+    gap: 3rem 1.5rem;
+  }
+
+  .gd-footer__contact {
+    grid-column: 1 / -1;
+  }
+
+  .gd-footer__base {
+    align-items: flex-start;
+    flex-wrap: wrap;
+  }
+
+  .gd-footer__base > span {
+    width: 100%;
+  }
+
+  .gd-footer__social {
+    margin-left: 0;
+  }
+}
+
+@media (max-width: 30rem) {
+  .gd-footer__grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .gd-footer__contact {
+    grid-column: auto;
+  }
+}

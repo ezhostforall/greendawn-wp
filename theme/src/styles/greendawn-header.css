@@ -1,5 +1,6 @@
 .greendawn-home,
-.site-header {
+.site-header,
+.site-footer {
 	--gd-navy-950: #071721;
 	--gd-navy-900: #0b1d2a;
 	--gd-cream: #faf9f6;
@@ -275,7 +276,8 @@
 
 @media (max-width: 75rem) {
 	.greendawn-home,
-	.site-header {
+	.site-header,
+	.site-footer {
 		--gd-shell-gutter: 1.25rem;
 		--gd-shell-max: 76rem;
 	}
@@ -386,7 +388,8 @@
 
 @media (max-width: 61rem) {
 	.greendawn-home,
-	.site-header {
+	.site-header,
+	.site-footer {
 		--gd-shell-gutter: 1rem;
 		--gd-shell-max: 58rem;
 	}
@@ -394,7 +397,8 @@
 
 @media (max-width: 42rem) {
 	.greendawn-home,
-	.site-header {
+	.site-header,
+	.site-footer {
 		--gd-shell-gutter: 0.75rem;
 		--gd-shell-max: 39rem;
 	}
@@ -449,7 +453,8 @@
 
 @media (max-width: 30rem) {
 	.greendawn-home,
-	.site-header {
+	.site-header,
+	.site-footer {
 		--gd-shell-gutter: 0.625rem;
 		--gd-shell-max: 28rem;
 	}

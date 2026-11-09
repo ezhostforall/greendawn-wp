@@ -36,8 +36,9 @@ function greendawn_setup(): void {
 		array(
 			'primary'          => __( 'Primary menu', 'greendawn' ),
 			'utility'          => __( 'Utility menu', 'greendawn' ),
-			'footer'           => __( 'Footer menu', 'greendawn' ),
-			'footer_secondary' => __( 'Footer secondary menu', 'greendawn' ),
+			'footer'           => __( 'Footer company menu', 'greendawn' ),
+			'footer_secondary' => __( 'Footer solutions menu', 'greendawn' ),
+			'footer_support'   => __( 'Footer support menu', 'greendawn' ),
 			'footer_social'    => __( 'Footer social links', 'greendawn' ),
 			'footer_legal'     => __( 'Footer legal links', 'greendawn' ),
 		)

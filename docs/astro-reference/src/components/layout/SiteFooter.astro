@@ -1,0 +1,201 @@
+---
+import { siteConfig } from "../../config/site";
+import { primaryNavigation } from "../../config/navigation";
+import { assetPath, liveSitePath } from "../../lib/urls";
+import ArrowIcon from "../media/ArrowIcon.astro";
+
+const companyNavigation = primaryNavigation.filter((item) => item.kind === "link" && item.label !== "Aftercare");
+const solutionsNavigation = primaryNavigation.find((item) => item.kind === "group");
+const aftercareNavigation = primaryNavigation.find((item) => item.kind === "link" && item.label === "Aftercare");
+---
+
+<footer class="footer">
+  <div class="page-shell">
+    <div class="footer__lead">
+      <a class="brand brand--footer" href={siteConfig.liveUrl} aria-label={`${siteConfig.name} homepage`}>
+        <img src={assetPath("/brand/greendawn-wordmark-480.png")} alt={siteConfig.name} width="480" height="132" />
+      </a>
+      <p>EV charging. Handled.</p>
+    </div>
+
+    <div class="footer__grid">
+      <nav aria-label="Company">
+        <span>Company</span>
+        {companyNavigation.map((item) => <a href={liveSitePath(item.path)}>{item.label}</a>)}
+      </nav>
+      <nav aria-label="Our Solutions">
+        <span>Our Solutions</span>
+        {solutionsNavigation?.children.map((item) => <a href={liveSitePath(item.path)}>{item.label}</a>)}
+      </nav>
+      <nav aria-label="Support">
+        <span>Support</span>
+        {aftercareNavigation && <a href={liveSitePath(aftercareNavigation.path)}>{aftercareNavigation.label}</a>}
+        <a href={liveSitePath("/customer-care/")}>Customer support</a>
+        <a href={liveSitePath("/blog/")}>Insights</a>
+        <a href={liveSitePath("/enquire/")}>Discuss your site</a>
+      </nav>
+      <div class="footer__contact">
+        <span>Contact</span>
+        <a href={siteConfig.phone.href}>{siteConfig.phone.display}</a>
+        <a href={siteConfig.email.href}>{siteConfig.email.display}</a>
+        <p>{siteConfig.registeredAddressLines[0]}<br />{siteConfig.registeredAddressLines[1]}<br />{siteConfig.registeredAddressLines[2]}</p>
+      </div>
+    </div>
+
+    <div class="footer__base">
+      <span>© {siteConfig.legalName} · Company {siteConfig.companyNumber} · VAT {siteConfig.vatNumber}</span>
+      <a href={liveSitePath("/privacy-policy/")}>Privacy</a>
+      <a href={assetPath("/legal/terms-and-conditions.pdf")}>Terms</a>
+      <a href={liveSitePath("/modern-slavery-statements/")}>Modern Slavery</a>
+      <a href={siteConfig.linkedinUrl}>LinkedIn <ArrowIcon direction="up-right" /></a>
+    </div>
+  </div>
+</footer>
+
+<style is:global>
+.footer {
+  background: var(--navy-950);
+  color: var(--cream);
+  padding-block: clamp(4rem, 7vw, 6rem) 2rem;
+}
+
+.footer__lead {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 2rem;
+  border-bottom: 1px solid var(--border-light);
+  padding-bottom: 2.75rem;
+}
+
+.brand--footer {
+  width: clamp(13rem, 20vw, 20rem);
+}
+
+.footer__lead p {
+  margin-bottom: 0;
+  color: var(--lime);
+  font-family: var(--font-display);
+  font-size: var(--step-1);
+  font-style: italic;
+  font-weight: 600;
+}
+
+.footer__grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1.5fr;
+  gap: clamp(2rem, 4vw, 4.5rem);
+  padding-block: 3.25rem;
+}
+
+.footer__grid > div,
+.footer__grid > nav {
+  display: flex;
+  align-items: flex-start;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
+.footer__grid > div > span,
+.footer__grid > nav > span {
+  margin-bottom: 0.7rem;
+  color: var(--lime);
+  font-family: var(--font-mono);
+  font-size: var(--type-caption);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.footer__grid a,
+.footer__grid p {
+  color: var(--slate-300);
+  font-size: 0.875rem;
+  line-height: 1.7;
+  transition: color 180ms ease;
+}
+
+.footer__grid a:hover {
+  color: var(--cream);
+}
+
+.footer__contact a:first-of-type {
+  color: var(--cream);
+  font-family: var(--font-body);
+  font-size: var(--step-1);
+  font-weight: 600;
+}
+
+.footer__contact p {
+  margin-top: 0.7rem;
+}
+
+.footer__base {
+  display: flex;
+  align-items: center;
+  gap: 1.6rem;
+  border-top: 1px solid var(--border-light);
+  color: var(--slate-300);
+  font-family: var(--font-mono);
+  font-size: 0.875rem;
+  letter-spacing: 0.04em;
+  padding-top: 1.7rem;
+  text-transform: uppercase;
+}
+
+.footer__base a:last-child {
+  margin-left: auto;
+}
+
+.footer__base a {
+  transition: color 180ms ease;
+}
+
+.footer__base a:hover {
+  color: var(--lime);
+}
+
+@media (max-width: 61rem) {
+  .footer__grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 42rem) {
+  .footer__lead {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .footer__grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem 1.5rem;
+  }
+
+  .footer__contact {
+    grid-column: 1 / -1;
+  }
+
+  .footer__base {
+    align-items: flex-start;
+    flex-wrap: wrap;
+  }
+
+  .footer__base span {
+    width: 100%;
+  }
+
+  .footer__base a:last-child {
+    margin-left: 0;
+  }
+}
+
+@media (max-width: 30rem) {
+  .footer__grid {
+    grid-template-columns: 1fr;
+  }
+
+  .footer__contact {
+    grid-column: auto;
+  }
+}
+</style>

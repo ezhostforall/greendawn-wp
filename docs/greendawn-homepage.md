@@ -74,7 +74,7 @@ After updating the theme and Greendawn Core together, check 320px/390px mobile, 
 
 ## Final enquiry section
 
-The **Final enquiry** tab supplies the eyebrow, large closing heading, two paragraphs, button label, telephone prompt and display number. Copy defaults come from the pinned `FinalCtaSection.astro`; the default `0345 512 0044` number comes from the same revision’s `src/config/site.ts`. Layout, lime background, typography and decorative arc remain controlled by the theme.
+The **Final enquiry** tab supplies the eyebrow, large closing heading, two paragraphs, button label, telephone prompt and optional page-specific display number. Copy defaults come from the pinned `FinalCtaSection.astro`; the phone defaults to the sitewide Footer telephone, whose initial `0345 512 0044` value comes from the same revision’s `src/config/site.ts`. Layout, lime background, typography and decorative arc remain controlled by the theme.
 
 The enquiry button shares **Appearance → Customise → Header → Call-to-action destination** with the header, hero and survey button. Set it to the current WordPress enquiry/contact page; this section navigates normally and works without JavaScript. A blank or `#` destination hides the button. The callback/enquiry drawer and arc animation are separate planned enhancements.
 
@@ -82,7 +82,7 @@ The telephone link is derived from the display number’s digits and optional le
 
 After updating the theme and Greendawn Core together, review the panel at 320px, 390px, 800px and 1440px. Check the shared enquiry destination, telephone display/call link, saved copy and blank-field defaults, mobile action stacking, button hover, keyboard focus and rendering without JavaScript. No further photographs need uploading for this section.
 
-The homepage uses the starter’s native menu disclosure. The coordination model, system arc and process timeline render in the initial HTML. All twelve static homepage sections are now ported. The sitewide footer, motion and callback drawer follow separately.
+The homepage uses the starter’s native menu disclosure. The coordination model, system arc and process timeline render in the initial HTML. All twelve static homepage sections are now ported. The Astro sitewide footer is shared across every template; see [footer setup](footer.md) for its Customiser content, menus and legal links. Motion and the callback drawer follow separately.
 
 The hero WebPs, wordmark and client marks come from Astro revision `891ed840c7369cb50df3e33232e81de49e2699d6`. The asset provenance and publication notes are maintained with the [Astro image records](https://github.com/ezhostforall/GreenDawn/blob/891ed840c7369cb50df3e33232e81de49e2699d6/docs/image-sources.md).
 
@@ -90,4 +90,4 @@ The [pinned Astro source snapshot](./astro-reference/) provides the homepage com
 
 ## Remaining homepage sequence
 
-With all twelve static sections from the pinned Astro `src/pages/index.astro` ported, complete the sitewide footer next. Add the enquiry interaction, then the planned GSAP enhancement with reduced-motion and no-JavaScript fallbacks. Final acceptance compares typography, spacing, media, keyboard behaviour and performance across the complete page.
+With all twelve static sections from the pinned Astro `src/pages/index.astro` ported, with the sitewide footer now shared across all templates, add the enquiry interaction next, then the planned GSAP enhancement with reduced-motion and no-JavaScript fallbacks. Final acceptance compares typography, spacing, media, keyboard behaviour and performance across the complete page.

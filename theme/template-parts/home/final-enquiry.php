@@ -10,11 +10,7 @@ defined( 'ABSPATH' ) || exit;
 $greendawn_closing_url   = esc_url( (string) get_theme_mod( 'greendawn_header_cta_url', '' ) );
 $greendawn_closing_url   = '#' === $greendawn_closing_url ? '' : $greendawn_closing_url;
 $greendawn_closing_phone = greendawn_home_field( 'closing_phone' );
-$greendawn_closing_tel   = preg_replace( '/[^0-9+]/', '', $greendawn_closing_phone );
-
-if ( ! preg_match( '/^\+?[0-9]{3,15}$/', $greendawn_closing_tel ) ) {
-	$greendawn_closing_tel = '';
-}
+$greendawn_closing_tel   = greendawn_phone_uri( $greendawn_closing_phone );
 ?>
 <section id="final-enquiry" class="gd-journey-section gd-final-cta" aria-labelledby="gd-final-cta-title">
 	<svg viewBox="0 0 1000 550" fill="none" aria-hidden="true" focusable="false">
@@ -35,7 +31,7 @@ if ( ! preg_match( '/^\+?[0-9]{3,15}$/', $greendawn_closing_tel ) ) {
 			<?php if ( '' !== $greendawn_closing_tel ) : ?>
 				<p>
 					<?php echo esc_html( greendawn_home_field( 'closing_phone_prompt' ) ); ?>
-					<a href="<?php echo esc_url( 'tel:' . $greendawn_closing_tel ); ?>"><?php echo esc_html( $greendawn_closing_phone ); ?></a>
+					<a href="<?php echo esc_url( $greendawn_closing_tel ); ?>"><?php echo esc_html( $greendawn_closing_phone ); ?></a>
 				</p>
 			<?php endif; ?>
 		</div>

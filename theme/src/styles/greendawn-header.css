@@ -65,6 +65,8 @@
 }
 
 .gd-header-slot {
+	position: relative;
+	z-index: 22;
 	--gd-header-expanded-height: 5.5rem;
 	min-height: var(--gd-header-expanded-height);
 }
@@ -506,4 +508,9 @@
 		max-height: calc(100dvh - var(--header-admin-offset));
 		overflow-y: auto;
 	}
+}
+
+/* Keep the keyboard skip link above the utility and compact-header layers. */
+.skip-link:focus {
+	z-index: 23;
 }

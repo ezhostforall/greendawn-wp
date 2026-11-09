@@ -94,8 +94,13 @@ test('the compact main header clears the WordPress admin toolbar and keeps mobil
 		const toolbar = page.locator('#wpadminbar');
 		await expect(toolbar).toBeVisible();
 		expect((await header.boundingBox())!.y).toBeGreaterThanOrEqual((await toolbar.boundingBox())!.height);
-		await page.evaluate(() => window.scrollTo({ top: 800, behavior: 'instant' }));
+		await page.evaluate(() => window.scrollTo({ top: 73, behavior: 'instant' }));
 		await expect(header).toHaveClass(/is-scrolled/);
+		expect(await header.evaluate((element) => {
+			const box = element.getBoundingClientRect();
+			return document.elementFromPoint(box.x + box.width / 2, box.y + 8)?.closest('.site-header') === element;
+		})).toBe(true);
+		await page.evaluate(() => window.scrollTo({ top: 800, behavior: 'instant' }));
 		expect((await header.boundingBox())!.y).toBe(width > 782 ? 32 : width > 600 ? 46 : 0);
 		if (width === 390) {
 			const toggle = header.locator('[data-nav-toggle]');
@@ -107,6 +112,13 @@ test('the compact main header clears the WordPress admin toolbar and keeps mobil
 			await support.press('Escape');
 			await expect(toggle).toBeFocused();
 			await expect(nav).toBeHidden();
+			const skip = page.getByRole('link', { name: 'Skip to content', exact: true });
+			await skip.focus();
+			await expect(skip).toBeInViewport();
+			expect(await skip.evaluate((element) => {
+				const box = element.getBoundingClientRect();
+				return document.elementFromPoint(box.x + box.width / 2, box.y + box.height / 2)?.closest('.skip-link') === element;
+			})).toBe(true);
 		}
 	}
 });

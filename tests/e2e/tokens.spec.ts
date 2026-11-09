@@ -20,7 +20,7 @@ test('WordPress exposes the shared token values on the frontend', async ({ page 
 });
 
 test('two different brand overrides flow through aliases without changing component CSS', async ({ page }) => {
-	await page.goto('/about/');
+	await page.goto('/services/');
 	for (const brand of [
 		{ accent: '#236345', text: '#101b14', space: '1.25rem', font: 'Georgia, serif' },
 		{ accent: '#6b27a0', text: '#201129', space: '1.5rem', font: 'Arial, sans-serif' },
@@ -36,7 +36,8 @@ test('two different brand overrides flow through aliases without changing compon
 		expect(values['--color-text']).toBe(brand.text);
 		expect(values['--space-m']).toBe(brand.space);
 		expect(values['--font-body']).toBe(brand.font);
-		await expect(page.locator('.site-header')).toHaveCSS('padding-inline-start', `${Number.parseFloat(brand.space) * 16}px`);
+		// The Astro header uses its page shell; shared cards still consume the spacing alias.
+		await expect(page.locator('.service-card').first()).toHaveCSS('padding-inline-start', `${Number.parseFloat(brand.space) * 16}px`);
 	}
 });
 

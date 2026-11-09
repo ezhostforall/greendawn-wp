@@ -220,6 +220,13 @@ final class Greendawn_Homepage implements Module_Interface {
 			'insight_fleet_label'           => array( __( 'Fleet guide: label', 'greendawn-core' ), __( 'Fleet planning', 'greendawn-core' ), 60 ),
 			'insight_fleet_title'           => array( __( 'Fleet guide: title', 'greendawn-core' ), __( 'Planning the transition to an electric fleet', 'greendawn-core' ), 100 ),
 			'insight_fleet_url'             => array( __( 'Fleet guide: destination', 'greendawn-core' ), home_url( '/guides/transitioning-to-electric-fleets/' ), 0, 'url' ),
+			'closing_eyebrow'               => array( __( 'Final enquiry eyebrow', 'greendawn-core' ), __( 'Start with the requirement', 'greendawn-core' ), 70 ),
+			'closing_title'                 => array( __( 'Final enquiry heading', 'greendawn-core' ), __( 'Tell us what your site needs.', 'greendawn-core' ), 100 ),
+			'closing_intro'                 => array( __( 'Final enquiry introduction', 'greendawn-core' ), __( 'A rough outline is enough to start. Tell us who needs charging, what you want it to achieve and what you know about the site.', 'greendawn-core' ), 280, 'textarea' ),
+			'closing_copy'                  => array( __( 'Final enquiry next step', 'greendawn-core' ), __( 'We’ll help identify the next step, including whether a technical survey is appropriate.', 'greendawn-core' ), 240, 'textarea' ),
+			'closing_cta_label'             => array( __( 'Enquiry button text', 'greendawn-core' ), __( 'Discuss your site', 'greendawn-core' ), 70 ),
+			'closing_phone_prompt'          => array( __( 'Telephone prompt', 'greendawn-core' ), __( 'Prefer to speak first?', 'greendawn-core' ), 100 ),
+			'closing_phone'                 => array( __( 'Telephone number', 'greendawn-core' ), __( '0345 512 0044', 'greendawn-core' ), 40 ),
 		);
 
 		$solution_images = array(
@@ -296,6 +303,12 @@ final class Greendawn_Homepage implements Module_Interface {
 				'maxlength'     => $settings[2],
 				'type'          => $settings[3] ?? 'text',
 			);
+			if ( 'closing_cta_label' === $name ) {
+				$fields[ $name ]['instructions'] = __( 'Uses the shared enquiry destination under Appearance → Customise → Header.', 'greendawn-core' );
+			}
+			if ( 'closing_phone' === $name ) {
+				$fields[ $name ]['instructions'] = __( 'Use a telephone number with an optional leading + and country code. The call link is generated from its digits.', 'greendawn-core' );
+			}
 			if ( 'proof_link' === $name ) {
 				$fields[ $name ]['instructions'] = __( 'Uses the Projects destination in the Hero tab.', 'greendawn-core' );
 			}
@@ -403,6 +416,7 @@ final class Greendawn_Homepage implements Module_Interface {
 			'aftercare_eyebrow' => __( 'Aftercare', 'greendawn-core' ),
 			'proof_image'       => __( 'Supporting proof', 'greendawn-core' ),
 			'insights_eyebrow'  => __( 'Insights', 'greendawn-core' ),
+			'closing_eyebrow'   => __( 'Final enquiry', 'greendawn-core' ),
 		);
 		$fields = array();
 		foreach ( $this->fields() as $name => $field ) {

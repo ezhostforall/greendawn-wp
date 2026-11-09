@@ -26,6 +26,7 @@ test('the branded homepage renders its sections in order without JavaScript', as
 				'EV infrastructure needs to keep working.',
 				'Different locations. A coordinated programme.',
 				'Make better-informed charging decisions.',
+				'Tell us what your site needs.',
 			]);
 			await expect(main.locator('#problem li')).toHaveCount(6);
 			await expect(main.locator('#system .gd-system__cards h3')).toHaveText([
@@ -58,7 +59,7 @@ test('the branded homepage renders its sections in order without JavaScript', as
 				`${baseURL}/fleet-charging-solutions/`, `${baseURL}/workplace-charging/`, `${baseURL}/public-charging/`,
 				`${baseURL}/business-ev-charging-installations/`, `${baseURL}/guides/ev-charging-for-car-dealership/`,
 			]);
-			for (const href of await main.locator('a[href]').evaluateAll((links) => links.map((link) => (link as HTMLAnchorElement).href))) {
+			for (const href of await main.locator('a[href]:not([href^="tel:"])').evaluateAll((links) => links.map((link) => (link as HTMLAnchorElement).href))) {
 				expect(new URL(href).origin).toBe(new URL(baseURL!).origin);
 			}
 			const projectImage = main.locator('#projects figure img');
@@ -89,7 +90,7 @@ test('the branded homepage renders its sections in order without JavaScript', as
 			await expect(main.locator('#surveys').getByRole('link', { name: 'What a technical survey should establish' })).toHaveAttribute('href', /\/guides\/greendawn-ev-charging-survey-pre-installation-guide\/$/);
 			await expect(main.getByRole('link', { name: 'Understand AC and DC charging' })).toHaveAttribute('href', /\/guides\/ac-vs-dc-ev-charging\/$/);
 			await expect(main.getByRole('link', { name: 'Explore site power planning' })).toHaveAttribute('href', /\/guides\/can-my-building-handle-ev-charging\/$/);
-			await expect(main.getByRole('link', { name: 'Discuss your site' })).toHaveAttribute('href', /\/about\/$/);
+			await expect(main.locator('.gd-hero').getByRole('link', { name: 'Discuss your site' })).toHaveAttribute('href', /\/about\/$/);
 			await expect(main.getByRole('link', { name: 'Explore our projects' })).toHaveAttribute('href', `${baseURL}/gallery/`);
 			const delivery = main.getByText('Commercial delivery', { exact: true });
 			expect(await delivery.evaluate((element) => getComputedStyle(element, '::before').backgroundColor)).toBe('rgb(255, 94, 51)');
@@ -190,7 +191,7 @@ test('the desktop header and hero use the Greendawn hover styles', async ({ page
 	await expect(headerCta).toHaveCSS('transform', 'matrix(1, 0, 0, 1, 0, -2)');
 
 	const main = page.getByRole('main');
-	const heroCta = main.getByRole('link', { name: 'Discuss your site' });
+	const heroCta = main.locator('.gd-hero').getByRole('link', { name: 'Discuss your site' });
 	await heroCta.hover();
 	await expect(heroCta).toHaveCSS('background-color', 'rgb(250, 249, 246)');
 	await expect(heroCta).toHaveCSS('transform', 'matrix(1, 0, 0, 1, 0, -3)');
@@ -218,6 +219,20 @@ test('the desktop header and hero use the Greendawn hover styles', async ({ page
 	await expect(proof.getByRole('link')).toHaveCSS('color', 'rgb(58, 34, 216)');
 	await proof.locator('.gd-proof-card').hover();
 	await expect(proof.locator('img')).toHaveCSS('transform', 'matrix(1.055, 0, 0, 1.055, 0, 0)');
+	const closing = main.locator('#final-enquiry');
+	const closingCta = closing.getByRole('link', { name: 'Discuss your site' });
+	await expect(closingCta).toHaveCSS('background-color', 'rgb(11, 29, 42)');
+	await closingCta.hover();
+	await expect(closingCta).toHaveCSS('background-color', 'rgb(58, 34, 216)');
+	await expect(closingCta).toHaveCSS('transform', 'matrix(1, 0, 0, 1, 0, -3)');
+	await closingCta.focus();
+	await page.keyboard.press('Tab');
+	const phone = closing.getByRole('link', { name: '0345 512 0044' });
+	await expect(phone).toBeFocused();
+	await expect(phone).toHaveCSS('outline-color', 'rgb(11, 29, 42)');
+	await page.emulateMedia({ reducedMotion: 'reduce' });
+	expect(await closingCta.evaluate((element) => Number.parseFloat(getComputedStyle(element).transitionDuration))).toBeLessThanOrEqual(0.001);
+
 });
 
 
@@ -290,6 +305,18 @@ test('saved homepage values render in the initial response with one hero image',
 	expect(html).toContain('Guidance for your charging project.');
 	expect(html).not.toContain('Make better-informed charging decisions.');
 	expect(html).not.toContain('commercial-ev-electrical-connection-');
+	const closing = page.locator('#final-enquiry');
+	await expect(closing.locator('.gd-eyebrow')).toHaveText('Your next charging project');
+	await expect(closing.getByRole('heading', { level: 2 })).toHaveText('Start your charging project.');
+	await expect(closing.locator('.gd-final-cta__inner > p').nth(1)).toHaveText('Tell us about your vehicles, site and operating hours.');
+	await expect(closing.locator('.gd-final-cta__inner > p').nth(2)).toHaveText('We’ll help identify the next step, including whether a technical survey is appropriate.');
+	await expect(closing.getByRole('link', { name: 'Plan your project' })).toHaveAttribute('href', `${baseURL}/contact/?from=home#enquiry`);
+	await expect(page.locator('.gd-hero').getByRole('link', { name: 'Discuss your site' })).toHaveAttribute('href', `${baseURL}/contact/?from=home#enquiry`);
+	await expect(closing.getByRole('link', { name: '+44 345 512 0044', exact: true })).toHaveAttribute('href', 'tel:+443455120044');
+	await expect(closing.locator('.gd-final-cta__actions > p')).toContainText('Call our team');
+	expect(html).toContain('Start your charging project.');
+	expect(html).not.toContain('Tell us what your site needs.');
+
 });
 
 test('the utility bar text can be edited and reset in the Customiser', async ({ page, baseURL }) => {
@@ -515,4 +542,51 @@ test('insight guide links remain available when their photographs are missing', 
 		expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(width);
 		await testInfo.attach(`greendawn-insights-no-media-${width}`, { body: await insights.screenshot(), contentType: 'image/png' });
 	}
+});
+
+
+test('the final enquiry panel matches the reference layout and works without JavaScript', async ({ browser, baseURL }, testInfo) => {
+	const context = await browser.newContext({ baseURL, javaScriptEnabled: false });
+	const page = await context.newPage();
+	try {
+		for (const width of [320, 390, 800, 1440]) {
+			await page.setViewportSize({ width, height: 900 });
+			await page.goto('/greendawn-home/');
+			await page.evaluate(() => document.fonts.ready);
+			const closing = page.locator('#final-enquiry');
+			const title = closing.getByRole('heading', { name: 'Tell us what your site needs.' });
+			await expect(closing).toHaveCSS('background-color', 'rgb(233, 242, 39)');
+			await expect(closing.locator('.gd-eyebrow')).toHaveText('Start with the requirement');
+			await expect(closing.locator('.gd-eyebrow')).toHaveCSS('margin-bottom', '32px');
+			const titleMetrics = await title.evaluate((element) => {
+				const style = getComputedStyle(element);
+				return { size: Number.parseFloat(style.fontSize), lineHeight: Number.parseFloat(style.lineHeight) };
+			});
+			expect(titleMetrics.size).toBeCloseTo(Math.min(144, Math.max(64, 48 + width * 0.055)), 1);
+			expect(titleMetrics.lineHeight / titleMetrics.size).toBeCloseTo(0.84, 2);
+			await expect(closing.locator('.gd-final-cta__inner > p').nth(1)).toHaveText('A rough outline is enough to start. Tell us who needs charging, what you want it to achieve and what you know about the site.');
+			await expect(closing.locator('.gd-final-cta__inner > p').nth(2)).toHaveText('We’ll help identify the next step, including whether a technical survey is appropriate.');
+			await expect(closing.getByRole('link', { name: '0345 512 0044' })).toHaveAttribute('href', 'tel:03455120044');
+			await expect(closing.locator('.gd-final-cta__actions')).toHaveCSS('flex-direction', width <= 672 ? 'column' : 'row');
+			await expect(closing.locator(':scope > svg')).toHaveAttribute('aria-hidden', 'true');
+			const cta = closing.getByRole('link', { name: 'Discuss your site' });
+			await expect(cta).toHaveAttribute('href', `${baseURL}/about/`);
+			expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(width);
+			await testInfo.attach(`greendawn-final-enquiry-${width}`, { body: await closing.screenshot({ animations: 'disabled' }), contentType: 'image/png' });
+			await cta.press('Enter');
+			await expect(page).toHaveURL(`${baseURL}/about/`);
+		}
+	} finally {
+		await context.close();
+	}
+});
+
+test('unconfigured enquiry destinations and unusable phone numbers do not create broken links', async ({ page }) => {
+	await page.goto('/greendawn-home-no-proof-image/');
+	const closing = page.locator('#final-enquiry');
+	await expect(closing.getByRole('heading', { name: 'Tell us what your site needs.' })).toBeVisible();
+	await expect(closing.getByRole('link')).toHaveCount(0);
+	await page.goto('/greendawn-home-no-insight-images/');
+	await expect(closing.getByRole('link', { name: 'Discuss your site' })).toHaveCount(0);
+	await expect(closing.getByRole('link', { name: '0345 512 0044' })).toHaveAttribute('href', 'tel:03455120044');
 });

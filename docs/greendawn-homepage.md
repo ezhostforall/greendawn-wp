@@ -1,6 +1,6 @@
 # Greendawn homepage pilot
 
-The Greendawn Homepage template renders the Hero, Trust, Problem, System, Process, Featured Project, Technical Site Surveys, Services, Aftercare and Supporting Proof sections from the Astro reference. The branded header is shared across the site, with a transparent overlay on this template and a navy background above inner-page content. The layout and proof stage order live in PHP. Greendawn Core owns the copy and image defaults and registers the editable homepage fields when Secure Custom Fields is active.
+The Greendawn Homepage template renders the Hero, Trust, Problem, System, Process, Featured Project, Technical Site Surveys, Services, Aftercare, Supporting Proof and Insights sections from the Astro reference. The branded header is shared across the site, with a transparent overlay on this template and a navy background above inner-page content. The layout and proof stage order live in PHP. Greendawn Core owns the copy and image defaults and registers the editable homepage fields when Secure Custom Fields is active.
 
 ## Set up the staging page
 
@@ -10,7 +10,7 @@ The Greendawn Homepage template renders the Hero, Trust, Problem, System, Proces
 4. Assign the Primary menu with About Us, Our Projects, the three Our Solutions children and Aftercare. Point the entries at their existing live destinations until those pages move. Assign the telephone and customer support links to the Utility menu. The supplied raster wordmark is the fallback when no custom logo is configured.
 5. Verify the Page preview and then assign it under **Settings → Reading** when ready. Compare it with the Astro reference at 390px and 1440px, exercise the menu by keyboard and confirm the enquiry and gallery destinations.
 
-The homepage editor groups fields under Hero, Trust, Problem, System, Process, Featured project, Surveys, Services, Aftercare and Supporting proof. Edit the four shared stage labels in Hero and their full descriptions in Process. The System and survey guides default to internal routes on the current WordPress site. Imported homepage URLs saved with `greendawn.co.uk` or `www.greendawn.co.uk` are resolved on the current site, retaining their paths, query strings and fragments. Other explicitly saved external destinations remain unchanged.
+The homepage editor groups fields under Hero, Trust, Problem, System, Process, Featured project, Surveys, Services, Aftercare, Supporting proof and Insights. Edit the four shared stage labels in Hero and their full descriptions in Process. The System and survey guides default to internal routes on the current WordPress site. Imported homepage URLs saved with `greendawn.co.uk` or `www.greendawn.co.uk` are resolved on the current site, retaining their paths, query strings and fragments. Other explicitly saved external destinations remain unchanged.
 
 Upload [the approved Johnsons project photograph](astro-reference/media/johnsons-dealership-ev-charging-1200.webp) to the Media Library and set its alt text to “Vehicle connected to EV charging equipment at a Johnsons Cars dealership”. Select it under **Featured project → Project photograph**. The default resolves the uploaded attachment at `2026/11/johnsons-dealership-ev-charging-1200.webp`; select it explicitly if WordPress uses a different month or filename. The theme renders the selected attachment with responsive sizes, dimensions and lazy loading. If no attachment resolves, the project story renders in one column without an empty image frame. No remote or bundled photograph is rendered as a fallback.
 
@@ -54,6 +54,24 @@ The gallery link shares **Hero → Projects destination** with the hero and John
 
 After updating the theme and Greendawn Core together, check the card at 320px, 390px and 1440px, including the uploaded/selected photograph and alt text, caption, saved copy/results, internal gallery destination, image hover and no-JavaScript rendering.
 
+## Insights section
+
+The **Insights** tab supplies the section eyebrow/heading and guidance index link, followed by three curated cards for power, survey and fleet guidance. Each card has an editable label, title, photograph and destination. Card count, order, typography and responsive layout remain controlled by the theme; this is not an automatic feed of the latest posts.
+
+Upload/select the reference photographs under `docs/astro-reference/media/`:
+
+| Card | Photograph | Suggested Media Library alt text |
+| --- | --- | --- |
+| Power guide | `commercial-ev-electrical-connection-1200.webp` | New electrical connection for a commercial EV charging project |
+| Survey guide | `commercial-ev-site-survey-1024.webp` | Completed paving and ducting area for an EV charging installation |
+| Fleet guide | `commercial-ev-fleet-charging-bays-1200.webp` (already used by Services) | Completed EV charging bays at a commercial fleet site |
+
+Defaults resolve the uploaded attachments under `2026/11/`; select them explicitly when filenames or upload paths differ. Images use responsive WordPress markup, native dimensions and lazy loading. A missing photograph leaves the card title, label and link intact without an empty image frame. Saved media renders directly in the initial HTML, without a default/replacement image swap.
+
+The index defaults to `/blog/`. Card destinations default to `/guides/load-balancing-explained/`, `/guides/greendawn-ev-charging-survey-pre-installation-guide/` and `/guides/transitioning-to-electric-fleets/` on the current WordPress site. Create those guide pages or point the fields at the appropriate internal content before publishing. Existing imported Greendawn-host URLs follow the current environment; deliberately saved third-party destinations remain external.
+
+After updating the theme and Greendawn Core together, check 320px/390px mobile, 800px tablet and 1440px desktop. The fleet card spans both columns on tablet. Check image crops, index-link wrapping, hover, keyboard focus, saved/blank field defaults and no-JavaScript rendering.
+
 The homepage uses the starter’s native menu disclosure. The coordination model, system arc and process timeline render in the initial HTML. The remaining sections, motion and callback drawer follow separately.
 
 The hero WebPs, wordmark and client marks come from Astro revision `891ed840c7369cb50df3e33232e81de49e2699d6`. The asset provenance and publication notes are maintained with the [Astro image records](https://github.com/ezhostforall/GreenDawn/blob/891ed840c7369cb50df3e33232e81de49e2699d6/docs/image-sources.md).
@@ -62,4 +80,4 @@ The [pinned Astro source snapshot](./astro-reference/) provides the homepage com
 
 ## Remaining homepage sequence
 
-After these ten sections, port Insights and the final enquiry section, in that order from the pinned Astro `src/pages/index.astro`. Complete the sitewide footer and enquiry interaction, then add the planned GSAP enhancement with reduced-motion and no-JavaScript fallbacks. Final acceptance compares typography, spacing, media, keyboard behaviour and performance across the complete page.
+After these eleven sections, port the final enquiry section from the pinned Astro `src/pages/index.astro`. Complete the sitewide footer and enquiry interaction, then add the planned GSAP enhancement with reduced-motion and no-JavaScript fallbacks. Final acceptance compares typography, spacing, media, keyboard behaviour and performance across the complete page.

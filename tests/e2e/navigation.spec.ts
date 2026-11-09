@@ -154,7 +154,7 @@ test('optional utility, CTA and sticky header work in short viewports and RTL', 
 	await expect(page.getByText('Utility child omitted')).toHaveCount(0);
 	await expect(page.locator('.header-cta')).toHaveAttribute('href', /\/about\/$/);
 	await page.evaluate(() => window.scrollTo(0, 700));
-	await expect(page.locator('.site-header')).toHaveCSS('position', 'sticky');
+	await expect(page.locator('.site-header')).toHaveCSS('position', 'fixed');
 	expect((await page.locator('.site-header').boundingBox())?.y).toBe(0);
 	// Exercise both fixed admin-bar offsets without authenticating to any host.
 	await page.evaluate(() => document.body.classList.add('admin-bar'));

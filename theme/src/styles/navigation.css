@@ -159,8 +159,6 @@
 
 .site-header--sticky {
 	--header-admin-offset: 0px;
-	position: sticky;
-	top: var(--header-admin-offset);
 }
 
 .admin-bar .site-header--sticky {
@@ -216,15 +214,5 @@
 	.site-header--sticky {
 		max-height: calc(100dvh - var(--header-admin-offset));
 		overflow-y: auto;
-	}
-}
-
-/* Prefer an ordinary scrolling header when the viewport is too short. */
-@media (max-height: 30rem) {
-	.site-header--sticky {
-		position: relative;
-		top: auto;
-		max-height: none;
-		overflow: visible;
 	}
 }

@@ -182,6 +182,9 @@ wp post meta update "$business_home_id" _thumbnail_id "$hero_id"
 create_page greendawn-home "Greendawn home" ''
 greendawn_home_id=$(wp post list --post_type=page --name=greendawn-home --field=ID)
 wp post meta update "$greendawn_home_id" _wp_page_template templates/greendawn-homepage.php
+create_page greendawn-home-sticky "Greendawn sticky header" ''
+greendawn_sticky_home_id=$(wp post list --post_type=page --name=greendawn-home-sticky --field=ID)
+wp post meta update "$greendawn_sticky_home_id" _wp_page_template templates/greendawn-homepage.php
 
 # Mirror the Media Library path supplied for the default homepage photograph.
 wp eval '

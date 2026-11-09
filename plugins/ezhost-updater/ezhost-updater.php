@@ -2,7 +2,7 @@
 /**
  * Plugin Name: EZ Host Updater
  * Description: Native WordPress update checks for explicitly configured GitHub Releases.
- * Version: 0.5.0
+ * Version: 0.6.19
  * Requires at least: 6.6
  * Requires PHP: 8.1
  * Update URI: https://updates.ezhostforall.invalid/ezhost-updater
@@ -15,7 +15,7 @@
 
 defined( 'ABSPATH' ) || exit;
 
-define( 'EZHOST_UPDATER_VERSION', '0.5.0' );
+define( 'EZHOST_UPDATER_VERSION', '0.6.19' );
 require_once __DIR__ . '/includes/Updater.php';
 
 add_action( 'plugins_loaded', array( \EZHost_Updater\Updater::class, 'register' ) );

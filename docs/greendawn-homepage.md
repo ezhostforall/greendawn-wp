@@ -82,6 +82,12 @@ The telephone link is derived from the display number’s digits and optional le
 
 After updating the theme and Greendawn Core together, review the panel at 320px, 390px, 800px and 1440px. Check the shared enquiry destination, telephone display/call link, saved copy and blank-field defaults, mobile action stacking, button hover, keyboard focus and rendering without JavaScript. No further photographs need uploading for this section.
 
+## Shared header behaviour
+
+**Appearance → Customise → Header → Keep the header visible while scrolling** enables the Astro compact main header. Above 72px of page scrolling, only the main navigation row becomes fixed and reduces from 5.5rem to 4.7rem on desktop. Mobile already uses the 4.7rem row. The utility row scrolls away separately, with a divider spanning the full header width and its content aligned to the page shell.
+
+The homepage keeps its initial transparent overlay; the compact header uses the reference dark translucent background, blur and shadow. Inner pages reserve the original main-row space to avoid shifting content when the header becomes fixed. WordPress admin-bar offsets, keyboard navigation, bounded mobile menus and reduced motion are retained. Without JavaScript, the header and native menu remain usable and scroll normally with the page.
+
 The homepage uses the starter’s native menu disclosure. The coordination model, system arc and process timeline render in the initial HTML. All twelve static homepage sections are now ported. The Astro sitewide footer is shared across every template; see [footer setup](footer.md) for its Customiser content, menus and legal links. Motion and the callback drawer follow separately.
 
 The hero WebPs, wordmark and client marks come from Astro revision `891ed840c7369cb50df3e33232e81de49e2699d6`. The asset provenance and publication notes are maintained with the [Astro image records](https://github.com/ezhostforall/GreenDawn/blob/891ed840c7369cb50df3e33232e81de49e2699d6/docs/image-sources.md).

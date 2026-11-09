@@ -169,7 +169,7 @@ test('the desktop header and hero use the Greendawn hover styles', async ({ page
 	await page.setViewportSize({ width: 1440, height: 900 });
 	await page.goto('/greendawn-home/');
 	const banner = page.getByRole('banner');
-	const utility = banner.getByRole('navigation', { name: 'Utility' }).getByRole('link', { name: 'Support' });
+	const utility = page.getByRole('navigation', { name: 'Utility' }).getByRole('link', { name: 'Support' });
 	const utilitySize = await utility.evaluate((element) => Number.parseFloat(getComputedStyle(element).fontSize));
 	expect(utilitySize).toBeCloseTo(15.32, 1);
 	await utility.hover();

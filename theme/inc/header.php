@@ -35,9 +35,10 @@ function greendawn_customize_header( WP_Customize_Manager $customizer ): void {
 	$customizer->add_control(
 		'greendawn_header_sticky',
 		array(
-			'section' => 'greendawn_header',
-			'type'    => 'checkbox',
-			'label'   => __( 'Keep the header visible while scrolling', 'greendawn' ),
+			'section'     => 'greendawn_header',
+			'type'        => 'checkbox',
+			'label'       => __( 'Keep the header visible while scrolling', 'greendawn' ),
+			'description' => __( 'The main header becomes compact after scrolling. The utility bar scrolls with the page.', 'greendawn' ),
 		)
 	);
 	$utility_setting = 'greendawn_header_utility_text';

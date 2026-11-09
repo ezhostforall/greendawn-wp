@@ -8,12 +8,12 @@ if ( ! defined( 'ABSPATH' ) || 'local' !== wp_get_environment_type() || 'http://
 	return;
 }
 
-add_filter( 'theme_mod_greendawn_header_sticky', static fn( $value ) => is_page( 'header-options' ) ? true : $value );
+add_filter( 'theme_mod_greendawn_header_sticky', static fn( $value ) => is_page( array( 'header-options', 'greendawn-home-sticky' ) ) ? true : $value );
 add_filter( 'theme_mod_greendawn_header_cta_label', static fn( $value ) => is_page( 'header-options' ) ? 'Talk to us' : $value );
 add_filter(
 	'theme_mod_greendawn_header_cta_url',
 	static function ( $value ) {
-		if ( is_page( array( 'header-options', 'greendawn-home' ) ) ) {
+		if ( is_page( array( 'header-options', 'greendawn-home', 'greendawn-home-sticky' ) ) ) {
 			return home_url( '/about/' );
 		}
 		if ( is_page( 'greendawn-home-edited' ) ) {
@@ -31,7 +31,7 @@ add_filter(
 		if ( is_page( 'header-empty' ) ) {
 			return array();
 		}
-		if ( ! is_page( array( 'header-options', 'greendawn-home' ) ) ) {
+		if ( ! is_page( array( 'header-options', 'greendawn-home', 'greendawn-home-sticky' ) ) ) {
 			unset( $locations['utility'] );
 		}
 		return $locations;

@@ -25,11 +25,34 @@ html:has(> .greendawn-home) {
 
 .greendawn-home > .site {
 	position: relative;
+	display: grid;
+	grid-template-columns: minmax(0, 1fr);
+	grid-template-rows: auto 1fr auto;
+}
+
+.greendawn-home .gd-utility-bar {
+	grid-area: 1 / 1;
+	background: transparent;
+}
+
+.greendawn-home .gd-header-slot {
+	position: absolute;
+	inset: 0 0 auto;
+	grid-area: 2 / 1 / 4;
+	z-index: 22;
+}
+
+.greendawn-home .site-main {
+	grid-area: 1 / 1 / 3;
+}
+
+.greendawn-home .site-footer {
+	grid-area: 3 / 1;
 }
 
 .greendawn-home .skip-link:focus {
 	position: absolute;
-	z-index: 21;
+	z-index: 23;
 	inset: 0 auto auto 0;
 }
 
@@ -54,7 +77,6 @@ html:has(> .greendawn-home) {
 }
 
 .greendawn-home .site-header {
-	--gd-header-padding: 0px;
 	position: absolute;
 	inset: 0 0 auto;
 	max-height: none;

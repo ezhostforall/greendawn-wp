@@ -204,6 +204,26 @@ wp eval '
   wp_update_attachment_metadata( $id, wp_generate_attachment_metadata( $id, $file ) );
   update_post_meta( $id, "_wp_attachment_image_alt", "Greendawn engineers working on commercial electrical distribution equipment" );
 '
+# The approved project photograph is upload-ready documentation, not a theme fallback.
+docker cp docs/astro-reference/media/johnsons-dealership-ev-charging-1200.webp "$container_id:/tmp/johnsons-dealership-ev-charging-1200.webp"
+wp eval '
+  $relative = "2026/11/johnsons-dealership-ev-charging-1200.webp";
+  $uploads = wp_get_upload_dir();
+  if ( ! attachment_url_to_postid( $uploads["baseurl"] . "/" . $relative ) ) {
+    $file = $uploads["basedir"] . "/" . $relative;
+    wp_mkdir_p( dirname( $file ) );
+    if ( ! copy( "/tmp/johnsons-dealership-ev-charging-1200.webp", $file ) ) {
+      WP_CLI::error( "Could not seed the Johnsons project photograph." );
+    }
+    $id = wp_insert_attachment( array( "post_title" => "Johnsons dealership charging", "post_mime_type" => "image/webp" ), $file, 0, true );
+    if ( is_wp_error( $id ) ) {
+      WP_CLI::error( $id->get_error_message() );
+    }
+    require_once ABSPATH . "wp-admin/includes/image.php";
+    wp_update_attachment_metadata( $id, wp_generate_attachment_metadata( $id, $file ) );
+    update_post_meta( $id, "_wp_attachment_image_alt", "Vehicle connected to EV charging equipment at a Johnsons Cars dealership" );
+  }
+'
 create_page greendawn-home-edited "Greendawn home edited" ''
 greendawn_edited_id=$(wp post list --post_type=page --name=greendawn-home-edited --field=ID)
 wp post meta update "$greendawn_edited_id" _wp_page_template templates/greendawn-homepage.php
@@ -211,6 +231,12 @@ wp post meta update "$greendawn_edited_id" greendawn_home_headline "Charging aro
 wp post meta update "$greendawn_edited_id" greendawn_home_headline_accent ""
 wp post meta update "$greendawn_edited_id" greendawn_home_hero_image "$hero_id"
 wp post meta update "$greendawn_edited_id" greendawn_home_consult_label "Assess"
+wp post meta update "$greendawn_edited_id" greendawn_home_featured_image "$hero_id"
+wp post meta update "$greendawn_edited_id" greendawn_home_featured_title "A programme shaped around your estate."
+wp post meta update "$greendawn_edited_id" greendawn_home_featured_sites_value "150"
+wp post meta update "$greendawn_edited_id" greendawn_home_survey_price "£250"
+wp post meta update "$greendawn_edited_id" greendawn_home_survey_outcome_1 "Assess the electrical capacity at your site"
+wp post meta update "$greendawn_edited_id" greendawn_home_survey_guide_url "https://example.com/survey-guide/"
 
 # Exercise WordPress's assigned Posts page and published editorial templates.
 create_page starter-home "Starter home" '<p>Static homepage fixture.</p>'

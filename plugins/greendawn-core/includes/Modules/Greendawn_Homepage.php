@@ -135,10 +135,50 @@ final class Greendawn_Homepage implements Module_Interface {
 			'design_description'            => array( __( 'Design description', 'greendawn-core' ), __( 'Assess power, layout and delivery constraints. Where a technical survey is needed, agree its scope before developing the design and proposal.', 'greendawn-core' ), 240, 'textarea' ),
 			'install_description'           => array( __( 'Install description', 'greendawn-core' ), __( 'Coordinate the agreed electrical and civil works, equipment, testing and commissioning. Plan access and handover with your team.', 'greendawn-core' ), 240, 'textarea' ),
 			'manage_description'            => array( __( 'Manage description', 'greendawn-core' ), __( 'Put the agreed software, monitoring, maintenance and fault-support arrangements in place, with clear ongoing responsibilities.', 'greendawn-core' ), 240, 'textarea' ),
+			'featured_eyebrow'              => array( __( 'Project eyebrow', 'greendawn-core' ), __( 'Commercial project experience', 'greendawn-core' ), 60 ),
+			'featured_title'                => array( __( 'Project heading', 'greendawn-core' ), __( 'A dealership programme coordinated site by site.', 'greendawn-core' ), 100 ),
+			'featured_caption'              => array( __( 'Project photograph caption', 'greendawn-core' ), __( 'Johnsons Cars · Dealership charging programme', 'greendawn-core' ), 100 ),
+			'featured_lead'                 => array( __( 'Project introduction', 'greendawn-core' ), __( 'Johnsons Cars needed charging across an estate with different electrical constraints, layouts and manufacturer requirements.', 'greendawn-core' ), 250, 'textarea' ),
+			'featured_sites_value'          => array( __( 'Sites figure', 'greendawn-core' ), __( '136', 'greendawn-core' ), 20 ),
+			'featured_sites_label'          => array( __( 'Sites label', 'greendawn-core' ), __( 'sites in the programme', 'greendawn-core' ), 50 ),
+			'featured_chargepoints_value'   => array( __( 'Chargepoints figure', 'greendawn-core' ), __( '454', 'greendawn-core' ), 20 ),
+			'featured_chargepoints_label'   => array( __( 'Chargepoints label', 'greendawn-core' ), __( 'chargepoints', 'greendawn-core' ), 50 ),
+			'featured_brands_value'         => array( __( 'Brands figure', 'greendawn-core' ), __( '11', 'greendawn-core' ), 20 ),
+			'featured_brands_label'         => array( __( 'Brands label', 'greendawn-core' ), __( 'automotive brands', 'greendawn-core' ), 50 ),
+			'featured_review_note'          => array( __( 'Programme review note', 'greendawn-core' ), __( 'Programme figures reviewed September 2026.', 'greendawn-core' ), 120 ),
+			'featured_copy'                 => array( __( 'Project description', 'greendawn-core' ), __( 'Greendawn coordinated the programme around those site-specific needs, bringing together infrastructure, charging equipment and installation.', 'greendawn-core' ), 280, 'textarea' ),
+			'featured_link'                 => array( __( 'Project link text', 'greendawn-core' ), __( 'Explore our project experience', 'greendawn-core' ), 65 ),
+			'survey_eyebrow'                => array( __( 'Survey eyebrow', 'greendawn-core' ), __( 'Technical site surveys', 'greendawn-core' ), 60 ),
+			'survey_title'                  => array( __( 'Survey heading', 'greendawn-core' ), __( 'Replace assumptions with a buildable plan.', 'greendawn-core' ), 100 ),
+			'survey_intro'                  => array( __( 'Survey introduction', 'greendawn-core' ), __( 'Start with a conversation. If a paid technical survey is the right next step, we agree what needs checking and what you will receive before booking.', 'greendawn-core' ), 280, 'textarea' ),
+			'survey_price_label'            => array( __( 'Survey price label', 'greendawn-core' ), __( 'Site surveys from', 'greendawn-core' ), 45 ),
+			'survey_price'                  => array( __( 'Survey starting price', 'greendawn-core' ), __( '£200', 'greendawn-core' ), 20 ),
+			'survey_tax_label'              => array( __( 'Survey tax label', 'greendawn-core' ), __( '+ VAT', 'greendawn-core' ), 30 ),
+			'survey_price_scope'            => array( __( 'Survey price scope', 'greendawn-core' ), __( 'The scope and final price depend on the site and requirement. Both are confirmed before booking, including any further assessments or third-party costs that may apply.', 'greendawn-core' ), 320, 'textarea' ),
+			'survey_outcomes_title'         => array( __( 'Survey outcomes heading', 'greendawn-core' ), __( 'What the survey helps establish', 'greendawn-core' ), 80 ),
+			'survey_outcome_1'              => array( __( 'Survey outcome 1', 'greendawn-core' ), __( 'Charging demand and available site capacity', 'greendawn-core' ), 140 ),
+			'survey_outcome_2'              => array( __( 'Survey outcome 2', 'greendawn-core' ), __( 'Charger locations, cable routes and access constraints', 'greendawn-core' ), 140 ),
+			'survey_outcome_3'              => array( __( 'Survey outcome 3', 'greendawn-core' ), __( 'Electrical, civil and network dependencies', 'greendawn-core' ), 140 ),
+			'survey_outcome_4'              => array( __( 'Survey outcome 4', 'greendawn-core' ), __( 'The information needed for the design and proposal', 'greendawn-core' ), 140 ),
+			'survey_summary'                => array( __( 'Survey scope summary', 'greendawn-core' ), __( 'A survey is recommended only where it adds useful technical certainty. Its scope sets out what will be checked, what you will receive and which questions may need further assessment.', 'greendawn-core' ), 340, 'textarea' ),
+			'survey_cta_label'              => array( __( 'Survey enquiry link text', 'greendawn-core' ), __( 'Discuss a site survey', 'greendawn-core' ), 60 ),
+			'survey_guide_label'            => array( __( 'Survey guide link text', 'greendawn-core' ), __( 'What a technical survey should establish', 'greendawn-core' ), 80 ),
+			'survey_guide_url'              => array( __( 'Survey guide URL', 'greendawn-core' ), self::PUBLIC_SITE . '/guides/greendawn-ev-charging-survey-pre-installation-guide/', 0, 'url' ),
 		);
 
 		$fields = array();
 		foreach ( $copy as $name => $settings ) {
+			if ( 'featured_eyebrow' === $name ) {
+				$fields['featured_image'] = array(
+					'key'            => 'field_greendawn_home_featured_image',
+					'name'           => 'greendawn_home_featured_image',
+					'label'          => __( 'Project photograph', 'greendawn-core' ),
+					'instructions'   => __( 'Select the Johnsons dealership photograph from the Media Library. Upload the supplied reference image first and set its alt text.', 'greendawn-core' ),
+					'type'           => 'image',
+					'return_format'  => 'id',
+					'default_upload' => '2026/11/johnsons-dealership-ev-charging-1200.webp',
+				);
+			}
 			$fields[ $name ] = array(
 				'key'           => 'field_greendawn_home_' . $name,
 				'name'          => 'greendawn_home_' . $name,
@@ -150,12 +190,13 @@ final class Greendawn_Homepage implements Module_Interface {
 		}
 		$fields = array(
 			'hero_image' => array(
-				'key'           => 'field_greendawn_home_hero_image',
-				'name'          => 'greendawn_home_hero_image',
-				'label'         => __( 'Hero photograph', 'greendawn-core' ),
-				'instructions'  => __( 'Defaults to the uploaded engineers photograph if present. Set alt text for the chosen photograph in the Media Library.', 'greendawn-core' ),
-				'type'          => 'image',
-				'return_format' => 'id',
+				'key'            => 'field_greendawn_home_hero_image',
+				'name'           => 'greendawn_home_hero_image',
+				'label'          => __( 'Hero photograph', 'greendawn-core' ),
+				'instructions'   => __( 'Defaults to the uploaded engineers photograph if present. Set alt text for the chosen photograph in the Media Library.', 'greendawn-core' ),
+				'type'           => 'image',
+				'return_format'  => 'id',
+				'default_upload' => '2026/11/greendawn-engineers-electrical-distribution-1600.webp',
 			),
 		) + $fields;
 
@@ -199,8 +240,12 @@ final class Greendawn_Homepage implements Module_Interface {
 				return $image_id;
 			}
 
+			$default_upload = $field['default_upload'] ?? '';
+			if ( '' === $default_upload ) {
+				return 0;
+			}
 			$uploads = wp_get_upload_dir();
-			return attachment_url_to_postid( trailingslashit( $uploads['baseurl'] ) . '2026/11/greendawn-engineers-electrical-distribution-1600.webp' );
+			return attachment_url_to_postid( trailingslashit( $uploads['baseurl'] ) . $default_upload );
 		}
 
 		if ( null === $value || false === $value || '' === $value || ( 'url' === $field['type'] && '#' === $value ) ) {
@@ -222,6 +267,8 @@ final class Greendawn_Homepage implements Module_Interface {
 			'problem_eyebrow' => __( 'Problem', 'greendawn-core' ),
 			'system_eyebrow'  => __( 'System', 'greendawn-core' ),
 			'process_title'   => __( 'Process', 'greendawn-core' ),
+			'featured_image'  => __( 'Featured project', 'greendawn-core' ),
+			'survey_eyebrow'  => __( 'Surveys', 'greendawn-core' ),
 		);
 		$fields = array();
 		foreach ( $this->fields() as $name => $field ) {

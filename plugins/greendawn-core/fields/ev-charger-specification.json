@@ -1,0 +1,337 @@
+[
+    {
+        "key": "group_63e767fddad09",
+        "title": "EV Charger Specification",
+        "fields": [
+            {
+                "key": "field_63e767feac647",
+                "label": "Brand",
+                "name": "brand",
+                "aria-label": "",
+                "type": "select",
+                "instructions": "",
+                "required": 1,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "choices": {
+                    "SyncEV": "SyncEV",
+                    "Simpson & Partners": "Simpson & Partners",
+                    "HelloNext": "HelloNext",
+                    "Project EV": "Project EV",
+                    "Autel": "Autel",
+                    "Enel-X": "Enel-X",
+                    "Ohme": "Ohme",
+                    "Nidec": "Nidec",
+                    "Zappi": "Zappi",
+                    "EO": "EO",
+                    "CTEK": "CTEK",
+                    "Easee": "Easee",
+                    "Hypervolt": "Hypervolt"
+                },
+                "default_value": false,
+                "return_format": "value",
+                "multiple": 0,
+                "allow_null": 0,
+                "allow_in_bindings": 1,
+                "ui": 0,
+                "ajax": 0,
+                "placeholder": "",
+                "create_options": 0,
+                "save_options": 0
+            },
+            {
+                "key": "field_63e768abac648",
+                "label": "Charging Power",
+                "name": "charging_power",
+                "aria-label": "",
+                "type": "text",
+                "instructions": "Input charging power - wattage only",
+                "required": 1,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "40",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "",
+                "maxlength": "",
+                "placeholder": "",
+                "prepend": "",
+                "append": ""
+            },
+            {
+                "key": "field_63e768fbac649",
+                "label": "Mains Supply",
+                "name": "mains_supply",
+                "aria-label": "",
+                "type": "select",
+                "instructions": "",
+                "required": 1,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "choices": {
+                    "Single Phase": "Single Phase",
+                    "Three Phase": "Three Phase"
+                },
+                "default_value": false,
+                "return_format": "value",
+                "multiple": 0,
+                "allow_null": 0,
+                "ui": 0,
+                "ajax": 0,
+                "placeholder": "",
+                "create_options": 0,
+                "save_options": 0
+            },
+            {
+                "key": "field_63e76952ac64a",
+                "label": "Supply Voltage",
+                "name": "supply_voltage",
+                "aria-label": "",
+                "type": "text",
+                "instructions": "eg. \"415V\" or \"50V - 920V DC\"",
+                "required": 1,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "",
+                "maxlength": "",
+                "placeholder": "150 - 750V DC x2",
+                "prepend": "",
+                "append": ""
+            },
+            {
+                "key": "field_63e769e3ac64b",
+                "label": "Dimensions (HxWxD",
+                "name": "dimensions",
+                "aria-label": "",
+                "type": "text",
+                "instructions": "input dimensions as mm, in order of height, width, then depth",
+                "required": 1,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "",
+                "maxlength": "",
+                "placeholder": "465 x 300 x 170",
+                "prepend": "",
+                "append": "mm"
+            },
+            {
+                "key": "field_63e76a8eac64c",
+                "label": "Weight",
+                "name": "weight",
+                "aria-label": "",
+                "type": "number",
+                "instructions": "input weight as kg - don't add kg",
+                "required": 1,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": 250,
+                "min": "",
+                "max": "",
+                "placeholder": 15,
+                "step": "",
+                "prepend": "",
+                "append": "kg"
+            },
+            {
+                "key": "field_63e76acbac64d",
+                "label": "Mounting Options",
+                "name": "mounting_options",
+                "aria-label": "",
+                "type": "select",
+                "instructions": "",
+                "required": 1,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "choices": {
+                    "Wall and Floor": "Wall and Floor",
+                    "Wall": "Wall",
+                    "Floor": "Floor"
+                },
+                "default_value": false,
+                "return_format": "value",
+                "multiple": 0,
+                "allow_null": 0,
+                "ui": 0,
+                "ajax": 0,
+                "placeholder": "",
+                "create_options": 0,
+                "save_options": 0
+            },
+            {
+                "key": "field_63e76b19ac64e",
+                "label": "Max Current Amps",
+                "name": "max_current_amps",
+                "aria-label": "",
+                "type": "text",
+                "instructions": "Input max current amps eg. \"32A Single Phase\" or \"63A Three Phase\"",
+                "required": 1,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "",
+                "maxlength": "",
+                "placeholder": "32A Single Phase",
+                "prepend": "",
+                "append": ""
+            },
+            {
+                "key": "field_63e76b75ac64f",
+                "label": "No. of Output Connections",
+                "name": "no_of_output_connections",
+                "aria-label": "",
+                "type": "select",
+                "instructions": "",
+                "required": 1,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "choices": {
+                    "1": "1",
+                    "2": "2"
+                },
+                "default_value": false,
+                "return_format": "value",
+                "multiple": 0,
+                "allow_null": 0,
+                "ui": 0,
+                "ajax": 0,
+                "placeholder": "",
+                "create_options": 0,
+                "save_options": 0
+            },
+            {
+                "key": "field_63e76be6ac650",
+                "label": "Output Connector Types",
+                "name": "output_connector_types",
+                "aria-label": "",
+                "type": "select",
+                "instructions": "",
+                "required": 1,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "choices": {
+                    "Tethered": "Tethered",
+                    "Tethered CCS": "Tethered CCS",
+                    "Type 2 (Socket)": "Type 2 (Socket)",
+                    "Type 2 (Socket), Tethered": "Type 2 (Socket), Tethered"
+                },
+                "default_value": false,
+                "return_format": "value",
+                "multiple": 0,
+                "allow_null": 0,
+                "ui": 0,
+                "ajax": 0,
+                "placeholder": "",
+                "create_options": 0,
+                "save_options": 0
+            },
+            {
+                "key": "field_63e76c75ac651",
+                "label": "Connectivity",
+                "name": "connectivity",
+                "aria-label": "",
+                "type": "checkbox",
+                "instructions": "Choose all that apply",
+                "required": 1,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "choices": {
+                    "WiFi": "WiFi",
+                    "Ethernet": "Ethernet",
+                    "4G": "4G",
+                    "RFID": "RFID",
+                    "GPRS": "GPRS",
+                    "NFC": "NFC",
+                    "None": "None"
+                },
+                "default_value": [],
+                "return_format": "value",
+                "allow_custom": 0,
+                "layout": "vertical",
+                "toggle": 0,
+                "save_custom": 0,
+                "custom_choice_button_text": "Add new choice"
+            },
+            {
+                "key": "field_63e76cbbac652",
+                "label": "Price",
+                "name": "price",
+                "aria-label": "",
+                "type": "text",
+                "instructions": "Input Price without £ symbol",
+                "required": 1,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "",
+                "maxlength": "",
+                "placeholder": "",
+                "prepend": "",
+                "append": ""
+            }
+        ],
+        "location": [
+            [
+                {
+                    "param": "post_type",
+                    "operator": "==",
+                    "value": "evcharger"
+                }
+            ]
+        ],
+        "menu_order": 0,
+        "position": "acf_after_title",
+        "style": "default",
+        "label_placement": "top",
+        "instruction_placement": "label",
+        "hide_on_screen": "",
+        "active": true,
+        "description": "",
+        "show_in_rest": 0,
+        "display_title": "",
+        "allow_ai_access": false,
+        "ai_description": ""
+    }
+]

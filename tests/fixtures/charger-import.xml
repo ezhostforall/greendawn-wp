@@ -1,0 +1,118 @@
+<?xml version='1.0' encoding='utf-8'?>
+<rss xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:wp="http://wordpress.org/export/1.2/" version="2.0">
+  <channel>
+    <title>Charger import fixture</title>
+    <link>https://example.test</link>
+    <wp:wxr_version>1.2</wp:wxr_version>
+    <wp:base_site_url>https://example.test</wp:base_site_url>
+    <wp:base_blog_url>https://example.test</wp:base_blog_url>
+    <item>
+      <title>Imported charger fixture</title>
+      <content:encoded>[et_pb_section]&lt;p&gt;Preserved imported description.&lt;/p&gt;[/et_pb_section]</content:encoded>
+      <wp:post_id>880001</wp:post_id>
+      <wp:post_date>2026-11-09 10:00:00</wp:post_date>
+      <wp:post_date_gmt>2026-11-09 10:00:00</wp:post_date_gmt>
+      <wp:post_name>charger-import-fixture</wp:post_name>
+      <wp:status>publish</wp:status>
+      <wp:post_type>evcharger</wp:post_type>
+      <wp:postmeta>
+        <wp:meta_key>brand</wp:meta_key>
+        <wp:meta_value>SyncEV</wp:meta_value>
+      </wp:postmeta>
+      <wp:postmeta>
+        <wp:meta_key>_brand</wp:meta_key>
+        <wp:meta_value>field_63e767feac647</wp:meta_value>
+      </wp:postmeta>
+      <wp:postmeta>
+        <wp:meta_key>charging_power</wp:meta_key>
+        <wp:meta_value>7–22kW</wp:meta_value>
+      </wp:postmeta>
+      <wp:postmeta>
+        <wp:meta_key>_charging_power</wp:meta_key>
+        <wp:meta_value>field_63e768abac648</wp:meta_value>
+      </wp:postmeta>
+      <wp:postmeta>
+        <wp:meta_key>mains_supply</wp:meta_key>
+        <wp:meta_value>Three Phase</wp:meta_value>
+      </wp:postmeta>
+      <wp:postmeta>
+        <wp:meta_key>_mains_supply</wp:meta_key>
+        <wp:meta_value>field_63e768fbac649</wp:meta_value>
+      </wp:postmeta>
+      <wp:postmeta>
+        <wp:meta_key>supply_voltage</wp:meta_key>
+        <wp:meta_value>150 - 750V DC x2</wp:meta_value>
+      </wp:postmeta>
+      <wp:postmeta>
+        <wp:meta_key>_supply_voltage</wp:meta_key>
+        <wp:meta_value>field_63e76952ac64a</wp:meta_value>
+      </wp:postmeta>
+      <wp:postmeta>
+        <wp:meta_key>dimensions</wp:meta_key>
+        <wp:meta_value>465 x 300 x 170</wp:meta_value>
+      </wp:postmeta>
+      <wp:postmeta>
+        <wp:meta_key>_dimensions</wp:meta_key>
+        <wp:meta_value>field_63e769e3ac64b</wp:meta_value>
+      </wp:postmeta>
+      <wp:postmeta>
+        <wp:meta_key>weight</wp:meta_key>
+        <wp:meta_value>3.75</wp:meta_value>
+      </wp:postmeta>
+      <wp:postmeta>
+        <wp:meta_key>_weight</wp:meta_key>
+        <wp:meta_value>field_63e76a8eac64c</wp:meta_value>
+      </wp:postmeta>
+      <wp:postmeta>
+        <wp:meta_key>mounting_options</wp:meta_key>
+        <wp:meta_value>Wall and Floor</wp:meta_value>
+      </wp:postmeta>
+      <wp:postmeta>
+        <wp:meta_key>_mounting_options</wp:meta_key>
+        <wp:meta_value>field_63e76acbac64d</wp:meta_value>
+      </wp:postmeta>
+      <wp:postmeta>
+        <wp:meta_key>max_current_amps</wp:meta_key>
+        <wp:meta_value>32A Single Phase</wp:meta_value>
+      </wp:postmeta>
+      <wp:postmeta>
+        <wp:meta_key>_max_current_amps</wp:meta_key>
+        <wp:meta_value>field_63e76b19ac64e</wp:meta_value>
+      </wp:postmeta>
+      <wp:postmeta>
+        <wp:meta_key>no_of_output_connections</wp:meta_key>
+        <wp:meta_value>2</wp:meta_value>
+      </wp:postmeta>
+      <wp:postmeta>
+        <wp:meta_key>_no_of_output_connections</wp:meta_key>
+        <wp:meta_value>field_63e76b75ac64f</wp:meta_value>
+      </wp:postmeta>
+      <wp:postmeta>
+        <wp:meta_key>output_connector_types</wp:meta_key>
+        <wp:meta_value>Type 2 (Socket), Tethered</wp:meta_value>
+      </wp:postmeta>
+      <wp:postmeta>
+        <wp:meta_key>_output_connector_types</wp:meta_key>
+        <wp:meta_value>field_63e76be6ac650</wp:meta_value>
+      </wp:postmeta>
+      <wp:postmeta>
+        <wp:meta_key>connectivity</wp:meta_key>
+        <wp:meta_value>a:2:{i:0;s:4:"WiFi";i:1;s:4:"RFID";}</wp:meta_value>
+      </wp:postmeta>
+      <wp:postmeta>
+        <wp:meta_key>_connectivity</wp:meta_key>
+        <wp:meta_value>field_63e76c75ac651</wp:meta_value>
+      </wp:postmeta>
+      <wp:postmeta>
+        <wp:meta_key>price</wp:meta_key>
+        <wp:meta_value>1,250.00 + installation</wp:meta_value>
+      </wp:postmeta>
+      <wp:postmeta>
+        <wp:meta_key>_price</wp:meta_key>
+        <wp:meta_value>field_63e76cbbac652</wp:meta_value>
+      </wp:postmeta>
+      <category domain="brands" nicename="syncev">SyncEV</category>
+      <category domain="power_outputs" nicename="7-22kw">7–22kW</category>
+    </item>
+  </channel>
+</rss>

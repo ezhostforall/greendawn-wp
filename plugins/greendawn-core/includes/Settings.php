@@ -71,6 +71,11 @@ final class Settings {
 		?>
 		<div class="wrap">
 			<h1><?php esc_html_e( 'Greendawn Core', 'greendawn-core' ); ?></h1>
+			<h2><?php esc_html_e( 'Site content', 'greendawn' ); ?></h2>
+			<p><?php esc_html_e( 'EV Chargers and Team Members are enabled automatically for this site. Add content through their admin menus; fixed page templates control the design.', 'greendawn' ); ?></p>
+			<?php if ( ! function_exists( 'acf_add_local_field_group' ) ) : ?>
+				<p><?php esc_html_e( 'Activate Secure Custom Fields to edit charger specifications, descriptions and team details. Native titles, featured images and imported metadata remain available without it.', 'greendawn' ); ?></p>
+			<?php endif; ?>
 			<?php if ( $enabled && ! function_exists( 'acf_add_local_field_group' ) ) : ?>
 				<div class="notice notice-warning">
 					<p><?php esc_html_e( 'Install and activate Secure Custom Fields to edit Service descriptions, benefits, FAQs and calls to action.', 'greendawn-core' ); ?></p>

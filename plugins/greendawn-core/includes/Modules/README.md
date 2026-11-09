@@ -1,9 +1,7 @@
 # Modules
 
-Each module implements `Module_Interface` and is enabled per site with the
-`greendawn_core_enabled_modules` filter. Register custom modules through
-`greendawn_core_available_modules`.
+Greendawn Core always loads the site-specific homepage/footer/enquiry fields, page fields, EV Chargers and Team Members. `Services` and `Diagnostics` remain optional through `greendawn_core_enabled_modules`; extensions can register through `greendawn_core_available_modules`.
 
-Planned, **not implemented** extension areas (add them as new classes here when a project
-needs them): form handling, lead storage, email/webhook delivery (must check
-`Plugin::outbound_allowed()`), marketing settings, client-specific integration hooks.
+The EV Charger module owns `evcharger`, `brands`, `power_outputs` and the bundled original SCF specification schema. Team Members owns non-public `team_member` records and structured profile fields. See [Internal-page content foundation](../../../../docs/internal-pages.md) for installation, capabilities and the Neel-owned charger import sequence.
+
+Business logic and outbound integrations belong in Core, presentation in the theme. Modules that send data off-site must check `Plugin::outbound_allowed()`.

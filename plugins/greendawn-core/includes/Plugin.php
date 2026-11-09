@@ -61,6 +61,8 @@ final class Plugin {
 		( new Modules\Lead_Capture() )->register();
 		( new Modules\Contact_Page() )->register();
 		( new Modules\About_Page() )->register();
+		( new Modules\EV_Chargers() )->register();
+		( new Modules\Team_Members() )->register();
 
 		$available = self::available_modules();
 		foreach ( self::enabled_modules() as $slug ) {

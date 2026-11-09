@@ -103,7 +103,7 @@
   line-height: 1.75;
 }
 
-.gd-case-study__note {
+.gd-case-study__story .gd-case-study__note {
   margin: -1rem 0 1.25rem;
   font-family: var(--font-mono);
   font-size: var(--gd-type-secondary);
@@ -227,7 +227,7 @@
   text-transform: uppercase;
 }
 
-.gd-surveys__price-value {
+.gd-surveys__price .gd-surveys__price-value {
   display: flex;
   align-items: baseline;
   gap: 1rem;
@@ -357,7 +357,7 @@
     padding: 2rem 1.5rem;
   }
 
-  .gd-surveys__price-value {
+  .gd-surveys__price .gd-surveys__price-value {
     margin-bottom: 1.5rem;
   }
 

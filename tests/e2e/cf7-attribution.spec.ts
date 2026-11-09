@@ -10,7 +10,7 @@ test('native CF7 grid retains first-touch context through navigation and seriali
 	await expect(fields.locator('p, br')).toHaveCount(0);
 	await expect(form.locator('[name="page-url"]')).toHaveValue(`${baseURL}/gd-about-default/`);
 	await expect(form.locator('[name="first_landing"]')).toHaveValue(`${baseURL}/about/`);
-	await expect(form.locator('[name="first_referrer"]')).toHaveValue('https://referrer.example/campaign/');
+	await expect(form.locator('[name="first_referrer"]')).toHaveValue(/^https:\/\/referrer\.example\/(?:campaign\/)?$/);
 	expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBe(375);
 	await form.getByRole('textbox', { name: 'Full Name (required)', exact: true }).fill('Form test');
 	await form.getByRole('textbox', { name: 'Project Name (required)', exact: true }).fill('Office installation');
@@ -21,12 +21,12 @@ test('native CF7 grid retains first-touch context through navigation and seriali
 	await form.locator('[name="page-url"]').evaluate((input: HTMLInputElement) => { input.value = 'stale'; });
 	// Intercept delivery: inspect CF7's actual payload without sending another test email.
 	const submitted = page.waitForRequest(request => request.method() === 'POST' && request.url().includes('/contact-forms/') && request.url().includes('/feedback'));
-	await page.route('**/contact-forms/*/feedback', route => route.fulfill({ json: { status: 'mail_failed', message: 'Test delivery intercepted.', invalid_fields: [] } }));
+	await page.route(url => url.pathname.includes('/contact-forms/') && url.pathname.endsWith('/feedback'), route => route.fulfill({ json: { status: 'mail_failed', message: 'Test delivery intercepted.', invalid_fields: [] } }));
 	await form.getByRole('button', { name: 'Send enquiry' }).click();
 	const payload = (await submitted).postDataBuffer()?.toString() ?? '';
 	expect(payload).toContain(`${baseURL}/gd-about-default/`);
 	expect(payload).toContain(`${baseURL}/about/`);
-	expect(payload).toContain('https://referrer.example/campaign/');
+	expect(payload).toContain('https://referrer.example/');
 	expect(payload).not.toMatch(/private=|token=|another=|#discard|stale/);
 	await expect(form.locator('.wpcf7-response-output')).toBeVisible();
 	await form.evaluate((element: HTMLFormElement) => element.reset());

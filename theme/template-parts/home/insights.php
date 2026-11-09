@@ -42,14 +42,14 @@ $greendawn_insights_url = esc_url( greendawn_home_field( 'insights_url' ) );
 					)
 				) : '';
 				?>
-				<a class="gd-insight-card gd-insight-card--<?php echo esc_attr( $greendawn_insight_key ); ?>" href="<?php echo esc_url( greendawn_home_field( $greendawn_insight_prefix . 'url' ) ); ?>" aria-labelledby="<?php echo esc_attr( $greendawn_insight_id ); ?>">
+				<a class="gd-insight-card gd-insight-card--<?php echo esc_attr( $greendawn_insight_key ); ?>" href="<?php echo esc_url( greendawn_home_field( $greendawn_insight_prefix . 'url' ) ); ?>" aria-labelledby="<?php echo esc_attr( 'gd-insight-label-' . $greendawn_insight_key . ' ' . $greendawn_insight_id ); ?>">
 					<?php if ( '' !== $greendawn_insight_html ) : ?>
 						<figure>
 							<?php echo $greendawn_insight_html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- WordPress generates escaped attachment markup. ?>
 							<span aria-hidden="true"><?php get_template_part( 'template-parts/home/arrow', null, array( 'diagonal' => true ) ); ?></span>
 						</figure>
 					<?php endif; ?>
-					<p><?php echo esc_html( greendawn_home_field( $greendawn_insight_prefix . 'label' ) ); ?></p>
+					<p id="<?php echo esc_attr( 'gd-insight-label-' . $greendawn_insight_key ); ?>"><?php echo esc_html( greendawn_home_field( $greendawn_insight_prefix . 'label' ) ); ?></p>
 					<h3 id="<?php echo esc_attr( $greendawn_insight_id ); ?>"><?php echo esc_html( greendawn_home_field( $greendawn_insight_prefix . 'title' ) ); ?></h3>
 				</a>
 			<?php endforeach; ?>

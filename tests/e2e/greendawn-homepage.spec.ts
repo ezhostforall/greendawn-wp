@@ -13,7 +13,7 @@ test('the branded homepage renders its sections in order without JavaScript', as
 			await expect(image).toHaveAttribute('fetchpriority', 'high');
 			await expect(image).toHaveAttribute('srcset', /1600w/);
 			await expect(image).toHaveAttribute('src', /\/uploads\/2026\/11\/greendawn-engineers-electrical-distribution-/);
-			await expect(main.getByRole('img', { name: 'Johnsons Cars' })).toBeVisible();
+			await expect(main.getByRole('img', { name: 'Johnsons Cars', exact: true })).toBeVisible();
 			await expect(main.getByRole('img', { name: 'The Salvation Army' })).toBeVisible();
 			await expect(main.locator('.gd-hero__proof strong')).toHaveText(['Consult', 'Design', 'Install', 'Manage']);
 			await expect(main.getByRole('heading', { level: 2 })).toHaveText([

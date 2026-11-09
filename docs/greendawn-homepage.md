@@ -25,3 +25,7 @@ The homepage uses the starter’s native menu disclosure. The coordination model
 The hero WebPs, wordmark and client marks come from Astro revision `891ed840c7369cb50df3e33232e81de49e2699d6`. The asset provenance and publication notes are maintained with the [Astro image records](https://github.com/ezhostforall/GreenDawn/blob/891ed840c7369cb50df3e33232e81de49e2699d6/docs/image-sources.md).
 
 The [pinned Astro source snapshot](./astro-reference/) provides the homepage components and style tokens used to check layout and typography.
+
+## Remaining homepage sequence
+
+After these seven static sections, port Services, Supporting Proof, Aftercare, FAQ and the final enquiry section in their Astro order. Complete the sitewide footer and enquiry interaction, then add the planned GSAP enhancement with reduced-motion and no-JavaScript fallbacks. Final acceptance compares typography, spacing, media, keyboard behaviour and performance across the complete page.

@@ -1,7 +1,7 @@
 <?php
 /**
  * Plugin Name: Greendawn Core
- * Description: Optional, modular foundation for reusable agency functionality. Does nothing until modules are enabled.
+ * Description: Greendawn content models, structured fields and site integrations, with optional Services and diagnostics modules.
  * Version: 0.5.0
  * Requires at least: 6.6
  * Requires PHP: 8.1

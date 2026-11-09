@@ -101,6 +101,20 @@ wp plugin activate lead-capture-test-fixture
 wp eval 'if ( ! has_filter( "update_plugins_updates.ezhostforall.invalid" ) || ! has_filter( "update_themes_updates.ezhostforall.invalid" ) || ! has_filter( "upgrader_pre_download" ) ) { WP_CLI::error( "EZ Host updater hooks missing" ); } WP_CLI::success( "Updater registered without configuration" );'
 wp rewrite structure '/%postname%/' --hard
 
+# Core models must work before SCF is installed, and consume legacy WXR metadata.
+docker cp tests/integration/content-foundation.php "$container_id:/tmp/content-foundation.php"
+docker cp tests/fixtures/charger-import.xml "$container_id:/tmp/charger-import.xml"
+wp eval-file /tmp/content-foundation.php native
+wp plugin install wordpress-importer --activate
+wp import /tmp/charger-import.xml --authors=skip
+# An unrelated blog prefix must never leak into charger detail permalinks.
+wp rewrite structure '/news/%postname%/' --hard
+wp eval-file /tmp/content-foundation.php imported
+wp plugin install secure-custom-fields --version=6.9.8 --activate
+wp eval-file /tmp/content-foundation.php scf
+wp plugin deactivate secure-custom-fields
+wp rewrite structure '/%postname%/' --hard
+
 create_page() {
   local slug="$1" title="$2" content="$3"
   if [[ -z "$(wp post list --post_type=page --name="$slug" --field=ID)" ]]; then

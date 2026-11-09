@@ -274,6 +274,14 @@ wp post meta update "$greendawn_edited_id" greendawn_home_solution_fleet_copy "A
 wp post meta update "$greendawn_edited_id" greendawn_home_solution_fleet_link "See our fleet service"
 wp post meta update "$greendawn_edited_id" greendawn_home_solution_fleet_url "https://www.greendawn.co.uk/fleet-charging-solutions/?source=home#details"
 wp post meta update "$greendawn_edited_id" greendawn_home_solution_fleet_image "$hero_id"
+wp post meta update "$greendawn_edited_id" greendawn_home_aftercare_title "Support around your charging operation."
+wp post meta update "$greendawn_edited_id" greendawn_home_aftercare_intro ""
+wp post meta update "$greendawn_edited_id" greendawn_home_aftercare_monitoring_title "Charger monitoring and reporting"
+wp post meta update "$greendawn_edited_id" greendawn_home_aftercare_statement "Clear support for every stage of operation."
+wp post meta update "$greendawn_edited_id" greendawn_home_aftercare_cta_label "Review our aftercare"
+wp post meta update "$greendawn_edited_id" greendawn_home_aftercare_cta_url "https://www.greendawn.co.uk/aftercare/?view=plans#scope"
+wp post meta update "$greendawn_edited_id" greendawn_home_aftercare_support_label "Speak to customer care"
+wp post meta update "$greendawn_edited_id" greendawn_home_aftercare_support_url "https://greendawn.co.uk/customer-care/?from=home#help"
 
 # Exercise WordPress's assigned Posts page and published editorial templates.
 create_page starter-home "Starter home" '<p>Static homepage fixture.</p>'

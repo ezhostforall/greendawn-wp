@@ -28,12 +28,14 @@ $greendawn_project_url   = esc_url( greendawn_home_field( 'projects_url' ) );
 <section class="gd-hero" id="top" aria-labelledby="gd-hero-title">
 	<div class="gd-hero__media">
 		<?php if ( '' !== $greendawn_hero_html ) : ?>
-			<?php echo $greendawn_hero_html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- WordPress generates escaped attachment markup. ?>
+			<div class="gd-hero__parallax">
+				<?php echo $greendawn_hero_html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- WordPress generates escaped attachment markup. ?>
+			</div>
 		<?php endif; ?>
 	</div>
 	<div class="gd-hero__shade" aria-hidden="true"></div>
 	<svg class="gd-hero__arc" viewBox="0 0 900 470" fill="none" aria-hidden="true" focusable="false">
-		<path d="M32 438C174 83 602 -77 868 222" />
+		<path pathLength="1" d="M32 438C174 83 602 -77 868 222" />
 	</svg>
 
 	<div class="gd-hero__content gd-home-shell">

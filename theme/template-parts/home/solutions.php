@@ -54,7 +54,7 @@ $greendawn_solutions_class = 'gd-solutions__layout' . ( '' === $greendawn_active
 							continue;
 						}
 						?>
-						<figure class="gd-solution-image gd-solution-image--<?php echo esc_attr( $greendawn_solution['key'] ); ?><?php echo $greendawn_active === $greendawn_solution['key'] ? ' gd-solution-image--default' : ''; ?>">
+						<figure data-gd-solution-image="<?php echo esc_attr( $greendawn_solution[ 'key' ] ); ?>" class="gd-solution-image gd-solution-image--<?php echo esc_attr( $greendawn_solution['key'] ); ?><?php echo $greendawn_active === $greendawn_solution['key'] ? ' gd-solution-image--default' : ''; ?>">
 							<?php echo $greendawn_solution['image']; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- WordPress generates escaped attachment markup. ?>
 							<figcaption><span><?php echo esc_html( $greendawn_solution['number'] ); ?></span><?php echo esc_html( $greendawn_solution['title'] ); ?></figcaption>
 						</figure>
@@ -69,9 +69,9 @@ $greendawn_solutions_class = 'gd-solutions__layout' . ( '' === $greendawn_active
 					?>
 					<li>
 						<?php if ( '' !== $greendawn_solution['url'] ) : ?>
-							<a class="<?php echo esc_attr( $greendawn_row_class ); ?>" href="<?php echo esc_url( $greendawn_solution['url'] ); ?>">
+							<a data-gd-solution-row="<?php echo esc_attr( $greendawn_solution[ 'key' ] ); ?>" class="<?php echo esc_attr( $greendawn_row_class ); ?>" href="<?php echo esc_url( $greendawn_solution['url'] ); ?>">
 						<?php else : ?>
-							<div class="<?php echo esc_attr( $greendawn_row_class ); ?>">
+							<div data-gd-solution-row="<?php echo esc_attr( $greendawn_solution[ 'key' ] ); ?>" class="<?php echo esc_attr( $greendawn_row_class ); ?>">
 						<?php endif; ?>
 							<span class="gd-solution-row__number" aria-hidden="true"><?php echo esc_html( $greendawn_solution['number'] ); ?></span>
 							<div class="gd-solution-row__body">

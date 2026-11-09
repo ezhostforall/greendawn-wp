@@ -1,0 +1,157 @@
+/* Native entrances follow the pinned Astro delays; reading content is never hidden. */
+.gd-hero__parallax {
+	position: absolute;
+	inset: 0;
+	height: 112%;
+}
+
+.gd-hero__parallax img {
+	height: 100%;
+}
+
+.gd-process__track {
+	position: relative;
+}
+
+.gd-problem__model {
+	overflow: hidden;
+}
+
+.gd-process__track .gd-process__steps {
+	border-block-start: 0;
+}
+
+.gd-process__line {
+	position: absolute;
+	inset: 0 0 auto;
+	height: 2px;
+	background: var(--gd-slate-200);
+}
+
+.gd-process__line span {
+	display: block;
+	width: 100%;
+	height: 100%;
+	transform: scaleX(0);
+	transform-origin: left center;
+	background: var(--gd-violet);
+}
+
+/* JS takes ownership only while the desktop image controller is active. */
+.gd-solutions__layout.gd-solutions--motion .gd-solution-image {
+	display: none;
+}
+
+.gd-solutions__layout.gd-solutions--motion .gd-solution-image.is-active {
+	display: block;
+}
+
+.gd-solutions--motion .gd-solution-row.is-active[href] {
+	color: var(--gd-violet);
+	padding-left: 0.6rem;
+}
+
+.gd-solutions--motion .gd-solution-row.is-active[href]::before {
+	transform: scaleY(1);
+}
+
+@media (max-width: 42rem) {
+	.gd-hero__parallax {
+		height: 100%;
+	}
+
+	.gd-process__line {
+		display: none;
+	}
+}
+
+@media (prefers-reduced-motion: no-preference) {
+	.gd-home {
+		--gd-ease-out4: cubic-bezier(0.165, 0.84, 0.44, 1);
+		--gd-ease-out3: cubic-bezier(0.215, 0.61, 0.355, 1);
+	}
+
+	.gd-hero-line > span {
+		animation: gd-hero-line-in 0.58s var(--gd-ease-out4) both;
+	}
+
+	.gd-hero-line:nth-child(2) > span {
+		animation-delay: 0.08s;
+	}
+
+	.gd-hero__copy > .gd-eyebrow,
+	.gd-hero__lead,
+	.gd-hero__actions,
+	.gd-hero__assurances {
+		animation: gd-hero-item-in 0.48s var(--gd-ease-out4) 0.34s both;
+	}
+
+	.gd-hero__lead { animation-delay: 0.44s; }
+	.gd-hero__actions { animation-delay: 0.54s; }
+	.gd-hero__assurances { animation-delay: 0.64s; }
+
+	.gd-hero__proof > div {
+		animation: gd-hero-proof-in 0.42s var(--gd-ease-out4) 0.84s both;
+	}
+
+	.gd-hero__proof > div:nth-child(2) { animation-delay: 0.92s; }
+	.gd-hero__proof > div:nth-child(3) { animation-delay: 1s; }
+	.gd-hero__proof > div:nth-child(4) { animation-delay: 1.08s; }
+
+	.gd-hero__media img {
+		animation: gd-hero-photo-in 0.72s var(--gd-ease-out4) both;
+	}
+
+	.gd-hero__arc path {
+		stroke-dasharray: 1;
+		animation: gd-hero-arc-in 1.25s var(--gd-ease-out3) 0.12s both;
+	}
+
+	.gd-reveal-enter:not(:focus-within) {
+		animation: gd-section-in 0.62s var(--gd-ease-out4) both;
+	}
+
+	@keyframes gd-hero-line-in {
+		from { transform: translateY(24%); }
+		to { transform: translateY(0); }
+	}
+
+	@keyframes gd-hero-item-in {
+		from { transform: translateY(18px); }
+		to { transform: translateY(0); }
+	}
+
+	@keyframes gd-hero-proof-in {
+		from { transform: translateY(14px); }
+		to { transform: translateY(0); }
+	}
+
+	@keyframes gd-hero-photo-in {
+		from { transform: scale(1.045); opacity: 0.76; }
+		to { transform: scale(1); opacity: 1; }
+	}
+
+	@keyframes gd-hero-arc-in {
+		from { stroke-dashoffset: 1; }
+		to { stroke-dashoffset: 0; }
+	}
+
+	@keyframes gd-section-in {
+		from { transform: translateY(28px); }
+		to { transform: translateY(0); }
+	}
+}
+
+/* Samples of the reference power3.out (quartic) and power2.out (cubic) curves. */
+@supports (animation-timing-function: linear(0, 1)) {
+	@media (prefers-reduced-motion: no-preference) {
+		.gd-home {
+			--gd-ease-out4: linear(0, 0.1192617, 0.2275238, 0.3254843, 0.4138184, 0.4931784, 0.5641937, 0.627471, 0.6835938, 0.7331228, 0.7765961, 0.8145285, 0.8474121, 0.8757162, 0.8998871, 0.9203482, 0.9375, 0.9517202, 0.9633636, 0.9727621, 0.9802246, 0.9860373, 0.9904633, 0.9937429, 0.9960938, 0.9977102, 0.998764, 0.999404, 0.9997559, 0.9999228, 0.9999847, 0.999999, 1);
+			--gd-ease-out3: linear(0, 0.0908508, 0.1760254, 0.2557068, 0.3300781, 0.3993225, 0.463623, 0.5231628, 0.578125, 0.6286926, 0.6750488, 0.7173767, 0.7558594, 0.7906799, 0.8220215, 0.8500671, 0.875, 0.8970032, 0.9162598, 0.9329529, 0.9472656, 0.9593811, 0.9694824, 0.9777527, 0.984375, 0.9895325, 0.9934082, 0.9961853, 0.9980469, 0.999176, 0.9997559, 0.9999695, 1);
+		}
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.gd-process__line span { transform: scaleX(1); }
+}

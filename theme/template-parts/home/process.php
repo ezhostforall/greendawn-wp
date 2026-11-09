@@ -18,15 +18,18 @@ $greendawn_stages = greendawn_home_stages();
 			</div>
 			<p><?php echo esc_html( greendawn_home_field( 'process_intro' ) ); ?></p>
 		</div>
-		<ol class="gd-process__steps" role="list">
-			<?php $greendawn_stage_number = 0; ?>
-			<?php foreach ( $greendawn_stages as $greendawn_stage => $greendawn_label ) : ?>
-				<li>
-					<span aria-hidden="true"><?php echo esc_html( sprintf( '%02d', ++$greendawn_stage_number ) ); ?></span>
-					<h3><?php echo esc_html( $greendawn_label ); ?></h3>
-					<p><?php echo esc_html( greendawn_home_field( $greendawn_stage . '_description' ) ); ?></p>
-				</li>
-			<?php endforeach; ?>
-		</ol>
+		<div class="gd-process__track">
+			<div class="gd-process__line" aria-hidden="true"><span></span></div>
+			<ol class="gd-process__steps" role="list">
+				<?php $greendawn_stage_number = 0; ?>
+				<?php foreach ( $greendawn_stages as $greendawn_stage => $greendawn_label ) : ?>
+					<li>
+						<span aria-hidden="true"><?php echo esc_html( sprintf( '%02d', ++$greendawn_stage_number ) ); ?></span>
+						<h3><?php echo esc_html( $greendawn_label ); ?></h3>
+						<p><?php echo esc_html( greendawn_home_field( $greendawn_stage . '_description' ) ); ?></p>
+					</li>
+				<?php endforeach; ?>
+			</ol>
+		</div>
 	</div>
 </section>

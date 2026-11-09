@@ -412,6 +412,8 @@ test('service photographs follow hover and keyboard focus without JavaScript', a
 
 
 test('service previews defer unused image requests with browser lazy loading enabled', async ({ page }) => {
+	// This checks the static CSS preview contract; scroll selection is covered separately.
+	await page.emulateMedia({ reducedMotion: 'reduce' });
 	const serviceImages: string[] = [];
 	page.on('request', (request) => {
 		if (request.resourceType() === 'image' && /commercial-ev-(fleet|workplace|destination|multi-site|dealership)/.test(request.url())) {

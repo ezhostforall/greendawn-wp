@@ -73,6 +73,7 @@ function greendawn_enqueue_assets(): void {
 	greendawn_enqueue_entry( 'main' );
 	if ( is_page_template( 'templates/greendawn-homepage.php' ) ) {
 		greendawn_enqueue_entry( 'greendawn-homepage' );
+		greendawn_enqueue_entry( 'greendawn-home-motion' );
 	}
 
 	foreach ( (array) apply_filters( 'greendawn_page_entries', array() ) as $name ) {

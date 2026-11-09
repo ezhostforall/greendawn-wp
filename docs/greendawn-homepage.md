@@ -34,7 +34,7 @@ The **Services** tab supplies the heading, introduction and five fixed audience 
 
 Upload these photographs and select them under their respective fields. Defaults resolve attachments with these filenames in the `2026/11/` uploads folder, including WordPress’s automatically scaled copy of the tall workplace photograph. If the upload path or filename differs, select the attachment explicitly. The preview images are decorative; their captions use the editable row titles.
 
-The first available photograph is shown initially. Hovering or keyboard-focusing a row previews its selected photograph through CSS, with keyboard focus taking priority over hover. All rows remain normal links and work without JavaScript. With normal browser lazy loading, hidden previews are deferred until displayed. Browsers may eagerly fetch lazy images when JavaScript is disabled, under the [HTML lazy-loading privacy rules](https://html.spec.whatwg.org/multipage/urls-and-fetching.html#lazy-loading-attributes); content and previews still work. A row without a selected/resolvable photograph retains the initial preview; if no photographs resolve, the list uses the full width without an empty frame. GSAP scroll animation remains a later stage.
+The first available photograph is shown initially. Hovering or keyboard-focusing a row previews its selected photograph through CSS, with keyboard focus taking priority over hover. All rows remain normal links and work without JavaScript. With normal browser lazy loading, hidden previews are deferred until displayed. Browsers may eagerly fetch lazy images when JavaScript is disabled, under the [HTML lazy-loading privacy rules](https://html.spec.whatwg.org/multipage/urls-and-fetching.html#lazy-loading-attributes); content and previews still work. A row without a selected/resolvable photograph retains the initial preview; if no photographs resolve, the list uses the full width without an empty frame. The optional scroll controller is described under Homepage motion below.
 
 ## Aftercare section
 
@@ -76,7 +76,7 @@ After updating the theme and Greendawn Core together, check 320px/390px mobile, 
 
 The **Final enquiry** tab supplies the eyebrow, large closing heading, two paragraphs, button label, telephone prompt and optional page-specific display number. Copy defaults come from the pinned `FinalCtaSection.astro`; the phone defaults to the sitewide Footer telephone, whose initial `0345 512 0044` value comes from the same revision’s `src/config/site.ts`. Layout, lime background, typography and decorative arc remain controlled by the theme.
 
-The enquiry button shares **Appearance → Customise → Header → Call-to-action destination** with the header, hero and survey button. Set it to the current WordPress enquiry/contact page; this section navigates normally and works without JavaScript. A blank or `#` destination hides the button. The callback/enquiry drawer enhances this link when enabled; see setup below. Arc animation remains a separate enhancement.
+The enquiry button shares **Appearance → Customise → Header → Call-to-action destination** with the header, hero and survey button. Set it to the current WordPress enquiry/contact page; this section navigates normally and works without JavaScript. A blank or `#` destination hides the button. The callback/enquiry drawer enhances this link when enabled; see setup below. The arc follows the optional homepage motion layer described below.
 
 The telephone link is derived from the display number’s digits and optional leading `+`. Use a normal local number or an international number such as `+44 345 512 0044`; set the contact page consistently. A value without a usable telephone number omits the telephone prompt/link rather than producing an empty `tel:` link. Empty content fields restore their pinned defaults, as in the other homepage sections.
 
@@ -88,7 +88,7 @@ After updating the theme and Greendawn Core together, review the panel at 320px,
 
 The homepage keeps its initial transparent overlay; the compact header uses the reference dark translucent background, blur and shadow. Inner pages reserve the original main-row space to avoid shifting content when the header becomes fixed. WordPress admin-bar offsets, keyboard navigation, bounded mobile menus and reduced motion are retained. Without JavaScript, the header and native menu remain usable and scroll normally with the page.
 
-The homepage uses the starter’s native menu disclosure. The coordination model, system arc and process timeline render in the initial HTML. All twelve static homepage sections are now ported. The Astro sitewide footer is shared across every template; see [footer setup](footer.md) for its Customiser content, menus and legal links. The optional callback drawer is described below; motion follows separately.
+The homepage uses the starter’s native menu disclosure. The coordination model, system arc and process timeline render in the initial HTML. All twelve static homepage sections are now ported. The Astro sitewide footer is shared across every template; see [footer setup](footer.md) for its Customiser content, menus and legal links. The optional callback drawer is described below; the motion layer is described below.
 
 The hero WebPs, wordmark and client marks come from Astro revision `891ed840c7369cb50df3e33232e81de49e2699d6`. The asset provenance and publication notes are maintained with the [Astro image records](https://github.com/ezhostforall/GreenDawn/blob/891ed840c7369cb50df3e33232e81de49e2699d6/docs/image-sources.md).
 
@@ -96,7 +96,7 @@ The [pinned Astro source snapshot](./astro-reference/) provides the homepage com
 
 ## Remaining homepage sequence
 
-The twelve static sections from the pinned Astro `src/pages/index.astro` and the shared sitewide footer are now ported. The optional React enquiry interaction is now implemented. The planned GSAP enhancement follows, with reduced-motion and no-JavaScript fallbacks. Final acceptance compares typography, spacing, media, keyboard behaviour and performance across the complete page.
+The twelve static sections from the pinned Astro `src/pages/index.astro` and the shared sitewide footer are now ported. The optional React enquiry interaction is now implemented. The CSS/GSAP motion layer is now implemented, with reduced-motion and no-JavaScript fallbacks. Final acceptance compares typography, spacing, media, keyboard behaviour and performance across the complete page.
 
 ## React callback drawer
 
@@ -122,3 +122,30 @@ The email includes supplied qualification, callback details, a page path and opt
 The small launcher/CSS entry is enabled only when the managed form is configured. React and the application chunk are dynamically imported on the first open. The modal uses native dialog focus containment/Escape, restores opener focus, reserves an independently scrolling body for short/mobile viewports and respects reduced motion. No animation framework is required for the drawer.
 
 Verify at 320px, 390px, tablet and desktop widths, including a short viewport and mobile menu entry; test keyboard-only use, validation announcements, retained inputs after failure, Back navigation, required details, suggested time, privacy/telephone links, all CTA entry points and no-JavaScript fallbacks. CI installs pinned Contact Form 7 6.2.4.1 in disposable WordPress and intercepts all outgoing test email. It also exercises direct HTTP validation, spam, throttling and accepted delivery, rather than mocking the CF7 REST response in the browser.
+
+## Homepage motion
+
+The motion layer follows the pinned Astro animation modules under `docs/astro-reference/src/scripts/animations/`. Ordinary hover/menu/form transitions remain CSS. Hero text/items/proof, the initial photograph settle and hero arc drawing use CSS with the reference durations and stagger offsets. Supported browsers use sampled versions of the reference GSAP easing curves, with cubic-bezier fallbacks. The hero remains a high-priority image and never fades from zero opacity.
+
+Simple section entrances use CSS transform animations, triggered once by a small Intersection Observer at the reference 87% viewport threshold. Their content is always visible; no stylesheet initially hides headings, copy or links. Completing an entrance removes its animation class, avoiding repeated movement when focus enters/leaves a section.
+
+A homepage-only loader dynamically imports GSAP/ScrollTrigger for:
+
+- the six-card problem assembly, connector and answer reveal;
+- the system arc and staggered system cards;
+- the delivery-process progress line and steps;
+- service-photo selection as rows pass the viewport thresholds;
+- the featured-project photograph and closing arc;
+- additional hero, system and project-story parallax on fine-pointer desktops at least 62rem wide and over 44rem tall.
+
+Scroll ranges, one-second smoothing and coordinated timings come from the pinned source. No new animation dependency is added. The existing generic `data-animate` example remains independently optional; the new homepage loader is not enqueued on ordinary pages.
+
+The Services controller matches photographs to stable audience keys, not array positions, so an omitted photograph does not shift the other mappings. Keyboard focus takes priority over pointer hover, followed by the current scroll selection. Incoming photographs are requested only when selected and decoded before replacing the visible image. Failed/missing photographs retain the current preview. Rapid scroll changes are batched into one frame and superseded image loads cannot overwrite a newer selection. Native CSS previews remain available without the controller.
+
+An initial reduced-motion preference avoids downloading the GSAP scroll bundle. Changing that preference while the page is open disconnects reveals and restores the original transforms, SVG strokes, service classes and image previews; re-enabling motion creates one fresh controller. Resizing updates the reference breakpoints. Font/image readiness and back-forward-cache restoration refresh scroll measurements. Normal page departure removes listeners, observers and animation contexts. An unavailable GSAP chunk leaves visible content and native links/previews usable. CSS hero entrances can run without JavaScript; reduced motion disables them from the first paint.
+
+### Staging acceptance
+
+Update the **theme**, purge the page cache and compare the complete homepage with Astro at 320px, 390px, tablet and desktop widths, including a short landscape window. No Core update, field migration or additional media upload is required for this stage.
+
+Check the hero entrance and arc, problem assembly, system arc/cards, process line, service-photo changes, project crop/parallax and closing arc. Exercise forward/reverse/fast scrolling, keyboard focus while hovering another service, slow/failed images, live resizing, reduced motion, back/forward navigation and the enquiry drawer. Confirm content remains readable with JavaScript or the scroll bundle disabled. Retest Lighthouse on the deployed staging host; automated browser coverage checks cold-page layout shift and preserves the hero's priority hint, but is not a substitute for the hosted performance audit.

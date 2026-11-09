@@ -63,6 +63,7 @@ export default defineConfig(({ command }) => ({
 				editor: resolve(root, 'src/styles/editor.css'),
 				'react-example': resolve(root, 'src/react/index.tsx'),
 				enquiry: resolve(root, 'src/enquiry/launcher.ts'),
+				'greendawn-home-motion': resolve(root, 'src/scripts/home/loader.ts'),
 				'greendawn-homepage': resolve(root, 'src/styles/greendawn-homepage.css'),
 			},
 		},

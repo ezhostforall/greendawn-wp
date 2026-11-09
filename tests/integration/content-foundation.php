@@ -77,6 +77,16 @@ foreach ( $greendawn_schema['fields'] as $greendawn_field ) {
 	$greendawn_assert( $greendawn_registered && $greendawn_registered['name'] === $greendawn_field['name'] && $greendawn_registered['type'] === $greendawn_field['type'], 'SCF must resolve the imported field keys and types.' );
 	$greendawn_assert( get_field( $greendawn_field['key'], $greendawn_id, false ) === get_post_meta( $greendawn_id, $greendawn_field['name'], true ), 'SCF must resolve the imported value without replacement defaults.' );
 }
+$greendawn_empty_id = wp_insert_post(
+	array(
+		'post_type'   => 'evcharger',
+		'post_status' => 'draft',
+		'post_title'  => 'Unspecified charger fixture',
+	),
+	true
+);
+$greendawn_assert( ! is_wp_error( $greendawn_empty_id ), 'An empty charger must save without invented specifications.' );
+$greendawn_assert( ! metadata_exists( 'post', $greendawn_empty_id, 'weight' ), 'Schema defaults must not be written into missing import metadata.' );
 update_field( 'field_63e76a8eac64c', '4.25', $greendawn_id );
 $greendawn_assert( '4.25' === get_post_meta( $greendawn_id, 'weight', true ), 'Editing a decimal must retain its value.' );
 $greendawn_assert( 'field_63e76a8eac64c' === get_post_meta( $greendawn_id, '_weight', true ), 'Editing must retain its original field reference.' );

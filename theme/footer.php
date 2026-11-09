@@ -73,7 +73,7 @@ $greendawn_footer_disclosure = trim( (string) apply_filters( 'greendawn_footer_d
 							<p><?php echo esc_html( $greendawn_footer_address ); ?></p>
 						<?php endif; ?>
 						<?php if ( $greendawn_footer_has_cta ) : ?>
-							<a class="gd-footer__cta" href="<?php echo esc_url( $greendawn_footer_cta_url ); ?>"><?php echo esc_html( $greendawn_footer_cta_label ); ?></a>
+							<a class="gd-footer__cta" data-lead-capture-open data-lead-entry-point="footer-cta" href="<?php echo esc_url( $greendawn_footer_cta_url ); ?>"><?php echo esc_html( $greendawn_footer_cta_label ); ?></a>
 						<?php endif; ?>
 					</div>
 				<?php endif; ?>

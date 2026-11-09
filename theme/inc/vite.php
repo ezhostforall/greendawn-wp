@@ -23,6 +23,7 @@ function greendawn_entries(): array {
 			'main'               => 'src/scripts/main.ts',
 			'editor'             => 'src/styles/editor.css',
 			'react-example'      => 'src/react/index.tsx',
+			'enquiry'            => 'src/enquiry/launcher.ts',
 			'greendawn-homepage' => 'src/styles/greendawn-homepage.css',
 		)
 	);

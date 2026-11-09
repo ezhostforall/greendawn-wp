@@ -77,7 +77,7 @@ $greendawn_submenu_label = __( 'Toggle submenu for %s', 'greendawn' );
 						);
 						?>
 						<?php if ( $greendawn_has_cta ) : ?>
-							<a class="gd-home-button gd-mobile-enquiry" href="<?php echo esc_url( $greendawn_cta_url ); ?>"><?php echo esc_html( $greendawn_cta_label ); ?></a>
+							<a class="gd-home-button gd-mobile-enquiry" data-lead-capture-open data-lead-entry-point="header" href="<?php echo esc_url( $greendawn_cta_url ); ?>"><?php echo esc_html( $greendawn_cta_label ); ?></a>
 						<?php endif; ?>
 						<?php
 						if ( has_nav_menu( 'utility' ) ) {
@@ -101,7 +101,7 @@ $greendawn_submenu_label = __( 'Toggle submenu for %s', 'greendawn' );
 					</nav>
 				<?php endif; ?>
 				<?php if ( $greendawn_has_cta ) : ?>
-					<a class="header-cta button" href="<?php echo esc_url( $greendawn_cta_url ); ?>">
+					<a class="header-cta button" data-lead-capture-open data-lead-entry-point="header" href="<?php echo esc_url( $greendawn_cta_url ); ?>">
 						<?php echo esc_html( $greendawn_cta_label ); ?>
 						<?php get_template_part( 'template-parts/home/arrow', null, array( 'diagonal' => true ) ); ?>
 					</a>

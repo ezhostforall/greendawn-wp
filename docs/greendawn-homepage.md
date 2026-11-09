@@ -76,7 +76,7 @@ After updating the theme and Greendawn Core together, check 320px/390px mobile, 
 
 The **Final enquiry** tab supplies the eyebrow, large closing heading, two paragraphs, button label, telephone prompt and optional page-specific display number. Copy defaults come from the pinned `FinalCtaSection.astro`; the phone defaults to the sitewide Footer telephone, whose initial `0345 512 0044` value comes from the same revision’s `src/config/site.ts`. Layout, lime background, typography and decorative arc remain controlled by the theme.
 
-The enquiry button shares **Appearance → Customise → Header → Call-to-action destination** with the header, hero and survey button. Set it to the current WordPress enquiry/contact page; this section navigates normally and works without JavaScript. A blank or `#` destination hides the button. The callback/enquiry drawer and arc animation are separate planned enhancements.
+The enquiry button shares **Appearance → Customise → Header → Call-to-action destination** with the header, hero and survey button. Set it to the current WordPress enquiry/contact page; this section navigates normally and works without JavaScript. A blank or `#` destination hides the button. The callback/enquiry drawer enhances this link when enabled; see setup below. Arc animation remains a separate enhancement.
 
 The telephone link is derived from the display number’s digits and optional leading `+`. Use a normal local number or an international number such as `+44 345 512 0044`; set the contact page consistently. A value without a usable telephone number omits the telephone prompt/link rather than producing an empty `tel:` link. Empty content fields restore their pinned defaults, as in the other homepage sections.
 
@@ -88,7 +88,7 @@ After updating the theme and Greendawn Core together, review the panel at 320px,
 
 The homepage keeps its initial transparent overlay; the compact header uses the reference dark translucent background, blur and shadow. Inner pages reserve the original main-row space to avoid shifting content when the header becomes fixed. WordPress admin-bar offsets, keyboard navigation, bounded mobile menus and reduced motion are retained. Without JavaScript, the header and native menu remain usable and scroll normally with the page.
 
-The homepage uses the starter’s native menu disclosure. The coordination model, system arc and process timeline render in the initial HTML. All twelve static homepage sections are now ported. The Astro sitewide footer is shared across every template; see [footer setup](footer.md) for its Customiser content, menus and legal links. Motion and the callback drawer follow separately.
+The homepage uses the starter’s native menu disclosure. The coordination model, system arc and process timeline render in the initial HTML. All twelve static homepage sections are now ported. The Astro sitewide footer is shared across every template; see [footer setup](footer.md) for its Customiser content, menus and legal links. The optional callback drawer is described below; motion follows separately.
 
 The hero WebPs, wordmark and client marks come from Astro revision `891ed840c7369cb50df3e33232e81de49e2699d6`. The asset provenance and publication notes are maintained with the [Astro image records](https://github.com/ezhostforall/GreenDawn/blob/891ed840c7369cb50df3e33232e81de49e2699d6/docs/image-sources.md).
 
@@ -96,4 +96,29 @@ The [pinned Astro source snapshot](./astro-reference/) provides the homepage com
 
 ## Remaining homepage sequence
 
-The twelve static sections from the pinned Astro `src/pages/index.astro` and the shared sitewide footer are now ported. Add the enquiry interaction next, then the planned GSAP enhancement with reduced-motion and no-JavaScript fallbacks. Final acceptance compares typography, spacing, media, keyboard behaviour and performance across the complete page.
+The twelve static sections from the pinned Astro `src/pages/index.astro` and the shared sitewide footer are now ported. The optional React enquiry interaction is now implemented. The planned GSAP enhancement follows, with reduced-motion and no-JavaScript fallbacks. Final acceptance compares typography, spacing, media, keyboard behaviour and performance across the complete page.
+
+## React callback drawer
+
+The enquiry enhancement now follows the pinned Astro flow. Desktop opens a right-side drawer; up to 42rem it becomes a bottom sheet. Header (including mobile), hero, survey, final enquiry and footer calls to action open the same form. A floating launcher is available sitewide. Existing anchor destinations remain the no-JavaScript and failed-module fallback; keep the Header enquiry destination pointing at a real internal contact page.
+
+### Staging setup
+
+1. Update **both the theme and Greendawn Core**, with Contact Form 7 active.
+2. Under **Settings → Greendawn Core → Callback enquiry drawer**, choose **Create callback form**. This creates a separate, idempotent Contact Form 7 form; it does not overwrite the existing contact form or enable the drawer automatically.
+3. Follow **Review callback email recipient and delivery settings**. The generated form initially uses the WordPress administration email. Check its **Mail** recipient, domain-valid sender and Reply-To, SMTP delivery and spam integrations before enabling it. Retain the generated form-tag names and validation contract: React is the presentation layer; these fields are the native delivery bridge.
+4. Check the site's privacy-policy page and the sitewide Footer telephone. These supply the drawer links. Configure WordPress's privacy-policy page where available; otherwise the internal `/privacy-policy/` route is used.
+5. Enable **the sitewide callback drawer**, save and purge the page cache. Disabling it restores ordinary enquiry links. If Core/CF7 is unavailable, the page and anchors still render.
+6. Test a qualified enquiry and the direct callback route, verify the actual mailbox, and confirm the success message. Browser/CI checks use intercepted test mail; they do not prove delivery on the staging host.
+
+The visitor selects an interest, at most one contextual answer, project stage and optional location. Choice buttons advance immediately; Back and closing/reopening retain answers in memory. “Just request a callback” skips qualification. First name, company, telephone, email and callback preference are required. Suggested times and notes are optional; a suggested time is a preference in UK local time, not a confirmed booking.
+
+The UI submits the **actual native CF7 form**, retaining its normal submission events, integration fields, validation, spam verdict and mail handling. It does not post directly to a webhook or introduce a second mail endpoint. The success screen appears only after CF7 reports `mail_sent`; this means its mail transport accepted the message, not a guarantee of inbox receipt. Rejection, spam and mail failure retain the visitor's answers. A delivery timeout explicitly says that delivery could not be confirmed; it does not encourage an immediate duplicate submission.
+
+Greendawn Core validates required contact details, telephone format, controlled choice values, field bounds and suggested date/time format independently of React. Its additional honeypot and hashed-IP limit (five otherwise valid attempts within a rolling ten-minute interval) supplement CF7 protections. No raw IP addresses or enquiry values are stored by the Core module; existing CF7 integrations such as Flamingo, SMTP logging or third-party spam services may have their own storage and privacy responsibilities. Protect the public form at the hosting layer too where appropriate; the transient throttle is intentionally modest and is not an atomic distributed rate limiter.
+
+The email includes supplied qualification, callback details, a page path and optional UTM values. It excludes page query strings and fragments. The `greendawn:lead-funnel` event exposes only controlled source, entry point, intent and project stage; no contact details, free text or URLs are sent to that event. No analytics vendor, CRM, Zapier or Trello integration is added in this stage. No visitor information is written to local/session storage.
+
+The small launcher/CSS entry is enabled only when the managed form is configured. React and the application chunk are dynamically imported on the first open. The modal uses native dialog focus containment/Escape, restores opener focus, reserves an independently scrolling body for short/mobile viewports and respects reduced motion. No animation framework is required for the drawer.
+
+Verify at 320px, 390px, tablet and desktop widths, including a short viewport and mobile menu entry; test keyboard-only use, validation announcements, retained inputs after failure, Back navigation, required details, suggested time, privacy/telephone links, all CTA entry points and no-JavaScript fallbacks. CI installs pinned Contact Form 7 6.2.4.1 in disposable WordPress and intercepts all outgoing test email. It also exercises direct HTTP validation, spam, throttling and accepted delivery, rather than mocking the CF7 REST response in the browser.

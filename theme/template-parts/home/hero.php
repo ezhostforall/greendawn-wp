@@ -49,7 +49,7 @@ $greendawn_project_url   = esc_url( greendawn_home_field( 'projects_url' ) );
 			<p class="gd-hero__lead"><?php echo esc_html( greendawn_home_field( 'lead' ) ); ?></p>
 			<div class="gd-hero__actions">
 				<?php if ( '' !== $greendawn_enquiry_url ) : ?>
-					<a class="gd-home-button" href="<?php echo esc_url( $greendawn_enquiry_url ); ?>">
+					<a class="gd-home-button" data-lead-capture-open data-lead-entry-point="hero" href="<?php echo esc_url( $greendawn_enquiry_url ); ?>">
 						<?php echo esc_html( '' !== $greendawn_enquiry_label ? $greendawn_enquiry_label : __( 'Discuss your site', 'greendawn' ) ); ?>
 						<?php get_template_part( 'template-parts/home/arrow', null, array( 'diagonal' => true ) ); ?>
 					</a>

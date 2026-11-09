@@ -14,7 +14,7 @@ test('the branded homepage renders its sections in order without JavaScript', as
 			await expect(image).toHaveAttribute('srcset', /1600w/);
 			await expect(image).toHaveAttribute('src', /\/uploads\/2026\/11\/greendawn-engineers-electrical-distribution-/);
 			await expect(main.getByRole('img', { name: 'Johnsons Cars', exact: true })).toBeVisible();
-			await expect(main.getByRole('img', { name: 'The Salvation Army' })).toBeVisible();
+			await expect(main.getByRole('img', { name: 'The Salvation Army', exact: true })).toBeVisible();
 			await expect(main.locator('.gd-hero__proof strong')).toHaveText(['Consult', 'Design', 'Install', 'Manage']);
 			await expect(main.getByRole('heading', { level: 2 })).toHaveText([
 				'One charging project. Coordinated from the start.',
@@ -24,6 +24,7 @@ test('the branded homepage renders its sections in order without JavaScript', as
 				'Replace assumptions with a buildable plan.',
 				'Charging built around your operation.',
 				'EV infrastructure needs to keep working.',
+				'Different locations. A coordinated programme.',
 			]);
 			await expect(main.locator('#problem li')).toHaveCount(6);
 			await expect(main.locator('#system .gd-system__cards h3')).toHaveText([
@@ -40,6 +41,12 @@ test('the branded homepage renders its sections in order without JavaScript', as
 			await expect(aftercare.locator('.gd-aftercare__quote')).toHaveText('Support that continues beyond installation.');
 			await expect(aftercare.locator('.gd-aftercare__quote')).toHaveCSS('font-style', 'italic');
 			await expect(aftercare.locator('.gd-aftercare__quote')).toHaveCSS('font-family', /Bricolage Grotesque/);
+			const proof = main.locator('#supporting-proof');
+			await expect(proof.getByRole('article')).toHaveCount(1);
+			await expect(proof.getByRole('heading', { level: 3 })).toHaveText('The Salvation Army');
+			await expect(proof.locator('.gd-proof-card__body strong')).toHaveText('50 sites · 71 chargepoints');
+			await expect(proof.getByRole('link', { name: 'Explore our project experience' })).toHaveAttribute('href', `${baseURL}/gallery/`);
+			expect(await proof.locator('.gd-eyebrow').evaluate((eyebrow) => Number.parseFloat(getComputedStyle(eyebrow).marginBottom))).toBeGreaterThan(0);
 			expect(await aftercare.locator('.gd-aftercare__quote').evaluate((quote) => Number.parseFloat(getComputedStyle(quote).marginTop))).toBeGreaterThan(0);
 			await expect(main.locator('#who-we-help h3')).toHaveText([
 				'Fleet & depot charging', 'Workplace charging', 'Public & destination charging',
@@ -76,7 +83,7 @@ test('the branded homepage renders its sections in order without JavaScript', as
 				'Electrical, civil and network dependencies',
 				'The information needed for the design and proposal',
 			]);
-			await expect(main.getByRole('link', { name: 'Explore our project experience' })).toHaveAttribute('href', `${baseURL}/gallery/`);
+			await expect(main.locator('#projects').getByRole('link', { name: 'Explore our project experience' })).toHaveAttribute('href', `${baseURL}/gallery/`);
 			await expect(main.getByRole('link', { name: 'Discuss a site survey' })).toHaveAttribute('href', /\/about\/$/);
 			await expect(main.getByRole('link', { name: 'What a technical survey should establish' })).toHaveAttribute('href', /\/guides\/greendawn-ev-charging-survey-pre-installation-guide\/$/);
 			await expect(main.getByRole('link', { name: 'Understand AC and DC charging' })).toHaveAttribute('href', /\/guides\/ac-vs-dc-ev-charging\/$/);
@@ -100,6 +107,14 @@ test('the branded homepage renders its sections in order without JavaScript', as
 			await testInfo.attach(`greendawn-project-${width}`, { body: await main.locator('#projects').screenshot(), contentType: 'image/png' });
 			await testInfo.attach(`greendawn-surveys-${width}`, { body: await main.locator('#surveys').screenshot(), contentType: 'image/png' });
 			await testInfo.attach(`greendawn-aftercare-${width}`, { body: await aftercare.screenshot({ animations: 'disabled' }), contentType: 'image/png' });
+			const proofImage = proof.getByRole('img', { name: 'Commercial EV chargers installed for The Salvation Army', exact: true });
+			await expect(proofImage).toHaveAttribute('loading', 'lazy');
+			await expect(proofImage).toHaveAttribute('srcset', /666w/);
+			await expect(proofImage).toHaveAttribute('width', /\d+/);
+			await expect(proofImage).toHaveAttribute('height', /\d+/);
+			await proofImage.scrollIntoViewIfNeeded();
+			await proofImage.evaluate((image: HTMLImageElement) => image.decode());
+			await testInfo.attach(`greendawn-proof-${width}`, { body: await proof.screenshot({ animations: 'disabled' }), contentType: 'image/png' });
 			const aftercareLink = aftercare.getByRole('link', { name: 'Explore aftercare' });
 			await aftercareLink.focus();
 			await aftercareLink.press('Tab');
@@ -183,7 +198,7 @@ test('the desktop header and hero use the Greendawn hover styles', async ({ page
 	await projects.hover();
 	await expect(projects).toHaveCSS('color', 'rgb(233, 242, 39)');
 	await expect(projects).toHaveCSS('gap', '21.6px');
-	const projectLink = main.getByRole('link', { name: 'Explore our project experience' });
+	const projectLink = main.locator('#projects').getByRole('link', { name: 'Explore our project experience' });
 	await expect(projectLink).toHaveCSS('color', 'rgb(11, 29, 42)');
 	await projectLink.hover();
 	await expect(projectLink).toHaveCSS('color', 'rgb(58, 34, 216)');
@@ -197,6 +212,11 @@ test('the desktop header and hero use the Greendawn hover styles', async ({ page
 	await aftercareCta.hover();
 	await expect(aftercareCta).toHaveCSS('background-color', 'rgb(250, 249, 246)');
 	await expect(aftercareCta).toHaveCSS('transform', 'matrix(1, 0, 0, 1, 0, -3)');
+	const proof = main.locator('#supporting-proof');
+	await proof.getByRole('link', { name: 'Explore our project experience' }).hover();
+	await expect(proof.getByRole('link')).toHaveCSS('color', 'rgb(58, 34, 216)');
+	await proof.locator('.gd-proof-card').hover();
+	await expect(proof.locator('img')).toHaveCSS('transform', 'matrix(1.055, 0, 0, 1.055, 0, 0)');
 });
 
 
@@ -246,6 +266,16 @@ test('saved homepage values render in the initial response with one hero image',
 	await expect(aftercare.getByRole('link', { name: 'Speak to customer care' })).toHaveAttribute('href', `${baseURL}/customer-care/?from=home#help`);
 	expect(html).toContain('Support around your charging operation.');
 	expect(html).not.toContain('EV infrastructure needs to keep working.');
+	const proof = page.locator('#supporting-proof');
+	await expect(proof.getByRole('heading', { level: 2 })).toHaveText('Coordinated charging across your sites.');
+	await expect(proof.getByRole('heading', { level: 3 })).toHaveText('Fleet charging programme');
+	await expect(proof.locator('.gd-proof-card__body strong')).toHaveText('52 sites · 74 chargepoints');
+	await expect(proof.locator('figcaption')).toHaveText('Fleet programme delivered together');
+	await expect(proof.locator('.gd-proof-card__body p')).toHaveText('A coordinated programme for a varied fleet estate.');
+	await expect(proof.getByRole('img')).toHaveAttribute('src', /service-media/);
+	await expect(proof.getByRole('link', { name: 'See our fleet projects' })).toHaveAttribute('href', `${baseURL}/gallery/?view=estate#projects`);
+	expect(html).toContain('Coordinated charging across your sites.');
+	expect(html).not.toContain('salvation-army-ev-charging-');
 });
 
 test('the utility bar text can be edited and reset in the Customiser', async ({ page, baseURL }) => {
@@ -361,4 +391,21 @@ test('service previews defer unused image requests with browser lazy loading ena
 	await expect.poll(() => workplaceImage.evaluate((image: HTMLImageElement) => image.naturalWidth)).toBeGreaterThan(0);
 	expect(serviceImages.some((url) => url.includes('workplace'))).toBe(true);
 	expect(serviceImages.some((url) => /destination|multi-site|dealership/.test(url))).toBe(false);
+});
+
+
+test('supporting proof retains its content and full-width card when the photograph is unavailable', async ({ page, baseURL }) => {
+	for (const width of [320, 1440]) {
+		await page.setViewportSize({ width, height: 900 });
+		await page.goto('/greendawn-home-no-proof-image/');
+		const proof = page.locator('#supporting-proof');
+		await expect(proof.locator('figure')).toHaveCount(0);
+		await expect(proof.getByRole('heading', { level: 3 })).toHaveText('The Salvation Army');
+		await expect(proof.locator('.gd-proof-card__body strong')).toHaveText('50 sites · 71 chargepoints');
+		await expect(proof.getByRole('link')).toHaveAttribute('href', `${baseURL}/gallery/`);
+		const card = (await proof.locator('.gd-proof-card').boundingBox())!;
+		const body = (await proof.locator('.gd-proof-card__body').boundingBox())!;
+		expect(body.width).toBeGreaterThan(card.width - 4);
+		expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(width);
+	}
 });

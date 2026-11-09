@@ -224,7 +224,7 @@ wp eval '
     update_post_meta( $id, "_wp_attachment_image_alt", "Vehicle connected to EV charging equipment at a Johnsons Cars dealership" );
   }
 '
-# Import the service preview photographs using normal WordPress thumbnail/scaling behaviour.
+# Import the homepage photographs using normal WordPress thumbnail/scaling behaviour.
 docker cp docs/astro-reference/media "$container_id:/tmp/greendawn-home-media"
 wp eval '
   $photographs = array(
@@ -233,6 +233,7 @@ wp eval '
     "commercial-ev-destination-hospitality-1200.webp" => "EV chargers installed outside a hotel",
     "commercial-ev-multi-site-charging-768.webp" => "Completed EV charging installation with multiple marked bays",
     "commercial-ev-dealership-charging-1200.webp" => "EV charging equipment installed at a Ford dealership",
+    "salvation-army-ev-charging-666.webp" => "Commercial EV chargers installed for The Salvation Army",
   );
   $uploads = wp_get_upload_dir();
   require_once ABSPATH . "wp-admin/includes/image.php";
@@ -244,7 +245,7 @@ wp eval '
     }
     wp_mkdir_p( dirname( $file ) );
     if ( ! copy( "/tmp/greendawn-home-media/" . $name, $file ) ) {
-      WP_CLI::error( "Could not seed the service photograph: " . $name );
+      WP_CLI::error( "Could not seed the homepage photograph: " . $name );
     }
     $id = wp_insert_attachment( array( "post_title" => $alt, "post_mime_type" => "image/webp" ), $file, 0, true );
     if ( is_wp_error( $id ) ) {
@@ -282,6 +283,20 @@ wp post meta update "$greendawn_edited_id" greendawn_home_aftercare_cta_label "R
 wp post meta update "$greendawn_edited_id" greendawn_home_aftercare_cta_url "https://www.greendawn.co.uk/aftercare/?view=plans#scope"
 wp post meta update "$greendawn_edited_id" greendawn_home_aftercare_support_label "Speak to customer care"
 wp post meta update "$greendawn_edited_id" greendawn_home_aftercare_support_url "https://greendawn.co.uk/customer-care/?from=home#help"
+wp post meta update "$greendawn_edited_id" greendawn_home_proof_title "Coordinated charging across your sites."
+wp post meta update "$greendawn_edited_id" greendawn_home_proof_project_title "Fleet charging programme"
+wp post meta update "$greendawn_edited_id" greendawn_home_proof_result "52 sites · 74 chargepoints"
+wp post meta update "$greendawn_edited_id" greendawn_home_proof_caption "Fleet programme delivered together"
+wp post meta update "$greendawn_edited_id" greendawn_home_proof_copy "A coordinated programme for a varied fleet estate."
+wp post meta update "$greendawn_edited_id" greendawn_home_proof_link "See our fleet projects"
+wp post meta update "$greendawn_edited_id" greendawn_home_proof_image "$hero_id"
+
+# Simulate an unavailable photograph on one disposable fixture page only.
+docker cp tests/fixtures/missing-proof-media.php "$container_id:/var/www/html/wp-content/plugins/greendawn-test-media.php"
+wp plugin activate greendawn-test-media
+create_page greendawn-home-no-proof-image "Greendawn proof without a photograph" ''
+greendawn_no_proof_id=$(wp post list --post_type=page --name=greendawn-home-no-proof-image --field=ID)
+wp post meta update "$greendawn_no_proof_id" _wp_page_template templates/greendawn-homepage.php
 
 # Exercise WordPress's assigned Posts page and published editorial templates.
 create_page starter-home "Starter home" '<p>Static homepage fixture.</p>'

@@ -22,12 +22,25 @@ test('the branded homepage renders its sections in order without JavaScript', as
 				'A clear route from requirement to operation.',
 				'A dealership programme coordinated site by site.',
 				'Replace assumptions with a buildable plan.',
+				'Charging built around your operation.',
 			]);
 			await expect(main.locator('#problem li')).toHaveCount(6);
 			await expect(main.locator('#system .gd-system__cards h3')).toHaveText([
 				'Power & infrastructure', 'Charging equipment', 'Software & operation',
 			]);
 			await expect(main.locator('#process h3')).toHaveText(['Consult', 'Design', 'Install', 'Manage']);
+			await expect(main.locator('#who-we-help h3')).toHaveText([
+				'Fleet & depot charging', 'Workplace charging', 'Public & destination charging',
+				'Multi-site programmes', 'Dealerships & motor retail',
+			]);
+			const destinations = await main.locator('#who-we-help .gd-solution-row').evaluateAll((links) => links.map((link) => (link as HTMLAnchorElement).href));
+			expect(destinations).toEqual([
+				`${baseURL}/fleet-charging-solutions/`, `${baseURL}/workplace-charging/`, `${baseURL}/public-charging/`,
+				`${baseURL}/business-ev-charging-installations/`, `${baseURL}/guides/ev-charging-for-car-dealership/`,
+			]);
+			for (const href of await main.locator('a[href]').evaluateAll((links) => links.map((link) => (link as HTMLAnchorElement).href))) {
+				expect(new URL(href).origin).toBe(new URL(baseURL!).origin);
+			}
 			const projectImage = main.locator('#projects figure img');
 			await expect(projectImage).toHaveAttribute('loading', 'lazy');
 			await expect(projectImage).toHaveAttribute('src', /johnsons-dealership-ev-charging-/);
@@ -51,13 +64,13 @@ test('the branded homepage renders its sections in order without JavaScript', as
 				'Electrical, civil and network dependencies',
 				'The information needed for the design and proposal',
 			]);
-			await expect(main.getByRole('link', { name: 'Explore our project experience' })).toHaveAttribute('href', 'https://greendawn.co.uk/gallery/');
+			await expect(main.getByRole('link', { name: 'Explore our project experience' })).toHaveAttribute('href', `${baseURL}/gallery/`);
 			await expect(main.getByRole('link', { name: 'Discuss a site survey' })).toHaveAttribute('href', /\/about\/$/);
 			await expect(main.getByRole('link', { name: 'What a technical survey should establish' })).toHaveAttribute('href', /\/guides\/greendawn-ev-charging-survey-pre-installation-guide\/$/);
 			await expect(main.getByRole('link', { name: 'Understand AC and DC charging' })).toHaveAttribute('href', /\/guides\/ac-vs-dc-ev-charging\/$/);
 			await expect(main.getByRole('link', { name: 'Explore site power planning' })).toHaveAttribute('href', /\/guides\/can-my-building-handle-ev-charging\/$/);
 			await expect(main.getByRole('link', { name: 'Discuss your site' })).toHaveAttribute('href', /\/about\/$/);
-			await expect(main.getByRole('link', { name: 'Explore our projects' })).toHaveAttribute('href', 'https://greendawn.co.uk/gallery/');
+			await expect(main.getByRole('link', { name: 'Explore our projects' })).toHaveAttribute('href', `${baseURL}/gallery/`);
 			const delivery = main.getByText('Commercial delivery', { exact: true });
 			expect(await delivery.evaluate((element) => getComputedStyle(element, '::before').backgroundColor)).toBe('rgb(255, 94, 51)');
 			expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(width);
@@ -163,7 +176,7 @@ test('the desktop header and hero use the Greendawn hover styles', async ({ page
 });
 
 
-test('saved homepage values render in the initial response with one hero image', async ({ page }) => {
+test('saved homepage values render in the initial response with one hero image', async ({ page, baseURL }) => {
 	const imageRequests: string[] = [];
 	page.on('request', (request) => {
 		if (request.resourceType() === 'image') imageRequests.push(request.url());
@@ -190,6 +203,16 @@ test('saved homepage values render in the initial response with one hero image',
 	await expect(page.locator('#surveys .gd-surveys__price-value strong')).toHaveText('£250');
 	await expect(page.locator('#surveys li p').first()).toHaveText('Assess the electrical capacity at your site');
 	await expect(page.getByRole('link', { name: 'What a technical survey should establish' })).toHaveAttribute('href', 'https://example.com/survey-guide/');
+	const services = page.locator('#who-we-help');
+	await expect(services.getByRole('heading', { name: 'Charging for your fleet' })).toBeVisible();
+	await expect(services.locator('.gd-solution-row--fleet p')).toHaveText('A charging plan for your vehicles and operating hours.');
+	await expect(services.locator('.gd-solution-row--fleet')).toHaveAttribute('href', `${baseURL}/fleet-charging-solutions/?source=home#details`);
+	await expect(services.locator('.gd-solution-row--fleet .gd-solution-row__destination')).toHaveText('See our fleet service');
+	await expect(services.locator('.gd-solution-image--fleet img')).toHaveAttribute('src', /service-media/);
+	await expect(services.locator('.gd-solution-image--fleet figcaption')).toHaveText('01Charging for your fleet');
+	expect(html).toContain('Charging for your fleet');
+	await expect(page.getByRole('link', { name: 'Explore our projects' })).toHaveAttribute('href', `${baseURL}/gallery/?view=estate#projects`);
+	await expect(page.getByRole('link', { name: 'Understand AC and DC charging' })).toHaveAttribute('href', `${baseURL}/guides/ac-vs-dc-ev-charging/`);
 });
 
 test('the utility bar text can be edited and reset in the Customiser', async ({ page, baseURL }) => {
@@ -211,4 +234,70 @@ test('the utility bar text can be edited and reset in the Customiser', async ({ 
 	await page.getByRole('button', { name: 'Reset utility bar text' }).click();
 	await expect(input).toHaveValue(defaultText);
 	await expect(preview).toHaveText(defaultText);
+});
+
+test('service photographs follow hover and keyboard focus without JavaScript', async ({ browser, baseURL }, testInfo) => {
+	const context = await browser.newContext({ baseURL, javaScriptEnabled: false });
+	const page = await context.newPage();
+	const serviceImages: string[] = [];
+	page.on('request', (request) => {
+		if (request.resourceType() === 'image' && /commercial-ev-(fleet|workplace|destination|multi-site|dealership)/.test(request.url())) {
+			serviceImages.push(request.url());
+		}
+	});
+	try {
+		await page.setViewportSize({ width: 1440, height: 900 });
+		await page.goto('/greendawn-home/');
+		const services = page.locator('#who-we-help');
+		const media = services.locator('.gd-solutions__media');
+		const fleet = services.locator('.gd-solution-row--fleet');
+		const fleetImage = services.locator('.gd-solution-image--fleet img');
+		await fleetImage.scrollIntoViewIfNeeded();
+		await expect.poll(() => fleetImage.evaluate((image: HTMLImageElement) => image.naturalWidth)).toBeGreaterThan(0);
+		await fleetImage.evaluate((image: HTMLImageElement) => image.decode());
+		await expect(fleetImage).toHaveAttribute('loading', 'lazy');
+		await expect(fleetImage).toHaveAttribute('alt', '');
+		await expect(fleetImage).toHaveAttribute('srcset', /1200w/);
+		expect(serviceImages.some((url) => url.includes('fleet-charging-bays'))).toBe(true);
+		expect(serviceImages.some((url) => /workplace|destination|multi-site|dealership/.test(url))).toBe(false);
+
+		const workplace = services.locator('.gd-solution-row--workplace');
+		await workplace.hover();
+		await expect(workplace).toHaveCSS('color', 'rgb(58, 34, 216)');
+		const workplaceImage = services.locator('.gd-solution-image--workplace img');
+		await expect(workplaceImage).toBeVisible();
+		await expect.poll(() => workplaceImage.evaluate((image: HTMLImageElement) => image.naturalWidth)).toBeGreaterThan(0);
+		await workplaceImage.evaluate((image: HTMLImageElement) => image.decode());
+		await expect(workplaceImage).toHaveAttribute('src', /workplace-charging-1200-scaled/);
+
+		await fleet.focus();
+		await fleet.press('Tab');
+		await expect(workplace).toBeFocused();
+		await services.locator('.gd-solution-row--public').hover();
+		const box = (await media.boundingBox())!;
+		const topPreview = await page.evaluate(({ x, y }) => document.elementFromPoint(x, y)?.closest('figure')?.className, { x: box.x + box.width / 2, y: box.y + box.height / 2 });
+		expect(topPreview).toContain('gd-solution-image--workplace');
+
+		for (const key of ['public', 'multi_site', 'dealership']) {
+			await page.keyboard.press('Tab');
+			await expect(services.locator(`.gd-solution-row--${key}`)).toBeFocused();
+			const image = services.locator(`.gd-solution-image--${key} img`);
+			await expect(image).toBeVisible();
+			await expect.poll(() => image.evaluate((element: HTMLImageElement) => element.naturalWidth)).toBeGreaterThan(0);
+			await image.evaluate((element: HTMLImageElement) => element.decode());
+		}
+		await page.locator('.gd-hero h1').click();
+		await page.mouse.move(0, 0);
+		await testInfo.attach('greendawn-services-1440', { body: await services.screenshot(), contentType: 'image/png' });
+
+		await page.setViewportSize({ width: 320, height: 900 });
+		await page.goto('/greendawn-home/');
+		await fleetImage.scrollIntoViewIfNeeded();
+		await fleetImage.evaluate((image: HTMLImageElement) => image.decode());
+		expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(320);
+		await expect(services.locator('.gd-solution-row')).toHaveCount(5);
+		await testInfo.attach('greendawn-services-320', { body: await services.screenshot(), contentType: 'image/png' });
+	} finally {
+		await context.close();
+	}
 });

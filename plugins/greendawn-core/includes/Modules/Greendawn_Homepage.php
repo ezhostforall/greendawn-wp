@@ -12,8 +12,7 @@ defined( 'ABSPATH' ) || exit;
 /** Registers the client homepage field group. */
 final class Greendawn_Homepage implements Module_Interface {
 
-	private const TEMPLATE    = 'templates/greendawn-homepage.php';
-	private const PUBLIC_SITE = 'https://greendawn.co.uk';
+	private const TEMPLATE = 'templates/greendawn-homepage.php';
 
 	/**
 	 * The translated field definitions for this request.
@@ -75,7 +74,7 @@ final class Greendawn_Homepage implements Module_Interface {
 			'headline_accent'               => array( __( 'Headline accent line', 'greendawn-core' ), __( 'Handled.', 'greendawn-core' ), 16 ),
 			'lead'                          => array( __( 'Introduction', 'greendawn-core' ), __( 'Greendawn plans, installs and supports commercial EV charging around your vehicles, users and available power—from a single site to a coordinated estate programme.', 'greendawn-core' ), 280, 'textarea' ),
 			'projects_label'                => array( __( 'Projects link label', 'greendawn-core' ), __( 'Explore our projects', 'greendawn-core' ), 45 ),
-			'projects_url'                  => array( __( 'Projects destination', 'greendawn-core' ), self::PUBLIC_SITE . '/gallery/', 0, 'url' ),
+			'projects_url'                  => array( __( 'Projects destination', 'greendawn-core' ), home_url( '/gallery/' ), 0, 'url' ),
 			'assurance_requirements'        => array( __( 'Site requirements assurance', 'greendawn-core' ), __( 'Site requirements first', 'greendawn-core' ), 70 ),
 			'assurance_equipment'           => array( __( 'Equipment assurance', 'greendawn-core' ), __( 'Equipment chosen for the operation', 'greendawn-core' ), 70 ),
 			'assurance_support'             => array( __( 'Support assurance', 'greendawn-core' ), __( 'Agreed support after installation', 'greendawn-core' ), 70 ),
@@ -123,12 +122,12 @@ final class Greendawn_Homepage implements Module_Interface {
 			'system_technology_title'       => array( __( 'Technology guide heading', 'greendawn-core' ), __( 'AC or DC follows the operational need.', 'greendawn-core' ), 80 ),
 			'system_technology_copy'        => array( __( 'Technology guide summary', 'greendawn-core' ), __( 'Vehicles, energy demand and the time available to charge shape the equipment choice.', 'greendawn-core' ), 180, 'textarea' ),
 			'system_technology_link'        => array( __( 'Technology guide link text', 'greendawn-core' ), __( 'Understand AC and DC charging', 'greendawn-core' ), 65 ),
-			'system_technology_url'         => array( __( 'Technology guide URL', 'greendawn-core' ), self::PUBLIC_SITE . '/guides/ac-vs-dc-ev-charging/', 0, 'url' ),
+			'system_technology_url'         => array( __( 'Technology guide URL', 'greendawn-core' ), home_url( '/guides/ac-vs-dc-ev-charging/' ), 0, 'url' ),
 			'system_site_power_label'       => array( __( 'Site power guide label', 'greendawn-core' ), __( 'Site power', 'greendawn-core' ), 45 ),
 			'system_site_power_title'       => array( __( 'Site power guide heading', 'greendawn-core' ), __( 'Make informed decisions about site power.', 'greendawn-core' ), 80 ),
 			'system_site_power_copy'        => array( __( 'Site power guide summary', 'greendawn-core' ), __( 'Assess demand and load management before deciding whether additional supply is needed.', 'greendawn-core' ), 180, 'textarea' ),
 			'system_site_power_link'        => array( __( 'Site power guide link text', 'greendawn-core' ), __( 'Explore site power planning', 'greendawn-core' ), 65 ),
-			'system_site_power_url'         => array( __( 'Site power guide URL', 'greendawn-core' ), self::PUBLIC_SITE . '/guides/can-my-building-handle-ev-charging/', 0, 'url' ),
+			'system_site_power_url'         => array( __( 'Site power guide URL', 'greendawn-core' ), home_url( '/guides/can-my-building-handle-ev-charging/' ), 0, 'url' ),
 			'process_title'                 => array( __( 'Process heading', 'greendawn-core' ), __( 'A clear route from requirement to operation.', 'greendawn-core' ), 100 ),
 			'process_intro'                 => array( __( 'Process introduction', 'greendawn-core' ), __( 'You do not need a finished specification to start. Each stage establishes the decisions and information needed for the next.', 'greendawn-core' ), 220, 'textarea' ),
 			'consult_description'           => array( __( 'Consult description', 'greendawn-core' ), __( 'Tell us about your vehicles, users, sites and objectives. We establish the requirement and recommend the next step.', 'greendawn-core' ), 240, 'textarea' ),
@@ -163,7 +162,38 @@ final class Greendawn_Homepage implements Module_Interface {
 			'survey_summary'                => array( __( 'Survey scope summary', 'greendawn-core' ), __( 'A survey is recommended only where it adds useful technical certainty. Its scope sets out what will be checked, what you will receive and which questions may need further assessment.', 'greendawn-core' ), 340, 'textarea' ),
 			'survey_cta_label'              => array( __( 'Survey enquiry link text', 'greendawn-core' ), __( 'Discuss a site survey', 'greendawn-core' ), 60 ),
 			'survey_guide_label'            => array( __( 'Survey guide link text', 'greendawn-core' ), __( 'What a technical survey should establish', 'greendawn-core' ), 80 ),
-			'survey_guide_url'              => array( __( 'Survey guide URL', 'greendawn-core' ), self::PUBLIC_SITE . '/guides/greendawn-ev-charging-survey-pre-installation-guide/', 0, 'url' ),
+			'survey_guide_url'              => array( __( 'Survey guide URL', 'greendawn-core' ), home_url( '/guides/greendawn-ev-charging-survey-pre-installation-guide/' ), 0, 'url' ),
+			'solutions_eyebrow'             => array( __( 'Services eyebrow', 'greendawn-core' ), __( 'Who we help', 'greendawn-core' ), 60 ),
+			'solutions_title'               => array( __( 'Services heading', 'greendawn-core' ), __( 'Charging built around your operation.', 'greendawn-core' ), 100 ),
+			'solutions_intro'               => array( __( 'Services introduction', 'greendawn-core' ), __( 'Different sites need charging to do different jobs. Start with the users, vehicles, parking time and available power.', 'greendawn-core' ), 240, 'textarea' ),
+			'solution_fleet_title'          => array( __( 'Fleet & depot charging: title', 'greendawn-core' ), __( 'Fleet & depot charging', 'greendawn-core' ), 65 ),
+			'solution_fleet_copy'           => array( __( 'Fleet & depot charging: description', 'greendawn-core' ), __( 'Plan around daily energy demand, charging windows and when vehicles need to leave.', 'greendawn-core' ), 240, 'textarea' ),
+			'solution_fleet_link'           => array( __( 'Fleet & depot charging: link text', 'greendawn-core' ), __( 'Explore fleet charging', 'greendawn-core' ), 70 ),
+			'solution_fleet_url'            => array( __( 'Fleet & depot charging: destination', 'greendawn-core' ), home_url( '/fleet-charging-solutions/' ), 0, 'url' ),
+			'solution_workplace_title'      => array( __( 'Workplace charging: title', 'greendawn-core' ), __( 'Workplace charging', 'greendawn-core' ), 65 ),
+			'solution_workplace_copy'       => array( __( 'Workplace charging: description', 'greendawn-core' ), __( 'Match provision to staff, company vehicles and visitors, with capacity and access considered from the start.', 'greendawn-core' ), 240, 'textarea' ),
+			'solution_workplace_link'       => array( __( 'Workplace charging: link text', 'greendawn-core' ), __( 'Explore workplace charging', 'greendawn-core' ), 70 ),
+			'solution_workplace_url'        => array( __( 'Workplace charging: destination', 'greendawn-core' ), home_url( '/workplace-charging/' ), 0, 'url' ),
+			'solution_public_title'         => array( __( 'Public & destination charging: title', 'greendawn-core' ), __( 'Public & destination charging', 'greendawn-core' ), 65 ),
+			'solution_public_copy'          => array( __( 'Public & destination charging: description', 'greendawn-core' ), __( 'Plan charging around the visitor experience, parking time, payment and ongoing support.', 'greendawn-core' ), 240, 'textarea' ),
+			'solution_public_link'          => array( __( 'Public & destination charging: link text', 'greendawn-core' ), __( 'Explore public and destination charging', 'greendawn-core' ), 70 ),
+			'solution_public_url'           => array( __( 'Public & destination charging: destination', 'greendawn-core' ), home_url( '/public-charging/' ), 0, 'url' ),
+			'solution_multi_site_title'     => array( __( 'Multi-site programmes: title', 'greendawn-core' ), __( 'Multi-site programmes', 'greendawn-core' ), 65 ),
+			'solution_multi_site_copy'      => array( __( 'Multi-site programmes: description', 'greendawn-core' ), __( 'Coordinate shared requirements while accounting for the different constraints at each location.', 'greendawn-core' ), 240, 'textarea' ),
+			'solution_multi_site_link'      => array( __( 'Multi-site programmes: link text', 'greendawn-core' ), __( 'Explore commercial project delivery', 'greendawn-core' ), 70 ),
+			'solution_multi_site_url'       => array( __( 'Multi-site programmes: destination', 'greendawn-core' ), home_url( '/business-ev-charging-installations/' ), 0, 'url' ),
+			'solution_dealership_title'     => array( __( 'Dealerships & motor retail: title', 'greendawn-core' ), __( 'Dealerships & motor retail', 'greendawn-core' ), 65 ),
+			'solution_dealership_copy'      => array( __( 'Dealerships & motor retail: description', 'greendawn-core' ), __( 'Plan for vehicle preparation, workshops, demonstrators, handovers and customer charging.', 'greendawn-core' ), 240, 'textarea' ),
+			'solution_dealership_link'      => array( __( 'Dealerships & motor retail: link text', 'greendawn-core' ), __( 'Read the dealership planning guide', 'greendawn-core' ), 70 ),
+			'solution_dealership_url'       => array( __( 'Dealerships & motor retail: destination', 'greendawn-core' ), home_url( '/guides/ev-charging-for-car-dealership/' ), 0, 'url' ),
+		);
+
+		$solution_images = array(
+			'solution_fleet_title'      => array( 'solution_fleet_image', __( 'Fleet & depot charging: photograph', 'greendawn-core' ), 'commercial-ev-fleet-charging-bays-1200.webp' ),
+			'solution_workplace_title'  => array( 'solution_workplace_image', __( 'Workplace charging: photograph', 'greendawn-core' ), 'commercial-ev-workplace-charging-1200.webp' ),
+			'solution_public_title'     => array( 'solution_public_image', __( 'Public & destination charging: photograph', 'greendawn-core' ), 'commercial-ev-destination-hospitality-1200.webp' ),
+			'solution_multi_site_title' => array( 'solution_multi_site_image', __( 'Multi-site programmes: photograph', 'greendawn-core' ), 'commercial-ev-multi-site-charging-768.webp' ),
+			'solution_dealership_title' => array( 'solution_dealership_image', __( 'Dealerships & motor retail: photograph', 'greendawn-core' ), 'commercial-ev-dealership-charging-1200.webp' ),
 		);
 
 		$fields = array();
@@ -177,6 +207,20 @@ final class Greendawn_Homepage implements Module_Interface {
 					'type'           => 'image',
 					'return_format'  => 'id',
 					'default_upload' => '2026/11/johnsons-dealership-ev-charging-1200.webp',
+				);
+			}
+			if ( isset( $solution_images[ $name ] ) ) {
+				$image      = $solution_images[ $name ];
+				$image_name = $image[0];
+
+				$fields[ $image_name ] = array(
+					'key'            => 'field_greendawn_home_' . $image_name,
+					'name'           => 'greendawn_home_' . $image_name,
+					'label'          => $image[1],
+					'instructions'   => __( 'Upload the supplied service photograph and select it here. The homepage preview is decorative; its caption follows the service title.', 'greendawn-core' ),
+					'type'           => 'image',
+					'return_format'  => 'id',
+					'default_upload' => '2026/11/' . $image[2],
 				);
 			}
 			$fields[ $name ] = array(
@@ -244,12 +288,30 @@ final class Greendawn_Homepage implements Module_Interface {
 			if ( '' === $default_upload ) {
 				return 0;
 			}
-			$uploads = wp_get_upload_dir();
-			return attachment_url_to_postid( trailingslashit( $uploads['baseurl'] ) . $default_upload );
+			$uploads  = wp_get_upload_dir();
+			$image_id = attachment_url_to_postid( trailingslashit( $uploads['baseurl'] ) . $default_upload );
+			if ( $image_id ) {
+				return $image_id;
+			}
+
+			// WordPress scales photographs larger than its big-image threshold on upload.
+			$scaled_upload = preg_replace( '/(\.[^\/.]+)$/', '-scaled$1', $default_upload );
+			return attachment_url_to_postid( trailingslashit( $uploads['baseurl'] ) . $scaled_upload );
 		}
 
 		if ( null === $value || false === $value || '' === $value || ( 'url' === $field['type'] && '#' === $value ) ) {
-			return $field['default_value'];
+			$value = $field['default_value'];
+		}
+
+		// Existing imported links should follow the current WordPress environment.
+		if ( 'url' === $field['type'] && is_string( $value ) ) {
+			$parts = wp_parse_url( $value );
+			if ( is_array( $parts ) && in_array( strtolower( $parts['host'] ?? '' ), array( 'greendawn.co.uk', 'www.greendawn.co.uk' ), true ) ) {
+				$path  = $parts['path'] ?? '/';
+				$path .= isset( $parts['query'] ) ? '?' . $parts['query'] : '';
+				$path .= isset( $parts['fragment'] ) ? '#' . $parts['fragment'] : '';
+				return home_url( $path );
+			}
 		}
 
 		return $value;
@@ -262,13 +324,14 @@ final class Greendawn_Homepage implements Module_Interface {
 		}
 
 		$tabs   = array(
-			'hero_image'      => __( 'Hero', 'greendawn-core' ),
-			'trust_label'     => __( 'Trust', 'greendawn-core' ),
-			'problem_eyebrow' => __( 'Problem', 'greendawn-core' ),
-			'system_eyebrow'  => __( 'System', 'greendawn-core' ),
-			'process_title'   => __( 'Process', 'greendawn-core' ),
-			'featured_image'  => __( 'Featured project', 'greendawn-core' ),
-			'survey_eyebrow'  => __( 'Surveys', 'greendawn-core' ),
+			'hero_image'        => __( 'Hero', 'greendawn-core' ),
+			'trust_label'       => __( 'Trust', 'greendawn-core' ),
+			'problem_eyebrow'   => __( 'Problem', 'greendawn-core' ),
+			'system_eyebrow'    => __( 'System', 'greendawn-core' ),
+			'process_title'     => __( 'Process', 'greendawn-core' ),
+			'featured_image'    => __( 'Featured project', 'greendawn-core' ),
+			'survey_eyebrow'    => __( 'Surveys', 'greendawn-core' ),
+			'solutions_eyebrow' => __( 'Services', 'greendawn-core' ),
 		);
 		$fields = array();
 		foreach ( $this->fields() as $name => $field ) {

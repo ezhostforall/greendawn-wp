@@ -224,6 +224,36 @@ wp eval '
     update_post_meta( $id, "_wp_attachment_image_alt", "Vehicle connected to EV charging equipment at a Johnsons Cars dealership" );
   }
 '
+# Import the service preview photographs using normal WordPress thumbnail/scaling behaviour.
+docker cp docs/astro-reference/media "$container_id:/tmp/greendawn-home-media"
+wp eval '
+  $photographs = array(
+    "commercial-ev-fleet-charging-bays-1200.webp" => "Completed EV charging bays at a commercial site",
+    "commercial-ev-workplace-charging-1200.webp" => "Wall-mounted EV charger beside a parked vehicle",
+    "commercial-ev-destination-hospitality-1200.webp" => "EV chargers installed outside a hotel",
+    "commercial-ev-multi-site-charging-768.webp" => "Completed EV charging installation with multiple marked bays",
+    "commercial-ev-dealership-charging-1200.webp" => "EV charging equipment installed at a Ford dealership",
+  );
+  $uploads = wp_get_upload_dir();
+  require_once ABSPATH . "wp-admin/includes/image.php";
+  foreach ( $photographs as $name => $alt ) {
+    $relative = "2026/11/" . $name;
+    $file = $uploads["basedir"] . "/" . $relative;
+    if ( attachment_url_to_postid( $uploads["baseurl"] . "/" . $relative ) ) {
+      continue;
+    }
+    wp_mkdir_p( dirname( $file ) );
+    if ( ! copy( "/tmp/greendawn-home-media/" . $name, $file ) ) {
+      WP_CLI::error( "Could not seed the service photograph: " . $name );
+    }
+    $id = wp_insert_attachment( array( "post_title" => $alt, "post_mime_type" => "image/webp" ), $file, 0, true );
+    if ( is_wp_error( $id ) ) {
+      WP_CLI::error( $id->get_error_message() );
+    }
+    wp_update_attachment_metadata( $id, wp_generate_attachment_metadata( $id, $file ) );
+    update_post_meta( $id, "_wp_attachment_image_alt", $alt );
+  }
+'
 create_page greendawn-home-edited "Greendawn home edited" ''
 greendawn_edited_id=$(wp post list --post_type=page --name=greendawn-home-edited --field=ID)
 wp post meta update "$greendawn_edited_id" _wp_page_template templates/greendawn-homepage.php
@@ -237,6 +267,13 @@ wp post meta update "$greendawn_edited_id" greendawn_home_featured_sites_value "
 wp post meta update "$greendawn_edited_id" greendawn_home_survey_price "£250"
 wp post meta update "$greendawn_edited_id" greendawn_home_survey_outcome_1 "Assess the electrical capacity at your site"
 wp post meta update "$greendawn_edited_id" greendawn_home_survey_guide_url "https://example.com/survey-guide/"
+wp post meta update "$greendawn_edited_id" greendawn_home_projects_url "https://greendawn.co.uk/gallery/?view=estate#projects"
+wp post meta update "$greendawn_edited_id" greendawn_home_system_technology_url "https://www.greendawn.co.uk/guides/ac-vs-dc-ev-charging/"
+wp post meta update "$greendawn_edited_id" greendawn_home_solution_fleet_title "Charging for your fleet"
+wp post meta update "$greendawn_edited_id" greendawn_home_solution_fleet_copy "A charging plan for your vehicles and operating hours."
+wp post meta update "$greendawn_edited_id" greendawn_home_solution_fleet_link "See our fleet service"
+wp post meta update "$greendawn_edited_id" greendawn_home_solution_fleet_url "https://www.greendawn.co.uk/fleet-charging-solutions/?source=home#details"
+wp post meta update "$greendawn_edited_id" greendawn_home_solution_fleet_image "$hero_id"
 
 # Exercise WordPress's assigned Posts page and published editorial templates.
 create_page starter-home "Starter home" '<p>Static homepage fixture.</p>'

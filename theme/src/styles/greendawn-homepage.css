@@ -1,6 +1,7 @@
 @import './greendawn-home-sections.css';
 @import './greendawn-home-journey.css';
 @import './greendawn-home-project-surveys.css';
+@import './greendawn-home-solutions.css';
 
 html:has(> .greendawn-home) {
 	scrollbar-gutter: stable;

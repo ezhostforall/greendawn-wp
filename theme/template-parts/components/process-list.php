@@ -11,7 +11,7 @@ if ( ! $greendawn_steps ) {
 	return;
 }
 ?>
-<ol class="gd-enquiry-process" aria-label="<?php esc_attr_e( 'Installation process', 'greendawn' ); ?>">
+<ol class="gd-enquiry-process" role="list" aria-label="<?php esc_attr_e( 'Installation process', 'greendawn' ); ?>">
 	<?php foreach ( $greendawn_steps as $greendawn_index => $greendawn_step ) : ?>
 		<li>
 			<span aria-hidden="true"><?php echo esc_html( sprintf( '%02d', $greendawn_index + 1 ) ); ?></span>

@@ -208,20 +208,20 @@ final class Greendawn_Enquire implements Module_Interface {
 	/**
 	 * Fills explicit hidden product tags on the server, including without JavaScript.
 	 *
-	 * @param \WPCF7_FormTag $tag Native CF7 tag.
-	 * @return \WPCF7_FormTag
+	 * @param array $tag Raw native tag before CF7 constructs its FormTag object.
+	 * @return array
 	 */
-	public function charger_tag( $tag ) {
+	public function charger_tag( array $tag ): array {
 		$names = array(
 			'chargerId'    => 'id',
 			'chargerTitle' => 'title',
 			'chargerURL'   => 'url',
 		);
-		if ( 'hidden' !== $tag->basetype || ! isset( $names[ $tag->name ] ) || ! $this->owns_form( get_the_ID() ) ) {
+		if ( 'hidden' !== $tag['basetype'] || ! isset( $names[ $tag['name'] ] ) || ! $this->owns_form( get_the_ID() ) ) {
 			return $tag;
 		}
-		$context     = apply_filters( 'greendawn_selected_charger', array() );
-		$tag->values = array( (string) ( $context[ $names[ $tag->name ] ] ?? '' ) );
+		$context       = apply_filters( 'greendawn_selected_charger', array() );
+		$tag['values'] = array( (string) ( $context[ $names[ $tag['name'] ] ] ?? '' ) );
 		return $tag;
 	}
 

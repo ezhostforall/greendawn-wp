@@ -84,9 +84,31 @@ update_post_meta( $greendawn_pages['gd-enquire-protected'], 'greendawn_enquire_i
 foreach ( array( 'contact_heading', 'contact_copy' ) as $greendawn_name ) {
 	update_post_meta( $greendawn_pages['gd-enquire-contacts-cleared'], 'greendawn_enquire_' . $greendawn_name, '' );
 }
+// The real CF7 renderer must fill native hidden values before JavaScript can run.
+$greendawn_product    = get_page_by_path( 'hellonext-h1-22', OBJECT, 'evcharger' );
+$greendawn_context    = \Greendawn_Core\Modules\EV_Chargers::quote_context( $greendawn_product->ID );
+$greendawn_page_query = new WP_Query( array( 'page_id' => $greendawn_default ) );
+$greendawn_page_query->the_post();
+$greendawn_context_filter = static fn(): array => $greendawn_context;
+add_filter( 'greendawn_selected_charger', $greendawn_context_filter, 20 );
+$greendawn_native         = do_shortcode( '[contact-form-7 id="' . $greendawn_form_id . '"]' );
+$greendawn_processor      = new WP_HTML_Tag_Processor( $greendawn_native );
+$greendawn_native_values  = array();
+while ( $greendawn_processor->next_tag( 'input' ) ) {
+	$greendawn_name = $greendawn_processor->get_attribute( 'name' );
+	if ( in_array( $greendawn_name, array( 'chargerId', 'chargerTitle', 'chargerURL' ), true ) ) {
+		$greendawn_native_values[ $greendawn_name ] = $greendawn_processor->get_attribute( 'value' );
+	}
+}
+$greendawn_expected_values = array(
+	'chargerId'    => (string) $greendawn_product->ID,
+	'chargerTitle' => $greendawn_context['title'],
+	'chargerURL'   => $greendawn_context['url'],
+);
+$greendawn_assert( $greendawn_native_values === $greendawn_expected_values, 'The native CF7 render must include server-resolved product fields before JavaScript.' );
+remove_filter( 'greendawn_selected_charger', $greendawn_context_filter, 20 );
+wp_reset_postdata();
 // Bind product transport through saved Page/form relationships, independent of client container IDs.
-$greendawn_product = get_page_by_path( 'hellonext-h1-22', OBJECT, 'evcharger' );
-$greendawn_context = \Greendawn_Core\Modules\EV_Chargers::quote_context( $greendawn_product->ID );
 wpcf7_contact_form( $greendawn_form_id );
 $greendawn_data = apply_filters(
 	'wpcf7_posted_data',

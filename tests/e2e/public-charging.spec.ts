@@ -78,6 +78,15 @@ test('Public preserves source content and all local destinations without JavaScr
 				await media.scrollIntoViewIfNeeded();
 				await media.evaluate(async (el: HTMLImageElement) => { await el.decode(); });
 			}
+			// Check lazy media in its visible viewport as well as the full-page composition.
+			// Chromium may omit cached off-screen lazy images from a full-page capture.
+			for (const [label, selector] of [['charger', '.gd-charger-card'], ['article', '.gd-insight-card']] as const) {
+				const card = page.locator(selector).first();
+				await card.scrollIntoViewIfNeeded();
+				expect(await card.locator('img').evaluate((el: HTMLImageElement) => el.complete && el.naturalWidth > 0)).toBe(true);
+				await card.evaluate(() => new Promise<void>(resolve => requestAnimationFrame(() => requestAnimationFrame(() => resolve()))));
+				await testInfo.attach(`public-${label}-${width}`, { body: await card.screenshot(), contentType: 'image/png' });
+			}
 			await page.evaluate(async () => {
 				await document.fonts.ready;
 				document.querySelector('.gd-article-track')?.scrollTo({ left: 0, behavior: 'instant' });

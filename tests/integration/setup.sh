@@ -428,3 +428,9 @@ wp plugin activate secure-custom-fields
 docker cp tests/integration/workplace-page.php "$container_id:/tmp/workplace-page.php"
 wp eval-file /tmp/workplace-page.php
 wp plugin deactivate secure-custom-fields
+
+# Fleet shares the audience renderers while owning its source process and selections.
+wp plugin activate secure-custom-fields
+docker cp tests/integration/fleet-page.php "$container_id:/tmp/fleet-page.php"
+wp eval-file /tmp/fleet-page.php
+wp plugin deactivate secure-custom-fields

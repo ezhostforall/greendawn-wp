@@ -53,3 +53,10 @@ About/form/tracking staging acceptance was confirmed by Neel. The next change ad
 Neel confirmed charger-detail staging acceptance. The fixed **Greendawn Workplace Charging** Page template is the next audience-page implementation, reusing the hero, CTA, process and page-selected form primitives and extracting a shared article collection. It retains all existing Workplace copy, its own process, six native charger destinations, two process photographs, the inline form and ten articles. Benefits and chargers remain visible without flip cards/autoplay. See [Workplace setup and acceptance](greendawn-workplace.md).
 
 After merging/installing the candidate theme and Core, assign the template to the existing `/workplace-charging/` Page and review its media, ordered native relationships and CF7 selection. Actual attachment matching, visible form feedback and intended-recipient delivery remain staging checks. Fleet Charging and Public Charging follow this audience-page implementation; only Public Charging replaces its source process with the approved homepage process. Enquire/support, Aftercare and the remaining internal templates follow the approved page plan.
+
+
+## Fleet Charging implementation
+
+Neel confirmed Workplace staging acceptance. The next audience-page template is **Greendawn Fleet Charging** for the existing `/fleet-charging-solutions/` Page. It retains the full Fleet copy, four benefits, six native charger destinations, aftercare CTA, Fleet-specific process/two photographs and all ten articles. The charger collection is shared with Workplace while all content/relationship ownership stays page-specific. The approved source/design has no inline Fleet body form; the local Enquire CTA and completed sitewide quote behaviour remain the enquiry routes. See [Fleet setup and acceptance](greendawn-fleet.md).
+
+After merging/installing the theme and Core, assign the template and reconcile native media/relationships on staging. Public Charging follows Fleet acceptance, using only the approved canonical homepage process and removing its old repeated process/photo groups. Existing About, Workplace and Fleet process copy remains independent.

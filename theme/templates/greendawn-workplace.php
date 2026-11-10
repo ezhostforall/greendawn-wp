@@ -10,7 +10,6 @@ defined( 'ABSPATH' ) || exit;
 get_header();
 while ( have_posts() ) :
 	the_post();
-	$greendawn_chargers = greendawn_page_records( greendawn_workplace_field( 'chargers', array() ), 'evcharger' );
 	$greendawn_posts    = greendawn_page_records( greendawn_workplace_field( 'posts', array() ), 'post' );
 	$greendawn_benefits = array();
 	foreach ( array( 'cost', 'reliability', 'energy', 'sustainability' ) as $greendawn_key ) {
@@ -48,33 +47,16 @@ while ( have_posts() ) :
 				'items'       => $greendawn_benefits,
 			)
 		);
-		?>
-		<?php if ( $greendawn_chargers ) : ?>
-			<section class="gd-section gd-recommended-chargers" aria-labelledby="workplace-chargers-title">
-				<div class="gd-shell">
-					<h2 id="workplace-chargers-title"><?php echo esc_html( greendawn_workplace_field( 'chargers_heading' ) ); ?></h2>
-					<?php
-					if ( '' !== greendawn_workplace_field( 'chargers_intro' ) ) :
-						?>
-						<p class="gd-chargers-intro"><?php echo esc_html( greendawn_workplace_field( 'chargers_intro' ) ); ?></p><?php endif; ?>
-					<div class="gd-charger-grid">
-						<?php foreach ( $greendawn_chargers as $greendawn_charger ) : ?>
-							<?php
-							get_template_part(
-								'template-parts/components/charger-card',
-								null,
-								array(
-									'post_id'     => $greendawn_charger->ID,
-									'instance_id' => 'workplace-product-' . $greendawn_charger->ID,
-								)
-							);
-							?>
-						<?php endforeach; ?>
-					</div>
-				</div>
-			</section>
-		<?php endif; ?>
-		<?php
+		get_template_part(
+			'template-parts/components/charger-collection',
+			null,
+			array(
+				'instance_id' => 'workplace',
+				'heading'     => greendawn_workplace_field( 'chargers_heading' ),
+				'intro'       => greendawn_workplace_field( 'chargers_intro' ),
+				'post_ids'    => greendawn_workplace_field( 'chargers', array() ),
+			)
+		);
 		if ( '' !== greendawn_workplace_field( 'cta_heading' ) ) {
 			get_template_part(
 				'template-parts/components/cta-band',

@@ -73,3 +73,16 @@ function greendawn_workplace_field( string $name, $fallback = '' ) {
 	$value = metadata_exists( 'post', $id, 'greendawn_workplace_' . $name ) ? get_post_meta( $id, 'greendawn_workplace_' . $name, true ) : $fallback;
 	return apply_filters( 'greendawn_workplace_field_value', $value, $name, $id );
 }
+
+/**
+ * Resolves independent Fleet content through Core with native metadata fallback.
+ *
+ * @param string $name Short field name.
+ * @param mixed  $fallback Value without the content module.
+ * @return mixed
+ */
+function greendawn_fleet_field( string $name, $fallback = '' ) {
+	$id    = get_the_ID();
+	$value = metadata_exists( 'post', $id, 'greendawn_fleet_' . $name ) ? get_post_meta( $id, 'greendawn_fleet_' . $name, true ) : $fallback;
+	return apply_filters( 'greendawn_fleet_field_value', $value, $name, $id );
+}

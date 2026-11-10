@@ -204,3 +204,26 @@
 .gd-faq-form > h3 { margin-block-end: 1.5rem; }
 @media (max-width: 61rem) { .gd-faq-layout--form { grid-template-columns: minmax(0, 1fr); } }
 @media (max-width: 42rem) { .gd-offering-grid { grid-template-columns: minmax(0, 1fr); } }
+
+/* Dedicated sales enquiry: the form stays first and the complete source process follows. */
+.gd-enquire-section { background: var(--gd-paper); }
+.gd-enquire-layout { display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr); gap: clamp(2.5rem, 5vw, 5rem); align-items: start; }
+.gd-enquire-form { min-width: 0; }
+.gd-enquiry-process { display: grid; gap: 2rem; margin: 0; padding: 0; list-style: none; counter-reset: none; }
+.gd-enquiry-process > li { display: grid; grid-template-columns: 2.25rem minmax(0, 1fr); gap: 1rem; padding-block-start: 1.5rem; border-block-start: 1px solid var(--gd-border-dark); }
+.gd-enquiry-process > li > span { padding-block-start: 0.35rem; color: var(--gd-violet); font: 400 0.875rem/1.4 var(--font-mono); }
+.greendawn-page .gd-enquiry-process h2 { margin-block-end: 1rem; font-size: var(--gd-type-card); line-height: 1.15; text-wrap: initial; }
+.gd-enquiry-process p { color: var(--gd-slate-500); }
+.gd-enquiry-process p:last-child { margin-block-end: 0; }
+.greendawn-enquire .charger-enquiry-context { margin-block-end: 1.5rem; padding: 1.25rem; border: 1px solid var(--gd-border-dark); border-radius: var(--gd-radius-sm); background: var(--gd-white); }
+.greendawn-enquire .charger-enquiry-context p { margin: 0; }
+.greendawn-enquire .charger-enquiry-context a { color: var(--gd-violet); text-underline-offset: 0.25em; }
+.gd-contact-intro { max-width: 65ch; margin-block-end: 2.5rem; color: var(--gd-slate-500); }
+.gd-contact-grid { display: grid; grid-template-columns: minmax(0, 1.4fr) repeat(2, minmax(0, 1fr)); gap: clamp(1.5rem, 3vw, 3rem); }
+.gd-contact-grid > div { min-width: 0; padding-block-start: 1.5rem; border-block-start: 1px solid var(--gd-border-dark); }
+.greendawn-page .gd-contact-grid h3 { margin-block-end: 1rem; font: 500 0.875rem/1.4 var(--font-mono); letter-spacing: 0; }
+.gd-contact-grid p { margin-block-end: 0; }
+.gd-contact-grid a { color: var(--gd-navy-900); text-underline-offset: 0.3em; }
+.gd-contact-grid a:hover { color: var(--gd-violet); }
+@media (max-width: 61rem) { .gd-enquire-layout { grid-template-columns: minmax(0, 1fr); } }
+@media (max-width: 42rem) { .gd-contact-grid { grid-template-columns: minmax(0, 1fr); } }

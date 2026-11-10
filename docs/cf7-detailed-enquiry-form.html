@@ -1,0 +1,38 @@
+<div class="gd-contact-fields">
+  <label>Full Name (required)
+    [text* fullname autocomplete:name placeholder "e.g. John Smith"]
+  </label>
+  <label>Phone Number (required)
+    [tel* phone autocomplete:tel placeholder "e.g. 07123 456789"]
+  </label>
+  <label>Email Address (required)
+    [email* your-email autocomplete:email placeholder "e.g. name@company.com"]
+  </label>
+  <label>Postcode
+    [text postcode autocomplete:postal-code placeholder "e.g. ST5 5NU"]
+  </label>
+  <label>Number of Chargers
+    [number numbercharger min:1 step:1 placeholder "e.g. 2"]
+  </label>
+  <label>Project Type (required)
+    [select* projecttype "Workplace" "Fleet" "Public parking" "Showroom" "Gym" "Public sector" "Other"]
+  </label>
+  <label>Company Name
+    [text company autocomplete:organization placeholder "e.g. Greendawn Ltd"]
+  </label>
+  <label class="gd-contact-field--wide">Tell us about your project
+    [textarea your-message placeholder "Anything useful about your site, usage, timelines or requirements..."]
+  </label>
+  <div class="gd-contact-field--wide">[submit "Start Your Journey"]</div>
+</div>
+[hidden page-url]
+[hidden first_referrer]
+[hidden first_landing]
+[hidden utm_source]
+[hidden utm_medium]
+[hidden utm_campaign]
+[hidden utm_term]
+[hidden utm_content]
+[hidden chargerId]
+[hidden chargerTitle]
+[hidden chargerURL]

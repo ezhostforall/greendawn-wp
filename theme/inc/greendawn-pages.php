@@ -53,13 +53,18 @@ function greendawn_charger_enquiry_context( string $content ): string {
 	if ( ! is_page( 'enquire' ) || ! is_main_query() || ! in_the_loop() ) {
 		return $content;
 	}
-	$context = apply_filters( 'greendawn_selected_charger', array() );
-	if ( empty( $context['id'] ) ) {
-		return $content;
-	}
-	return '<aside class="charger-enquiry-context"><p><strong>' . esc_html__( 'Enquiry about:', 'greendawn' ) . '</strong> <a href="' . esc_url( $context['url'] ) . '">' . esc_html( $context['title'] ) . '</a></p></aside>' . $content;
+	return greendawn_charger_enquiry_summary() . $content;
 }
 add_filter( 'the_content', 'greendawn_charger_enquiry_context', 8 );
+
+/** Returns the validated public product selection for an explicit template placement. */
+function greendawn_charger_enquiry_summary(): string {
+	$context = apply_filters( 'greendawn_selected_charger', array() );
+	if ( empty( $context['id'] ) ) {
+		return '';
+	}
+	return '<aside class="charger-enquiry-context"><p><strong>' . esc_html__( 'Enquiry about:', 'greendawn' ) . '</strong> <a href="' . esc_url( $context['url'] ) . '">' . esc_html( $context['title'] ) . '</a></p></aside>';
+}
 
 /**
  * Resolves independent Workplace content through Core with native metadata fallback.
@@ -135,4 +140,17 @@ function greendawn_page_prose( string $content ): string {
 			),
 		)
 	);
+}
+
+/**
+ * Resolves page-owned Enquire content through Core with native metadata fallback.
+ *
+ * @param string $name Short field name.
+ * @param mixed  $fallback Value without the content module.
+ * @return mixed
+ */
+function greendawn_enquire_field( string $name, $fallback = '' ) {
+	$id    = get_the_ID();
+	$value = metadata_exists( 'post', $id, 'greendawn_enquire_' . $name ) ? get_post_meta( $id, 'greendawn_enquire_' . $name, true ) : $fallback;
+	return apply_filters( 'greendawn_enquire_field_value', $value, $name, $id );
 }

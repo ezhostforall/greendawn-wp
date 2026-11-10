@@ -446,3 +446,10 @@ wp plugin activate secure-custom-fields
 docker cp tests/integration/aftercare-page.php "$container_id:/tmp/aftercare-page.php"
 wp eval-file /tmp/aftercare-page.php
 wp plugin deactivate secure-custom-fields
+
+# Dedicated Enquire page: explicit sales form, six source stages and validated product context.
+wp plugin activate secure-custom-fields
+docker cp tests/integration/enquire-page.php "$container_id:/tmp/enquire-page.php"
+docker cp docs/cf7-detailed-enquiry-form.html "$container_id:/tmp/cf7-detailed-enquiry-form.html"
+wp eval-file /tmp/enquire-page.php
+wp plugin deactivate secure-custom-fields

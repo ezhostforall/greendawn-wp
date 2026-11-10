@@ -19,6 +19,7 @@ final class Lead_Capture implements Module_Interface {
 		add_action( 'admin_init', array( $this, 'settings' ) );
 		add_action( 'admin_post_greendawn_core_create_callback', array( $this, 'create_form' ) );
 		add_filter( 'greendawn_lead_config', array( $this, 'configuration' ) );
+		add_filter( 'wpcf7_contact_form_properties', array( $this, 'attribution_properties' ), 10, 2 );
 		add_filter( 'wpcf7_validate', array( $this, 'validate' ), 20, 2 );
 		add_filter( 'wpcf7_spam', array( $this, 'spam' ), 20, 2 );
 	}
@@ -110,8 +111,53 @@ final class Lead_Capture implements Module_Interface {
 			'utmSource'             => 120,
 			'utmMedium'             => 120,
 			'utmCampaign'           => 120,
+			'utmTerm'               => 120,
+			'utmContent'            => 120,
+			'page-url'              => 2048,
+			'first_landing'         => 2048,
+			'first_referrer'        => 2048,
 			'website'               => 200,
 		);
+	}
+
+	/**
+	 * Attribution fields extend existing managed forms without rebuilding saved mail settings.
+	 *
+	 * @return string[]
+	 */
+	public static function attribution_fields(): array {
+		return array( 'page-url', 'first_landing', 'first_referrer', 'utmSource', 'utmMedium', 'utmCampaign', 'utmTerm', 'utmContent' );
+	}
+
+	/**
+	 * Extends only the configured callback form in memory; saved properties stay intact.
+	 *
+	 * @param array              $properties Existing CF7 properties.
+	 * @param \WPCF7_ContactForm $form Form being loaded.
+	 * @return array
+	 */
+	public function attribution_properties( array $properties, \WPCF7_ContactForm $form ): array {
+		$id = absint( get_option( 'greendawn_core_callback_form', 0 ) );
+		if ( ! $id || $form->id() !== $id ) {
+			return $properties;
+		}
+		$markup = (string) ( $properties['form'] ?? '' );
+		$extra  = array();
+		$mail   = $properties['mail'] ?? array();
+		foreach ( self::attribution_fields() as $name ) {
+			if ( ! preg_match( '/\[[a-z0-9_*]+\s+' . preg_quote( $name, '/' ) . '(?:\s|\])/', $markup ) ) {
+				$markup .= "\n[hidden " . $name . ']';
+			}
+			if ( ! str_contains( (string) ( $mail['body'] ?? '' ), '[' . $name . ']' ) ) {
+				$extra[] = $name . ': [' . $name . ']';
+			}
+		}
+		$properties['form'] = $markup;
+		if ( $extra ) {
+			$mail['body']       = ( $mail['body'] ?? '' ) . "\n\nVisit attribution\n" . implode( "\n", $extra );
+			$properties['mail'] = $mail;
+		}
+		return $properties;
 	}
 
 	/**
@@ -149,7 +195,9 @@ final class Lead_Capture implements Module_Interface {
 			if ( in_array( $name, array( 'firstName', 'company' ), true ) ) {
 				$type .= '*';
 			}
-			$markup[] = sprintf( '<label>%1$s [%2$s %1$s maxlength:%3$d]</label>', $name, $type, $limit );
+			$markup[] = in_array( $name, self::attribution_fields(), true )
+				? '[hidden ' . $name . ']'
+				: sprintf( '<label>%1$s [%2$s %1$s maxlength:%3$d]</label>', $name, $type, $limit );
 		}
 		foreach ( self::choices() as $name => $choices ) {
 			$type     = 'callbackPreference' === $name ? 'select*' : 'select';

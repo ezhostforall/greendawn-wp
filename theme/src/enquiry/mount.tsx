@@ -3,6 +3,7 @@ import { createRoot } from 'react-dom/client';
 import { flushSync } from 'react-dom';
 import type { LeadConfig } from './launcher';
 import { submitCallback } from './transport';
+import { getVisitAttribution } from '../scripts/attribution';
 
 type Step = 'intent' | 'context' | 'stage' | 'location' | 'contact' | 'success';
 const contexts: Record<string, string> = { 'ev-charging': 'siteType', power: 'powerReason', aftercare: 'aftercareIssue' };
@@ -104,11 +105,9 @@ function App({ config, transport, handleRef }: { config: LeadConfig; transport: 
 		if (!contact.callbackPreference) next.callbackPreference = 'Choose when you would prefer us to call.';
 		if (Object.keys(next).length) { focusErrors(next); return; }
 		inFlight.current = true; setSubmitting(true); setMessage(''); setErrors({});
-		const values: Record<string, string> = { ...answers, ...contact, source: config.source, entryPoint: entry.current, pagePath: window.location.pathname.slice(0, 240) };
+		const values: Record<string, string> = { ...answers, ...contact, source: config.source, entryPoint: entry.current, pagePath: window.location.pathname.slice(0, 240), ...getVisitAttribution() };
 		for (const name of ['intent', 'projectStage', 'siteType', 'aftercareIssue', 'powerReason', 'location', 'preferredCallbackTime', 'notes', 'website', 'utmSource', 'utmMedium', 'utmCampaign']) values[name] ??= '';
 		if (values.callbackPreference !== 'scheduled') values.preferredCallbackTime = '';
-		const params = new URLSearchParams(window.location.search);
-		for (const [key, query] of [['utmSource', 'utm_source'], ['utmMedium', 'utm_medium'], ['utmCampaign', 'utm_campaign']] as const) values[key] = params.get(query)?.slice(0, 120) ?? '';
 		try {
 			const response = await submitCallback(transport, values);
 			if (response.status === 'mail_sent') {

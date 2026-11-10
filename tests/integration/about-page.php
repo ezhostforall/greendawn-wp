@@ -52,7 +52,8 @@ foreach ( $greendawn_slugs as $greendawn_index => $greendawn_slug ) {
 }
 $greendawn_form = WPCF7_ContactForm::get_template();
 $greendawn_form->set_title( 'About fixture form' );
-$greendawn_form->set_properties( array( 'form' => '<p><label>Full name [text* full-name]</label></p><p><label>Email [email* your-email]</label></p><p><label>Message [textarea your-message]</label></p><p>[submit "Send fixture enquiry"]</p>' ) );
+$greendawn_form_markup = file_get_contents( '/tmp/cf7-project-enquiry-form.html' ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents -- Reads the copied disposable fixture.
+$greendawn_form->set_properties( array( 'form' => $greendawn_form_markup ) );
 $greendawn_form_id = $greendawn_form->save();
 $greendawn_pages   = array();
 foreach ( array( 'gd-about-default', 'gd-about-edited', 'gd-about-empty', 'gd-about-invalid-form', 'gd-about-no-core' ) as $greendawn_slug ) {

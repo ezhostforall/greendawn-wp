@@ -7,7 +7,6 @@
 
 defined( 'ABSPATH' ) || exit;
 
-$greendawn_form_id         = shortcode_exists( 'contact-form-7' ) ? greendawn_contact_form_id( $args['form_id'] ?? 0 ) : 0;
 $greendawn_form_heading    = (string) ( $args['heading'] ?? '' );
 $greendawn_form_heading_id = sanitize_html_class( $args['instance_id'] ?? wp_unique_id( 'gd-form-' ) ) . '-title';
 ?>
@@ -25,13 +24,6 @@ else :
 		if ( '' !== $greendawn_form_heading ) :
 			?>
 			<h2 id="<?php echo esc_attr( $greendawn_form_heading_id ); ?>"><?php echo esc_html( $greendawn_form_heading ); ?></h2><?php endif; ?>
-		<div class="gd-form-panel starter-contact-form">
-			<?php if ( $greendawn_form_id ) : ?>
-				<?php echo do_shortcode( sprintf( '[contact-form-7 id="%d"]', $greendawn_form_id ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CF7 renders a validated, published form ID. ?>
-			<?php else : ?>
-				<p><?php esc_html_e( 'The enquiry form is currently unavailable.', 'greendawn' ); ?></p>
-				<a class="gd-page-text-link" href="<?php echo esc_url( home_url( '/enquire/' ) ); ?>"><?php esc_html_e( 'Contact our team', 'greendawn' ); ?><?php get_template_part( 'template-parts/home/arrow' ); ?></a>
-			<?php endif; ?>
-		</div>
+		<?php get_template_part( 'template-parts/components/form-content', null, array( 'form_id' => $args['form_id'] ?? 0 ) ); ?>
 	</div>
 </section>

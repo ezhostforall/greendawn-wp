@@ -99,3 +99,40 @@ function greendawn_public_field( string $name, $fallback = '' ) {
 	$value = metadata_exists( 'post', $id, 'greendawn_public_' . $name ) ? get_post_meta( $id, 'greendawn_public_' . $name, true ) : $fallback;
 	return apply_filters( 'greendawn_public_field_value', $value, $name, $id );
 }
+
+/**
+ * Resolves page-owned Aftercare content through Core, with native metadata fallback.
+ *
+ * @param string $name Short field name.
+ * @param mixed  $fallback Value without the content module.
+ * @return mixed
+ */
+function greendawn_aftercare_field( string $name, $fallback = '' ) {
+	$id    = get_the_ID();
+	$value = metadata_exists( 'post', $id, 'greendawn_aftercare_' . $name ) ? get_post_meta( $id, 'greendawn_aftercare_' . $name, true ) : $fallback;
+	return apply_filters( 'greendawn_aftercare_field_value', $value, $name, $id );
+}
+
+/**
+ * Restricts structured prose to semantic content, without layout/media/script markup.
+ *
+ * @param string $content Editor-owned prose.
+ */
+function greendawn_page_prose( string $content ): string {
+	return wp_kses(
+		wpautop( $content ),
+		array(
+			'p'      => array(),
+			'br'     => array(),
+			'strong' => array(),
+			'em'     => array(),
+			'ul'     => array(),
+			'ol'     => array(),
+			'li'     => array(),
+			'a'      => array(
+				'href'  => true,
+				'title' => true,
+			),
+		)
+	);
+}

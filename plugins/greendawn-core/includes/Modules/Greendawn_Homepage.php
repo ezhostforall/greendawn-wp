@@ -67,7 +67,8 @@ final class Greendawn_Homepage implements Module_Interface {
 			return $this->fields;
 		}
 
-		$copy = array(
+		$process = Greendawn_Process::homepage_defaults();
+		$copy    = array(
 			'eyebrow'                       => array( __( 'Eyebrow', 'greendawn-core' ), __( 'Commercial EV charging infrastructure', 'greendawn-core' ), 60 ),
 			'coverage'                      => array( __( 'Coverage', 'greendawn-core' ), __( 'England · Scotland · Wales', 'greendawn-core' ), 60 ),
 			'headline'                      => array( __( 'Headline first line', 'greendawn-core' ), __( 'EV charging.', 'greendawn-core' ), 28 ),
@@ -78,13 +79,13 @@ final class Greendawn_Homepage implements Module_Interface {
 			'assurance_requirements'        => array( __( 'Site requirements assurance', 'greendawn-core' ), __( 'Site requirements first', 'greendawn-core' ), 70 ),
 			'assurance_equipment'           => array( __( 'Equipment assurance', 'greendawn-core' ), __( 'Equipment chosen for the operation', 'greendawn-core' ), 70 ),
 			'assurance_support'             => array( __( 'Support assurance', 'greendawn-core' ), __( 'Agreed support after installation', 'greendawn-core' ), 70 ),
-			'consult_label'                 => array( __( 'Consult stage label', 'greendawn-core' ), __( 'Consult', 'greendawn-core' ), 30 ),
+			'consult_label'                 => array( __( 'Consult stage label', 'greendawn-core' ), $process['consult_label'], 30 ),
 			'consult_caption'               => array( __( 'Consult stage caption', 'greendawn-core' ), __( 'Understand your requirement', 'greendawn-core' ), 75 ),
-			'design_label'                  => array( __( 'Design stage label', 'greendawn-core' ), __( 'Design', 'greendawn-core' ), 30 ),
+			'design_label'                  => array( __( 'Design stage label', 'greendawn-core' ), $process['design_label'], 30 ),
 			'design_caption'                => array( __( 'Design stage caption', 'greendawn-core' ), __( 'Resolve power, layout and scope', 'greendawn-core' ), 75 ),
-			'install_label'                 => array( __( 'Install stage label', 'greendawn-core' ), __( 'Install', 'greendawn-core' ), 30 ),
+			'install_label'                 => array( __( 'Install stage label', 'greendawn-core' ), $process['install_label'], 30 ),
 			'install_caption'               => array( __( 'Install stage caption', 'greendawn-core' ), __( 'Coordinate works and commissioning', 'greendawn-core' ), 75 ),
-			'manage_label'                  => array( __( 'Manage stage label', 'greendawn-core' ), __( 'Manage', 'greendawn-core' ), 30 ),
+			'manage_label'                  => array( __( 'Manage stage label', 'greendawn-core' ), $process['manage_label'], 30 ),
 			'manage_caption'                => array( __( 'Manage stage caption', 'greendawn-core' ), __( 'Support the charging operation', 'greendawn-core' ), 75 ),
 			'trust_label'                   => array( __( 'Commercial delivery label', 'greendawn-core' ), __( 'Commercial delivery', 'greendawn-core' ), 45 ),
 			'trust_intro'                   => array( __( 'Commercial delivery summary', 'greendawn-core' ), __( 'Experience across dealership, fleet, workplace and destination sites.', 'greendawn-core' ), 160, 'textarea' ),
@@ -128,12 +129,12 @@ final class Greendawn_Homepage implements Module_Interface {
 			'system_site_power_copy'        => array( __( 'Site power guide summary', 'greendawn-core' ), __( 'Assess demand and load management before deciding whether additional supply is needed.', 'greendawn-core' ), 180, 'textarea' ),
 			'system_site_power_link'        => array( __( 'Site power guide link text', 'greendawn-core' ), __( 'Explore site power planning', 'greendawn-core' ), 65 ),
 			'system_site_power_url'         => array( __( 'Site power guide URL', 'greendawn-core' ), home_url( '/guides/can-my-building-handle-ev-charging/' ), 0, 'url' ),
-			'process_title'                 => array( __( 'Process heading', 'greendawn-core' ), __( 'A clear route from requirement to operation.', 'greendawn-core' ), 100 ),
-			'process_intro'                 => array( __( 'Process introduction', 'greendawn-core' ), __( 'You do not need a finished specification to start. Each stage establishes the decisions and information needed for the next.', 'greendawn-core' ), 220, 'textarea' ),
-			'consult_description'           => array( __( 'Consult description', 'greendawn-core' ), __( 'Tell us about your vehicles, users, sites and objectives. We establish the requirement and recommend the next step.', 'greendawn-core' ), 240, 'textarea' ),
-			'design_description'            => array( __( 'Design description', 'greendawn-core' ), __( 'Assess power, layout and delivery constraints. Where a technical survey is needed, agree its scope before developing the design and proposal.', 'greendawn-core' ), 240, 'textarea' ),
-			'install_description'           => array( __( 'Install description', 'greendawn-core' ), __( 'Coordinate the agreed electrical and civil works, equipment, testing and commissioning. Plan access and handover with your team.', 'greendawn-core' ), 240, 'textarea' ),
-			'manage_description'            => array( __( 'Manage description', 'greendawn-core' ), __( 'Put the agreed software, monitoring, maintenance and fault-support arrangements in place, with clear ongoing responsibilities.', 'greendawn-core' ), 240, 'textarea' ),
+			'process_title'                 => array( __( 'Process heading', 'greendawn-core' ), $process['process_title'], 100 ),
+			'process_intro'                 => array( __( 'Process introduction', 'greendawn-core' ), $process['process_intro'], 220, 'textarea' ),
+			'consult_description'           => array( __( 'Consult description', 'greendawn-core' ), $process['consult_description'], 240, 'textarea' ),
+			'design_description'            => array( __( 'Design description', 'greendawn-core' ), $process['design_description'], 240, 'textarea' ),
+			'install_description'           => array( __( 'Install description', 'greendawn-core' ), $process['install_description'], 240, 'textarea' ),
+			'manage_description'            => array( __( 'Manage description', 'greendawn-core' ), $process['manage_description'], 240, 'textarea' ),
 			'featured_eyebrow'              => array( __( 'Project eyebrow', 'greendawn-core' ), __( 'Commercial project experience', 'greendawn-core' ), 60 ),
 			'featured_title'                => array( __( 'Project heading', 'greendawn-core' ), __( 'A dealership programme coordinated site by site.', 'greendawn-core' ), 100 ),
 			'featured_caption'              => array( __( 'Project photograph caption', 'greendawn-core' ), __( 'Johnsons Cars · Dealership charging programme', 'greendawn-core' ), 100 ),

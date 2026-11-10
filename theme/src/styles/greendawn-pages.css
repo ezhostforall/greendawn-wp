@@ -175,3 +175,8 @@
 @media (max-width: 61rem) { .gd-charger-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 @media (max-width: 42rem) { .gd-feature-grid, .gd-charger-grid, .gd-process-media { grid-template-columns: minmax(0, 1fr); } }
 @media (prefers-reduced-motion: reduce) { .gd-charger-card { transition: none; } .gd-charger-card:hover { transform: none; } }
+
+/* Preserve the Public Charging AC/DC guidance as a readable native list. */
+.gd-charger-guidance { max-width: 72ch; margin-block: 1.25rem 1.5rem; padding-inline-start: 1.5rem; color: var(--gd-slate-500); }
+.gd-charger-guidance li + li { margin-block-start: 1rem; }
+.gd-charger-guidance strong { color: var(--gd-navy-900); }

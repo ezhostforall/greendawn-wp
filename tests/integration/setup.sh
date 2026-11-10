@@ -434,3 +434,9 @@ wp plugin activate secure-custom-fields
 docker cp tests/integration/fleet-page.php "$container_id:/tmp/fleet-page.php"
 wp eval-file /tmp/fleet-page.php
 wp plugin deactivate secure-custom-fields
+
+# Public replaces both old processes using approved defaults; legacy homepage edits survive.
+wp plugin activate secure-custom-fields
+docker cp tests/integration/public-charging.php "$container_id:/tmp/public-charging.php"
+wp eval-file /tmp/public-charging.php
+wp plugin deactivate secure-custom-fields

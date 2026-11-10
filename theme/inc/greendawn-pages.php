@@ -86,3 +86,16 @@ function greendawn_fleet_field( string $name, $fallback = '' ) {
 	$value = metadata_exists( 'post', $id, 'greendawn_fleet_' . $name ) ? get_post_meta( $id, 'greendawn_fleet_' . $name, true ) : $fallback;
 	return apply_filters( 'greendawn_fleet_field_value', $value, $name, $id );
 }
+
+/**
+ * Resolves independent Public Charging content with native metadata fallback.
+ *
+ * @param string $name Short field name.
+ * @param mixed  $fallback Value without the content module.
+ * @return mixed
+ */
+function greendawn_public_field( string $name, $fallback = '' ) {
+	$id    = get_the_ID();
+	$value = metadata_exists( 'post', $id, 'greendawn_public_' . $name ) ? get_post_meta( $id, 'greendawn_public_' . $name, true ) : $fallback;
+	return apply_filters( 'greendawn_public_field_value', $value, $name, $id );
+}

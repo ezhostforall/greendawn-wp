@@ -17,7 +17,7 @@ $greendawn_form_id = absint( get_option( 'greendawn_core_callback_form', 0 ) );
 $greendawn_assert( $greendawn_form_id > 0, 'A configured callback form must exist.' );
 $greendawn_legacy_form = get_post_meta( $greendawn_form_id, '_form', true );
 $greendawn_legacy_mail = get_post_meta( $greendawn_form_id, '_mail', true );
-foreach ( array( 'page-url', 'first_landing', 'first_referrer', 'utmTerm', 'utmContent' ) as $greendawn_field ) {
+foreach ( array( 'page-url', 'first_landing', 'first_referrer', 'utmTerm', 'utmContent', 'chargerId', 'chargerTitle', 'chargerURL' ) as $greendawn_field ) {
 	$greendawn_legacy_form         = str_replace( '[hidden ' . $greendawn_field . ']', '', $greendawn_legacy_form );
 	$greendawn_legacy_mail['body'] = preg_replace( '/^' . preg_quote( $greendawn_field, '/' ) . ':.*\R?/m', '', $greendawn_legacy_mail['body'] );
 }

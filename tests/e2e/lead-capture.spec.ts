@@ -79,6 +79,7 @@ test('direct route validates, retains answers on close and mail failure, then sh
 	await dialog.getByRole('button', { name: 'Request callback', exact: true }).click();
 	await expect(dialog.getByRole('alert')).toContainText('highlighted');
 	await expect(dialog.locator('[aria-invalid="true"]')).toHaveCount(8);
+	await expect(dialog.getByRole('textbox', { name: 'First name', exact: true })).toBeFocused();
 	await fillContact(page, 'failure@example.test');
 	await page.keyboard.press('Escape');
 	await expect(page.locator('.lead-capture__launcher')).toBeFocused();
@@ -212,4 +213,43 @@ test('the administrator can disable and re-enable the drawer without changing th
 		await visitor.close();
 	}
 	await expect(page.getByRole('checkbox', { name: 'Enable the sitewide callback drawer' })).toBeChecked();
+});
+
+test('charger quotes open the existing drawer and deliver canonical product context', async ({ page, request }) => {
+	await page.goto('/evcharger/hellonext-h1-22/?utm_source=product-qa&utm_campaign=quote');
+	await page.getByRole('link', { name: 'Request Quote', exact: true }).first().click();
+	const dialog = page.getByRole('dialog');
+	await expect(dialog.getByRole('heading', { name: 'How should we reach you?' })).toBeVisible();
+	await expect(dialog.locator('.lead-capture__product-context')).toContainText('Charger fixture 1');
+	await fillContact(page, 'charger@example.test');
+	await dialog.getByRole('button', { name: 'Request callback', exact: true }).click();
+	await expect(dialog.getByRole('heading', { name: 'Thank you. Your request has been sent.' })).toBeVisible();
+	const mail = await (await request.get('/wp-json/greendawn-test/v1/callback')).json();
+	expect(mail.message).toContain('chargerTitle: Charger fixture 1');
+	expect(mail.message).toContain('chargerURL: http://localhost:8080/evcharger/hellonext-h1-22/');
+	expect(mail.message).toContain('entryPoint: charger-quote');
+	expect(mail.message).toContain('intent: ev-charging');
+	expect(mail.message).toContain('utmSource: product-qa');
+	await dialog.getByRole('button', { name: 'Close', exact: true }).click();
+	await page.getByRole('link', { name: 'Request Quote', exact: true }).first().click();
+	await dialog.getByRole('button', { name: 'Remove charger selection' }).click();
+	await expect(dialog.locator('.lead-capture__product-context')).toHaveCount(0);
+});
+
+test('quote requests reject wrong product IDs and replace spoofed titles and URLs', async ({ page, request }) => {
+	await page.goto('/evcharger/hellonext-h1-22/');
+	const native = page.locator('[data-lead-transport] form');
+	const fields = await native.locator('input[type="hidden"]').evaluateAll(inputs => Object.fromEntries(inputs.map(input => [(input as HTMLInputElement).name, (input as HTMLInputElement).value])));
+	const config = JSON.parse(await page.locator('[data-lead-capture]').getAttribute('data-config') ?? '{}');
+	const endpoint = `/wp-json/contact-form-7/v1/contact-forms/${config.formId}/feedback`;
+	const good = { ...fields, firstName: 'Quote HTTP test', company: 'Quote Company', phone: '0121 555 0100', email: 'quote-http@example.test', callbackPreference: 'today', source: 'website', entryPoint: 'charger-quote' };
+	const invalid = await (await request.post(endpoint, { multipart: { ...good, chargerId: String(config.formId), chargerTitle: 'Invented title', chargerURL: 'https://unrelated.example/' } })).json();
+	expect(invalid.status).toBe('validation_failed');
+	expect(invalid.invalid_fields.map((field: { field: string }) => field.field)).toContain('chargerId');
+	const accepted = await (await request.post(endpoint, { multipart: { ...good, chargerId: String(config.charger.id), chargerTitle: 'Invented title', chargerURL: 'https://unrelated.example/' } })).json();
+	expect(accepted.status).toBe('mail_sent');
+	const mail = await (await request.get('/wp-json/greendawn-test/v1/callback')).json();
+	expect(mail.message).toContain('chargerTitle: Charger fixture 1');
+	expect(mail.message).toContain('chargerURL: http://localhost:8080/evcharger/hellonext-h1-22/');
+	expect(mail.message).not.toMatch(/Invented title|unrelated\.example/);
 });

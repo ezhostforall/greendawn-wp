@@ -119,3 +119,32 @@
 @media (max-width: 42rem) {
 	.gd-form-panel .gd-contact-fields { grid-template-columns: minmax(0, 1fr); }
 }
+
+/* Product photographs are contained, never cropped like editorial hero images. */
+.gd-charger-hero { padding-block: clamp(2rem, 4vw, 4rem); background: var(--gd-navy-900); color: var(--gd-cream); }
+.gd-charger-hero .breadcrumbs { margin: 0 0 2rem; color: var(--gd-slate-300); font-family: var(--font-mono); font-size: var(--gd-type-caption); }
+.gd-charger-hero .breadcrumbs a { color: inherit; }
+.gd-charger-hero .breadcrumbs ol { font-size: inherit; }
+.gd-charger-hero__inner { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr); gap: clamp(2rem, 5vw, 5rem); align-items: center; }
+.gd-charger-hero__inner--text { grid-template-columns: minmax(0, 1fr); }
+.gd-charger-hero h1 { max-width: 18ch; margin-block: 0 2rem; color: inherit; font: 700 clamp(2.5rem, 2rem + 3vw, 5rem)/1.04 var(--font-body); letter-spacing: -0.055em; }
+.gd-charger-summary { display: flex; flex-wrap: wrap; gap: 0.75rem; margin: 0 0 2.5rem; padding: 0; list-style: none; }
+.gd-charger-summary li { padding: 0.5rem 0.85rem; border: 1px solid var(--gd-border-light); border-radius: var(--gd-radius-sm); color: var(--gd-cream); font-family: var(--font-mono); font-size: 0.875rem; }
+.gd-charger-hero :focus-visible { outline-color: var(--gd-lime); }
+.gd-charger-media { margin: 0; padding: clamp(1.25rem, 3vw, 3rem); border-radius: var(--gd-radius-md); background: var(--gd-white); }
+.gd-charger-media img { width: 100%; height: auto; aspect-ratio: 1; object-fit: contain; }
+.gd-charger-description__inner { display: grid; grid-template-columns: minmax(0, 0.7fr) minmax(0, 1.3fr); gap: clamp(2rem, 5vw, 5rem); }
+.gd-charger-description h2 { margin-block-end: 0; }
+.gd-charger-specs { background: var(--gd-paper); }
+.gd-charger-spec-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1px; overflow: hidden; margin: 0 0 2.5rem; border: 1px solid var(--gd-border-dark); border-radius: var(--gd-radius-md); background: var(--gd-border-dark); }
+.gd-charger-spec-grid > div { min-width: 0; padding: clamp(1.25rem, 2.5vw, 2rem); background: var(--gd-white); }
+.gd-charger-spec-grid dt { margin-block-end: 0.6rem; color: var(--gd-slate-500); font-family: var(--font-mono); font-size: 0.875rem; }
+.gd-charger-spec-grid dd { margin: 0; color: var(--gd-navy-900); font-weight: 600; font-size: 1.125rem; }
+@media (max-width: 61rem) {
+	.gd-charger-hero__inner, .gd-charger-description__inner { grid-template-columns: minmax(0, 1fr); }
+	.gd-charger-media { width: min(100%, 34rem); }
+	.gd-charger-spec-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 42rem) {
+	.gd-charger-spec-grid { grid-template-columns: minmax(0, 1fr); }
+}

@@ -39,5 +39,30 @@ $greendawn_process_navy  = 'navy' === ( $args['surface'] ?? '' );
 				<?php endforeach; ?>
 			</ol>
 		</div>
+		<?php
+		$greendawn_process_media = array();
+		foreach ( (array) ( $args['media'] ?? array() ) as $greendawn_media_id ) {
+			$greendawn_image = wp_get_attachment_image(
+				absint( $greendawn_media_id ),
+				'large',
+				false,
+				array(
+					'loading' => 'lazy',
+					'sizes'   => '(max-width: 42rem) calc(100vw - 2rem), 45vw',
+				)
+			);
+			if ( $greendawn_image ) {
+				$greendawn_process_media[] = $greendawn_image;
+			}
+		}
+		if ( $greendawn_process_media ) :
+			?>
+			<div class="gd-process-media<?php echo 1 === count( $greendawn_process_media ) ? ' gd-process-media--single' : ''; ?>">
+				<?php
+				foreach ( $greendawn_process_media as $greendawn_image ) :
+					?>
+					<figure><?php echo $greendawn_image; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- WordPress attachment markup. ?></figure><?php endforeach; ?>
+			</div>
+		<?php endif; ?>
 	</div>
 </section>

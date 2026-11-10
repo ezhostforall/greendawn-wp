@@ -46,3 +46,10 @@ The new **Greendawn About Us** template and shared presentation primitives are a
 ## Charger detail implementation
 
 About/form/tracking staging acceptance was confirmed by Neel. The next change adds the automatic native charger detail template and connects Request Quote to the existing drawer with server-resolved product identity. See [charger detail setup and acceptance](greendawn-charger-detail.md). Audience templates remain the next implementation stage; the Enquire/support templates remain later work.
+
+
+## Workplace Charging implementation
+
+Neel confirmed charger-detail staging acceptance. The fixed **Greendawn Workplace Charging** Page template is the next audience-page implementation, reusing the hero, CTA, process and page-selected form primitives and extracting a shared article collection. It retains all existing Workplace copy, its own process, six native charger destinations, two process photographs, the inline form and ten articles. Benefits and chargers remain visible without flip cards/autoplay. See [Workplace setup and acceptance](greendawn-workplace.md).
+
+After merging/installing the candidate theme and Core, assign the template to the existing `/workplace-charging/` Page and review its media, ordered native relationships and CF7 selection. Actual attachment matching, visible form feedback and intended-recipient delivery remain staging checks. Fleet Charging and Public Charging follow this audience-page implementation; only Public Charging replaces its source process with the approved homepage process. Enquire/support, Aftercare and the remaining internal templates follow the approved page plan.

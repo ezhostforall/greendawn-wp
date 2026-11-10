@@ -62,6 +62,7 @@ final class Plugin {
 		( new Modules\Contact_Page() )->register();
 		( new Modules\About_Page() )->register();
 		( new Modules\Greendawn_About() )->register();
+		( new Modules\Greendawn_Workplace() )->register();
 		( new Modules\EV_Chargers() )->register();
 		( new Modules\Team_Members() )->register();
 

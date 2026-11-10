@@ -60,3 +60,16 @@ function greendawn_charger_enquiry_context( string $content ): string {
 	return '<aside class="charger-enquiry-context"><p><strong>' . esc_html__( 'Enquiry about:', 'greendawn' ) . '</strong> <a href="' . esc_url( $context['url'] ) . '">' . esc_html( $context['title'] ) . '</a></p></aside>' . $content;
 }
 add_filter( 'the_content', 'greendawn_charger_enquiry_context', 8 );
+
+/**
+ * Resolves independent Workplace content through Core with native metadata fallback.
+ *
+ * @param string $name Short field name.
+ * @param mixed  $fallback Value without the content module.
+ * @return mixed
+ */
+function greendawn_workplace_field( string $name, $fallback = '' ) {
+	$id    = get_the_ID();
+	$value = metadata_exists( 'post', $id, 'greendawn_workplace_' . $name ) ? get_post_meta( $id, 'greendawn_workplace_' . $name, true ) : $fallback;
+	return apply_filters( 'greendawn_workplace_field_value', $value, $name, $id );
+}

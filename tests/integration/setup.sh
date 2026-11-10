@@ -422,3 +422,9 @@ wp plugin activate secure-custom-fields
 docker cp tests/integration/charger-detail.php "$container_id:/tmp/charger-detail.php"
 wp eval-file /tmp/charger-detail.php
 wp plugin deactivate secure-custom-fields
+
+# Fixed Workplace content: edit with SCF, render without SCF, never mutate staging.
+wp plugin activate secure-custom-fields
+docker cp tests/integration/workplace-page.php "$container_id:/tmp/workplace-page.php"
+wp eval-file /tmp/workplace-page.php
+wp plugin deactivate secure-custom-fields

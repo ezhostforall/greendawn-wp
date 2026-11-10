@@ -76,7 +76,7 @@ function greendawn_enqueue_assets(): void {
 		greendawn_enqueue_entry( 'greendawn-home-motion' );
 	}
 
-	if ( is_page_template( 'templates/greendawn-about.php' ) || is_singular( 'evcharger' ) ) {
+	if ( is_page_template( array( 'templates/greendawn-about.php', 'templates/greendawn-workplace.php' ) ) || is_singular( 'evcharger' ) ) {
 		greendawn_enqueue_entry( 'greendawn-pages' );
 	}
 

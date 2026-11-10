@@ -8,11 +8,23 @@
 defined( 'ABSPATH' ) || exit;
 
 $greendawn_form_id         = shortcode_exists( 'contact-form-7' ) ? greendawn_contact_form_id( $args['form_id'] ?? 0 ) : 0;
+$greendawn_form_heading    = (string) ( $args['heading'] ?? '' );
 $greendawn_form_heading_id = sanitize_html_class( $args['instance_id'] ?? wp_unique_id( 'gd-form-' ) ) . '-title';
 ?>
-<section class="gd-section gd-form-section" aria-labelledby="<?php echo esc_attr( $greendawn_form_heading_id ); ?>">
-	<div class="gd-shell gd-form-section__inner">
-		<h2 id="<?php echo esc_attr( $greendawn_form_heading_id ); ?>"><?php echo esc_html( $args['heading'] ?? '' ); ?></h2>
+<section class="gd-section gd-form-section"
+<?php
+if ( '' !== $greendawn_form_heading ) :
+	?>
+	aria-labelledby="<?php echo esc_attr( $greendawn_form_heading_id ); ?>"
+	<?php
+else :
+	?>
+	aria-label="<?php esc_attr_e( 'Project enquiry', 'greendawn' ); ?>"<?php endif; ?>>
+	<div class="gd-shell gd-form-section__inner<?php echo '' === $greendawn_form_heading ? ' gd-form-section__inner--form-only' : ''; ?>">
+		<?php
+		if ( '' !== $greendawn_form_heading ) :
+			?>
+			<h2 id="<?php echo esc_attr( $greendawn_form_heading_id ); ?>"><?php echo esc_html( $greendawn_form_heading ); ?></h2><?php endif; ?>
 		<div class="gd-form-panel starter-contact-form">
 			<?php if ( $greendawn_form_id ) : ?>
 				<?php echo do_shortcode( sprintf( '[contact-form-7 id="%d"]', $greendawn_form_id ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CF7 renders a validated, published form ID. ?>

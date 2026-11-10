@@ -64,7 +64,7 @@ function App({ config, transport, handleRef }: { config: LeadConfig; transport: 
 				setCharger(product);
 				if (product) { setAnswers({ intent: 'ev-charging' }); setHistory([]); setDirect(true); setStep('contact'); }
 				dialog.current?.showModal(); document.body.classList.add('lead-capture-open'); setOpened(true); emit('lead_tool_opened', product ? { intent: 'ev-charging' } : answers);
-				if (product) startCallback({ intent: 'ev-charging' });
+				if (product) startCallback({ intent: 'ev-charging' }, step === 'success');
 			}, close,
 	}));
 	useEffect(() => {
@@ -74,7 +74,7 @@ function App({ config, transport, handleRef }: { config: LeadConfig; transport: 
 	}, [step, opened]);
 	useEffect(() => () => { document.body.classList.remove('lead-capture-open'); }, []);
 	function go(next: Step): void { setHistory([...history, step]); setStep(next); setMessage(''); }
-	function startCallback(values = answers): void { if (!started) { emit('lead_callback_started', values); setStarted(true); } }
+	function startCallback(values = answers, force = false): void { if (force || !started) { emit('lead_callback_started', values); setStarted(true); } }
 	function choose(name: string, value: string): void {
 		const next = { ...answers, [name]: value };
 		if (name === 'intent') { setDirect(false); delete next.siteType; delete next.aftercareIssue; delete next.powerReason; }

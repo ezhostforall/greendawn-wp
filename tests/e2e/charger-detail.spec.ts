@@ -25,7 +25,7 @@ test('all six charger destinations use product details with saved specification 
 		await expect(image).toHaveAttribute('alt', 'Charger fixture 1');
 		expect(await image.evaluate(el => getComputedStyle(el).objectFit)).toBe('contain');
 		expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBe(width);
-		await testInfo.attach(`charger-${width}`, { body: await page.screenshot(), contentType: 'image/png' });
+		await testInfo.attach(`charger-${width}`, { body: await page.screenshot({ fullPage: true }), contentType: 'image/png' });
 	}
 	const results = await new AxeBuilder({ page }).include('main').withTags(['wcag2a', 'wcag2aa', 'wcag21aa']).analyze();
 	expect(results.violations).toEqual([]);

@@ -79,6 +79,7 @@ test('direct route validates, retains answers on close and mail failure, then sh
 	await dialog.getByRole('button', { name: 'Request callback', exact: true }).click();
 	await expect(dialog.getByRole('alert')).toContainText('highlighted');
 	await expect(dialog.locator('[aria-invalid="true"]')).toHaveCount(8);
+	await expect(dialog.getByRole('textbox', { name: 'First name', exact: true })).toBeFocused();
 	await fillContact(page, 'failure@example.test');
 	await page.keyboard.press('Escape');
 	await expect(page.locator('.lead-capture__launcher')).toBeFocused();

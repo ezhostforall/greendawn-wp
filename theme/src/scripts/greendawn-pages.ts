@@ -24,3 +24,26 @@ for (const root of document.querySelectorAll<HTMLElement>('[data-gd-articles]'))
 		if (!event.persisted) { controller.abort(); observer.disconnect(); }
 	});
 }
+
+// Local poster/fallback links work without JavaScript; third-party video loads only on activation.
+for (const link of document.querySelectorAll<HTMLAnchorElement>('a[data-gd-video]')) {
+	link.addEventListener('click', event => {
+		if (event.button !== 0 || event.metaKey || event.ctrlKey || event.altKey || event.shiftKey) return;
+		const media = link.closest<HTMLElement>('[data-gd-video-media]');
+		if (!media) return;
+		let source: URL;
+		try { source = new URL(link.dataset.gdVideo ?? ''); } catch { return; }
+		if (source.origin !== 'https://www.youtube-nocookie.com' || source.username || source.password || !/^\/embed\/[A-Za-z0-9_-]{11}$/.test(source.pathname)) return;
+		event.preventDefault();
+		source.search = '?rel=0&autoplay=1';
+		source.hash = '';
+		const frame = document.createElement('iframe');
+		frame.src = source.href;
+		frame.title = link.textContent?.trim() || 'Video testimonial';
+		frame.allow = 'autoplay; encrypted-media; picture-in-picture; fullscreen';
+		frame.allowFullscreen = true;
+		frame.referrerPolicy = 'strict-origin-when-cross-origin';
+		media.replaceChildren(frame);
+		frame.focus();
+	});
+}

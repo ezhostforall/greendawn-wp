@@ -154,3 +154,16 @@ function greendawn_enquire_field( string $name, $fallback = '' ) {
 	$value = metadata_exists( 'post', $id, 'greendawn_enquire_' . $name ) ? get_post_meta( $id, 'greendawn_enquire_' . $name, true ) : $fallback;
 	return apply_filters( 'greendawn_enquire_field_value', $value, $name, $id );
 }
+
+/**
+ * Resolves independent Business Installations content through Core and native metadata.
+ *
+ * @param string $name Short field name.
+ * @param mixed  $fallback Value without the content module.
+ * @return mixed
+ */
+function greendawn_business_field( string $name, $fallback = '' ) {
+	$id    = get_the_ID();
+	$value = metadata_exists( 'post', $id, 'greendawn_business_' . $name ) ? get_post_meta( $id, 'greendawn_business_' . $name, true ) : $fallback;
+	return apply_filters( 'greendawn_business_field_value', $value, $name, $id );
+}

@@ -64,6 +64,7 @@ final class Plugin {
 		( new Modules\Greendawn_About() )->register();
 		( new Modules\Greendawn_Workplace() )->register();
 		( new Modules\Greendawn_Fleet() )->register();
+		( new Modules\Greendawn_Public_Charging() )->register();
 		( new Modules\EV_Chargers() )->register();
 		( new Modules\Team_Members() )->register();
 

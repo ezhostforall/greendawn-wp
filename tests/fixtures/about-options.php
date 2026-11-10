@@ -11,6 +11,9 @@ if ( ! defined( 'ABSPATH' ) || 'local' !== wp_get_environment_type() ) {
 add_action(
 	'wp',
 	static function (): void {
+		if ( is_page( 'gd-public-no-core' ) ) {
+			remove_all_filters( 'greendawn_public_field_value' );
+		}
 		if ( is_page( 'gd-fleet-no-core' ) ) {
 			remove_all_filters( 'greendawn_fleet_field_value' );
 		}

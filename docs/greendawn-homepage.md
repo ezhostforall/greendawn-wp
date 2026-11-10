@@ -149,3 +149,7 @@ An initial reduced-motion preference avoids downloading the GSAP scroll bundle. 
 Update the **theme**, purge the page cache and compare the complete homepage with Astro at 320px, 390px, tablet and desktop widths, including a short landscape window. No Core update, field migration or additional media upload is required for this stage.
 
 Check the hero entrance and arc, problem assembly, system arc/cards, process line, service-photo changes, project crop/parallax and closing arc. Exercise forward/reverse/fast scrolling, keyboard focus while hovering another service, slow/failed images, live resizing, reduced motion, back/forward navigation and the enquiry drawer. Confirm content remains readable with JavaScript or the scroll bundle disabled. Retest Lighthouse on the deployed staging host; automated browser coverage checks cold-page layout shift and preserves the hero's priority hint, but is not a substitute for the hosted performance audit.
+
+## Shared approved process defaults
+
+The approved process language is defined once in Core’s `Greendawn_Process` and adapted to the existing homepage keys. Saved homepage values, stage captions, motion hooks and existing blank/default behaviour are unchanged. New Public Charging process fields use the same initial wording but keep their own saved Page content; this is not a global synchronisation or reset action. See [Public process ownership and restoration](greendawn-public-charging.md#approved-process-ownership-and-restoration).

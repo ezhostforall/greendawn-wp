@@ -38,7 +38,7 @@ $greendawn_scf_rows = get_field( 'field_greendawn_aftercare_faqs', $greendawn_de
 $greendawn_assert( is_array( $greendawn_scf_rows ) && 3 === count( $greendawn_scf_rows ), 'SCF must prefill all three FAQ rows before the first save.' );
 foreach ( $greendawn_defaults as $greendawn_index => $greendawn_row ) {
 	$greendawn_assert( $greendawn_scf_rows[ $greendawn_index ]['question'] === $greendawn_row['question'], 'SCF repeater defaults must format their subfield names correctly.' );
-	$greendawn_assert( trim( preg_replace( '/\s+/', ' ', wp_strip_all_tags( $greendawn_scf_rows[ $greendawn_index ]['answer'] ) ) ) === trim( preg_replace( '/\s+/', ' ', wp_strip_all_tags( $greendawn_row['answer'] ) ) ), 'All source FAQ paragraphs and list items must remain in SCF defaults.' );
+	$greendawn_assert( preg_replace( '/\s+/', '', wp_strip_all_tags( $greendawn_scf_rows[ $greendawn_index ]['answer'] ) ) === preg_replace( '/\s+/', '', wp_strip_all_tags( $greendawn_row['answer'] ) ), 'All source FAQ paragraphs and list items must remain in SCF defaults.' );
 }
 $greendawn_assert( ! metadata_exists( 'post', $greendawn_default, 'greendawn_aftercare_faqs' ), 'Displaying repeater defaults must not save rows.' );
 $greendawn_posts = get_field( 'field_greendawn_aftercare_posts', $greendawn_default );

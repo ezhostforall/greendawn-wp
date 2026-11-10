@@ -43,3 +43,20 @@ function greendawn_page_records( $selected, string $type ): array {
 		)
 	) : array();
 }
+
+/**
+ * Preserves visible product context on the ordinary no-JavaScript enquiry destination.
+ *
+ * @param string $content Main page content.
+ */
+function greendawn_charger_enquiry_context( string $content ): string {
+	if ( ! is_page( 'enquire' ) || ! is_main_query() || ! in_the_loop() ) {
+		return $content;
+	}
+	$context = apply_filters( 'greendawn_selected_charger', array() );
+	if ( empty( $context['id'] ) ) {
+		return $content;
+	}
+	return '<aside class="charger-enquiry-context"><p><strong>' . esc_html__( 'Enquiry about:', 'greendawn' ) . '</strong> <a href="' . esc_url( $context['url'] ) . '">' . esc_html( $context['title'] ) . '</a></p></aside>' . $content;
+}
+add_filter( 'the_content', 'greendawn_charger_enquiry_context', 8 );

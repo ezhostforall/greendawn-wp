@@ -42,3 +42,7 @@ CI tests registration without SCF, imports a representative WXR charger, checks 
 ## About template implementation
 
 The new **Greendawn About Us** template and shared presentation primitives are available in the next page-template change. See [setup and acceptance checks](greendawn-about.md). The content foundation and Neel-owned charger/team intake are complete as reported; the six audience charger URLs were checked publicly and Neel confirmed the saved specification values. Assign the new template to the existing About Us record after staging installation, then review its team/form/image/article selections.
+
+## Charger detail implementation
+
+About/form/tracking staging acceptance was confirmed by Neel. The next change adds the automatic native charger detail template and connects Request Quote to the existing drawer with server-resolved product identity. See [charger detail setup and acceptance](greendawn-charger-detail.md). Audience templates remain the next implementation stage; the Enquire/support templates remain later work.

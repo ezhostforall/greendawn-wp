@@ -8,7 +8,7 @@ import { getVisitAttribution } from '../scripts/attribution';
 type Step = 'intent' | 'context' | 'stage' | 'location' | 'contact' | 'success';
 const contexts: Record<string, string> = { 'ev-charging': 'siteType', power: 'powerReason', aftercare: 'aftercareIssue' };
 const legends: Record<string, string> = { intent: 'What can we help with?', siteType: 'What best describes the site?', aftercareIssue: 'What are you experiencing?', powerReason: 'What’s prompted the enquiry?', projectStage: 'Where are you in the process?' };
-const entryPoints = ['floating-launcher', 'header', 'hero', 'services', 'pricing', 'final-cta', 'footer-cta'];
+const entryPoints = ['floating-launcher', 'header', 'hero', 'services', 'pricing', 'final-cta', 'footer-cta', 'charger-quote'];
 
 interface Handle { open: (opener: HTMLElement, entry: string) => void; close: () => void }
 
@@ -28,6 +28,7 @@ function App({ config, transport, handleRef }: { config: LeadConfig; transport: 
 	const entry = useRef('floating-launcher');
 	const inFlight = useRef(false);
 	const [opened, setOpened] = useState(false);
+	const [charger, setCharger] = useState<{ id: number; title: string; url: string }>();
 	const [step, setStep] = useState<Step>('intent');
 	const [history, setHistory] = useState<Step[]>([]);
 	const [answers, setAnswers] = useState<Record<string, string>>({});
@@ -51,7 +52,7 @@ function App({ config, transport, handleRef }: { config: LeadConfig; transport: 
 		} }));
 	}
 	function reset(): void {
-		setStep('intent'); setHistory([]); setAnswers({}); setContact({}); setErrors({}); setMessage(''); setDirect(false); setStarted(false);
+		setCharger(undefined); setStep('intent'); setHistory([]); setAnswers({}); setContact({}); setErrors({}); setMessage(''); setDirect(false); setStarted(false);
 		transport.reset();
 	}
 	function close(): void { dialog.current?.close(); }
@@ -59,7 +60,11 @@ function App({ config, transport, handleRef }: { config: LeadConfig; transport: 
 			open: (trigger, point) => {
 				opener.current = trigger; entry.current = entryPoints.includes(point) ? point : 'floating-launcher';
 				if (step === 'success') reset();
-				dialog.current?.showModal(); document.body.classList.add('lead-capture-open'); setOpened(true); emit('lead_tool_opened');
+				const product = point === 'charger-quote' && config.charger && 'id' in config.charger ? config.charger : undefined;
+				setCharger(product);
+				if (product) { setAnswers({ intent: 'ev-charging' }); setHistory([]); setDirect(true); setStep('contact'); }
+				dialog.current?.showModal(); document.body.classList.add('lead-capture-open'); setOpened(true); emit('lead_tool_opened', product ? { intent: 'ev-charging' } : answers);
+				if (product) startCallback({ intent: 'ev-charging' });
 			}, close,
 	}));
 	useEffect(() => {
@@ -69,7 +74,7 @@ function App({ config, transport, handleRef }: { config: LeadConfig; transport: 
 	}, [step, opened]);
 	useEffect(() => () => { document.body.classList.remove('lead-capture-open'); }, []);
 	function go(next: Step): void { setHistory([...history, step]); setStep(next); setMessage(''); }
-	function startCallback(): void { if (!started) { emit('lead_callback_started'); setStarted(true); } }
+	function startCallback(values = answers): void { if (!started) { emit('lead_callback_started', values); setStarted(true); } }
 	function choose(name: string, value: string): void {
 		const next = { ...answers, [name]: value };
 		if (name === 'intent') { setDirect(false); delete next.siteType; delete next.aftercareIssue; delete next.powerReason; }
@@ -85,7 +90,7 @@ function App({ config, transport, handleRef }: { config: LeadConfig; transport: 
 	}
 	function focusErrors(next: Record<string, string>): void {
 		setErrors(next);
-		setMessage('Please check the highlighted fields.');
+		setMessage(next.chargerId ? next.chargerId : 'Please check the highlighted fields.');
 		requestAnimationFrame(() => {
 			const control = form.current?.elements.namedItem(Object.keys(next)[0] ?? '');
 			if (control instanceof HTMLElement) control.focus();
@@ -105,7 +110,7 @@ function App({ config, transport, handleRef }: { config: LeadConfig; transport: 
 		if (!contact.callbackPreference) next.callbackPreference = 'Choose when you would prefer us to call.';
 		if (Object.keys(next).length) { focusErrors(next); return; }
 		inFlight.current = true; setSubmitting(true); setMessage(''); setErrors({});
-		const values: Record<string, string> = { ...answers, ...contact, source: config.source, entryPoint: entry.current, pagePath: window.location.pathname.slice(0, 240), ...getVisitAttribution() };
+		const values: Record<string, string> = { ...answers, ...contact, source: config.source, entryPoint: entry.current, pagePath: window.location.pathname.slice(0, 240), ...getVisitAttribution(), chargerId: charger ? String(charger.id) : '', chargerTitle: charger?.title ?? '', chargerURL: charger?.url ?? '' };
 		for (const name of ['intent', 'projectStage', 'siteType', 'aftercareIssue', 'powerReason', 'location', 'preferredCallbackTime', 'notes', 'website', 'utmSource', 'utmMedium', 'utmCampaign']) values[name] ??= '';
 		if (values.callbackPreference !== 'scheduled') values.preferredCallbackTime = '';
 		try {
@@ -136,6 +141,7 @@ function App({ config, transport, handleRef }: { config: LeadConfig; transport: 
 						{step === 'location' && <><div className="lead-capture__heading-group"><h2 tabIndex={-1} data-step-heading>Where is the site?</h2><p className="lead-capture__intro">Optional, but useful for routing your enquiry.</p></div>{field('location', 'Town, city or postcode (optional)', 'text', 'postal-code')}<div className="lead-capture__step-actions"><button className="lead-capture__primary" type="button" onClick={() => { startCallback(); go('contact'); }}>Continue</button><button className="lead-capture__text-button" type="button" onClick={() => { setContact({ ...contact, location: '' }); startCallback(); go('contact'); }}>Skip for now</button></div></>}
 						{step === 'contact' && <>
 							<div className="lead-capture__heading-group"><h2 tabIndex={-1} data-step-heading>How should we reach you?</h2><p className="lead-capture__intro">Greendawn supports commercial sites. All four contact fields are required so we can route the enquiry.</p></div>
+							{charger && <div className="lead-capture__product-context"><p>Enquiry about <strong>{charger.title}</strong></p><button type="button" className="lead-capture__text-button" onClick={() => setCharger(undefined)}>Remove charger selection</button></div>}
 							<div className="lead-capture__field-grid">{field('firstName', 'First name', 'text', 'given-name', 80)}{field('phone', 'Telephone number', 'tel', 'tel', 40)}{field('company', 'Company name', 'text', 'organization')}{field('email', 'Email', 'email', 'email', 160)}</div>
 							<fieldset className="lead-capture__callback-fieldset"><legend>When would you prefer a call?</legend><div className="lead-capture__choices lead-capture__choices--compact">{Object.entries(config.choices.callbackPreference ?? {}).map(([value, label]) => <label key={value} className="lead-capture__option lead-capture__option--compact"><input type="radio" name="callbackPreference" value={value} checked={contact.callbackPreference === value} required aria-invalid={!!errors.callbackPreference} aria-describedby={errors.callbackPreference ? 'lead-error-callbackPreference' : undefined} onChange={() => { setContact({ ...contact, callbackPreference: value, preferredCallbackTime: '' }); setErrors({ ...errors, callbackPreference: '' }); }} /><span>{label}</span></label>)}</div>{errors.callbackPreference && <p className="lead-capture__error" id="lead-error-callbackPreference">{errors.callbackPreference}</p>}</fieldset>
 							{contact.callbackPreference === 'scheduled' && <>{field('preferredCallbackTime', 'Suggested date and time (optional)', 'datetime-local', '', 30)}<p className="lead-capture__intro">We’ll confirm availability. Times are interpreted in UK local time.</p></>}

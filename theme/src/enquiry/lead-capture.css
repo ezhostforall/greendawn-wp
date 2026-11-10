@@ -696,3 +696,6 @@ body.lead-capture-open {
     transition: none;
   }
 }
+
+.lead-capture__product-context { margin-block-end: 1.5rem; padding: 1rem; border: 1px solid rgb(11 29 42 / 20%); border-radius: 0.5rem; background: #f2f2ec; color: #0b1d2a; }
+.lead-capture__product-context p { margin: 0 0 0.5rem; }

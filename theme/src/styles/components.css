@@ -128,3 +128,6 @@
 .feature-cta .button:focus-visible {
 	outline-color: var(--color-on-accent);
 }
+
+.charger-enquiry-context { margin-block-end: 2rem; padding: 1rem; border-inline-start: 3px solid currentColor; overflow-wrap: anywhere; }
+.charger-enquiry-context p { margin: 0; }

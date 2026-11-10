@@ -416,3 +416,9 @@ wp eval-file /tmp/about-page.php
 wp plugin deactivate secure-custom-fields
 docker cp tests/fixtures/about-options.php "$container_id:/var/www/html/wp-content/plugins/about-test-fixture.php"
 wp plugin activate about-test-fixture
+
+# Validate native product copy in SCF, then exercise rendering with SCF inactive.
+wp plugin activate secure-custom-fields
+docker cp tests/integration/charger-detail.php "$container_id:/tmp/charger-detail.php"
+wp eval-file /tmp/charger-detail.php
+wp plugin deactivate secure-custom-fields

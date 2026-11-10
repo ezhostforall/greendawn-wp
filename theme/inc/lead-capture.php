@@ -40,6 +40,7 @@ function greendawn_lead_render(): void {
 	$config['privacyUrl']  = '' !== $privacy_url ? $privacy_url : home_url( '/privacy-policy/' );
 	$config['phone']       = greendawn_footer_value( 'phone' );
 	$config['phoneUrl']    = greendawn_phone_uri( $config['phone'] );
+	$config['charger']     = apply_filters( 'greendawn_selected_charger', array() );
 	$config['source']      = is_page_template( 'templates/greendawn-homepage.php' ) ? 'homepage' : 'website';
 	$fallback_url          = esc_url_raw( (string) get_theme_mod( 'greendawn_header_cta_url', '' ) );
 	$config['fallbackUrl'] = '' !== $fallback_url && '#' !== $fallback_url ? $fallback_url : home_url( '/contact/' );

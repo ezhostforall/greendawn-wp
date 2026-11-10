@@ -20,6 +20,7 @@ final class Lead_Capture implements Module_Interface {
 		add_action( 'admin_post_greendawn_core_create_callback', array( $this, 'create_form' ) );
 		add_filter( 'greendawn_lead_config', array( $this, 'configuration' ) );
 		add_filter( 'wpcf7_contact_form_properties', array( $this, 'attribution_properties' ), 10, 2 );
+		add_filter( 'wpcf7_posted_data', array( $this, 'charger_context_data' ) );
 		add_filter( 'wpcf7_validate', array( $this, 'validate' ), 20, 2 );
 		add_filter( 'wpcf7_spam', array( $this, 'spam' ), 20, 2 );
 	}
@@ -113,6 +114,9 @@ final class Lead_Capture implements Module_Interface {
 			'utmCampaign'           => 120,
 			'utmTerm'               => 120,
 			'utmContent'            => 120,
+			'chargerId'             => 20,
+			'chargerTitle'          => 500,
+			'chargerURL'            => 2048,
 			'page-url'              => 2048,
 			'first_landing'         => 2048,
 			'first_referrer'        => 2048,
@@ -126,7 +130,7 @@ final class Lead_Capture implements Module_Interface {
 	 * @return string[]
 	 */
 	public static function attribution_fields(): array {
-		return array( 'page-url', 'first_landing', 'first_referrer', 'utmSource', 'utmMedium', 'utmCampaign', 'utmTerm', 'utmContent' );
+		return array( 'page-url', 'first_landing', 'first_referrer', 'utmSource', 'utmMedium', 'utmCampaign', 'utmTerm', 'utmContent', 'chargerId', 'chargerTitle', 'chargerURL' );
 	}
 
 	/**
@@ -248,6 +252,25 @@ final class Lead_Capture implements Module_Interface {
 	}
 
 	/**
+	 * Resolves product identity on the server; client titles/URLs are never authoritative.
+	 *
+	 * @param array $data Native CF7 submission data.
+	 * @return array
+	 */
+	public function charger_context_data( array $data ): array {
+		if ( ! $this->is_managed() ) {
+			return $data;
+		}
+		$context              = EV_Chargers::quote_context( $data['chargerId'] ?? '' );
+		$data['chargerTitle'] = $context['title'] ?? '';
+		$data['chargerURL']   = $context['url'] ?? '';
+		if ( $context ) {
+			$data['chargerId'] = (string) $context['id'];
+		}
+		return $data;
+	}
+
+	/**
 	 * Additional server-side validation for the qualified callback contract.
 	 *
 	 * @param \WPCF7_Validation $result CF7 validation result.
@@ -262,7 +285,7 @@ final class Lead_Capture implements Module_Interface {
 		$data                  = $submission ? $submission->get_posted_data() : array();
 		$choices               = self::choices();
 		$choices['source']     = array_fill_keys( array( 'homepage', 'website' ), '' );
-		$choices['entryPoint'] = array_fill_keys( array( 'floating-launcher', 'header', 'hero', 'services', 'pricing', 'final-cta', 'footer-cta' ), '' );
+		$choices['entryPoint'] = array_fill_keys( array( 'floating-launcher', 'header', 'hero', 'services', 'pricing', 'final-cta', 'footer-cta', 'charger-quote' ), '' );
 		$limits                = self::limits();
 		foreach ( $tags as $tag ) {
 			$name  = $tag->name;
@@ -276,6 +299,9 @@ final class Lead_Capture implements Module_Interface {
 				continue;
 			}
 			$value = trim( (string) $value );
+			if ( 'chargerId' === $name && '' !== $value && ! EV_Chargers::quote_context( $value ) ) {
+				$result->invalidate( $tag, __( 'This charger is no longer available. Remove the charger selection and try again.', 'greendawn' ) );
+			}
 			if ( in_array( $name, array( 'firstName', 'company', 'phone', 'email', 'callbackPreference' ), true ) && '' === $value ) {
 				$result->invalidate( $tag, __( 'Please complete this field.', 'greendawn-core' ) );
 			}

@@ -2,6 +2,7 @@ import './lead-capture.css';
 
 export interface LeadConfig {
 	formId: number;
+	charger?: { id: number; title: string; url: string } | [];
 	choices: Record<string, Record<string, string>>;
 	privacyUrl: string;
 	phone: string;

@@ -84,7 +84,6 @@ test('Public preserves source content and all local destinations without JavaScr
 				const card = page.locator(selector).first();
 				await card.scrollIntoViewIfNeeded();
 				expect(await card.locator('img').evaluate((el: HTMLImageElement) => el.complete && el.naturalWidth > 0)).toBe(true);
-				await card.evaluate(() => new Promise<void>(resolve => requestAnimationFrame(() => requestAnimationFrame(() => resolve()))));
 				await testInfo.attach(`public-${label}-${width}`, { body: await card.screenshot(), contentType: 'image/png' });
 			}
 			await page.evaluate(async () => {

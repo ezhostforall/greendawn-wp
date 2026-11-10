@@ -7,7 +7,7 @@
 
 defined( 'ABSPATH' ) || exit;
 
-define( 'GREENDAWN_VERSION', '0.5.0' );
+define( 'GREENDAWN_VERSION', '0.6.26' );
 define( 'GREENDAWN_DIR', get_template_directory() );
 
 require_once GREENDAWN_DIR . '/inc/setup.php';

@@ -11,6 +11,12 @@ if ( ! defined( 'ABSPATH' ) || 'local' !== wp_get_environment_type() ) {
 add_action(
 	'wp',
 	static function (): void {
+		if ( is_page( 'gd-aftercare-no-core' ) ) {
+			remove_all_filters( 'greendawn_aftercare_field_value' );
+		}
+		if ( is_page( 'gd-aftercare-no-cf7' ) ) {
+			remove_shortcode( 'contact-form-7' );
+		}
 		if ( is_page( 'gd-public-no-core' ) ) {
 			remove_all_filters( 'greendawn_public_field_value' );
 		}

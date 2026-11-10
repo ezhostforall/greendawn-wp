@@ -440,3 +440,9 @@ wp plugin activate secure-custom-fields
 docker cp tests/integration/public-charging.php "$container_id:/tmp/public-charging.php"
 wp eval-file /tmp/public-charging.php
 wp plugin deactivate secure-custom-fields
+
+# Aftercare preserves full offering/FAQ content and independently selected CF7 forms.
+wp plugin activate secure-custom-fields
+docker cp tests/integration/aftercare-page.php "$container_id:/tmp/aftercare-page.php"
+wp eval-file /tmp/aftercare-page.php
+wp plugin deactivate secure-custom-fields

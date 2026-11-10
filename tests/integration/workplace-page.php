@@ -8,16 +8,19 @@
 if ( 'local' !== wp_get_environment_type() ) {
 	WP_CLI::error( 'Workplace fixtures are restricted to disposable WordPress.' );
 }
-$greendawn_assert    = static function ( bool $condition, string $message ): void {
+$greendawn_assert   = static function ( bool $condition, string $message ): void {
 	if ( ! $condition ) {
 		WP_CLI::error( $message );
 	}
 };
-$greendawn_module    = new \Greendawn_Core\Modules\Greendawn_Workplace();
-$greendawn_schema    = $greendawn_module->fields();
-$greendawn_slugs     = array( 'hellonext-h1-22', 'project-ev-ac-pro-earth-dual-7-22kw', 'simpson-partners-7-22kw', 'sync-ev-22kw', 'sync-ev-22kw-2', 'easee-charger-22kw' );
-$greendawn_chargers  = array_map( static fn( string $slug ): int => get_page_by_path( $slug, OBJECT, 'evcharger' )->ID, $greendawn_slugs );
-$greendawn_image     = attachment_url_to_postid( wp_get_upload_dir()['baseurl'] . '/2026/11/commercial-ev-workplace-charging-1200.webp' );
+$greendawn_module   = new \Greendawn_Core\Modules\Greendawn_Workplace();
+$greendawn_schema   = $greendawn_module->fields();
+$greendawn_slugs    = array( 'hellonext-h1-22', 'project-ev-ac-pro-earth-dual-7-22kw', 'simpson-partners-7-22kw', 'sync-ev-22kw', 'sync-ev-22kw-2', 'easee-charger-22kw' );
+$greendawn_chargers = array_map( static fn( string $slug ): int => get_page_by_path( $slug, OBJECT, 'evcharger' )->ID, $greendawn_slugs );
+$greendawn_image    = attachment_url_to_postid( wp_get_upload_dir()['baseurl'] . '/2026/11/commercial-ev-workplace-charging-1200.webp' );
+if ( ! $greendawn_image ) {
+	$greendawn_image = attachment_url_to_postid( wp_get_upload_dir()['baseurl'] . '/2026/11/commercial-ev-workplace-charging-1200-scaled.webp' );
+}
 $greendawn_engineers = attachment_url_to_postid( wp_get_upload_dir()['baseurl'] . '/2026/11/greendawn-engineers-electrical-distribution-1600.webp' );
 $greendawn_assert( $greendawn_image > 0 && $greendawn_engineers > 0, 'Both existing local media fixtures must be present.' );
 $greendawn_form = WPCF7_ContactForm::get_template();

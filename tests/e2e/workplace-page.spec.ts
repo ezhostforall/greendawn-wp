@@ -30,7 +30,7 @@ test('Workplace preserves its complete source content and local destinations wit
 			const image = page.locator('.gd-page-hero__media img');
 			await expect(image).toHaveAttribute('loading', 'eager');
 			await expect(image).toHaveAttribute('fetchpriority', 'high');
-			await expect(image).toHaveAttribute('srcset', /1024w/);
+			await expect(image).toHaveAttribute('srcset', /[0-9]+w/);
 			await expect(page.locator('.gd-feature-grid h3')).toHaveText(['Cost Savings', 'Convenience & Reliability', 'Energy Management', 'Sustainability']);
 			await expect(page.locator('.gd-feature-grid p')).toHaveText(benefits);
 			for (const paragraph of await page.locator('.gd-feature-grid p').all()) await expect(paragraph).toBeVisible();

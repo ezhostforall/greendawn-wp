@@ -127,7 +127,7 @@
 	margin: 0;
 }
 
-.site-header .primary-nav a {
+.site-header .primary-nav :is(a, .submenu-toggle--label) {
 	color: var(--gd-cream);
 	font-family: var(--font-mono);
 	font-size: 0.875rem;
@@ -142,7 +142,7 @@
 	--focus-color: var(--gd-navy-950);
 }
 
-.site-header .primary-nav.is-enhanced .sub-menu a {
+.site-header .primary-nav.is-enhanced .sub-menu :is(a, .submenu-toggle--label) {
 	color: var(--gd-navy-900);
 }
 
@@ -157,6 +157,19 @@
 
 .site-header .submenu-toggle::before {
 	transition: transform 180ms ease;
+}
+
+.site-header .submenu-toggle--label {
+	grid-column: 1 / -1;
+	justify-content: space-between;
+	gap: 0.75rem;
+	text-align: start;
+	overflow-wrap: anywhere;
+}
+
+.site-header .submenu-toggle--label::before {
+	order: 1;
+	flex-shrink: 0;
 }
 
 @media (width > 75rem) {
@@ -200,7 +213,7 @@
 		border-top: 1px solid rgb(7 23 33 / 10%);
 	}
 
-	.site-header .primary-nav.is-enhanced .sub-menu a {
+	.site-header .primary-nav.is-enhanced .sub-menu :is(a, .submenu-toggle--label) {
 		display: flex;
 		min-height: 3.4rem;
 		align-items: center;
@@ -209,8 +222,7 @@
 		transition: background-color 180ms ease;
 	}
 
-	.site-header .primary-nav.is-enhanced .sub-menu a:hover,
-	.site-header .primary-nav.is-enhanced .sub-menu a:focus-visible {
+	.site-header .primary-nav.is-enhanced .sub-menu :is(a, .submenu-toggle--label):is(:hover, :focus-visible) {
 		background: var(--gd-lime);
 	}
 }
@@ -321,7 +333,7 @@
 		border-top: 1px solid var(--gd-border-light);
 	}
 
-	.site-header .primary-nav > ul > li > a {
+	.site-header .primary-nav > ul > li > :is(a, .submenu-toggle--label) {
 		min-height: 4.75rem;
 		align-content: center;
 		padding-block: 0.8rem;
@@ -341,7 +353,7 @@
 		--focus-color: var(--gd-lime);
 	}
 
-	.site-header .primary-nav.is-enhanced .sub-menu a {
+	.site-header .primary-nav.is-enhanced .sub-menu :is(a, .submenu-toggle--label) {
 		min-height: 3.6rem;
 		align-content: center;
 		padding-block: 0.75rem;
@@ -382,7 +394,7 @@
 		width: 10rem;
 	}
 
-	.site-header .primary-nav > ul > li > a {
+	.site-header .primary-nav > ul > li > :is(a, .submenu-toggle--label) {
 		min-height: 4.3rem;
 		font-size: clamp(1.75rem, 8vw, 2.75rem);
 	}
@@ -393,7 +405,7 @@
 }
 
 @media (max-height: 44rem) and (max-width: 75rem) {
-	.site-header .primary-nav > ul > li > a {
+	.site-header .primary-nav > ul > li > :is(a, .submenu-toggle--label) {
 		min-height: 3.5rem;
 		font-size: clamp(1.45rem, 5.2vh, 2.2rem);
 	}

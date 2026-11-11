@@ -4,6 +4,7 @@ import { expect, test, type Page } from '@playwright/test';
 const primary = (page: Page) => page.getByRole('navigation', { name: 'Primary', exact: true });
 const services = (page: Page) => page.getByRole('button', { name: 'Toggle submenu for Services', exact: true });
 const advisory = (page: Page) => page.getByRole('button', { name: 'Toggle submenu for Advisory', exact: true });
+const resources = (page: Page) => primary(page).getByRole('button', { name: 'Resources', exact: true });
 const menuToggle = (page: Page) => page.locator('[data-nav-toggle]');
 
 async function expectNoOverflow(page: Page) {
@@ -35,9 +36,20 @@ test('desktop hides the mobile button and supports nested keyboard disclosures',
 	await expect(services(page)).toBeFocused();
 	await expect(advisory(page)).toBeHidden();
 	await services(page).click();
-	await page.getByRole('button', { name: 'Toggle submenu for Resources' }).click();
+	await resources(page).getByText('Resources', { exact: true }).click();
 	await expect(services(page)).toHaveAttribute('aria-expanded', 'false');
+	await expect(resources(page)).toHaveAttribute('aria-expanded', 'true');
+	await expect(primary(page).getByRole('link', { name: 'Resources', exact: true })).toHaveCount(0);
 	await expect(primary(page).getByRole('link', { name: 'Contact', exact: true })).toBeVisible();
+	const moreResources = primary(page).getByRole('button', { name: 'More resources', exact: true });
+	await moreResources.press('Space');
+	const resourceDetails = primary(page).getByRole('link', { name: 'Resource details', exact: true });
+	await expect(resourceDetails).toBeVisible();
+	await page.keyboard.press('Tab');
+	await expect(resourceDetails).toBeFocused();
+	await page.keyboard.press('Escape');
+	await expect(moreResources).toBeFocused();
+	await expect(resourceDetails).toBeHidden();
 	await page.locator('h1').click();
 	await expect(primary(page).getByRole('link', { name: 'Contact', exact: true })).toBeHidden();
 	await services(page).click();
@@ -87,7 +99,7 @@ for (const width of [320, 768, 960]) {
 		await expect(page.locator('html')).not.toHaveCSS('overflow-y', 'hidden');
 		await menuToggle(page).click();
 		// Tab from the final visible menu control reaches content, closing the menu.
-		await page.getByRole('button', { name: 'Toggle submenu for Resources' }).focus();
+		await resources(page).focus();
 		await page.keyboard.press('Tab');
 		await expect(primary(page)).toBeHidden();
 		expect(await page.evaluate(() => !document.querySelector('.site-header')?.contains(document.activeElement))).toBe(true);
@@ -134,7 +146,13 @@ test('touch disclosures preserve the parent link destination', async ({ browser,
 	const page = await context.newPage();
 	await page.goto('/about/');
 	await menuToggle(page).tap();
+	await resources(page).getByText('Resources', { exact: true }).tap();
+	await expect(primary(page)).toBeVisible();
+	await expect(resources(page)).toHaveAttribute('aria-expanded', 'true');
+	await expect(page).toHaveURL(/\/about\/$/);
+	await expect(primary(page).getByRole('link', { name: 'Contact', exact: true })).toBeVisible();
 	await services(page).tap();
+	await expect(resources(page)).toHaveAttribute('aria-expanded', 'false');
 	await advisory(page).tap();
 	await expect(primary(page).getByRole('link', { name: 'Service detail with a longer descriptive label' })).toBeVisible();
 	await primary(page).getByRole('link', { name: 'Services', exact: true }).tap();
@@ -219,6 +237,7 @@ for (const width of [320, 1280]) {
 		}
 		await expect(primary(page).getByRole('link', { name: 'Service detail with a longer descriptive label' })).toBeVisible();
 		await expect(primary(page).getByRole('link', { name: 'Contact', exact: true })).toBeVisible();
+		await expect(primary(page).getByRole('link', { name: 'Resource details', exact: true })).toBeVisible();
 		await expectNoOverflow(page);
 		await primary(page).getByRole('link', { name: 'Services', exact: true }).click();
 		await expect(page).toHaveURL(/\/about\/#services$/);

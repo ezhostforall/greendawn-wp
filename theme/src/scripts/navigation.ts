@@ -33,10 +33,19 @@ export function initNavigation(): void {
 		const button = document.createElement('button');
 		button.type = 'button';
 		button.className = 'submenu-toggle';
-		button.setAttribute('aria-label', (toggle.dataset.submenuLabel ?? '%s').replace('%s', link.textContent?.trim() ?? ''));
 		submenu.id = `primary-submenu-${index + 1}`;
 		button.setAttribute('aria-controls', submenu.id);
-		link.after(button);
+		const destination = link.getAttribute('href')?.trim();
+		if (!destination || destination === '#') {
+			const label = document.createElement('span');
+			label.append(...link.childNodes);
+			button.classList.add('submenu-toggle--label');
+			button.append(label);
+			link.replaceWith(button);
+		} else {
+			button.setAttribute('aria-label', (toggle.dataset.submenuLabel ?? '%s').replace('%s', link.textContent?.trim() ?? ''));
+			link.after(button);
+		}
 		submenus.set(button, submenu);
 		closeSubmenu(button);
 		button.addEventListener('click', () => {
@@ -63,7 +72,7 @@ export function initNavigation(): void {
 		closeMenu();
 		if (focusWillHide) {
 			if (smallScreen.matches) toggle.focus();
-			else menu.querySelector<HTMLAnchorElement>('a')?.focus();
+			else menu.querySelector<HTMLElement>(':scope > ul > li > :is(a[href], .submenu-toggle--label)')?.focus();
 		}
 	};
 	menu.classList.add('is-enhanced');

@@ -364,6 +364,25 @@ if [[ -z "$editorial_post_id" ]]; then
     --post_content="$(cat tests/fixtures/editor-parity.html)" --porcelain)
 fi
 wp post meta update "$editorial_post_id" _thumbnail_id "$hero_id"
+wp post update "$editorial_post_id" --post_excerpt="A complete editorial excerpt with a final sentence for the archive."
+if [[ -z "$(wp term list category --slug=guides --field=term_id)" ]]; then
+  wp term create category "Guides" --slug=guides --description="Installation guides and practical advice."
+fi
+wp post term set "$editorial_post_id" category guides --by=slug
+if [[ -z "$(wp term list category --slug=editorial --field=term_id)" ]]; then
+  wp term create category "Editorials" --slug=editorial
+fi
+wp post term set "$(wp post list --post_type=post --name=hello-starter --field=ID)" category editorial --by=slug
+if [[ -z "$(wp term list post_tag --slug=installation-notes --field=term_id)" ]]; then
+  wp term create post_tag "Installation notes" --slug=installation-notes
+fi
+wp post term set "$editorial_post_id" post_tag installation-notes --by=slug
+protected_post_id=$(wp post list --post_type=post --name=editorial-protected --field=ID)
+if [[ -z "$protected_post_id" ]]; then
+  protected_post_id=$(wp post create --post_status=publish --post_title="Protected article fixture" --post_name=editorial-protected \
+    --post_password=local-fixture --post_date="2020-01-01 12:00:00" --post_content="<p>Protected editorial fixture body.</p>" --porcelain)
+fi
+wp post meta update "$protected_post_id" _thumbnail_id "$hero_id"
 wp rewrite flush
 
 echo "Disposable WordPress integration environment ready at http://localhost:8080"

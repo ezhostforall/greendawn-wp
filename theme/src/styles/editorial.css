@@ -203,7 +203,7 @@
 
 .gd-editorial-card h2 {
 	margin: 0;
-	color: var(--gd-navy-900);
+	color: var(--wp--preset--color--heading);
 	font: 700 clamp(1.35rem, 1.15rem + 0.65vw, 1.75rem)/1.15 var(--font-body);
 	letter-spacing: -0.03em;
 }

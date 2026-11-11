@@ -364,7 +364,7 @@ if [[ -z "$editorial_post_id" ]]; then
     --post_content="$(cat tests/fixtures/editor-parity.html)" --porcelain)
 fi
 wp post meta update "$editorial_post_id" _thumbnail_id "$hero_id"
-wp post update "$editorial_post_id" --post_excerpt="A complete editorial excerpt with a final sentence for the archive."
+wp post update "$editorial_post_id" --post_author="$(wp user get admin --field=ID)" --post_excerpt="A complete editorial excerpt with a final sentence for the archive."
 if [[ -z "$(wp term list category --slug=guides --field=term_id)" ]]; then
   wp term create category "Guides" --slug=guides --description="Installation guides and practical advice."
 fi

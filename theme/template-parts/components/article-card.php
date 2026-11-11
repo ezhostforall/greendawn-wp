@@ -35,7 +35,7 @@ if ( $greendawn_editorial ) :
 			</figure>
 		<?php endif; ?>
 		<div class="gd-editorial-card__body">
-			<h2 id="<?php echo esc_attr( $greendawn_card_title_id ); ?>"><a href="<?php echo esc_url( $greendawn_url ); ?>"><?php echo esc_html( $greendawn_title ); ?></a></h2>
+			<h2 class="card__title" id="<?php echo esc_attr( $greendawn_card_title_id ); ?>"><a href="<?php echo esc_url( $greendawn_url ); ?>"><?php echo esc_html( $greendawn_title ); ?></a></h2>
 			<time class="entry-meta" datetime="<?php echo esc_attr( $args['datetime'] ?? '' ); ?>"><?php echo esc_html( $args['date'] ?? '' ); ?></time>
 			<div class="entry-summary"><?php echo wp_kses_post( $args['excerpt'] ?? '' ); ?></div>
 			<a class="gd-editorial-card__more" href="<?php echo esc_url( $greendawn_url ); ?>" aria-label="<?php echo esc_attr( sprintf( /* translators: %s: article title. */ __( 'Read more: %s', 'greendawn' ), $greendawn_title ) ); ?>">

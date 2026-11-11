@@ -11,7 +11,7 @@ if (home) {
 	let resizeFrame = 0;
 	const reveals = [...home.querySelectorAll<HTMLElement>([
 		'.gd-problem__intro', '.gd-system__header', '.gd-system__decisions > article',
-		'.gd-process__intro', '.gd-surveys__intro', '.gd-surveys__price', '.gd-surveys__outcomes',
+		'.gd-process__intro', '.gd-surveys__intro', '.gd-surveys__card', '.gd-surveys__outcomes',
 		'.gd-surveys__footer', '.gd-solutions__intro', '.gd-aftercare__copy', '.gd-aftercare__quote',
 		'.gd-proof-grid__header', '.gd-insights__header', '.gd-final-cta__inner',
 	].join(','))];

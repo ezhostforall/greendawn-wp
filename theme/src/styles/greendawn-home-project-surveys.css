@@ -207,7 +207,7 @@
   border-bottom: 2px solid var(--gd-navy-900);
 }
 
-.gd-surveys__price {
+.gd-surveys__card {
   display: flex;
   min-width: 0;
   min-height: 21rem;
@@ -218,7 +218,7 @@
   padding: clamp(2rem, 4vw, 4rem);
 }
 
-.gd-surveys__price-label {
+.gd-surveys__card-label {
   margin: 0;
   color: var(--gd-lime);
   font-family: var(--font-mono);
@@ -227,31 +227,14 @@
   text-transform: uppercase;
 }
 
-.gd-surveys__price .gd-surveys__price-value {
-  display: flex;
-  align-items: baseline;
-  gap: 1rem;
+.gd-surveys__wordmark {
+  display: block;
+  width: clamp(12rem, 22vw, 20rem);
+  height: auto;
   margin: auto 0 2rem;
 }
 
-.gd-surveys__price-value strong {
-  font-family: var(--font-mono);
-  font-size: clamp(3.8rem, 2.8rem + 8vw, 7.5rem);
-  font-weight: 600;
-  letter-spacing: -0.085em;
-  line-height: 0.82;
-}
-
-.gd-surveys__price-value span {
-  color: var(--gd-lime);
-  font-family: var(--font-mono);
-  font-size: var(--gd-type-secondary);
-  font-weight: 600;
-  letter-spacing: 0.04em;
-  white-space: nowrap;
-}
-
-.gd-surveys__price > p:last-child {
+.gd-surveys__card > p:last-child {
   max-width: 31rem;
   font-size: 1rem;
   margin: 0;
@@ -337,7 +320,7 @@
     grid-template-columns: 1fr;
   }
 
-  .gd-surveys__price {
+  .gd-surveys__card {
     min-height: 17.5rem;
   }
 
@@ -352,12 +335,12 @@
 }
 
 @media (max-width: 42rem) {
-  .gd-surveys__price {
+  .gd-surveys__card {
     min-height: 16rem;
     padding: 2rem 1.5rem;
   }
 
-  .gd-surveys__price .gd-surveys__price-value {
+  .gd-surveys__wordmark {
     margin-bottom: 1.5rem;
   }
 

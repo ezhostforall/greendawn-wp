@@ -293,6 +293,7 @@ wp post meta update "$greendawn_edited_id" greendawn_home_featured_image "$hero_
 wp post meta update "$greendawn_edited_id" greendawn_home_featured_title "A programme shaped around your estate."
 wp post meta update "$greendawn_edited_id" greendawn_home_featured_sites_value "150"
 wp post meta update "$greendawn_edited_id" greendawn_home_survey_price "£250"
+wp post meta update "$greendawn_edited_id" greendawn_home_survey_tax_label "+ VAT"
 wp post meta update "$greendawn_edited_id" greendawn_home_survey_outcome_1 "Assess the electrical capacity at your site"
 wp post meta update "$greendawn_edited_id" greendawn_home_survey_guide_url "https://example.com/survey-guide/"
 wp post meta update "$greendawn_edited_id" greendawn_home_projects_url "https://greendawn.co.uk/gallery/?view=estate#projects"

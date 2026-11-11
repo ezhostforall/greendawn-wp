@@ -157,8 +157,11 @@ done
 services=$(wp menu item add-custom Primary Services 'http://localhost:8080/about/#services' --porcelain)
 advisory=$(wp menu item add-custom Primary Advisory 'http://localhost:8080/about/#advisory' --parent-id="$services" --porcelain)
 wp menu item add-custom Primary 'Service detail with a longer descriptive label' 'http://localhost:8080/about/#detail' --parent-id="$advisory"
-resources=$(wp menu item add-custom Primary Resources 'http://localhost:8080/about/#resources' --porcelain)
+resources=$(wp menu item add-custom Primary Resources '#' --porcelain)
 wp menu item add-custom Primary Contact 'http://localhost:8080/about/#contact' --parent-id="$resources"
+more_resources=$(wp menu item add-custom Primary 'More resources' '#' --parent-id="$resources" --porcelain)
+wp post meta update "$more_resources" _menu_item_url ''
+wp menu item add-custom Primary 'Resource details' 'http://localhost:8080/about/#resource-details' --parent-id="$more_resources"
 wp menu location assign Primary primary
 if wp menu list --fields=name --format=csv | grep -qx Utility; then wp menu delete Utility; fi
 wp menu create Utility

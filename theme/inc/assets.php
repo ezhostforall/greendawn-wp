@@ -76,7 +76,7 @@ function greendawn_enqueue_assets(): void {
 		greendawn_enqueue_entry( 'greendawn-home-motion' );
 	}
 
-	if ( is_page_template( array( 'templates/greendawn-about.php', 'templates/greendawn-workplace.php', 'templates/greendawn-fleet.php', 'templates/greendawn-public-charging.php', 'templates/greendawn-aftercare.php', 'templates/greendawn-enquire.php', 'templates/greendawn-business-installations.php', 'templates/greendawn-customer-care.php' ) ) || is_singular( 'evcharger' ) ) {
+	if ( is_page_template( array( 'templates/greendawn-about.php', 'templates/greendawn-workplace.php', 'templates/greendawn-fleet.php', 'templates/greendawn-public-charging.php', 'templates/greendawn-aftercare.php', 'templates/greendawn-enquire.php', 'templates/greendawn-business-installations.php', 'templates/greendawn-customer-care.php', 'templates/greendawn-gallery.php' ) ) || is_singular( 'evcharger' ) ) {
 		greendawn_enqueue_entry( 'greendawn-pages' );
 	}
 

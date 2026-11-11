@@ -180,3 +180,43 @@ function greendawn_customer_care_field( string $name, $fallback = '' ) {
 	$value = metadata_exists( 'post', $id, 'greendawn_customer_care_' . $name ) ? get_post_meta( $id, 'greendawn_customer_care_' . $name, true ) : $fallback;
 	return apply_filters( 'greendawn_customer_care_field_value', $value, $name, $id );
 }
+
+/**
+ * Resolves Gallery fields through Greendawn Core.
+ *
+ * @param string $name Short field name.
+ * @param mixed  $fallback Value without Core.
+ * @return mixed
+ */
+function greendawn_gallery_field( string $name, $fallback = '' ) {
+	$id    = get_the_ID();
+	$key   = 'greendawn_gallery_' . $name;
+	$value = metadata_exists( 'post', $id, $key ) ? get_post_meta( $id, $key, true ) : $fallback;
+	return apply_filters( 'greendawn_gallery_field_value', $value, $name, $id );
+}
+
+/**
+ * Loads selected images in their saved order and primes their attachment metadata.
+ *
+ * @param mixed $selection Ordered attachment IDs.
+ * @return WP_Post[]
+ */
+function greendawn_gallery_images( $selection ): array {
+	if ( ! is_array( $selection ) ) {
+		return array();
+	}
+	$ids = array_values( array_unique( array_filter( array_map( 'absint', $selection ) ) ) );
+	if ( ! $ids ) {
+		return array();
+	}
+	return get_posts(
+		array(
+			'post_type'      => 'attachment',
+			'post_status'    => 'inherit',
+			'post_mime_type' => 'image',
+			'post__in'       => $ids,
+			'orderby'        => 'post__in',
+			'posts_per_page' => count( $ids ),
+		)
+	);
+}

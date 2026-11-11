@@ -90,3 +90,7 @@ Core owns content/defaults and native media selections; editors receive no desig
 The fixed **Greendawn Customer Care** template now retains the source support introduction, all four commitments and the WhatsApp route beside a separately selected support CF7 form. It reuses the shared text hero, a support-list variant of the feature grid and form-content presentation. The current Divi form is recreated through a supplied five-required-field CF7 definition; form/recipient configuration remains administrator-owned and independent of sales. Source defaults, saved blanks, import preservation and password gating are retained. See [Customer Care setup and staging acceptance](greendawn-customer-care.md).
 
 After Customer Care staging acceptance, the remaining planned pages are **Gallery** and **Blog**. Customer Care does not change project data ownership, editorial queries or their templates.
+
+## Gallery implementation
+
+The **Greendawn Gallery** template uses a Page-owned story repeater and ordered Media Library selections. It keeps the five source stories, 19 story photograph placements and 39 gallery placements, and links to the local Enquire page. See [Gallery setup and the source photo inventory](greendawn-gallery.md) for staging reconciliation. Blog is the remaining planned page.

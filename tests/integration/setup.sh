@@ -453,3 +453,9 @@ docker cp tests/integration/enquire-page.php "$container_id:/tmp/enquire-page.ph
 docker cp docs/cf7-detailed-enquiry-form.html "$container_id:/tmp/cf7-detailed-enquiry-form.html"
 wp eval-file /tmp/enquire-page.php
 wp plugin deactivate secure-custom-fields
+
+# Commercial landing page: source copy, explicit shared sales form, local media and trusted video.
+wp plugin activate secure-custom-fields
+docker cp tests/integration/business-installations.php "$container_id:/tmp/business-installations.php"
+wp eval-file /tmp/business-installations.php
+wp plugin deactivate secure-custom-fields

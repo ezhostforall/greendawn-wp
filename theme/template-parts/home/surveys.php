@@ -1,6 +1,6 @@
 <?php
 /**
- * Technical survey scope, starting price and next steps.
+ * Technical survey scope and next steps.
  *
  * @package Greendawn
  */
@@ -21,9 +21,9 @@ $greendawn_guide_url   = esc_url( greendawn_home_field( 'survey_guide_url' ) );
 			</div>
 		</div>
 		<div class="gd-surveys__overview">
-			<div class="gd-surveys__price">
-				<p class="gd-surveys__price-label"><?php echo esc_html( greendawn_home_field( 'survey_price_label' ) ); ?></p>
-				<p class="gd-surveys__price-value"><strong><?php echo esc_html( greendawn_home_field( 'survey_price' ) ); ?></strong><span><?php echo esc_html( greendawn_home_field( 'survey_tax_label' ) ); ?></span></p>
+			<div class="gd-surveys__card">
+				<p class="gd-surveys__card-label"><?php echo esc_html( greendawn_home_field( 'survey_price_label' ) ); ?></p>
+				<img class="gd-surveys__wordmark" src="<?php echo esc_url( get_theme_file_uri( '/assets/home/greendawn-wordmark-480.png' ) ); ?>" width="480" height="132" loading="lazy" decoding="async" alt="<?php esc_attr_e( 'Greendawn', 'greendawn' ); ?>">
 				<p><?php echo esc_html( greendawn_home_field( 'survey_price_scope' ) ); ?></p>
 			</div>
 			<div class="gd-surveys__outcomes">

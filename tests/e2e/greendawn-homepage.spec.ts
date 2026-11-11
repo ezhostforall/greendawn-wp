@@ -78,7 +78,16 @@ test('the branded homepage renders its sections in order without JavaScript', as
 				range.selectNodeContents(label);
 				return range.getClientRects().length;
 			})).toBe(1);
-			await expect(main.locator('#surveys .gd-surveys__price-value')).toHaveText('£200+ VAT');
+			const surveyCard = main.locator('#surveys .gd-surveys__card');
+			await expect(surveyCard.locator('p')).toHaveText([
+				'Site surveys from',
+				'The scope and final price depend on the site and requirement. Both are confirmed before booking, including any further assessments or third-party costs that may apply.',
+			]);
+			const surveyLogo = surveyCard.getByRole('img', { name: 'Greendawn', exact: true });
+			await expect(surveyLogo).toHaveAttribute('src', /greendawn-wordmark-480\.png$/);
+			await surveyLogo.scrollIntoViewIfNeeded();
+			await expect.poll(() => surveyLogo.evaluate((image: HTMLImageElement) => image.naturalWidth)).toBeGreaterThan(0);
+			await expect(surveyCard).not.toContainText(/£\d|\+ VAT/);
 			await expect(main.locator('#surveys li p')).toHaveText([
 				'Charging demand and available site capacity',
 				'Charger locations, cable routes and access constraints',
@@ -270,7 +279,8 @@ test('saved homepage values render in the initial response with one hero image',
 	expect(html).not.toContain('johnsons-dealership-ev-charging-');
 	await expect(page.locator('#projects figure img')).toHaveAttribute('alt', 'Service fixture image');
 	await expect(page.locator('#projects .gd-case-study__facts strong').first()).toHaveText('150');
-	await expect(page.locator('#surveys .gd-surveys__price-value strong')).toHaveText('£250');
+	await expect(page.locator('#surveys').getByRole('img', { name: 'Greendawn', exact: true })).toBeVisible();
+	await expect(page.locator('#surveys')).not.toContainText(/£250|\+ VAT/);
 	await expect(page.locator('#surveys li p').first()).toHaveText('Assess the electrical capacity at your site');
 	await expect(page.locator('#surveys').getByRole('link', { name: 'What a technical survey should establish' })).toHaveAttribute('href', 'https://example.com/survey-guide/');
 	const services = page.locator('#who-we-help');

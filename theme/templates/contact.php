@@ -37,7 +37,7 @@ while ( have_posts() ) :
 
 		<div class="container section layout-grid contact-content">
 			<?php if ( $greendawn_contact_form_id ) : ?>
-				<section class="card layout-stack starter-contact-form">
+				<section class="card layout-stack starter-contact-form" data-greendawn-form-location="contact" data-greendawn-form-id="<?php echo esc_attr( (string) $greendawn_contact_form_id ); ?>">
 					<h2 class="type-subheading"><?php esc_html_e( 'Send an enquiry', 'greendawn' ); ?></h2>
 					<?php
 					// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CF7 renders the form markup for a validated numeric ID.

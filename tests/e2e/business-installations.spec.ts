@@ -1,4 +1,5 @@
 import { expect, test } from '@playwright/test';
+import { mockComplianz } from './helpers/complianz';
 import AxeBuilder from '@axe-core/playwright';
 
 const route = '/business-ev-charging-installations/';
@@ -124,6 +125,7 @@ test('Business video loads only on keyboard activation and keeps the layout stab
 
 test('Business sales form reuses native feedback and first-touch attribution without changing Enquire', async ({ page, baseURL }) => {
 	await page.setViewportSize({ width: 375, height: 900 });
+	await mockComplianz(page, { marketing: true });
 	await page.goto('/about/?utm_source=search&utm_medium=cpc&utm_campaign=business', { referer: 'https://referrer.example/landing/?private=discard' });
 	await page.goto(route);
 	const form = page.locator('.gd-business-form form');

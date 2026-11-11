@@ -24,6 +24,15 @@ else :
 		if ( '' !== $greendawn_form_heading ) :
 			?>
 			<h2 id="<?php echo esc_attr( $greendawn_form_heading_id ); ?>"><?php echo esc_html( $greendawn_form_heading ); ?></h2><?php endif; ?>
-		<?php get_template_part( 'template-parts/components/form-content', null, array( 'form_id' => $args['form_id'] ?? 0 ) ); ?>
+		<?php
+		get_template_part(
+			'template-parts/components/form-content',
+			null,
+			array(
+				'form_id'       => $args['form_id'] ?? 0,
+				'form_location' => $args['form_location'] ?? '',
+			)
+		);
+		?>
 	</div>
 </section>

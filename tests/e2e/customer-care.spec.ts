@@ -1,4 +1,5 @@
 import { expect, test } from '@playwright/test';
+import { mockComplianz } from './helpers/complianz';
 import AxeBuilder from '@axe-core/playwright';
 
 const route = '/customer-care/';
@@ -120,6 +121,7 @@ test('Customer Care validates required support fields and remains accessible wit
 
 test('Customer Care retains native success/error feedback and attribution without sending live mail', async ({ page, baseURL }) => {
 	await page.setViewportSize({ width: 375, height: 900 });
+	await mockComplianz(page, { marketing: true });
 	await page.goto('/about/?utm_source=support&utm_medium=referral&utm_campaign=care', { referer: 'https://referrer.example/path/?private=discard' });
 	await page.goto(route);
 	const form = page.locator('.gd-support-form form');

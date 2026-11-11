@@ -1,6 +1,8 @@
 import { expect, test } from '@playwright/test';
+import { mockComplianz } from './helpers/complianz';
 
 test('native CF7 grid retains first-touch context through navigation and serialisation', async ({ page, baseURL }) => {
+	await mockComplianz(page, { marketing: true });
 	await page.setViewportSize({ width: 375, height: 900 });
 	await page.goto('/about/?utm_source=search&utm_medium=cpc&utm_campaign=charging&utm_term=fleet&utm_content=ad-one&private=discard#discard', { referer: 'https://referrer.example/campaign/?token=discard#discard' });
 	await page.goto('/gd-about-default/?utm_source=internal&utm_campaign=replace&private=discard#discard');
@@ -43,6 +45,7 @@ test('CF7 remains usable when session storage is denied or JavaScript is disable
 	const context = await browser.newContext({ baseURL });
 	await context.addInitScript(() => { Object.defineProperty(window, 'sessionStorage', { get() { throw new DOMException('Storage denied', 'SecurityError'); } }); });
 	const page = await context.newPage();
+	await mockComplianz(page, { marketing: true });
 	await page.goto('/gd-about-default/');
 	const form = page.locator('.gd-form-panel form');
 	await expect(form.locator('[name="page-url"]')).toHaveValue(`${baseURL}/gd-about-default/`);

@@ -86,9 +86,10 @@ while ( have_posts() ) :
 			'template-parts/components/form-panel',
 			null,
 			array(
-				'instance_id' => 'workplace-form',
-				'heading'     => greendawn_workplace_field( 'form_heading' ),
-				'form_id'     => greendawn_workplace_field( 'form', 0 ),
+				'instance_id'   => 'workplace-form',
+				'heading'       => greendawn_workplace_field( 'form_heading' ),
+				'form_id'       => greendawn_workplace_field( 'form', 0 ),
+				'form_location' => 'workplace',
 			)
 		);
 		get_template_part(

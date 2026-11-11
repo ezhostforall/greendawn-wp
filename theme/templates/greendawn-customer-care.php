@@ -70,6 +70,7 @@ while ( have_posts() ) :
 							null,
 							array(
 								'form_id'             => greendawn_customer_care_field( 'form', 0 ),
+								'form_location'       => 'customer_care',
 								'unavailable_message' => __( 'The support form is currently unavailable.', 'greendawn' ),
 								'fallback_url'        => '' !== $greendawn_label ? $greendawn_whatsapp : '',
 								'fallback_label'      => $greendawn_label,

@@ -31,6 +31,9 @@ test('blog cards, pagination and article headers work at narrow and wide widths'
 	await expect(hero.locator('time')).toHaveAttribute('datetime', /^\d{4}-\d{2}-\d{2}/);
 	await expect(hero.locator('.entry-thumbnail img')).toHaveAttribute('loading', 'eager');
 	await expect(hero.locator('.entry-thumbnail img')).toHaveAttribute('fetchpriority', 'high');
+	await expect(hero.locator('.entry-thumbnail img')).toHaveCSS('object-fit', 'cover');
+	const mobileImage = await hero.locator('.entry-thumbnail img').boundingBox();
+	expect((mobileImage?.width ?? 0) / (mobileImage?.height ?? 0)).toBeCloseTo(16 / 9, 2);
 	await expect(hero.getByText(/^By /)).toBeVisible();
 	await expect(page.locator('.entry-footer')).toContainText('Installation notes');
 	await expect(hero.getByRole('navigation', { name: 'Breadcrumb' }).getByRole('link', { name: 'Blog' })).toHaveAttribute('href', /\/blog\/$/);
@@ -46,19 +49,38 @@ test('blog cards, pagination and article headers work at narrow and wide widths'
 	expect(postBody?.width).toBeCloseTo(672, 0);
 	await page.evaluate(async () => { await document.fonts.ready; await document.querySelector<HTMLImageElement>('.entry-thumbnail img')?.decode(); });
 	await testInfo.attach('blog-post-1280', { body: await page.screenshot({ fullPage: true }), contentType: 'image/png' });
+});
+
+test('default pages share the Customer Care hero and keep optional images below it', async ({ page }, testInfo) => {
+	await page.setViewportSize({ width: 1280, height: 850 });
+	const hero = page.locator('main .gd-page-hero--text');
+	await page.goto('/customer-care/');
+	await expect(hero).toBeVisible();
+	const heroBackground = await hero.evaluate(element => getComputedStyle(element).backgroundColor);
+	const heroPadding = await hero.evaluate(element => getComputedStyle(element).paddingBlock);
+	const headingStyle = await typography(hero.getByRole('heading', { level: 1 }));
+
 	await page.goto('/policy-example/');
 	await expect(hero.getByRole('heading', { level: 1 })).toHaveText('Policy example');
 	await expect(hero.locator('[aria-current="page"]')).toHaveText('Policy example');
 	await expect(page.locator('.entry-content')).toContainText('Policy body fixture.');
-	await expect(hero.locator('time, .entry-thumbnail')).toHaveCount(0);
+	await expect(hero.locator('time, img')).toHaveCount(0);
+	await expect(page.locator('.editorial-page > .entry-thumbnail')).toHaveCount(0);
+	await expect(hero).toHaveCSS('background-color', heroBackground);
+	await expect(hero).toHaveCSS('padding-block', heroPadding);
+	expect(await typography(hero.getByRole('heading', { level: 1 }))).toEqual(headingStyle);
 	const titleLeft = await hero.locator('h1').evaluate(element => element.getBoundingClientRect().left);
-	const bodyLeft = await page.locator('.entry-content > p').evaluate(element => element.getBoundingClientRect().left);
-	expect(titleLeft).toBeCloseTo(bodyLeft, 0);
-	expect(titleLeft).toBeCloseTo(80, 0);
+	expect(titleLeft).toBeCloseTo(24, 0);
 	const bodyWidth = await page.locator('.entry-content > p').evaluate(element => element.getBoundingClientRect().width);
 	expect(bodyWidth).toBeCloseTo(1120, 0);
+	await testInfo.attach('default-page-1280', { body: await page.screenshot({ fullPage: true }), contentType: 'image/png' });
+
+	await page.goto('/page-with-featured-image/');
+	await expect(hero.locator('img')).toHaveCount(0);
+	await expect(page.locator('.editorial-page > .entry-thumbnail img')).toBeVisible();
 	await page.setViewportSize({ width: 320, height: 850 });
 	expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBe(320);
+	await testInfo.attach('default-page-320', { body: await page.screenshot({ fullPage: true }), contentType: 'image/png' });
 });
 
 test('native editorial categories retain filtering, descriptions and navigation without JavaScript', async ({ browser, baseURL }, testInfo) => {

@@ -6,8 +6,10 @@
  */
 
 defined( 'ABSPATH' ) || exit;
+
+$greendawn_editorial = is_singular( 'post' );
 ?>
-<article id="post-<?php the_ID(); ?>" <?php post_class( 'editorial-entry' ); ?>>
+<article id="post-<?php the_ID(); ?>" <?php post_class( $greendawn_editorial ? 'editorial-entry greendawn-editorial' : 'editorial-entry' ); ?>>
 	<?php
 	get_template_part(
 		'template-parts/entry-hero',
@@ -15,6 +17,7 @@ defined( 'ABSPATH' ) || exit;
 		array(
 			'show_date'  => true,
 			'wide_media' => true,
+			'editorial'  => $greendawn_editorial,
 		)
 	);
 	?>

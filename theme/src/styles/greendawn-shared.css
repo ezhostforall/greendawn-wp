@@ -2,6 +2,7 @@
 
 .greendawn-home,
 .greendawn-page,
+.greendawn-editorial,
 .site-header,
 .site-footer,
 .gd-utility-bar {
@@ -27,7 +28,8 @@
 }
 
 .greendawn-home,
-.greendawn-page {
+.greendawn-page,
+.greendawn-editorial {
 	--gd-shell: min(100% - 2 * var(--gd-shell-gutter), var(--gd-shell-max));
 }
 
@@ -50,6 +52,7 @@
 @media (max-width: 75rem) {
 .greendawn-home,
 .greendawn-page,
+.greendawn-editorial,
 .site-header,
 .site-footer,
 .gd-utility-bar {
@@ -62,6 +65,7 @@
 @media (max-width: 61rem) {
 .greendawn-home,
 .greendawn-page,
+.greendawn-editorial,
 .site-header,
 .site-footer,
 .gd-utility-bar {
@@ -74,6 +78,7 @@
 @media (max-width: 42rem) {
 .greendawn-home,
 .greendawn-page,
+.greendawn-editorial,
 .site-header,
 .site-footer,
 .gd-utility-bar {
@@ -86,6 +91,7 @@
 @media (max-width: 30rem) {
 .greendawn-home,
 .greendawn-page,
+.greendawn-editorial,
 .site-header,
 .site-footer,
 .gd-utility-bar {

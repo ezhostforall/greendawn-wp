@@ -93,4 +93,12 @@ After Customer Care staging acceptance, the remaining planned pages are **Galler
 
 ## Gallery implementation
 
-The **Greendawn Gallery** template uses a Page-owned story repeater and ordered Media Library selections. It keeps the five source stories, 19 story photograph placements and 39 gallery placements, and links to the local Enquire page. See [Gallery setup and the source photo inventory](greendawn-gallery.md) for staging reconciliation. Blog is the remaining planned page.
+The **Greendawn Gallery** template uses a Page-owned story repeater and ordered Media Library selections. It keeps the five source stories, 19 story photograph placements and 39 gallery placements, and links to the local Enquire page. See [Gallery setup and the source photo inventory](greendawn-gallery.md) for staging reconciliation.
+
+## Blog and individual posts
+
+The existing WordPress Posts page uses the **Our Content** hero, a responsive article grid and native pagination. The category navigation resolves the published site’s `guides` and `editorial` terms by slug and uses their generated WordPress links. Category, tag, date and author archives use the same listing presentation and the native query.
+
+Individual posts use a site-width hero with breadcrumbs, date, author and optional featured image. Gutenberg content continues through WordPress’s normal rendering and keeps a narrower reading column with wide and full block alignments. WordPress renders categories, tags, paginated content, post navigation and comments using the existing records and settings.
+
+After installing the theme on staging, confirm **Settings → Reading → Posts page** points to the existing Blog page. Check both category links, an older page of the index and representative imported posts with and without featured images. Review original permalinks, authors, dates, excerpts, images and SEO fields on those records. Any legacy Divi content still present in imported posts needs editorial conversion to blocks before launch.

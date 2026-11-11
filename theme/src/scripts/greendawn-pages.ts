@@ -1,4 +1,5 @@
 import '../styles/greendawn-pages.css';
+import './photo-dialog';
 
 // Static article links remain accessible through native scrolling without JavaScript.
 for (const root of document.querySelectorAll<HTMLElement>('[data-gd-articles]')) {

@@ -354,6 +354,8 @@ wp post meta update "$greendawn_no_insights_id" _wp_page_template templates/gree
 create_page starter-home "Starter home" '<p>Static homepage fixture.</p>'
 create_page blog "Blog" ''
 create_page policy-example "Policy example" '<!-- wp:paragraph --><p>Policy body fixture.</p><!-- /wp:paragraph -->'
+create_page page-with-featured-image "Page with featured image" '<p>Default page content.</p>'
+wp post meta update "$(wp post list --post_type=page --name=page-with-featured-image --field=ID)" _thumbnail_id "$hero_id"
 wp option update page_on_front "$(wp post list --post_type=page --name=starter-home --field=ID)"
 wp option update page_for_posts "$(wp post list --post_type=page --name=blog --field=ID)"
 wp option update show_on_front page

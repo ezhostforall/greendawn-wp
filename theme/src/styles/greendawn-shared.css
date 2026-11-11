@@ -35,7 +35,8 @@
 
 .site-header {
 	--gd-header-width: min(100% - 2 * var(--gd-shell-gutter), var(--gd-shell-max));
-	min-height: var(--gd-header-expanded-height);
+	--gd-header-row-height: var(--gd-header-expanded-height);
+	min-height: var(--gd-header-row-height);
 	padding: 0;
 	border: 0;
 	background: var(--gd-navy-950);

@@ -69,7 +69,7 @@ export function initNavigation(): void {
 	menu.classList.add('is-enhanced');
 	disclosure.addEventListener('toggle', () => {
 		if (disclosure.open) return;
-		if (smallScreen.matches && menu.contains(document.activeElement)) toggle.focus();
+		if (smallScreen.matches && menu.contains(document.activeElement)) toggle.focus({ preventScroll: true });
 		closeAll();
 	}, { signal });
 	smallScreen.addEventListener('change', reset, { signal });
@@ -86,14 +86,15 @@ export function initNavigation(): void {
 		} else if (menu.contains(event.target) || event.target === toggle) {
 			if (smallScreen.matches && disclosure.open) {
 				closeMenu();
-				toggle.focus();
+				toggle.focus({ preventScroll: true });
+				event.preventDefault();
 			}
 		}
 	}, { signal });
 	document.addEventListener('click', (event) => {
 		if (!(event.target instanceof Node) || menu.contains(event.target) || toggle.contains(event.target)) return;
 		const active = document.activeElement;
-		if (smallScreen.matches && menu.contains(active)) toggle.focus();
+		if (smallScreen.matches && menu.contains(active)) toggle.focus({ preventScroll: true });
 		else if (active instanceof HTMLElement && menu.contains(active) && active.closest('.sub-menu')) {
 			const ancestor = active.closest('.primary-nav > ul > li');
 			ancestor?.querySelector<HTMLButtonElement>(':scope > .submenu-toggle')?.focus();
@@ -106,7 +107,7 @@ export function initNavigation(): void {
 	menu.addEventListener('click', (event) => {
 		if (event.target instanceof Element && event.target.closest('a') && smallScreen.matches) {
 			closeMenu();
-			toggle.focus();
+			toggle.focus({ preventScroll: true });
 		}
 	}, { signal });
 	window.addEventListener('pagehide', (event) => {

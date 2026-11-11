@@ -49,16 +49,32 @@ test('desktop hides the mobile button and supports nested keyboard disclosures',
 });
 
 for (const width of [320, 768, 960]) {
-	test(`inline navigation works at ${width}px without trapping focus or locking scroll`, async ({ page }, testInfo) => {
+	test(`full-screen navigation works at ${width}px and releases focus and scroll on close`, async ({ page }, testInfo) => {
 		await page.setViewportSize({ width, height: 720 });
 		await page.goto('/about/');
+		const header = page.locator('.site-header');
+		const logo = header.locator('.custom-logo');
+		const closed = (await header.boundingBox())!;
+		const closedLogo = (await logo.boundingBox())!;
 		await expect(primary(page)).toBeHidden();
 		await menuToggle(page).click();
 		await expect(primary(page)).toBeVisible();
+		await expect(header).toHaveCSS('position', 'fixed');
+		await expect(page.locator('html')).toHaveCSS('overflow-y', 'hidden');
+		const open = (await header.boundingBox())!;
+		const openLogo = (await logo.boundingBox())!;
+		const nav = (await primary(page).boundingBox())!;
+		expect(open.y).toBe(0);
+		expect(open.width).toBeCloseTo(width, 1);
+		expect(open.height).toBeCloseTo(720, 1);
+		expect(nav.y).toBeCloseTo(closed.height, 1);
+		expect(nav.y + nav.height).toBeCloseTo(720, 1);
+		expect(openLogo.width).toBeCloseTo(closedLogo.width, 1);
+		expect(openLogo.height).toBeCloseTo(closedLogo.height, 1);
+		expect(openLogo.y - open.y).toBeCloseTo(closedLogo.y - closed.y, 1);
 		await services(page).click();
 		await advisory(page).click();
 		await expectNoOverflow(page);
-		expect(await page.locator('body').evaluate((body) => getComputedStyle(body).overflow)).not.toBe('hidden');
 		await testInfo.attach(`header-${width}`, { body: await page.locator('.site-header').screenshot(), contentType: 'image/png' });
 		await primary(page).getByRole('link', { name: 'Service detail with a longer descriptive label' }).focus();
 		await page.keyboard.press('Escape');
@@ -68,6 +84,7 @@ for (const width of [320, 768, 960]) {
 		await page.keyboard.press('Escape');
 		await expect(menuToggle(page)).toBeFocused();
 		await expect(primary(page)).toBeHidden();
+		await expect(page.locator('html')).not.toHaveCSS('overflow-y', 'hidden');
 		await menuToggle(page).click();
 		// Tab from the final visible menu control reaches content, closing the menu.
 		await page.getByRole('button', { name: 'Toggle submenu for Resources' }).focus();
@@ -175,6 +192,8 @@ test('optional utility, CTA and sticky header work in short viewports and RTL', 
 	const enquiry = primary(page).getByRole('link', { name: 'Talk to us' });
 	await enquiry.scrollIntoViewIfNeeded();
 	await expect(enquiry).toBeInViewport();
+	await expect(menuToggle(page)).toBeInViewport();
+	await expect(primary(page).getByRole('link', { name: 'Support', exact: true })).toBeVisible();
 	await testInfo.attach('short-rtl-header', { body: await page.locator('.site-header').screenshot(), contentType: 'image/png' });
 });
 
@@ -193,6 +212,8 @@ for (const width of [320, 1280]) {
 		if (width === 320) {
 			await expect(primary(page)).toBeHidden();
 			await menuToggle(page).press('Enter');
+			await expect(page.locator('.site-header')).toHaveCSS('position', 'relative');
+			await expect(page.locator('html')).not.toHaveCSS('overflow-y', 'hidden');
 		} else {
 			await expect(menuToggle(page)).toBeHidden();
 		}

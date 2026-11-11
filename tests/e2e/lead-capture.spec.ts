@@ -115,6 +115,16 @@ test('back navigation, branching, short viewports and all CTA entry points remai
 		await page.keyboard.press('Escape');
 		await expect(trigger).toBeFocused();
 	}
+	await page.setViewportSize({ width: 390, height: 850 });
+	const mobileToggle = page.locator('[data-nav-toggle]');
+	await mobileToggle.click();
+	await page.locator('.primary-nav [data-lead-entry-point="header"]').click();
+	await expect(page.getByRole('dialog')).toBeVisible();
+	await expect(page.locator('.primary-nav')).toBeHidden();
+	await page.keyboard.press('Escape');
+	await expect(mobileToggle).toBeFocused();
+	await expect(page.locator('html')).not.toHaveCSS('overflow-y', 'hidden');
+	await page.setViewportSize({ width: 1440, height: 900 });
 	await page.locator('.lead-capture__launcher').click();
 	const dialog = page.getByRole('dialog');
 	await dialog.getByRole('button', { name: 'Just request a callback' }).click();

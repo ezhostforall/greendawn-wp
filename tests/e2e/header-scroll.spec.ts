@@ -29,6 +29,25 @@ test('only the main header sticks and compacts like Astro while the utility row 
 			expect(await page.getByRole('main').evaluate((element) => element.getBoundingClientRect().top + window.scrollY)).toBeCloseTo(mainTop, 1);
 			expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(width);
 			await testInfo.attach(`header-compact-${path.includes('home') ? 'home' : 'inner'}-${width}`, { body: await header.screenshot({ animations: 'disabled' }), contentType: 'image/png' });
+			if (width < 1200) {
+				const logo = header.locator('.custom-logo');
+				const compactLogo = (await logo.boundingBox())!;
+				const toggle = header.locator('[data-nav-toggle]');
+				const scroll = await page.evaluate(() => window.scrollY);
+				await toggle.click();
+				await expect.poll(async () => (await header.boundingBox())!.height).toBeCloseTo(900, 1);
+				const menuLogo = (await logo.boundingBox())!;
+				expect(menuLogo.y).toBeCloseTo(compactLogo.y, 1);
+				expect(menuLogo.width).toBeCloseTo(compactLogo.width, 1);
+				expect(menuLogo.height).toBeCloseTo(compactLogo.height, 1);
+				const menu = header.getByRole('navigation', { name: 'Primary', exact: true });
+				await expect(menu.getByRole('link', { name: 'Support', exact: true })).toBeVisible();
+				await expect(menu).toHaveCSS('overscroll-behavior-y', 'contain');
+				await toggle.press('Escape');
+				await expect(menu).toBeHidden();
+				expect(await page.evaluate(() => window.scrollY)).toBe(scroll);
+				await expect.poll(async () => (await header.boundingBox())!.height).toBeCloseTo(75.2, 1);
+			}
 			if (path === '/greendawn-home-sticky/') {
 				await page.evaluate(() => window.scrollTo({ top: document.documentElement.scrollHeight, behavior: 'instant' }));
 				expect((await header.boundingBox())!.y).toBe(0);

@@ -23,6 +23,7 @@ while ( have_posts() ) :
 	$greendawn_contact_heading = (string) greendawn_enquire_field( 'contact_heading' );
 	$greendawn_contact_copy    = (string) greendawn_enquire_field( 'contact_copy' );
 	$greendawn_has_contact     = '' !== $greendawn_contact_heading || '' !== $greendawn_contact_copy || array_filter( $greendawn_contacts );
+	$greendawn_charger         = apply_filters( 'greendawn_selected_charger', array() );
 	$greendawn_steps           = array();
 	foreach ( array( 'consultation', 'hardware_quote', 'site_survey', 'full_quote', 'acceptance', 'aftercare' ) as $greendawn_stage ) {
 		$greendawn_steps[] = array(
@@ -58,8 +59,10 @@ while ( have_posts() ) :
 						'template-parts/components/form-content',
 						null,
 						array(
-							'form_id'      => greendawn_enquire_field( 'form', 0 ),
-							'fallback_url' => $greendawn_has_contact ? '#enquire-contact' : '',
+							'form_id'       => greendawn_enquire_field( 'form', 0 ),
+							'form_location' => 'enquire',
+							'charger_slug'  => $greendawn_charger['slug'] ?? '',
+							'fallback_url'  => $greendawn_has_contact ? '#enquire-contact' : '',
 						)
 					);
 					?>

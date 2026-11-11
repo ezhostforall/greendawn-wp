@@ -1,4 +1,5 @@
 import { expect, test } from '@playwright/test';
+import { mockComplianz } from './helpers/complianz';
 import AxeBuilder from '@axe-core/playwright';
 
 const titles = ['Consultation', 'Hardware Quote', 'Site Survey', 'Full Quote', 'Acceptance & Installation', 'Aftercare'];
@@ -115,6 +116,7 @@ test('Enquire retains visible and submitted charger identity through the native 
 test('Enquire shows validation and delivery responses, retains attribution and leaves the drawer independent', async ({ page, baseURL }) => {
 	await page.setViewportSize({ width: 375, height: 900 });
 	await page.emulateMedia({ reducedMotion: 'reduce' });
+	await mockComplianz(page, { marketing: true });
 	await page.goto('/enquire/?charger=hellonext-h1-22&utm_source=search&utm_medium=cpc&utm_campaign=project&utm_term=fleet&utm_content=ad-one&private=discard', { referer: 'https://referrer.example/landing/?private=discard' });
 	const form = page.locator('.gd-enquire-form form');
 	await form.getByRole('button', { name: 'Start Your Journey' }).click();
@@ -142,6 +144,10 @@ test('Enquire shows validation and delivery responses, retains attribution and l
 	status = 'mail_sent';
 	await form.getByRole('button', { name: 'Start Your Journey' }).click();
 	await expect(form.locator('.wpcf7-response-output')).toHaveText('Project enquiry received.');
+	expect(await page.evaluate(() => window.dataLayer?.filter(entry => entry.event === 'generate_lead'))).toEqual([{
+		event: 'generate_lead', form_location: 'enquire', lead_type: 'charger_quote',
+		cta_location: null, charger_slug: 'hellonext-h1-22', gd_event_statistics: false, gd_event_marketing: true,
+	}]);
 	await expect(form.locator('.wpcf7-response-output')).toBeVisible();
 	await expect(form.locator('[name="utm_campaign"]')).toHaveValue('project');
 	await expect(page.locator('script[src*="ScrollTrigger"], script[src*="jsx-runtime"]')).toHaveCount(0);

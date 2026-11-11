@@ -1,8 +1,16 @@
+import { getTrackingConsent } from './tracking-consent';
+
 const storageKey = 'greendawn:enquiry-visit:v2';
 const campaigns = { utmSource: 'utm_source', utmMedium: 'utm_medium', utmCampaign: 'utm_campaign', utmTerm: 'utm_term', utmContent: 'utm_content' } as const;
 type Campaign = Record<keyof typeof campaigns, string>;
 type Visit = Campaign & { landing: string; referrer: string };
 let visit: Visit | undefined;
+const emptyCampaign: Campaign = { utmSource: '', utmMedium: '', utmCampaign: '', utmTerm: '', utmContent: '' };
+
+export function clearVisitAttribution(): void {
+	visit = undefined;
+	try { window.sessionStorage.removeItem(storageKey); } catch { /* Storage is optional. */ }
+}
 
 // Attribution URLs contain origin/path only, never query strings or fragments.
 function cleanURL(value: string): string {
@@ -14,6 +22,10 @@ function cleanURL(value: string): string {
 
 /** First-touch attribution shared by native forms and the lazy React drawer. */
 export function getVisitAttribution(): Record<string, string> {
+	const page = cleanURL(window.location.href);
+	if (getTrackingConsent().marketing === null) {
+		return { 'page-url': page, first_landing: '', first_referrer: '', ...emptyCampaign };
+	}
 	if (!visit) {
 		const params = new URLSearchParams(window.location.search);
 		const initial = { landing: cleanURL(window.location.href), referrer: cleanURL(document.referrer) } as Visit;
@@ -34,7 +46,8 @@ export function getVisitAttribution(): Record<string, string> {
 			window.sessionStorage.setItem(storageKey, JSON.stringify(visit));
 		} catch { /* Storage denial must never prevent enquiries; current-page values remain available. */ }
 	}
-	return { 'page-url': cleanURL(window.location.href), first_landing: visit.landing, first_referrer: visit.referrer, ...Object.fromEntries(Object.keys(campaigns).map(name => [name, visit?.[name as keyof Campaign] ?? ''])) };
+	const { landing, referrer, ...campaign } = visit;
+	return { 'page-url': page, first_landing: landing, first_referrer: referrer, ...campaign };
 }
 
 /** Native contact forms retain their existing underscore-style UTM mail tags. */

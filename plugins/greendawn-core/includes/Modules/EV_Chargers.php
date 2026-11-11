@@ -116,6 +116,7 @@ final class EV_Chargers implements Module_Interface {
 		}
 		return array(
 			'id'    => $post->ID,
+			'slug'  => $post->post_name,
 			'title' => html_entity_decode( wp_strip_all_tags( $post->post_title ), ENT_QUOTES, get_bloginfo( 'charset' ) ),
 			'url'   => get_permalink( $post ),
 		);

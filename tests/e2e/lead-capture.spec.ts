@@ -1,5 +1,6 @@
 import { expect, test, type Page } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
+import { mockComplianz } from './helpers/complianz';
 
 async function direct(page: Page, path = '/callback-home/') {
 	await page.goto(path);
@@ -22,6 +23,7 @@ async function fillContact(page: Page, email = 'visitor@example.test') {
 test.beforeEach(async ({ request }) => { await request.post('/wp-json/greendawn-test/v1/callback/reset'); });
 
 test('qualified React flow uses native CF7 delivery and emits no personal data in funnel events', async ({ page, request }, testInfo) => {
+	await mockComplianz(page, { marketing: true });
 	await page.setViewportSize({ width: 1440, height: 900 });
 	await page.addInitScript(() => {
 		(window as unknown as { funnel: unknown[] }).funnel = [];
@@ -60,6 +62,11 @@ test('qualified React flow uses native CF7 delivery and emits no personal data i
 	expect(mail.message).toContain('first_landing: http://localhost:8080/about/');
 	expect(mail.message).toContain('first_referrer: https://referrer.example/');
 	expect(mail.message).not.toContain('?utm_');
+	const conversions = await page.evaluate(() => window.dataLayer?.filter(entry => entry.event === 'generate_lead'));
+	expect(conversions).toEqual([{
+		event: 'generate_lead', form_location: 'enquiry_drawer', lead_type: 'sales_enquiry',
+		cta_location: 'hero', charger_slug: null, gd_event_statistics: false, gd_event_marketing: true,
+	}]);
 	expect(loaded.some((url) => /mount-.*\.js/.test(url))).toBe(true);
 	const events = await page.evaluate(() => (window as unknown as { funnel: unknown[] }).funnel);
 	expect(events).toEqual([
@@ -226,6 +233,7 @@ test('the administrator can disable and re-enable the drawer without changing th
 });
 
 test('charger quotes open the existing drawer and deliver canonical product context', async ({ page, request }) => {
+	await mockComplianz(page, { marketing: true });
 	await page.goto('/evcharger/hellonext-h1-22/?utm_source=product-qa&utm_campaign=quote');
 	await page.getByRole('link', { name: 'Request Quote', exact: true }).first().click();
 	const dialog = page.getByRole('dialog');

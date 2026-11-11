@@ -104,9 +104,10 @@ while ( have_posts() ) :
 				'template-parts/components/form-panel',
 				null,
 				array(
-					'instance_id' => 'about-form',
-					'heading'     => greendawn_about_field( 'form_heading' ),
-					'form_id'     => greendawn_about_field( 'form', 0 ),
+					'instance_id'   => 'about-form',
+					'heading'       => greendawn_about_field( 'form_heading' ),
+					'form_id'       => greendawn_about_field( 'form', 0 ),
+					'form_location' => 'about',
 				)
 			);
 		}

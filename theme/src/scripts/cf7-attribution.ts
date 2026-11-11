@@ -1,8 +1,7 @@
-import { getCF7Attribution } from './attribution';
+import { clearVisitAttribution, getCF7Attribution } from './attribution';
+import { getTrackingConsent } from './tracking-consent';
 
 export function initCF7Attribution(): void {
-	// Capture the entry page even when this page contains no contact form.
-	getCF7Attribution();
 	const fill = (form: HTMLFormElement): void => {
 		if (!form.matches('.wpcf7 form')) return;
 		for (const [name, value] of Object.entries(getCF7Attribution())) {
@@ -10,6 +9,14 @@ export function initCF7Attribution(): void {
 		}
 	};
 	const fillAll = (): void => document.querySelectorAll<HTMLFormElement>('.wpcf7 form').forEach(fill);
+	const refresh = (): void => {
+		if (getTrackingConsent().marketing === null) clearVisitAttribution();
+		// Capture a permitted entry even on pages without a contact form.
+		getCF7Attribution();
+		fillAll();
+	};
+	document.addEventListener('greendawn_consent_changed', refresh);
+	getCF7Attribution();
 	fillAll();
 	// Capture before CF7 serialises fields; formdata also covers newly inserted forms.
 	document.addEventListener('submit', event => { if (event.target instanceof HTMLFormElement) fill(event.target); }, true);

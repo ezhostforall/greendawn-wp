@@ -1,4 +1,5 @@
 import { expect, test } from '@playwright/test';
+import { mockComplianz } from './helpers/complianz';
 import AxeBuilder from '@axe-core/playwright';
 
 const questions = ['Do I need aftercare if my chargers are brand new?', 'Can I accept payments without a backoffice platform?', 'What happens if I don’t have an aftercare plan?'];
@@ -127,6 +128,7 @@ test('Aftercare disclosures, form validation and article controls remain keyboar
 });
 
 test('Aftercare serialises existing attribution and shows success/delivery failure without sending email', async ({ page, baseURL }) => {
+	await mockComplianz(page, { marketing: true });
 	await page.goto('/aftercare/?utm_source=search&utm_medium=cpc&utm_campaign=care', { referer: 'https://referrer.example/landing/?private=discard' });
 	const form = page.locator('.gd-faq-form form');
 	await expect(form.locator('[name="page-url"]')).toHaveValue(`${baseURL}/aftercare/`);

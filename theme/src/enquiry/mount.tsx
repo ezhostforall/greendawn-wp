@@ -4,11 +4,12 @@ import { flushSync } from 'react-dom';
 import type { LeadConfig } from './launcher';
 import { submitCallback } from './transport';
 import { getVisitAttribution } from '../scripts/attribution';
+import { getTrackingConsent } from '../scripts/tracking-consent';
+import { drawerEntryPoints, reportConfirmedForm, type DrawerEntryPoint } from '../scripts/tracking-forms';
 
 type Step = 'intent' | 'context' | 'stage' | 'location' | 'contact' | 'success';
 const contexts: Record<string, string> = { 'ev-charging': 'siteType', power: 'powerReason', aftercare: 'aftercareIssue' };
 const legends: Record<string, string> = { intent: 'What can we help with?', siteType: 'What best describes the site?', aftercareIssue: 'What are you experiencing?', powerReason: 'What’s prompted the enquiry?', projectStage: 'Where are you in the process?' };
-const entryPoints = ['floating-launcher', 'header', 'hero', 'services', 'pricing', 'final-cta', 'footer-cta', 'charger-quote'];
 
 interface Handle { open: (opener: HTMLElement, entry: string) => void; close: () => void }
 
@@ -25,10 +26,10 @@ function App({ config, transport, handleRef }: { config: LeadConfig; transport: 
 	const form = useRef<HTMLFormElement>(null);
 	const body = useRef<HTMLDivElement>(null);
 	const opener = useRef<HTMLElement | null>(null);
-	const entry = useRef('floating-launcher');
+	const entry = useRef<DrawerEntryPoint>('floating-launcher');
 	const inFlight = useRef(false);
 	const [opened, setOpened] = useState(false);
-	const [charger, setCharger] = useState<{ id: number; title: string; url: string }>();
+	const [charger, setCharger] = useState<Exclude<LeadConfig['charger'], []>>();
 	const [step, setStep] = useState<Step>('intent');
 	const [history, setHistory] = useState<Step[]>([]);
 	const [answers, setAnswers] = useState<Record<string, string>>({});
@@ -58,7 +59,7 @@ function App({ config, transport, handleRef }: { config: LeadConfig; transport: 
 	function close(): void { dialog.current?.close(); }
 	useImperativeHandle(handleRef, () => ({
 			open: (trigger, point) => {
-				opener.current = trigger; entry.current = entryPoints.includes(point) ? point : 'floating-launcher';
+				opener.current = trigger; entry.current = drawerEntryPoints.find(value => value === point) ?? 'floating-launcher';
 				if (step === 'success') reset();
 				const product = point === 'charger-quote' && config.charger && 'id' in config.charger ? config.charger : undefined;
 				setCharger(product);
@@ -113,9 +114,14 @@ function App({ config, transport, handleRef }: { config: LeadConfig; transport: 
 		const values: Record<string, string> = { ...answers, ...contact, source: config.source, entryPoint: entry.current, pagePath: window.location.pathname.slice(0, 240), ...getVisitAttribution(), chargerId: charger ? String(charger.id) : '', chargerTitle: charger?.title ?? '', chargerURL: charger?.url ?? '' };
 		for (const name of ['intent', 'projectStage', 'siteType', 'aftercareIssue', 'powerReason', 'location', 'preferredCallbackTime', 'notes', 'website', 'utmSource', 'utmMedium', 'utmCampaign']) values[name] ??= '';
 		if (values.callbackPreference !== 'scheduled') values.preferredCallbackTime = '';
+		const submitted = getTrackingConsent();
+		const submittedEntry = entry.current;
 		try {
 			const response = await submitCallback(transport, values);
 			if (response.status === 'mail_sent') {
+				if (values.intent !== 'aftercare') {
+					reportConfirmedForm('enquiry_drawer', submitted, charger ? 'charger_quote' : 'sales_enquiry', submittedEntry, charger?.slug);
+				}
 				emit('lead_callback_submitted'); setStep('success'); setContact({}); setAnswers({});
 			} else if (response.invalid_fields?.length) {
 				focusErrors(Object.fromEntries(response.invalid_fields.map(({ field: name, message: error }) => [name, error])));

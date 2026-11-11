@@ -94,8 +94,8 @@ test('fluid type grows within its bounds and survives text enlargement', async (
 	await page.setViewportSize({ width: 1440, height: 1000 });
 	const largeTitle = Number.parseFloat(await page.locator('h1').evaluate((el) => getComputedStyle(el).fontSize));
 	const largeHeading = Number.parseFloat(await page.locator('#layout-narrow h2').evaluate((el) => getComputedStyle(el).fontSize));
-	expect(smallTitle).toBeGreaterThanOrEqual(36);
-	expect(largeTitle).toBeLessThanOrEqual(72);
+	expect(smallTitle).toBeGreaterThanOrEqual(40);
+	expect(largeTitle).toBeLessThanOrEqual(80);
 	expect(largeTitle).toBeGreaterThan(smallTitle + 8);
 	expect(smallHeading).toBeGreaterThanOrEqual(24);
 	expect(largeHeading).toBeLessThanOrEqual(44);

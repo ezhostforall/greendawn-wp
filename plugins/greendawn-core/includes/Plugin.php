@@ -68,6 +68,7 @@ final class Plugin {
 		( new Modules\Greendawn_Aftercare() )->register();
 		( new Modules\Greendawn_Enquire() )->register();
 		( new Modules\Greendawn_Business() )->register();
+		( new Modules\Greendawn_Customer_Care() )->register();
 		( new Modules\EV_Chargers() )->register();
 		( new Modules\Team_Members() )->register();
 

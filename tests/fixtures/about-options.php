@@ -11,6 +11,13 @@ if ( ! defined( 'ABSPATH' ) || 'local' !== wp_get_environment_type() ) {
 add_action(
 	'wp',
 	static function (): void {
+		if ( is_page( 'gd-care-no-core' ) ) {
+			remove_all_filters( 'greendawn_customer_care_field_value' );
+			remove_all_filters( 'greendawn_customer_care_whatsapp_url' );
+		}
+		if ( is_page( 'gd-care-no-cf7' ) ) {
+			remove_shortcode( 'contact-form-7' );
+		}
 		if ( is_page( 'gd-business-no-core' ) ) {
 			remove_all_filters( 'greendawn_business_field_value' );
 		}

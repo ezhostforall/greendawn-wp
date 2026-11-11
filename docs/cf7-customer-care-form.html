@@ -1,0 +1,26 @@
+<div class="gd-contact-fields">
+  <label>Name (required)
+    [text* your-name autocomplete:name placeholder "Name"]
+  </label>
+  <label>Email Address (required)
+    [email* your-email autocomplete:email placeholder "Email Address"]
+  </label>
+  <label>Phone Number (required)
+    [tel* phone autocomplete:tel placeholder "Phone Number"]
+  </label>
+  <label>Issue Type (required)
+    [select* issue-type first_as_label "Issue Type" "Charger Issue" "Backoffice Help" "Recommendation" "Other Issue"]
+  </label>
+  <label class="gd-contact-field--wide">Issue Summary (required)
+    [textarea* issue-summary 40x5 placeholder "Issue Summary"]
+  </label>
+  <div class="gd-contact-field--wide">[submit "Submit"]</div>
+</div>
+[hidden page-url]
+[hidden first_referrer]
+[hidden first_landing]
+[hidden utm_source]
+[hidden utm_medium]
+[hidden utm_campaign]
+[hidden utm_term]
+[hidden utm_content]

@@ -459,3 +459,10 @@ wp plugin activate secure-custom-fields
 docker cp tests/integration/business-installations.php "$container_id:/tmp/business-installations.php"
 wp eval-file /tmp/business-installations.php
 wp plugin deactivate secure-custom-fields
+
+# Customer Care replaces Divi with an explicitly selected, separately routed support form.
+wp plugin activate secure-custom-fields
+docker cp tests/integration/customer-care.php "$container_id:/tmp/customer-care.php"
+docker cp docs/cf7-customer-care-form.html "$container_id:/tmp/cf7-customer-care-form.html"
+wp eval-file /tmp/customer-care.php
+wp plugin deactivate secure-custom-fields

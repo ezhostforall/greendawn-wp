@@ -13,9 +13,9 @@ $greendawn_form_id      = shortcode_exists( 'contact-form-7' ) ? greendawn_conta
 <?php if ( $greendawn_form_id ) : ?>
 	<?php echo do_shortcode( sprintf( '[contact-form-7 id="%d"]', $greendawn_form_id ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CF7 renders a validated, published form ID. ?>
 <?php else : ?>
-	<p><?php esc_html_e( 'The enquiry form is currently unavailable.', 'greendawn' ); ?></p>
+	<p><?php echo esc_html( $args['unavailable_message'] ?? __( 'The enquiry form is currently unavailable.', 'greendawn' ) ); ?></p>
 	<?php if ( '' !== $greendawn_fallback_url ) : ?>
-	<a class="gd-page-text-link" href="<?php echo esc_url( $greendawn_fallback_url ); ?>"><?php esc_html_e( 'Contact our team', 'greendawn' ); ?><?php get_template_part( 'template-parts/home/arrow' ); ?></a>
+	<a class="gd-page-text-link" href="<?php echo esc_url( $greendawn_fallback_url ); ?>"><?php echo esc_html( $args['fallback_label'] ?? __( 'Contact our team', 'greendawn' ) ); ?><?php get_template_part( 'template-parts/home/arrow' ); ?></a>
 	<?php endif; ?>
 <?php endif; ?>
 </div>

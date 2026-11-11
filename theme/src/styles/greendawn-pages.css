@@ -259,3 +259,14 @@
 .greendawn-page .gd-video-link:focus-visible { outline-offset: -6px; outline-color: var(--gd-lime); }
 @media (max-width: 61rem) { .gd-business-layout { grid-template-columns: minmax(0, 1fr); } .gd-testimonial-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 @media (max-width: 42rem) { .gd-testimonial-grid { grid-template-columns: minmax(0, 1fr); } }
+
+/* Customer Care shares static benefits and form presentation; routing stays support-specific. */
+.greendawn-customer-care .gd-page-lead { max-width: 65ch; }
+.gd-support-points .gd-feature-grid { margin: 0; padding: 0; list-style: none; }
+.gd-support-points li { min-width: 0; padding: 1.5rem; border: 1px solid var(--gd-border-dark); border-radius: var(--gd-radius-md); background: var(--gd-white); }
+.gd-support-points strong { color: var(--gd-navy-900); font-weight: 700; }
+.gd-support-contact { background: var(--gd-paper); }
+.gd-support-contact__grid { display: grid; grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr); gap: clamp(2rem, 5vw, 5rem); align-items: start; }
+.gd-support-contact__grid > div { min-width: 0; }
+.gd-support-contact h3 { margin-block-end: 1.5rem; }
+@media (max-width: 61rem) { .gd-support-contact__grid { grid-template-columns: minmax(0, 1fr); } }

@@ -103,7 +103,7 @@ if (home) {
 			}
 			const workplace = solutions?.querySelector('.gd-solution-row--workplace')?.parentElement;
 			const fleet = solutions?.querySelector('.gd-solution-row--fleet')?.parentElement;
-			if (workplace && fleet && workplace.nextElementSibling === fleet) fleet.before(workplace);
+			if (workplace && fleet && workplace.nextElementSibling === fleet) workplace.before(fleet);
 		}
 		if (focused instanceof HTMLElement && focused.isConnected && document.activeElement !== focused) focused.focus({ preventScroll: true });
 		syncProcess();

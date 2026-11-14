@@ -104,9 +104,9 @@
 
 /* Product photographs are contained, never cropped like editorial hero images. */
 .gd-charger-hero { padding-block: clamp(2rem, 4vw, 4rem); background: var(--gd-navy-900); color: var(--gd-cream); }
-.gd-charger-hero .breadcrumbs { margin: 0 0 2rem; color: var(--gd-slate-300); font-family: var(--font-mono); font-size: var(--gd-type-caption); }
-.gd-charger-hero .breadcrumbs a { color: inherit; }
-.gd-charger-hero .breadcrumbs ol { font-size: inherit; }
+.gd-charger-hero :is(.breadcrumbs, .rank-math-breadcrumb) { margin: 0 0 2rem; color: var(--gd-slate-300); font-family: var(--font-mono); font-size: var(--gd-type-caption); overflow-wrap: anywhere; }
+.gd-charger-hero :is(.breadcrumbs, .rank-math-breadcrumb) a { color: inherit; text-underline-offset: 0.3em; }
+.gd-charger-hero :is(.breadcrumbs ol, .rank-math-breadcrumb p) { margin: 0; font-size: inherit; }
 .gd-charger-hero__inner { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr); gap: clamp(2rem, 5vw, 5rem); align-items: center; }
 .gd-charger-hero__inner--text { grid-template-columns: minmax(0, 1fr); }
 .gd-charger-hero h1 { max-width: 18ch; margin-block: 0 2rem; color: inherit; font: 700 clamp(2.5rem, 2rem + 3vw, 5rem)/1.04 var(--font-body); letter-spacing: -0.055em; }

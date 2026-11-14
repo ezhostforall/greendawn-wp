@@ -24,6 +24,8 @@ get_template_part(
 		'eyebrow'     => implode( ' · ', $greendawn_stages ),
 		'heading'     => greendawn_home_field( 'process_title' ),
 		'intro'       => greendawn_home_field( 'process_intro' ),
+		'phone_intro' => ! empty( $args['mobile_refresh'] ) ? __( 'One team coordinates power, groundworks, chargers, software and support. An outline of what your site needs is enough to start.', 'greendawn' ) : '',
+		'phone_title' => ! empty( $args['mobile_refresh'] ) ? __( 'How your EV charging project works', 'greendawn' ) : '',
 		'steps'       => $greendawn_steps,
 	)
 );

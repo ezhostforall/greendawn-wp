@@ -41,7 +41,14 @@ $greendawn_solutions_class = 'gd-solutions__layout' . ( '' === $greendawn_active
 		<div class="gd-solutions__intro">
 			<div>
 				<p class="gd-eyebrow gd-journey-eyebrow"><?php echo esc_html( greendawn_home_field( 'solutions_eyebrow' ) ); ?></p>
-				<h2 id="gd-solutions-title"><?php echo esc_html( greendawn_home_field( 'solutions_title' ) ); ?></h2>
+				<h2 id="gd-solutions-title">
+					<?php if ( ! empty( $args['mobile_refresh'] ) ) : ?>
+						<span class="gd-refresh-wide"><?php echo esc_html( greendawn_home_field( 'solutions_title' ) ); ?></span>
+						<span class="gd-refresh-phone"><?php esc_html_e( 'Commercial EV charging solutions', 'greendawn' ); ?></span>
+					<?php else : ?>
+						<?php echo esc_html( greendawn_home_field( 'solutions_title' ) ); ?>
+					<?php endif; ?>
+				</h2>
 			</div>
 			<p><?php echo esc_html( greendawn_home_field( 'solutions_intro' ) ); ?></p>
 		</div>

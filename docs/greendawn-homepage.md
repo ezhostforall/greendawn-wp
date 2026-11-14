@@ -20,6 +20,14 @@ The default programme figures (136 sites, 454 chargepoints, 11 automotive brands
 
 Verify both sections at 320px, 390px and 1440px, including the project image and copy, the survey wordmark and scope, guide and enquiry links, keyboard focus, sticky image behaviour and absence of horizontal scrolling. Default content and saved overrides must be present in the initial HTML with JavaScript disabled.
 
+## Preview the mobile refresh
+
+Install the candidate theme and Greendawn Core together on staging. Duplicate the existing WordPress homepage as a separate test page, including its saved homepage fields and media selections. In the test page’s Template setting, select **Greendawn Homepage — Mobile Refresh**. Keep the existing homepage selected under **Settings → Reading**. Use a private or access-controlled staging preview.
+
+The variant uses the existing editable homepage fields and the same desktop and tablet presentation above 42rem. Its phone copy and layout are specific to the variant. On phones, the enhanced view puts services and the featured project immediately after the hero, shows the project photo at 16:9, and makes the process stages directly selectable and swipeable. Without JavaScript the template renders all four stages and native enquiry links. The mobile callback bar uses the existing callback form and appears between the hero enquiry link and the closing enquiry section when the form is available.
+
+Check both page URLs side by side at 320, 390, 430, 834 and 1440 pixels. Use a short phone viewport to check the project crop. Test the callback bar, the existing enquiry buttons and the footer’s Cookie settings link with the actual staging consent configuration. Rehearse selecting the variant on the staging front page and then switching back. For production, select the variant on the existing homepage page to retain the URL and page ID. Selecting **Greendawn Homepage** restores the original layout. Purge the homepage cache after a template switch.
+
 ## Services section
 
 The **Services** tab supplies the heading, introduction and five fixed audience rows. Each row has an editable title, description, link text, destination and photograph. Row order, typography and composition remain controlled by the theme. All five defaults point internally and were checked against the existing staging routes:

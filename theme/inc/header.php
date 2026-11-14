@@ -116,7 +116,7 @@ add_action( 'customize_register', 'greendawn_customize_header' );
  */
 function greendawn_home_logo_priority( array $attributes ): array {
 	$business_hero = is_page_template( 'templates/business-homepage.php' ) && has_post_thumbnail( get_queried_object_id() );
-	if ( is_page_template( 'templates/greendawn-homepage.php' ) || $business_hero ) {
+	if ( greendawn_is_homepage_template() || $business_hero ) {
 		$attributes['fetchpriority'] = 'auto';
 	}
 	return $attributes;

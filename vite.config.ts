@@ -64,6 +64,7 @@ export default defineConfig(({ command }) => ({
 				'react-example': resolve(root, 'src/react/index.tsx'),
 				enquiry: resolve(root, 'src/enquiry/launcher.ts'),
 				'greendawn-home-motion': resolve(root, 'src/scripts/home/loader.ts'),
+				'greendawn-home-mobile': resolve(root, 'src/scripts/home/mobile.ts'),
 				'greendawn-homepage': resolve(root, 'src/styles/greendawn-homepage.css'),
 				'greendawn-pages': resolve(root, 'src/scripts/greendawn-pages.ts'),
 			},

@@ -19,8 +19,15 @@ $greendawn_closing_tel   = greendawn_phone_uri( $greendawn_closing_phone );
 	<div class="gd-home-shell gd-final-cta__inner">
 		<p class="gd-eyebrow gd-journey-eyebrow"><?php echo esc_html( greendawn_home_field( 'closing_eyebrow' ) ); ?></p>
 		<h2 id="gd-final-cta-title"><?php echo esc_html( greendawn_home_field( 'closing_title' ) ); ?></h2>
-		<p><?php echo esc_html( greendawn_home_field( 'closing_intro' ) ); ?></p>
-		<p><?php echo esc_html( greendawn_home_field( 'closing_copy' ) ); ?></p>
+		<p>
+			<?php if ( ! empty( $args['mobile_refresh'] ) ) : ?>
+				<span class="gd-refresh-wide"><?php echo esc_html( greendawn_home_field( 'closing_intro' ) ); ?></span>
+				<span class="gd-refresh-phone"><?php esc_html_e( 'Tell us who needs charging and what you know about the site. We’ll help work out the next step.', 'greendawn' ); ?></span>
+			<?php else : ?>
+				<?php echo esc_html( greendawn_home_field( 'closing_intro' ) ); ?>
+			<?php endif; ?>
+		</p>
+		<p class="gd-final-cta__detail"><?php echo esc_html( greendawn_home_field( 'closing_copy' ) ); ?></p>
 		<div class="gd-final-cta__actions">
 			<?php if ( '' !== $greendawn_closing_url ) : ?>
 				<a class="gd-home-button gd-home-button--navy" data-lead-capture-open data-lead-entry-point="final-cta" href="<?php echo esc_url( $greendawn_closing_url ); ?>">

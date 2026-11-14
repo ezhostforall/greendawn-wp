@@ -12,7 +12,7 @@ defined( 'ABSPATH' ) || exit;
 /** Registers the client homepage field group. */
 final class Greendawn_Homepage implements Module_Interface {
 
-	private const TEMPLATE = 'templates/greendawn-homepage.php';
+	private const TEMPLATES = array( 'templates/greendawn-homepage.php', 'templates/greendawn-homepage-mobile.php' );
 
 	/**
 	 * The translated field definitions for this request.
@@ -57,7 +57,7 @@ final class Greendawn_Homepage implements Module_Interface {
 	 */
 	private function uses_fields( \WP_Post $post ): bool {
 		return 'page' === $post->post_type
-			&& self::TEMPLATE === get_page_template_slug( $post )
+			&& in_array( get_page_template_slug( $post ), self::TEMPLATES, true )
 			&& function_exists( 'acf_add_local_field_group' );
 	}
 
@@ -440,14 +440,17 @@ final class Greendawn_Homepage implements Module_Interface {
 				'key'         => 'group_greendawn_homepage',
 				'title'       => __( 'Greendawn homepage', 'greendawn-core' ),
 				'description' => __( 'Empty fields use the Greendawn defaults. Set the enquiry destination under Appearance → Customise → Header.', 'greendawn-core' ),
-				'location'    => array(
-					array(
-						array(
-							'param'    => 'page_template',
-							'operator' => '==',
-							'value'    => self::TEMPLATE,
-						),
-					),
+				'location'    => array_map(
+					static function ( string $template ): array {
+						return array(
+							array(
+								'param'    => 'page_template',
+								'operator' => '==',
+								'value'    => $template,
+							),
+						);
+					},
+					self::TEMPLATES
 				),
 				'fields'      => $fields,
 			)

@@ -48,7 +48,14 @@ $greendawn_project_url   = esc_url( greendawn_home_field( 'projects_url' ) );
 				<span class="gd-hero-line gd-hero-line--service"><span><?php echo esc_html( greendawn_home_field( 'headline' ) ); ?></span></span>
 				<span class="gd-hero-line gd-hero-line--accent"><span><?php echo esc_html( greendawn_home_field( 'headline_accent' ) ); ?></span></span>
 			</h1>
-			<p class="gd-hero__lead"><?php echo esc_html( greendawn_home_field( 'lead' ) ); ?></p>
+			<p class="gd-hero__lead">
+				<?php if ( ! empty( $args['mobile_refresh'] ) ) : ?>
+					<span class="gd-refresh-wide"><?php echo esc_html( greendawn_home_field( 'lead' ) ); ?></span>
+					<span class="gd-refresh-phone"><?php esc_html_e( 'We design, install and support EV charging for workplaces, fleets and public sites across Britain.', 'greendawn' ); ?></span>
+				<?php else : ?>
+					<?php echo esc_html( greendawn_home_field( 'lead' ) ); ?>
+				<?php endif; ?>
+			</p>
 			<div class="gd-hero__actions">
 				<?php if ( '' !== $greendawn_enquiry_url ) : ?>
 					<a class="gd-home-button" data-lead-capture-open data-lead-entry-point="hero" href="<?php echo esc_url( $greendawn_enquiry_url ); ?>">

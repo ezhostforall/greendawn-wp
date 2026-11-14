@@ -3,6 +3,7 @@ const home = document.querySelector<HTMLElement>('[data-gd-home-motion]');
 
 if (home) {
 	const reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
+	const compact = home.hasAttribute('data-gd-home-refresh') ? window.matchMedia('(max-width: 42rem)') : undefined;
 	const lifecycle = new AbortController();
 	const seen = new WeakSet<Element>();
 	let observer: IntersectionObserver | undefined;
@@ -18,7 +19,7 @@ if (home) {
 
 	function observeReveals(): void {
 		observer?.disconnect();
-		if (reduced.matches || !('IntersectionObserver' in window)) return;
+		if (reduced.matches || compact?.matches || !('IntersectionObserver' in window)) return;
 		observer = new IntersectionObserver((entries) => {
 			for (const entry of entries) {
 				if (!entry.isIntersecting) continue;
@@ -31,11 +32,11 @@ if (home) {
 	}
 
 	function enable(): void {
-		if (lifecycle.signal.aborted || reduced.matches) return;
+		if (lifecycle.signal.aborted || reduced.matches || compact?.matches) return;
 		observeReveals();
 		if (motionCleanup || loading) return;
 		loading = import('./scroll-motion').then(({ initHomeMotion }) => {
-			if (!lifecycle.signal.aborted && !reduced.matches) motionCleanup = initHomeMotion(home!);
+			if (!lifecycle.signal.aborted && !reduced.matches && !compact?.matches) motionCleanup = initHomeMotion(home!);
 		}).catch(() => {
 			// Visible HTML and CSS previews remain usable when the enhancement fails.
 		}).finally(() => { loading = undefined; });
@@ -48,7 +49,13 @@ if (home) {
 		reveals.forEach((element) => element.classList.remove('gd-reveal-enter'));
 	}
 
-	reduced.addEventListener('change', () => reduced.matches ? disable() : enable(), { signal: lifecycle.signal });
+	function syncMotion(): void {
+		if (reduced.matches || compact?.matches) disable();
+		else enable();
+	}
+
+	reduced.addEventListener('change', syncMotion, { signal: lifecycle.signal });
+	compact?.addEventListener('change', syncMotion, { signal: lifecycle.signal });
 	home.addEventListener('animationend', (event) => {
 		if (event.animationName === 'gd-section-in' && event.target instanceof HTMLElement) event.target.classList.remove('gd-reveal-enter');
 	}, { signal: lifecycle.signal });

@@ -30,8 +30,22 @@ $greendawn_project_class = 'gd-home-shell gd-case-study__layout' . ( '' === $gre
 		<?php endif; ?>
 		<div class="gd-case-study__story">
 			<p class="gd-eyebrow gd-journey-eyebrow"><?php echo esc_html( greendawn_home_field( 'featured_eyebrow' ) ); ?></p>
-			<h2 id="gd-project-title"><?php echo esc_html( greendawn_home_field( 'featured_title' ) ); ?></h2>
-			<p class="gd-case-study__lead"><?php echo esc_html( greendawn_home_field( 'featured_lead' ) ); ?></p>
+			<h2 id="gd-project-title">
+				<?php if ( ! empty( $args['mobile_refresh'] ) ) : ?>
+					<span class="gd-refresh-wide"><?php echo esc_html( greendawn_home_field( 'featured_title' ) ); ?></span>
+					<span class="gd-refresh-phone"><?php esc_html_e( 'Johnsons Cars', 'greendawn' ); ?></span>
+				<?php else : ?>
+					<?php echo esc_html( greendawn_home_field( 'featured_title' ) ); ?>
+				<?php endif; ?>
+			</h2>
+			<p class="gd-case-study__lead">
+				<?php if ( ! empty( $args['mobile_refresh'] ) ) : ?>
+					<span class="gd-refresh-wide"><?php echo esc_html( greendawn_home_field( 'featured_lead' ) ); ?></span>
+					<span class="gd-refresh-phone"><?php esc_html_e( 'Greendawn coordinated charging across a dealership estate with different site layouts, power constraints and manufacturer requirements.', 'greendawn' ); ?></span>
+				<?php else : ?>
+					<?php echo esc_html( greendawn_home_field( 'featured_lead' ) ); ?>
+				<?php endif; ?>
+			</p>
 			<div class="gd-case-study__facts">
 				<?php foreach ( array( 'sites', 'chargepoints', 'brands' ) as $greendawn_fact ) : ?>
 					<div>
@@ -41,7 +55,7 @@ $greendawn_project_class = 'gd-home-shell gd-case-study__layout' . ( '' === $gre
 				<?php endforeach; ?>
 			</div>
 			<p class="gd-case-study__note"><?php echo esc_html( greendawn_home_field( 'featured_review_note' ) ); ?></p>
-			<p><?php echo esc_html( greendawn_home_field( 'featured_copy' ) ); ?></p>
+			<p class="gd-case-study__copy"><?php echo esc_html( greendawn_home_field( 'featured_copy' ) ); ?></p>
 			<?php if ( '' !== $greendawn_project_url ) : ?>
 				<a class="gd-home-text-link gd-home-text-link--dark" href="<?php echo esc_url( $greendawn_project_url ); ?>">
 					<?php echo esc_html( greendawn_home_field( 'featured_link' ) ); ?>

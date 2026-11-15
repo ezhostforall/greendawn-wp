@@ -60,4 +60,7 @@ endif;
 		?>
 		<p id="<?php echo esc_attr( $greendawn_card_label_id ); ?>"><?php echo esc_html( $args['label'] ?? '' ); ?></p><?php endif; ?>
 	<h3 id="<?php echo esc_attr( $greendawn_card_title_id ); ?>"><?php echo esc_html( $args['title'] ?? '' ); ?></h3>
+	<?php if ( ! empty( $args['phone_arrow'] ) ) : ?>
+		<span class="gd-refresh-phone"><?php get_template_part( 'template-parts/home/arrow', null, array( 'diagonal' => true ) ); ?></span>
+	<?php endif; ?>
 </a>

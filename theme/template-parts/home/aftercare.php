@@ -40,7 +40,9 @@ $greendawn_support_url   = esc_url( greendawn_home_field( 'aftercare_support_url
 			<p class="gd-aftercare__support">
 				<?php echo esc_html( greendawn_home_field( 'aftercare_support_prompt' ) ); ?>
 				<?php if ( '' !== $greendawn_support_url ) : ?>
-					<a class="gd-aftercare__support-link" href="<?php echo esc_url( $greendawn_support_url ); ?>"><?php echo esc_html( greendawn_home_field( 'aftercare_support_label' ) ); ?></a>.
+					<a class="gd-aftercare__support-link" href="<?php echo esc_url( $greendawn_support_url ); ?>"><?php echo esc_html( greendawn_home_field( 'aftercare_support_label' ) ); ?><?php if ( ! empty( $args['mobile_refresh'] ) ) : ?>
+						<span class="gd-refresh-phone"><?php get_template_part( 'template-parts/home/arrow', null, array( 'diagonal' => true ) ); ?></span>
+					<?php endif; ?></a>.
 				<?php endif; ?>
 			</p>
 		</div>

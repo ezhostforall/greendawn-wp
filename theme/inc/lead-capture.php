@@ -42,14 +42,24 @@ function greendawn_lead_render(): void {
 	$config['phoneUrl']    = greendawn_phone_uri( $config['phone'] );
 	$config['charger']     = apply_filters( 'greendawn_selected_charger', array() );
 	$config['source']      = greendawn_is_homepage_template() ? 'homepage' : 'website';
+	$mobile_refresh        = is_page_template( 'templates/greendawn-homepage-mobile.php' );
 	$fallback_url          = esc_url_raw( (string) get_theme_mod( 'greendawn_header_cta_url', '' ) );
 	$config['fallbackUrl'] = '' !== $fallback_url && '#' !== $fallback_url ? $fallback_url : home_url( '/contact/' );
 	?>
 	<aside class="lead-capture" data-lead-capture data-config="<?php echo esc_attr( wp_json_encode( $config ) ); ?>" aria-label="<?php esc_attr_e( 'Request a callback', 'greendawn' ); ?>">
+		<?php if ( $mobile_refresh ) : ?>
+			<div class="gd-refresh-callback-dock">
+		<?php endif; ?>
 		<button class="lead-capture__launcher" type="button" data-lead-capture-open data-lead-entry-point="floating-launcher" aria-label="<?php esc_attr_e( 'Request a callback', 'greendawn' ); ?>" aria-haspopup="dialog" hidden>
 			<span class="lead-capture__launcher-label"><?php esc_html_e( 'Request a callback', 'greendawn' ); ?></span>
 			<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5h14a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-8l-5 3v-3H5a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2Z" /><path d="M8 10h8M8 14h5" /></svg>
+			<?php if ( $mobile_refresh ) : ?>
+				<span class="gd-refresh-phone"><?php get_template_part( 'template-parts/home/arrow', null, array( 'diagonal' => true ) ); ?></span>
+			<?php endif; ?>
 		</button>
+		<?php if ( $mobile_refresh ) : ?>
+			</div>
+		<?php endif; ?>
 		<div data-lead-react></div>
 		<div data-lead-transport hidden aria-hidden="true">
 			<?php echo do_shortcode( '[contact-form-7 id="' . absint( $config['formId'] ) . '"]' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CF7 generates its escaped native form and integration fields. ?>

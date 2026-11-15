@@ -35,6 +35,7 @@ $greendawn_insights_url = esc_url( greendawn_home_field( 'insights_url' ) );
 				<?php if ( 'fleet' === $greendawn_insight_key && ! empty( $args['mobile_refresh'] ) && '' !== greendawn_home_field( 'system_technology_url' ) ) : ?>
 					<a class="gd-refresh-phone gd-refresh-technology gd-insight-card" href="<?php echo esc_url( greendawn_home_field( 'system_technology_url' ) ); ?>">
 						<h3><?php echo esc_html( greendawn_home_field( 'system_technology_link' ) ); ?></h3>
+						<?php get_template_part( 'template-parts/home/arrow', null, array( 'diagonal' => true ) ); ?>
 					</a>
 				<?php endif; ?>
 				<?php
@@ -57,6 +58,7 @@ $greendawn_insights_url = esc_url( greendawn_home_field( 'insights_url' ) );
 						'url'         => greendawn_home_field( $greendawn_insight_prefix . 'url' ),
 						'label'       => greendawn_home_field( $greendawn_insight_prefix . 'label' ),
 						'show_label'  => true,
+						'phone_arrow' => ! empty( $args['mobile_refresh'] ),
 						'title'       => greendawn_home_field( $greendawn_insight_prefix . 'title' ),
 					)
 				);

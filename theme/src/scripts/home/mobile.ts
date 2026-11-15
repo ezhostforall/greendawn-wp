@@ -10,8 +10,6 @@ if (home) {
 	const hero = home.querySelector<HTMLElement>('#top');
 	const project = home.querySelector<HTMLElement>('#projects');
 	const solutions = home.querySelector<HTMLElement>('#who-we-help');
-	const cta = hero?.querySelector<HTMLElement>('[data-lead-entry-point="hero"]') ?? hero;
-	const final = home.querySelector<HTMLElement>('#final-enquiry');
 	const launcher = document.querySelector<HTMLButtonElement>('.lead-capture__launcher');
 	const tablist = home.querySelector<HTMLElement>('.gd-refresh-process-tabs');
 	const list = home.querySelector<HTMLOListElement>('.gd-process__steps');
@@ -25,13 +23,11 @@ if (home) {
 	let frame = 0;
 
 	function updateLauncher(): void {
-		if (!launcher || !cta || !final) return;
-		const reachedFinal = final.getBoundingClientRect().top < (window.visualViewport?.height ?? innerHeight);
+		if (!launcher) return;
 		const viewport = window.visualViewport;
 		const keyboard = viewport && viewport.scale === 1 && viewport.height + 150 < innerHeight
 			&& document.activeElement?.matches('input, textarea, [contenteditable="true"]');
-		const show = phone.matches && !keyboard && cta.getBoundingClientRect().bottom <= 0 && !reachedFinal;
-		launcher.toggleAttribute('data-gd-refresh-visible', show);
+		launcher.toggleAttribute('data-gd-refresh-keyboard', Boolean(keyboard));
 	}
 
 	function queueLauncher(): void {
@@ -51,7 +47,6 @@ if (home) {
 			button.setAttribute('aria-disabled', String(button.dataset.gdStep === '-1' ? active === 0 : active === tabs.length - 1));
 		});
 		if (focus) tabs[active]?.focus();
-		queueLauncher();
 	}
 
 	function step(delta: number): void {
@@ -149,9 +144,9 @@ if (home) {
 	}, options);
 
 	phone.addEventListener('change', syncLayout, options);
-	window.addEventListener('scroll', queueLauncher, { ...options, passive: true });
 	window.addEventListener('resize', queueLauncher, { ...options, passive: true });
-	window.addEventListener('load', queueLauncher, options);
+	document.addEventListener('focusin', queueLauncher, options);
+	document.addEventListener('focusout', queueLauncher, options);
 	window.visualViewport?.addEventListener('resize', queueLauncher, options);
 	window.addEventListener('pageshow', queueLauncher, options);
 	window.addEventListener('pagehide', (event) => {

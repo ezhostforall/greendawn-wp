@@ -673,24 +673,33 @@ test('the refresh without JavaScript keeps its process and enquiry links usable'
 		await page.goto('/greendawn-home-refresh/');
 		await expect(page.locator('.gd-process__steps > li:visible')).toHaveCount(4);
 		await expect(page.getByRole('link', { name: 'Discuss a site survey' })).toHaveAttribute('href', /\/about\/$/);
+		const guideLinks = page.locator('#insights .gd-insights__grid > a:visible');
+		await expect(guideLinks).toHaveCount(3);
+		for (const link of await guideLinks.all()) {
+			await expect(link.locator('.gd-home-arrow:visible')).toHaveCount(1);
+		}
+		await expect(page.locator('#aftercare .gd-aftercare__support-link .gd-home-arrow')).toBeVisible();
 		await expect(page.getByRole('link', { name: 'Cookie settings' })).toHaveAttribute('href', /\/cookie-policy-uk\/$/);
 	} finally {
 		await context.close();
 	}
 });
 
-test('the refresh uses the existing callback drawer and shows its phone bar between enquiries', async ({ page }) => {
+test('the mobile callback bar is available from the hero through the footer', async ({ page }) => {
 	await page.setViewportSize({ width: 390, height: 844 });
 	await page.goto('/greendawn-home-refresh/');
 	const hero = page.locator('[data-lead-entry-point="hero"]');
 	const launcher = page.getByRole('button', { name: 'Request a callback', exact: true });
 	await expect(hero).toBeVisible();
-	await expect(launcher).toBeHidden();
-	await page.locator('#process').scrollIntoViewIfNeeded();
 	await expect(launcher).toBeVisible();
-	const bar = await launcher.boundingBox();
+	const dock = page.locator('.gd-refresh-callback-dock');
+	await expect(dock).toHaveCSS('background-color', 'rgb(7, 23, 33)');
+	await expect(launcher).toHaveCSS('background-color', 'rgb(233, 242, 39)');
+	const dockBox = await dock.boundingBox();
 	const homepage = await page.locator('main#content').boundingBox();
-	expect(bar).toMatchObject({ x: homepage?.x, width: homepage?.width });
+	expect(dockBox).toMatchObject({ x: homepage?.x, width: homepage?.width });
+	expect(await launcher.boundingBox()).toMatchObject({ x: dockBox!.x + 14, width: dockBox!.width - 28 });
+	await expect(launcher.locator('.gd-home-arrow')).toBeVisible();
 	await launcher.click();
 	const drawer = page.getByRole('dialog');
 	await expect(drawer.getByRole('button', { name: 'Just request a callback' })).toBeVisible();
@@ -699,5 +708,12 @@ test('the refresh uses the existing callback drawer and shows its phone bar betw
 	await expect(drawer).toBeHidden();
 	await expect(launcher).toBeFocused();
 	await page.locator('#final-enquiry').scrollIntoViewIfNeeded();
-	await expect(launcher).toBeHidden();
+	await expect(launcher).toBeVisible();
+	await page.evaluate(() => window.scrollTo(0, document.documentElement.scrollHeight));
+	const cookieSettings = page.getByRole('link', { name: 'Cookie settings' });
+	await expect(cookieSettings).toBeInViewport({ ratio: 1 });
+	const cookieBox = (await cookieSettings.boundingBox())!;
+	expect(cookieBox.y + cookieBox.height).toBeLessThanOrEqual((await dock.boundingBox())!.y);
+	await launcher.click();
+	await expect(drawer).toBeVisible();
 });

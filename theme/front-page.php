@@ -8,8 +8,8 @@
 
 defined( 'ABSPATH' ) || exit;
 
-if ( is_page_template( 'templates/greendawn-homepage.php' ) ) {
-	get_template_part( 'templates/greendawn-homepage' );
+if ( greendawn_is_homepage_template() ) {
+	get_template_part( 'templates/greendawn-homepage', is_page_template( 'templates/greendawn-homepage-mobile.php' ) ? 'mobile' : null );
 	return;
 }
 

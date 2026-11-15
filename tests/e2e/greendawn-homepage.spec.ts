@@ -612,3 +612,92 @@ test('unconfigured enquiry destinations and unusable phone numbers do not create
 	await expect(closing.getByRole('link', { name: 'Discuss your site' })).toHaveCount(0);
 	await expect(closing.getByRole('link', { name: '0345 512 0044' })).toHaveAttribute('href', 'tel:03455120044');
 });
+
+test('the mobile refresh keeps the existing desktop and tablet homepage', async ({ page }) => {
+	await page.emulateMedia({ reducedMotion: 'reduce' });
+	for (const width of [673, 834, 1440]) {
+		await page.setViewportSize({ width, height: 900 });
+		const snapshot = async () => page.locator('.gd-home').evaluate((element) => {
+			const sections = Array.from(element.children) as HTMLElement[];
+			return sections.map(section => {
+				const { height, width: sectionWidth } = section.getBoundingClientRect();
+				return [section.id, section.innerText.replace(/\s+/g, ' ').trim(), height, sectionWidth];
+			});
+		});
+		await page.goto('/greendawn-home/');
+		await page.evaluate(() => document.fonts.ready);
+		const original = await snapshot();
+		await page.goto('/greendawn-home-refresh/');
+		await page.evaluate(() => document.fonts.ready);
+		expect(await snapshot()).toEqual(original);
+		await expect(page.getByRole('tablist', { name: 'Delivery stages' })).toHaveCount(0);
+		await expect(page.getByRole('link', { name: 'Cookie settings' })).toHaveCount(0);
+	}
+});
+
+test('the phone refresh reorders real sections and keeps its process accessible', async ({ page }) => {
+	await page.setViewportSize({ width: 390, height: 844 });
+	await page.goto('/greendawn-home-refresh/');
+	const sections = page.locator('.gd-home > section');
+	await expect(sections.nth(1)).toHaveAttribute('id', 'who-we-help');
+	await expect(sections.nth(2)).toHaveAttribute('id', 'projects');
+	await expect(page.locator('.gd-solutions__list a').first()).toContainText('Workplace charging');
+	const process = page.locator('#process');
+	const tabs = process.getByRole('tab');
+	await expect(tabs).toHaveCount(4);
+	await expect(tabs.first()).toHaveAttribute('aria-selected', 'true');
+	await tabs.first().press('ArrowRight');
+	await expect(tabs.nth(1)).toBeFocused();
+	await expect(process.getByRole('tabpanel')).toHaveCount(1);
+	await process.getByRole('button', { name: 'Next stage' }).click();
+	await expect(tabs.nth(2)).toHaveAttribute('aria-selected', 'true');
+	for (const [width, height] of [[320, 800], [390, 844], [430, 380]]) {
+		await page.setViewportSize({ width: width!, height: height! });
+		const image = page.locator('.gd-case-study__media');
+		const box = await image.boundingBox();
+		expect(box).not.toBeNull();
+		expect(box!.width / box!.height).toBeCloseTo(16 / 9, 2);
+		expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(width!);
+	}
+	await page.setViewportSize({ width: 834, height: 900 });
+	await expect(sections.nth(1)).toHaveClass(/gd-trust/);
+	await expect(page.locator('.gd-solutions__list a').first()).toContainText('Fleet & depot charging');
+	await expect(process.getByRole('tablist')).toHaveCount(0);
+	await expect(process.locator('.gd-process__steps > li:visible')).toHaveCount(4);
+});
+
+test('the refresh without JavaScript keeps its process and enquiry links usable', async ({ browser, baseURL }) => {
+	const context = await browser.newContext({ baseURL, javaScriptEnabled: false, viewport: { width: 390, height: 844 } });
+	try {
+		const page = await context.newPage();
+		await page.goto('/greendawn-home-refresh/');
+		await expect(page.locator('.gd-process__steps > li:visible')).toHaveCount(4);
+		await expect(page.getByRole('link', { name: 'Discuss a site survey' })).toHaveAttribute('href', /\/about\/$/);
+		await expect(page.getByRole('link', { name: 'Cookie settings' })).toHaveAttribute('href', /\/cookie-policy-uk\/$/);
+	} finally {
+		await context.close();
+	}
+});
+
+test('the refresh uses the existing callback drawer and shows its phone bar between enquiries', async ({ page }) => {
+	await page.setViewportSize({ width: 390, height: 844 });
+	await page.goto('/greendawn-home-refresh/');
+	const hero = page.locator('[data-lead-entry-point="hero"]');
+	const launcher = page.getByRole('button', { name: 'Request a callback', exact: true });
+	await expect(hero).toBeVisible();
+	await expect(launcher).toBeHidden();
+	await page.locator('#process').scrollIntoViewIfNeeded();
+	await expect(launcher).toBeVisible();
+	const bar = await launcher.boundingBox();
+	const homepage = await page.locator('main#content').boundingBox();
+	expect(bar).toMatchObject({ x: homepage?.x, width: homepage?.width });
+	await launcher.click();
+	const drawer = page.getByRole('dialog');
+	await expect(drawer.getByRole('button', { name: 'Just request a callback' })).toBeVisible();
+	await expect(launcher).toBeHidden();
+	await page.keyboard.press('Escape');
+	await expect(drawer).toBeHidden();
+	await expect(launcher).toBeFocused();
+	await page.locator('#final-enquiry').scrollIntoViewIfNeeded();
+	await expect(launcher).toBeHidden();
+});

@@ -14,7 +14,14 @@ $greendawn_insights_url = esc_url( greendawn_home_field( 'insights_url' ) );
 		<div class="gd-insights__header">
 			<div>
 				<p class="gd-eyebrow gd-journey-eyebrow"><?php echo esc_html( greendawn_home_field( 'insights_eyebrow' ) ); ?></p>
-				<h2 id="gd-insights-title"><?php echo esc_html( greendawn_home_field( 'insights_title' ) ); ?></h2>
+				<h2 id="gd-insights-title">
+					<?php if ( ! empty( $args['mobile_refresh'] ) ) : ?>
+						<span class="gd-refresh-wide"><?php echo esc_html( greendawn_home_field( 'insights_title' ) ); ?></span>
+						<span class="gd-refresh-phone"><?php esc_html_e( 'Commercial charging guides', 'greendawn' ); ?></span>
+					<?php else : ?>
+						<?php echo esc_html( greendawn_home_field( 'insights_title' ) ); ?>
+					<?php endif; ?>
+				</h2>
 			</div>
 			<?php if ( '' !== $greendawn_insights_url ) : ?>
 				<a class="gd-home-text-link gd-home-text-link--dark" href="<?php echo esc_url( $greendawn_insights_url ); ?>">
@@ -25,6 +32,11 @@ $greendawn_insights_url = esc_url( greendawn_home_field( 'insights_url' ) );
 		</div>
 		<div class="gd-insights__grid">
 			<?php foreach ( array( 'power', 'survey', 'fleet' ) as $greendawn_insight_key ) : ?>
+				<?php if ( 'fleet' === $greendawn_insight_key && ! empty( $args['mobile_refresh'] ) && '' !== greendawn_home_field( 'system_technology_url' ) ) : ?>
+					<a class="gd-refresh-phone gd-refresh-technology gd-insight-card" href="<?php echo esc_url( greendawn_home_field( 'system_technology_url' ) ); ?>">
+						<h3><?php echo esc_html( greendawn_home_field( 'system_technology_link' ) ); ?></h3>
+					</a>
+				<?php endif; ?>
 				<?php
 				$greendawn_insight_prefix = 'insight_' . $greendawn_insight_key . '_';
 				$greendawn_insight_id     = 'gd-insight-title-' . $greendawn_insight_key;

@@ -25,6 +25,7 @@ function greendawn_entries(): array {
 			'react-example'         => 'src/react/index.tsx',
 			'enquiry'               => 'src/enquiry/launcher.ts',
 			'greendawn-home-motion' => 'src/scripts/home/loader.ts',
+			'greendawn-home-mobile' => 'src/scripts/home/mobile.ts',
 			'greendawn-homepage'    => 'src/styles/greendawn-homepage.css',
 			'greendawn-pages'       => 'src/scripts/greendawn-pages.ts',
 		)

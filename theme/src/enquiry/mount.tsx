@@ -130,6 +130,8 @@ function App({ config, transport, handleRef }: { config: LeadConfig; transport: 
 		finally { inFlight.current = false; setSubmitting(false); }
 	}
 
+	function openDirect(): void { setDirect(true); startCallback(); go('contact'); }
+
 	const choiceName = step === 'intent' ? 'intent' : step === 'context' ? (context ?? 'siteType') : 'projectStage';
 	return <dialog ref={dialog} className="lead-capture__dialog" id="lead-capture-dialog" aria-labelledby="lead-capture-title" onClose={() => { document.body.classList.remove('lead-capture-open'); setOpened(false); opener.current?.focus(); }} onClick={(e) => { if (e.target === e.currentTarget) close(); }}>
 		<section className="lead-capture__panel" style={{ '--lead-progress': progress } as CSSProperties}>
@@ -143,7 +145,19 @@ function App({ config, transport, handleRef }: { config: LeadConfig; transport: 
 				<div className="screen-reader-text" role="status" aria-live="polite">{opened ? stageLabel : ''}</div>
 				<div className="lead-capture__body" ref={body}>
 					<section className={`lead-capture__step${step === 'success' ? ' lead-capture__success' : ''}`}>
-						{['intent', 'context', 'stage'].includes(step) && <><fieldset><legend tabIndex={-1} data-step-heading>{legends[choiceName]}</legend><p className="lead-capture__intro">Choose the closest match to continue. You can add detail before requesting your callback.</p><div className="lead-capture__choices lead-capture__choices--stacked">{Object.entries(config.choices[choiceName] ?? {}).map(([value, label]) => <button className="lead-capture__option" type="button" key={value} aria-pressed={answers[choiceName] === value} onClick={() => choose(choiceName, value)}>{label}<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 5 7 7-7 7" /></svg></button>)}</div></fieldset>{step === 'intent' && <div className="lead-capture__step-actions"><button className="lead-capture__text-button" type="button" onClick={() => { setDirect(true); startCallback(); go('contact'); }}>Just request a callback</button></div>}</>}
+						{['intent', 'context', 'stage'].includes(step) && <>
+							<fieldset>
+								<legend tabIndex={-1} data-step-heading>{legends[choiceName]}</legend>
+								<p className="lead-capture__intro">Choose the closest match to continue. You can add detail before requesting your callback.</p>
+								{step === 'intent' && <div className="lead-capture__step-actions lead-capture__direct-phone">
+									<button className="lead-capture__text-button" type="button" onClick={openDirect}>Just request a callback</button>
+								</div>}
+								<div className="lead-capture__choices lead-capture__choices--stacked">{Object.entries(config.choices[choiceName] ?? {}).map(([value, label]) => <button className="lead-capture__option" type="button" key={value} aria-pressed={answers[choiceName] === value} onClick={() => choose(choiceName, value)}>{label}<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 5 7 7-7 7" /></svg></button>)}</div>
+							</fieldset>
+							{step === 'intent' && <div className="lead-capture__step-actions lead-capture__direct-default">
+								<button className="lead-capture__text-button" type="button" onClick={openDirect}>Just request a callback</button>
+							</div>}
+						</>}
 						{step === 'location' && <><div className="lead-capture__heading-group"><h2 tabIndex={-1} data-step-heading>Where is the site?</h2><p className="lead-capture__intro">Optional, but useful for routing your enquiry.</p></div>{field('location', 'Town, city or postcode (optional)', 'text', 'postal-code')}<div className="lead-capture__step-actions"><button className="lead-capture__primary" type="button" onClick={() => { startCallback(); go('contact'); }}>Continue</button><button className="lead-capture__text-button" type="button" onClick={() => { setContact({ ...contact, location: '' }); startCallback(); go('contact'); }}>Skip for now</button></div></>}
 						{step === 'contact' && <>
 							<div className="lead-capture__heading-group"><h2 tabIndex={-1} data-step-heading>How should we reach you?</h2><p className="lead-capture__intro">Greendawn supports commercial sites. All four contact fields are required so we can route the enquiry.</p></div>

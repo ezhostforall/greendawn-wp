@@ -19,6 +19,13 @@ function greendawn_posted_on(): void {
 }
 
 /**
+ * Whether the current page uses either branded homepage template.
+ */
+function greendawn_is_homepage_template(): bool {
+	return is_page_template( array( 'templates/greendawn-homepage.php', 'templates/greendawn-homepage-mobile.php' ) );
+}
+
+/**
  * Outputs breadcrumbs. Uses Rank Math when active, otherwise a minimal fallback.
  * Rank Math owns breadcrumb structured data; the fallback emits none.
  */

@@ -14,9 +14,23 @@ $greendawn_support_url   = esc_url( greendawn_home_field( 'aftercare_support_url
 	<div class="gd-home-shell gd-aftercare__layout">
 		<div class="gd-aftercare__copy">
 			<p class="gd-eyebrow gd-journey-eyebrow"><?php echo esc_html( greendawn_home_field( 'aftercare_eyebrow' ) ); ?></p>
-			<h2 id="gd-aftercare-title"><?php echo esc_html( greendawn_home_field( 'aftercare_title' ) ); ?></h2>
-			<p class="gd-aftercare__intro"><?php echo esc_html( greendawn_home_field( 'aftercare_intro' ) ); ?></p>
-			<p><?php echo esc_html( greendawn_home_field( 'aftercare_copy' ) ); ?></p>
+			<h2 id="gd-aftercare-title">
+				<?php if ( ! empty( $args['mobile_refresh'] ) ) : ?>
+					<span class="gd-refresh-wide"><?php echo esc_html( greendawn_home_field( 'aftercare_title' ) ); ?></span>
+					<span class="gd-refresh-phone"><?php esc_html_e( 'Aftercare for commercial chargers', 'greendawn' ); ?></span>
+				<?php else : ?>
+					<?php echo esc_html( greendawn_home_field( 'aftercare_title' ) ); ?>
+				<?php endif; ?>
+			</h2>
+			<p class="gd-aftercare__intro">
+				<?php if ( ! empty( $args['mobile_refresh'] ) ) : ?>
+					<span class="gd-refresh-wide"><?php echo esc_html( greendawn_home_field( 'aftercare_intro' ) ); ?></span>
+					<span class="gd-refresh-phone"><?php esc_html_e( 'Keep your chargers running with agreed monitoring, maintenance and fault support.', 'greendawn' ); ?></span>
+				<?php else : ?>
+					<?php echo esc_html( greendawn_home_field( 'aftercare_intro' ) ); ?>
+				<?php endif; ?>
+			</p>
+			<p class="gd-aftercare__detail"><?php echo esc_html( greendawn_home_field( 'aftercare_copy' ) ); ?></p>
 			<?php if ( '' !== $greendawn_aftercare_url ) : ?>
 				<a class="gd-home-button" href="<?php echo esc_url( $greendawn_aftercare_url ); ?>">
 					<?php echo esc_html( greendawn_home_field( 'aftercare_cta_label' ) ); ?>

@@ -16,8 +16,22 @@ $greendawn_guide_url   = esc_url( greendawn_home_field( 'survey_guide_url' ) );
 		<div class="gd-surveys__intro">
 			<p class="gd-eyebrow gd-journey-eyebrow"><?php echo esc_html( greendawn_home_field( 'survey_eyebrow' ) ); ?></p>
 			<div>
-				<h2 id="gd-surveys-title"><?php echo esc_html( greendawn_home_field( 'survey_title' ) ); ?></h2>
-				<p><?php echo esc_html( greendawn_home_field( 'survey_intro' ) ); ?></p>
+				<h2 id="gd-surveys-title">
+					<?php if ( ! empty( $args['mobile_refresh'] ) ) : ?>
+						<span class="gd-refresh-wide"><?php echo esc_html( greendawn_home_field( 'survey_title' ) ); ?></span>
+						<span class="gd-refresh-phone"><?php esc_html_e( 'Technical site surveys', 'greendawn' ); ?></span>
+					<?php else : ?>
+						<?php echo esc_html( greendawn_home_field( 'survey_title' ) ); ?>
+					<?php endif; ?>
+				</h2>
+				<p>
+					<?php if ( ! empty( $args['mobile_refresh'] ) ) : ?>
+						<span class="gd-refresh-wide"><?php echo esc_html( greendawn_home_field( 'survey_intro' ) ); ?></span>
+						<span class="gd-refresh-phone"><?php esc_html_e( 'We start with a conversation about your site. If a paid technical survey would help, we’ll explain what it covers and confirm the cost before you book.', 'greendawn' ); ?></span>
+					<?php else : ?>
+						<?php echo esc_html( greendawn_home_field( 'survey_intro' ) ); ?>
+					<?php endif; ?>
+				</p>
 			</div>
 		</div>
 		<div class="gd-surveys__overview">
@@ -39,7 +53,7 @@ $greendawn_guide_url   = esc_url( greendawn_home_field( 'survey_guide_url' ) );
 			</div>
 		</div>
 		<div class="gd-surveys__footer">
-			<p><?php echo esc_html( greendawn_home_field( 'survey_summary' ) ); ?></p>
+			<p class="gd-surveys__summary"><?php echo esc_html( greendawn_home_field( 'survey_summary' ) ); ?></p>
 			<div class="gd-surveys__actions">
 				<?php if ( '' !== $greendawn_enquiry_url ) : ?>
 					<a class="gd-home-button gd-home-button--navy" data-lead-capture-open data-lead-entry-point="pricing" href="<?php echo esc_url( $greendawn_enquiry_url ); ?>">

@@ -92,6 +92,9 @@ $greendawn_footer_disclosure = trim( (string) apply_filters( 'greendawn_footer_d
 					<?php endif; ?>
 				</span>
 				<?php greendawn_footer_menu( 'footer_legal', __( 'Legal links', 'greendawn' ) ); ?>
+				<?php if ( is_page_template( 'templates/greendawn-homepage-mobile.php' ) ) : ?>
+					<a class="gd-refresh-phone gd-refresh-cookie-settings" href="<?php echo esc_url( home_url( '/cookie-policy-uk/' ) ); ?>"><?php esc_html_e( 'Cookie settings', 'greendawn' ); ?></a>
+				<?php endif; ?>
 				<div class="gd-footer__social"><?php greendawn_footer_menu( 'footer_social', __( 'Social links', 'greendawn' ) ); ?></div>
 			</div>
 		</div>

@@ -19,6 +19,9 @@ test('all six charger destinations use product details with saved specification 
 	await page.goto('/evcharger/hellonext-h1-22/');
 	for (const width of [320, 834, 1440]) {
 		await page.setViewportSize({ width, height: 950 });
+		const breadcrumb = page.locator('.gd-charger-hero').getByRole('navigation', { name: 'Breadcrumb' });
+		await expect(breadcrumb.locator('[aria-current="page"]')).toHaveText('Charger fixture 1');
+		await expect(breadcrumb.getByRole('link', { name: 'Home' })).toHaveCSS('color', 'rgb(171, 181, 189)');
 		const image = page.locator('.gd-charger-media img');
 		await expect(image).toHaveAttribute('loading', 'eager');
 		await expect(image).toHaveAttribute('fetchpriority', 'high');

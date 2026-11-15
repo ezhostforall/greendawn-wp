@@ -7,9 +7,13 @@
 
 defined( 'ABSPATH' ) || exit;
 
-$greendawn_branded_home = is_page_template( 'templates/greendawn-homepage.php' );
-$greendawn_cta_label    = trim( (string) get_theme_mod( 'greendawn_header_cta_label', '' ) );
-$greendawn_cta_url      = esc_url( (string) get_theme_mod( 'greendawn_header_cta_url', '' ) );
+$greendawn_branded_home = greendawn_is_homepage_template();
+$greendawn_home_classes = $greendawn_branded_home ? array( 'greendawn-home' ) : array();
+if ( is_page_template( 'templates/greendawn-homepage-mobile.php' ) ) {
+	$greendawn_home_classes[] = 'gd-home-refresh';
+}
+$greendawn_cta_label = trim( (string) get_theme_mod( 'greendawn_header_cta_label', '' ) );
+$greendawn_cta_url   = esc_url( (string) get_theme_mod( 'greendawn_header_cta_url', '' ) );
 if ( '' === $greendawn_cta_label ) {
 	$greendawn_cta_label = __( 'Discuss your site', 'greendawn' );
 }
@@ -24,7 +28,7 @@ $greendawn_submenu_label = __( 'Toggle submenu for %s', 'greendawn' );
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<?php wp_head(); ?>
 </head>
-<body <?php body_class( $greendawn_branded_home ? 'greendawn-home' : '' ); ?>>
+<body <?php body_class( $greendawn_home_classes ); ?>>
 <?php wp_body_open(); ?>
 <div class="site" id="page">
 	<a class="skip-link screen-reader-text" href="#content"><?php esc_html_e( 'Skip to content', 'greendawn' ); ?></a>

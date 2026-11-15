@@ -689,9 +689,8 @@ test('the refresh uses the existing callback drawer and shows its phone bar betw
 	await page.locator('#process').scrollIntoViewIfNeeded();
 	await expect(launcher).toBeVisible();
 	const bar = await launcher.boundingBox();
-	const contentWidth = await page.evaluate(() => document.documentElement.clientWidth);
-	expect(bar?.x).toBe(0);
-	expect(bar?.width).toBeCloseTo(contentWidth, 0);
+	const homepage = await page.locator('main#content').boundingBox();
+	expect(bar).toMatchObject({ x: homepage?.x, width: homepage?.width });
 	await launcher.click();
 	const drawer = page.getByRole('dialog');
 	await expect(drawer.getByRole('button', { name: 'Just request a callback' })).toBeVisible();

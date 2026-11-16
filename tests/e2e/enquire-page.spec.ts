@@ -117,7 +117,7 @@ test('Enquire shows validation and delivery responses, retains attribution and l
 	await page.setViewportSize({ width: 375, height: 900 });
 	await page.emulateMedia({ reducedMotion: 'reduce' });
 	await mockComplianz(page, { marketing: true });
-	await page.goto('/enquire/?charger=hellonext-h1-22&utm_source=search&utm_medium=cpc&utm_campaign=project&utm_term=fleet&utm_content=ad-one&private=discard', { referer: 'https://referrer.example/landing/?private=discard' });
+	await page.goto('/enquire/?charger=hellonext-h1-22&utm_source=search&utm_medium=cpc&utm_campaign=project&utm_term=fleet&utm_content=ad-one&gclid=Google-Native&msclkid=Microsoft-Native&private=discard', { referer: 'https://referrer.example/landing/?private=discard' });
 	const form = page.locator('.gd-enquire-form form');
 	await form.getByRole('button', { name: 'Start Your Journey' }).click();
 	await expect(form.locator('[aria-invalid="true"]').first()).toBeVisible();
@@ -134,7 +134,7 @@ test('Enquire shows validation and delivery responses, retains attribution and l
 	let status = 'mail_failed';
 	await page.route(url => url.pathname.includes('/contact-forms/') && url.pathname.endsWith('/feedback'), async route => {
 		const payload = route.request().postDataBuffer()?.toString() ?? '';
-		for (const value of ['Sales form test', 'Charger fixture 1', `${baseURL}/evcharger/hellonext-h1-22/`, 'search', 'cpc', 'project', 'fleet', 'ad-one']) expect(payload).toContain(value);
+		for (const value of ['Sales form test', 'Charger fixture 1', `${baseURL}/evcharger/hellonext-h1-22/`, 'search', 'cpc', 'project', 'fleet', 'ad-one', 'Google-Native', 'Microsoft-Native']) expect(payload).toContain(value);
 		expect(payload).not.toContain('private=discard');
 		await route.fulfill({ json: { status, message: status === 'mail_sent' ? 'Project enquiry received.' : 'Delivery failed. Please try again.', invalid_fields: [] } });
 	});

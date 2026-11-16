@@ -3,6 +3,7 @@ import { createRoot } from 'react-dom/client';
 import { flushSync } from 'react-dom';
 import type { LeadConfig } from './launcher';
 import { submitCallback } from './transport';
+import { getAdvertisingAttribution } from '../scripts/advertising-attribution';
 import { getVisitAttribution } from '../scripts/attribution';
 import { getTrackingConsent } from '../scripts/tracking-consent';
 import { drawerEntryPoints, reportConfirmedForm, type DrawerEntryPoint } from '../scripts/tracking-forms';
@@ -111,7 +112,7 @@ function App({ config, transport, handleRef }: { config: LeadConfig; transport: 
 		if (!contact.callbackPreference) next.callbackPreference = 'Choose when you would prefer us to call.';
 		if (Object.keys(next).length) { focusErrors(next); return; }
 		inFlight.current = true; setSubmitting(true); setMessage(''); setErrors({});
-		const values: Record<string, string> = { ...answers, ...contact, source: config.source, entryPoint: entry.current, pagePath: window.location.pathname.slice(0, 240), ...getVisitAttribution(), chargerId: charger ? String(charger.id) : '', chargerTitle: charger?.title ?? '', chargerURL: charger?.url ?? '' };
+		const values: Record<string, string> = { ...answers, ...contact, source: config.source, entryPoint: entry.current, pagePath: window.location.pathname.slice(0, 240), ...getVisitAttribution(), ...getAdvertisingAttribution(answers.intent === 'aftercare'), chargerId: charger ? String(charger.id) : '', chargerTitle: charger?.title ?? '', chargerURL: charger?.url ?? '' };
 		for (const name of ['intent', 'projectStage', 'siteType', 'aftercareIssue', 'powerReason', 'location', 'preferredCallbackTime', 'notes', 'website', 'utmSource', 'utmMedium', 'utmCampaign']) values[name] ??= '';
 		if (values.callbackPreference !== 'scheduled') values.preferredCallbackTime = '';
 		const submitted = getTrackingConsent();

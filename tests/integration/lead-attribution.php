@@ -40,6 +40,10 @@ foreach ( array( 'recipient', 'sender', 'subject', 'additional_headers', 'use_ht
 }
 $greendawn_assert( str_starts_with( $greendawn_form->prop( 'mail' )['body'], 'Reviewed callback introduction' ), 'Custom email copy must remain intact.' );
 $greendawn_assert( (bool) get_option( 'greendawn_core_callback_enabled' ), 'Extending attribution must not disable the existing reviewed drawer.' );
+$_COOKIE['cmplz_marketing'] = 'allow';
+$greendawn_support = apply_filters( 'wpcf7_posted_data', array( 'intent' => array( 'aftercare' ), 'gclid' => 'PaidTest', 'ad_utm_campaign' => 'Support' ) );
+unset( $_COOKIE['cmplz_marketing'] );
+$greendawn_assert( '' === $greendawn_support['gclid'] && '' === $greendawn_support['ad_utm_campaign'], 'The managed drawer must discard ad data for a native CF7 support selection.' );
 $greendawn_ordinary = WPCF7_ContactForm::get_template();
 $greendawn_ordinary->set_title( 'Unrelated form fixture' );
 $greendawn_ordinary_markup = '<label>Email [email* ordinary-email]</label>[submit "Send"]';

@@ -5,7 +5,15 @@ test('native CF7 grid retains first-touch context through navigation and seriali
 	await mockComplianz(page, { marketing: true });
 	await page.setViewportSize({ width: 375, height: 900 });
 	await page.goto('/about/?utm_source=search&utm_medium=cpc&utm_campaign=charging&utm_term=fleet&utm_content=ad-one&private=discard#discard', { referer: 'https://referrer.example/campaign/?token=discard#discard' });
-	await page.goto('/gd-about-default/?utm_source=internal&utm_campaign=replace&private=discard#discard');
+	const ids = {
+		gclid: 'Google-AbC', gbraid: 'Google-GB', wbraid: 'Google-WB', gad_source: '1',
+		gad_campaignid: '0000123456789012345', gclsrc: 'aw.ds', dclid: 'Display-AbC',
+		msclkid: 'Microsoft-AbC', fbclid: 'Meta-AbC', ttclid: 'TikTok-AbC', li_fat_id: 'LinkedIn-AbC',
+		twclid: 'X-AbC', epik: 'Pinterest-AbC', rdt_cid: 'Reddit-AbC', ScCid: 'Snap-AbC', sccid: 'Snap-AbC',
+	};
+	const tagged = new URLSearchParams({ ...ids, utm_source: 'ad-search', utm_campaign: 'ad-campaign' });
+	await page.goto(`/?${tagged}`, { referer: 'https://referrer.example/ads/' });
+	await page.goto('/gd-about-default/?utm_source=internal&utm_campaign=replace&gclid=Do-Not-Replace&private=discard#discard');
 	const form = page.locator('.gd-form-panel form');
 	const fields = form.locator('.gd-contact-fields');
 	await expect(fields).toBeVisible();
@@ -14,6 +22,12 @@ test('native CF7 grid retains first-touch context through navigation and seriali
 	await expect(form.locator('[name="first_landing"]')).toHaveValue(`${baseURL}/about/`);
 	await expect(form.locator('[name="first_referrer"]')).toHaveValue(/^https:\/\/referrer\.example\/(?:campaign\/)?$/);
 	for (const [name, value] of Object.entries({ utm_source: 'search', utm_medium: 'cpc', utm_campaign: 'charging', utm_term: 'fleet', utm_content: 'ad-one' })) await expect(form.locator(`[name="${name}"]`)).toHaveValue(value);
+	for (const [name, value] of Object.entries(ids)) {
+		if (name !== 'ScCid') await expect(form.locator(`[name="${name}"]`)).toHaveValue(value);
+	}
+	await expect(form.locator('[name="ScCid"]')).toHaveCount(0);
+	await expect(form.locator('[name="ad_utm_source"]')).toHaveValue('ad-search');
+	await expect(form.locator('[name="ad_utm_campaign"]')).toHaveValue('ad-campaign');
 	expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBe(375);
 	await form.getByRole('textbox', { name: 'Full Name (required)', exact: true }).fill('Form test');
 	await form.getByRole('textbox', { name: 'Project Name (required)', exact: true }).fill('Office installation');
@@ -32,7 +46,8 @@ test('native CF7 grid retains first-touch context through navigation and seriali
 	expect(payload).toContain('https://referrer.example/');
 	expect(payload).not.toMatch(/private=|token=|another=|#discard|stale/);
 	for (const value of ['search', 'cpc', 'charging', 'fleet', 'ad-one']) expect(payload).toContain(value);
-	expect(payload).not.toContain('internal');
+	for (const value of [...Object.values(ids), 'ad-search', 'ad-campaign']) expect(payload).toContain(value);
+	expect(payload).not.toMatch(/Do-Not-Replace|internal/);
 	await expect(form.locator('.wpcf7-response-output')).toBeVisible();
 	await form.evaluate((element: HTMLFormElement) => element.reset());
 	await expect(form.locator('[name="first_landing"]')).toHaveValue(`${baseURL}/about/`);
@@ -46,10 +61,12 @@ test('CF7 remains usable when session storage is denied or JavaScript is disable
 	await context.addInitScript(() => { Object.defineProperty(window, 'sessionStorage', { get() { throw new DOMException('Storage denied', 'SecurityError'); } }); });
 	const page = await context.newPage();
 	await mockComplianz(page, { marketing: true });
-	await page.goto('/gd-about-default/');
+	await page.goto('/gd-about-default/?gclid=NoStorage&ScCid=Conflicting-A&sccid=Conflicting-B');
 	const form = page.locator('.gd-form-panel form');
 	await expect(form.locator('[name="page-url"]')).toHaveValue(`${baseURL}/gd-about-default/`);
 	await expect(form.locator('[name="first_landing"]')).toHaveValue(`${baseURL}/gd-about-default/`);
+	await expect(form.locator('[name="gclid"]')).toHaveValue('NoStorage');
+	await expect(form.locator('[name="sccid"]')).toHaveValue('');
 	await form.getByRole('button', { name: 'Send enquiry' }).click();
 	await expect(form.locator('[aria-invalid="true"]').first()).toBeVisible();
 	await context.close();
@@ -58,6 +75,7 @@ test('CF7 remains usable when session storage is denied or JavaScript is disable
 	await fallback.goto('/gd-about-default/');
 	await expect(fallback.locator('.gd-contact-fields label')).toHaveCount(7);
 	await expect(fallback.locator('.gd-form-panel [name="page-url"]')).toHaveValue('');
+	await expect(fallback.locator('.gd-form-panel [name="gclid"]')).toHaveValue('');
 	await expect(fallback.getByRole('button', { name: 'Send enquiry' })).toBeVisible();
 	await noJS.close();
 });

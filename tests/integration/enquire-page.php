@@ -120,6 +120,22 @@ $greendawn_data = apply_filters(
 	)
 );
 $greendawn_assert( $greendawn_data['chargerTitle'] === $greendawn_context['title'] && $greendawn_data['chargerURL'] === $greendawn_context['url'] && 'Unchanged name' === $greendawn_data['fullname'], 'Native sales submissions must resolve identity on the server without trusting a submitted title, URL or container.' );
+$greendawn_ads = array(
+	'fullname'        => 'Unchanged name',
+	'gclid'           => 'Exact-Google_AbC==',
+	'msclkid'         => array( 'invalid-array' ),
+	'fbclid'          => str_repeat( 'a', 1025 ),
+	'ttclid'          => "bad\nline",
+	'gad_campaignid'  => '0000123456789012345',
+	'ad_utm_campaign' => 'Spring launch',
+);
+$greendawn_data = apply_filters( 'wpcf7_posted_data', $greendawn_ads );
+$greendawn_assert( '' === $greendawn_data['gclid'] && '' === $greendawn_data['ad_utm_campaign'], 'Posted ad data requires the marketing consent cookie.' );
+$_COOKIE['cmplz_marketing'] = 'allow';
+$greendawn_data = apply_filters( 'wpcf7_posted_data', $greendawn_ads );
+unset( $_COOKIE['cmplz_marketing'] );
+$greendawn_assert( 'Exact-Google_AbC==' === $greendawn_data['gclid'] && '0000123456789012345' === $greendawn_data['gad_campaignid'] && 'Spring launch' === $greendawn_data['ad_utm_campaign'], 'Valid advertising data must retain its case, leading zeros and campaign context.' );
+$greendawn_assert( '' === $greendawn_data['msclkid'] && '' === $greendawn_data['fbclid'] && '' === $greendawn_data['ttclid'] && 'Unchanged name' === $greendawn_data['fullname'], 'Malformed attribution must be discarded without changing enquiry fields.' );
 $greendawn_hidden    = wp_insert_post(
 	array(
 		'post_type'   => 'evcharger',
@@ -157,6 +173,7 @@ $greendawn_original = array(
 );
 $greendawn_assert( apply_filters( 'wpcf7_posted_data', $greendawn_original ) === $greendawn_original, 'Unrelated forms must not acquire the Enquire product policy.' );
 $greendawn_form = wpcf7_contact_form( $greendawn_form_id );
+$greendawn_assert( 1 === substr_count( $greendawn_form->prop( 'form' ), '[hidden gclid]' ), 'Selected sales forms must expose each advertising field once.' );
 $greendawn_assert( get_post_meta( $greendawn_form_id, '_form', true ) === $greendawn_markup, 'Selected form rendering must not rewrite saved definitions.' );
 $greendawn_assert( $greendawn_form->prop( 'mail' )['recipient'] === $greendawn_mail['recipient'] && $greendawn_form->prop( 'mail' )['body'] === $greendawn_mail['body'], 'Configured recipients and reviewed email content must remain intact.' );
 WP_CLI::success( 'Enquire source/defaults, independent form, public product transport, saved clears and import preservation verified.' );

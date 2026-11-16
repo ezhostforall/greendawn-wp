@@ -3,17 +3,26 @@ import { mockComplianz } from './helpers/complianz';
 
 test('Marketing permission controls stored attribution and clears native form fields on withdrawal', async ({ page }) => {
 	await mockComplianz(page);
-	await page.goto('/gd-about-default/?utm_source=test-campaign');
+	await page.goto('/gd-about-default/?utm_source=test-campaign&msclkid=Microsoft-AbC123&sccid=Snap-xyz');
 	const utm = page.locator('.gd-form-panel [name="utm_source"]');
 	const stored = () => page.evaluate(() => sessionStorage.getItem('greendawn:enquiry-visit:v2'));
+	const ads = page.locator('.gd-form-panel [name="msclkid"]');
+	const adsStored = () => page.evaluate(() => sessionStorage.getItem('greendawn:advertising-visit:v1'));
 	await expect(utm).toHaveValue('');
 	expect(await stored()).toBeNull();
+	await expect(ads).toHaveValue('');
+	expect(await adsStored()).toBeNull();
 	await page.evaluate(() => document.dispatchEvent(new CustomEvent('test:consent', { detail: { marketing: true } })));
 	await expect(utm).toHaveValue('test-campaign');
 	expect(await stored()).toContain('test-campaign');
+	await expect(ads).toHaveValue('Microsoft-AbC123');
+	await expect(page.locator('.gd-form-panel [name="sccid"]')).toHaveValue('Snap-xyz');
+	expect(await adsStored()).toContain('Microsoft-AbC123');
 	await page.evaluate(() => document.dispatchEvent(new CustomEvent('test:consent', { detail: { marketing: false } })));
 	await expect(utm).toHaveValue('');
 	expect(await stored()).toBeNull();
+	await expect(ads).toHaveValue('');
+	expect(await adsStored()).toBeNull();
 });
 
 test('only confirmed inline placements report once, using consent at submission and confirmation', async ({ page }) => {
@@ -57,6 +66,7 @@ test('only confirmed inline placements report once, using consent at submission 
 		document.dispatchEvent(new CustomEvent('test:consent', { detail: { statistics: true, marketing: true } }));
 	});
 	const support = page.locator('.gd-support-form .wpcf7 form');
+	await expect(support.locator('[name="gclid"], [name="sccid"], [name="ad_utm_campaign"]')).toHaveCount(0);
 	await support.evaluate(node => {
 		const placement = node.closest<HTMLElement>('[data-greendawn-form-id]');
 		const detail = { contactFormId: placement?.dataset.greendawnFormId };

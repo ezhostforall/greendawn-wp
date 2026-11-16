@@ -125,7 +125,7 @@ final class Advertising_Attribution implements Module_Interface {
 
 		// The same Complianz preference used by the browser, read again on the submission request.
 		$allowed = isset( $_COOKIE['cmplz_marketing'] ) && 'allow' === $_COOKIE['cmplz_marketing']; // phpcs:ignore WordPress.Security -- Strict comparison to Complianz's allow token. The cookie does not authorise an operation.
-		$support = $form->id() === absint( get_option( 'greendawn_core_callback_form', 0 ) ) && 'aftercare' === ( $data['intent'] ?? '' );
+		$support = $form->id() === absint( get_option( 'greendawn_core_callback_form', 0 ) ) && in_array( 'aftercare', (array) ( $data['intent'] ?? array() ), true );
 		foreach ( array_merge( self::IDENTIFIERS, self::CAMPAIGNS ) as $name ) {
 			$value = $data[ $name ] ?? '';
 			if ( ! $allowed || $support || ! is_string( $value ) ) {

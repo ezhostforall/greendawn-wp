@@ -12,7 +12,7 @@
 }
 
 .gd-campaign-shell {
-  width: min(100% - 3.5rem, 70rem);
+  width: min(100% - 2 * var(--gd-shell-gutter), var(--gd-shell-max));
   margin-inline: auto;
 }
 
@@ -21,7 +21,6 @@
 }
 
 .gd-campaign-bar .gd-campaign-shell {
-  width: min(100% - 2 * var(--gd-shell-gutter), var(--gd-shell-max));
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -336,10 +335,6 @@ html:has(.gd-campaign-popup[open]) {
 }
 
 @media (max-width: 42rem) {
-  .gd-campaign-shell {
-    width: calc(100% - 2rem);
-  }
-
   .gd-campaign-bar .gd-campaign-shell {
     gap: 0.5rem;
     padding-block: 0.45rem;

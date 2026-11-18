@@ -108,6 +108,7 @@ final class Campaigns implements Module_Interface {
 				'expiry'   => array( 'Promotion ends (inclusive)', 'date_picker' ),
 			),
 			'Landing page'     => array(
+				'hero_image'       => array( 'Hero image', 'image' ),
 				'kicker'           => array( 'Hero kicker' ),
 				'headline'         => array( 'Hero headline' ),
 				'accent'           => array( 'Hero accent' ),
@@ -173,6 +174,11 @@ final class Campaigns implements Module_Interface {
 					'label' => $definition[0],
 					'type'  => $definition[1] ?? 'text',
 				);
+				if ( 'image' === $field['type'] ) {
+					$field['return_format'] = 'id';
+					$field['preview_size']  = 'medium';
+					$field['instructions']  = __( 'Select the landing page hero photograph. If empty, the Featured Image or campaign default is used.', 'greendawn-core' );
+				}
 				if ( 'date_picker' === $field['type'] ) {
 					$field['display_format'] = 'j F Y';
 					$field['return_format']  = 'Ymd';

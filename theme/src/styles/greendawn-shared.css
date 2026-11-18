@@ -59,7 +59,8 @@
 .greendawn-editorial,
 .site-header,
 .site-footer,
-.gd-utility-bar {
+.gd-utility-bar,
+.gd-campaign-bar {
 		--gd-shell-gutter: 1.25rem;
 		--gd-shell-max: 76rem;
 	}
@@ -72,7 +73,8 @@
 .greendawn-editorial,
 .site-header,
 .site-footer,
-.gd-utility-bar {
+.gd-utility-bar,
+.gd-campaign-bar {
 		--gd-shell-gutter: 1rem;
 		--gd-shell-max: 58rem;
 	}
@@ -85,7 +87,8 @@
 .greendawn-editorial,
 .site-header,
 .site-footer,
-.gd-utility-bar {
+.gd-utility-bar,
+.gd-campaign-bar {
 		--gd-shell-gutter: 0.75rem;
 		--gd-shell-max: 39rem;
 	}
@@ -98,7 +101,8 @@
 .greendawn-editorial,
 .site-header,
 .site-footer,
-.gd-utility-bar {
+.gd-utility-bar,
+.gd-campaign-bar {
 		--gd-shell-gutter: 0.625rem;
 		--gd-shell-max: 28rem;
 	}

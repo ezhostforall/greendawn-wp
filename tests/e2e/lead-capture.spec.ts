@@ -134,9 +134,14 @@ test('the shared callback dock keeps inner-page controls and footer links reacha
 
 	for (const width of [390, 834, 1440]) {
 		await page.setViewportSize({ width, height: 844 });
-		await page.evaluate(() => window.scrollTo(0, document.documentElement.scrollHeight));
+		await page.goto('/callback-inner/');
+		await expect(dock).toBeVisible();
+		await page.evaluate(() => document.fonts.ready);
+		await page.evaluate(() => window.scrollTo({ top: document.documentElement.scrollHeight, behavior: 'instant' }));
+		const footer = page.locator('.gd-footer__base');
+		await expect(footer).toBeInViewport({ ratio: 1 });
 		const box = (await dock.boundingBox())!;
-		const footerBase = (await page.locator('.gd-footer__base').boundingBox())!;
+		const footerBase = (await footer.boundingBox())!;
 		expect(footerBase.y + footerBase.height).toBeLessThanOrEqual(box.y);
 		if (width > 390) {
 			expect(box.x).toBeGreaterThan(width / 2);

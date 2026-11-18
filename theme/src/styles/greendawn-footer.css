@@ -177,6 +177,19 @@
   .gd-footer__grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
+
+  .gd-footer__base {
+    align-items: flex-start;
+    flex-wrap: wrap;
+  }
+
+  .gd-footer__base > span {
+    width: 100%;
+  }
+
+  .gd-footer__social {
+    margin-left: 0;
+  }
 }
 
 @media (max-width: 42rem) {
@@ -191,19 +204,6 @@
 
   .gd-footer__contact {
     grid-column: 1 / -1;
-  }
-
-  .gd-footer__base {
-    align-items: flex-start;
-    flex-wrap: wrap;
-  }
-
-  .gd-footer__base > span {
-    width: 100%;
-  }
-
-  .gd-footer__social {
-    margin-left: 0;
   }
 }
 

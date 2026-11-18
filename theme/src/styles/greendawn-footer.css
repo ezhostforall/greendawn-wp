@@ -2,7 +2,7 @@
 .gd-footer {
   --gd-shell: min(100% - 2 * var(--gd-shell-gutter), var(--gd-shell-max));
   --focus-color: var(--gd-lime);
-  padding: clamp(4rem, 7vw, 6rem) 0 2rem;
+  padding: clamp(4rem, 7vw, 6rem) 0 calc(2rem + var(--lead-dock-clearance, 0px));
   border: 0;
   background: var(--gd-navy-950);
   color: var(--gd-cream);

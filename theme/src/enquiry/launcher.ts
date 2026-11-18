@@ -32,6 +32,22 @@ if (component && transport && mount && typeof HTMLDialogElement !== 'undefined')
 		const reveal = (): void => { if (launcher && ready()) launcher.hidden = false; };
 		if (document.readyState === 'complete') reveal();
 		else window.addEventListener('load', reveal, { once: true, signal: lifecycle.signal });
+		if (launcher && window.visualViewport) {
+			const viewport = window.visualViewport;
+			const syncKeyboard = (): void => {
+				const editing = document.activeElement?.matches('input, textarea, [contenteditable="true"]');
+				const keyboard = editing && viewport.scale === 1 && viewport.height + 150 < window.innerHeight;
+				launcher.toggleAttribute('data-lead-keyboard', Boolean(keyboard));
+			};
+			const options = { signal: lifecycle.signal };
+			viewport.addEventListener('resize', syncKeyboard, options);
+			window.addEventListener('resize', syncKeyboard, options);
+			window.addEventListener('pageshow', syncKeyboard, options);
+			document.addEventListener('focusin', syncKeyboard, options);
+			document.addEventListener('focusout', () => queueMicrotask(syncKeyboard), options);
+			syncKeyboard();
+		}
+
 		document.addEventListener('click', (event) => {
 			const trigger = event.target instanceof Element ? event.target.closest<HTMLElement>('[data-lead-capture-open]') : null;
 			if (!trigger || !ready() || event.defaultPrevented || (event instanceof MouseEvent && (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey))) return;

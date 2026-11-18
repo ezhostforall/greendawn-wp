@@ -105,6 +105,50 @@ test('direct route validates, retains answers on close and mail failure, then sh
 	await expect(dialog.getByRole('heading', { name: /Thank you/ })).toBeVisible();
 });
 
+test('the shared callback dock keeps inner-page controls and footer links reachable', async ({ page }) => {
+	await page.setViewportSize({ width: 390, height: 844 });
+	await page.goto('/callback-inner/');
+	const launcher = page.getByRole('button', { name: 'Request a callback', exact: true });
+	const dock = page.locator('.lead-capture__dock');
+	await expect(launcher).toBeInViewport();
+	await expect(dock).toHaveCSS('background-color', 'rgb(7, 23, 33)');
+	await expect(launcher).toHaveCSS('background-color', 'rgb(233, 242, 39)');
+	const phoneDock = (await dock.boundingBox())!;
+	expect(phoneDock.x).toBe(0);
+	expect(phoneDock.width).toBe(await page.locator('html').evaluate(el => el.clientWidth));
+
+	const menu = page.locator('[data-nav-toggle]');
+	await menu.click();
+	await expect(dock).toBeHidden();
+	await menu.click();
+	await expect(dock).toBeVisible();
+
+	await page.evaluate(() => {
+		const banner = document.createElement('div');
+		banner.className = 'cmplz-cookiebanner cmplz-show';
+		document.body.append(banner);
+	});
+	await expect(dock).toBeHidden();
+	await page.locator('.cmplz-cookiebanner').evaluate(banner => banner.classList.add('cmplz-dismissed'));
+	await expect(dock).toBeVisible();
+
+	for (const width of [390, 834, 1440]) {
+		await page.setViewportSize({ width, height: 844 });
+		await page.evaluate(() => window.scrollTo(0, document.documentElement.scrollHeight));
+		const box = (await dock.boundingBox())!;
+		const footerBase = (await page.locator('.gd-footer__base').boundingBox())!;
+		expect(footerBase.y + footerBase.height).toBeLessThanOrEqual(box.y);
+		if (width > 390) {
+			expect(box.x).toBeGreaterThan(width / 2);
+			expect(box.width).toBeLessThan(phoneDock.width);
+		}
+	}
+	await launcher.click();
+	await expect(page.getByRole('dialog')).toBeVisible();
+	await page.keyboard.press('Escape');
+	await expect(launcher).toBeFocused();
+});
+
 test('back navigation, branching, short viewports and all CTA entry points remain usable', async ({ page }, testInfo) => {
 	for (const width of [320, 390, 800, 1440]) {
 		await page.setViewportSize({ width, height: width === 800 ? 400 : 850 });

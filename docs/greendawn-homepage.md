@@ -24,7 +24,7 @@ Verify both sections at 320px, 390px and 1440px, including the project image and
 
 Install the candidate theme and Greendawn Core together on staging. Duplicate the existing WordPress homepage as a separate test page, including its saved homepage fields and media selections. In the test page’s Template setting, select **Greendawn Homepage — Mobile Refresh**. Keep the existing homepage selected under **Settings → Reading**. Use a private or access-controlled staging preview.
 
-The variant uses the existing editable homepage fields and the same desktop and tablet presentation above 42rem. Its phone copy and layout are specific to the variant. On phones, the enhanced view puts services and the featured project immediately after the hero, shows the project photo at 16:9, and makes the process stages directly selectable and swipeable. Without JavaScript the template renders all four stages and native enquiry links. The mobile callback bar uses the existing callback form and is available from the first screen through the footer when the form is available.
+The variant uses the existing editable homepage fields and the same desktop and tablet presentation above 42rem. Its phone copy and layout are specific to the variant. On phones, the enhanced view puts services and the featured project immediately after the hero, shows the project photo at 16:9, and makes the process stages directly selectable and swipeable. Without JavaScript the template renders all four stages and native enquiry links.
 
 Check both page URLs side by side at 320, 390, 430, 834 and 1440 pixels. Use a short phone viewport to check the project crop. Test the callback bar, the existing enquiry buttons and the footer’s Cookie settings link with the actual staging consent configuration. Rehearse selecting the variant on the staging front page and then switching back. For production, select the variant on the existing homepage page to retain the URL and page ID. Selecting **Greendawn Homepage** restores the original layout. Purge the homepage cache after a template switch.
 
@@ -108,7 +108,7 @@ The twelve static sections from the pinned Astro `src/pages/index.astro` and the
 
 ## React callback drawer
 
-The enquiry enhancement now follows the pinned Astro flow. Desktop opens a right-side drawer; up to 42rem it becomes a bottom sheet. Header (including mobile), hero, survey, final enquiry and footer calls to action open the same form. A floating launcher is available sitewide. Existing anchor destinations remain the no-JavaScript and failed-module fallback; keep the Header enquiry destination pointing at a real internal contact page.
+The enquiry enhancement now follows the pinned Astro flow. Desktop opens a right-side drawer; up to 42rem it becomes a bottom sheet. Header (including mobile), hero, survey, final enquiry and footer calls to action open the same form. The sitewide launcher uses a full-width navy bar with an inset yellow button on phones and a compact corner dock on wider screens. It is available from the first screen through the footer once the managed form is ready. The dock yields to navigation, the Complianz banner and the open drawer, and hides while the on-screen keyboard is open. Existing anchor destinations remain the no-JavaScript and failed-module fallback; keep the Header enquiry destination pointing at a real internal contact page.
 
 ### Staging setup
 

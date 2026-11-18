@@ -60,7 +60,8 @@
 .site-header,
 .site-footer,
 .gd-utility-bar,
-.gd-campaign-bar {
+.gd-campaign-bar,
+.gd-campaign-landing {
 		--gd-shell-gutter: 1.25rem;
 		--gd-shell-max: 76rem;
 	}
@@ -74,7 +75,8 @@
 .site-header,
 .site-footer,
 .gd-utility-bar,
-.gd-campaign-bar {
+.gd-campaign-bar,
+.gd-campaign-landing {
 		--gd-shell-gutter: 1rem;
 		--gd-shell-max: 58rem;
 	}
@@ -88,7 +90,8 @@
 .site-header,
 .site-footer,
 .gd-utility-bar,
-.gd-campaign-bar {
+.gd-campaign-bar,
+.gd-campaign-landing {
 		--gd-shell-gutter: 0.75rem;
 		--gd-shell-max: 39rem;
 	}
@@ -102,7 +105,8 @@
 .site-header,
 .site-footer,
 .gd-utility-bar,
-.gd-campaign-bar {
+.gd-campaign-bar,
+.gd-campaign-landing {
 		--gd-shell-gutter: 0.625rem;
 		--gd-shell-max: 28rem;
 	}

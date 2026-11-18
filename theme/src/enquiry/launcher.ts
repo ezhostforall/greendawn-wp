@@ -1,7 +1,18 @@
 import './lead-capture.css';
+import type { CampaignTimeline } from '../scripts/campaign-phase';
+
+export interface DrawerCampaign extends CampaignTimeline {
+	id: number;
+	drawer_title: string;
+	drawer_copy: string;
+	late_drawer: string;
+	drawer_cta: string;
+	drawer_context: string;
+}
 
 export interface LeadConfig {
 	formId: number;
+	campaigns?: { featured: DrawerCampaign | []; current: DrawerCampaign | [] };
 	charger?: { id: number; title: string; url: string; slug?: string } | [];
 	choices: Record<string, Record<string, string>>;
 	privacyUrl: string;
@@ -60,7 +71,9 @@ if (component && transport && mount && typeof HTMLDialogElement !== 'undefined')
 				const mobile = trigger.closest('.primary-nav');
 				const toggle = document.querySelector<HTMLElement>('[data-nav-toggle]');
 				if (mobile && toggle?.getAttribute('aria-expanded') === 'true') toggle.click();
-				app.open(mobile && toggle ? toggle : trigger, trigger.dataset.leadEntryPoint ?? 'floating-launcher');
+				const popupLink = trigger.closest('[data-gd-campaign-popup]')
+					? document.querySelector<HTMLElement>('[data-gd-campaign-bar-link], .lead-capture__launcher') : null;
+				app.open((mobile && toggle ? toggle : popupLink) ?? trigger, trigger.dataset.leadEntryPoint ?? 'floating-launcher', Number(trigger.dataset.leadCampaign ?? 0));
 			}).catch(() => {
 				loading = undefined;
 				if (lifecycle.signal.aborted) return;

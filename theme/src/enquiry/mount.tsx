@@ -1,7 +1,8 @@
 import { Component, createRef, useEffect, useImperativeHandle, useRef, useState, type CSSProperties, type ReactNode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { flushSync } from 'react-dom';
-import type { LeadConfig } from './launcher';
+import type { DrawerCampaign, LeadConfig } from './launcher';
+import { campaignIsActive, campaignPhase } from '../scripts/campaign-phase';
 import { submitCallback } from './transport';
 import { getAdvertisingAttribution } from '../scripts/advertising-attribution';
 import { getVisitAttribution } from '../scripts/attribution';
@@ -12,7 +13,7 @@ type Step = 'intent' | 'context' | 'stage' | 'location' | 'contact' | 'success';
 const contexts: Record<string, string> = { 'ev-charging': 'siteType', power: 'powerReason', aftercare: 'aftercareIssue' };
 const legends: Record<string, string> = { intent: 'What can we help with?', siteType: 'What best describes the site?', aftercareIssue: 'What are you experiencing?', powerReason: 'What’s prompted the enquiry?', projectStage: 'Where are you in the process?' };
 
-interface Handle { open: (opener: HTMLElement, entry: string) => void; close: () => void }
+interface Handle { open: (opener: HTMLElement, entry: string, campaignId: number) => void; close: () => void }
 
 class Boundary extends Component<{ children: ReactNode; fallback: string }, { failed: boolean }> {
 	state = { failed: false };
@@ -32,6 +33,8 @@ function App({ config, transport, handleRef }: { config: LeadConfig; transport: 
 	const [opened, setOpened] = useState(false);
 	const [charger, setCharger] = useState<Exclude<LeadConfig['charger'], []>>();
 	const [step, setStep] = useState<Step>('intent');
+	const [grant, setGrant] = useState<DrawerCampaign>();
+	const [campaignNow, setCampaignNow] = useState(() => Date.now() / 1000);
 	const [history, setHistory] = useState<Step[]>([]);
 	const [answers, setAnswers] = useState<Record<string, string>>({});
 	const [contact, setContact] = useState<Record<string, string>>({});
@@ -42,6 +45,14 @@ function App({ config, transport, handleRef }: { config: LeadConfig; transport: 
 	const [started, setStarted] = useState(false);
 	const context = contexts[answers.intent ?? ''];
 	const steps: Step[] = direct ? ['contact'] : ['intent', ...(context ? ['context' as const] : []), 'stage', 'location', 'contact'];
+	const featured = config.campaigns?.featured;
+	const currentCampaign = config.campaigns?.current;
+	const featuredActive = featured && 'id' in featured && campaignIsActive(featured) ? featured : undefined;
+	const grantNotice = grant ?? featuredActive;
+	const noticePhase = grantNotice && campaignPhase(grantNotice, campaignNow);
+	const support = answers.intent === 'aftercare';
+	const showGrantNotice = (noticePhase === 'live' || noticePhase === 'late')
+		&& !support && step !== 'success' && (step === 'intent' || grant || charger);
 	const progress = step === 'success' ? 100 : (steps.indexOf(step) + 1) / steps.length * 100;
 	const stageLabel = { intent: 'Your requirement', context: 'Site details', stage: 'Project stage', location: 'Site location', contact: 'Callback details', success: 'Complete' }[step];
 
@@ -55,31 +66,46 @@ function App({ config, transport, handleRef }: { config: LeadConfig; transport: 
 	}
 	function reset(): void {
 		setCharger(undefined); setStep('intent'); setHistory([]); setAnswers({}); setContact({}); setErrors({}); setMessage(''); setDirect(false); setStarted(false);
+		setGrant(undefined);
 		transport.reset();
 	}
 	function close(): void { dialog.current?.close(); }
 	useImperativeHandle(handleRef, () => ({
-			open: (trigger, point) => {
-				opener.current = trigger; entry.current = drawerEntryPoints.find(value => value === point) ?? 'floating-launcher';
-				if (step === 'success') reset();
-				const product = point === 'charger-quote' && config.charger && 'id' in config.charger ? config.charger : undefined;
-				setCharger(product);
-				if (product) { setAnswers({ intent: 'ev-charging' }); setHistory([]); setDirect(true); setStep('contact'); }
-				dialog.current?.showModal(); document.body.classList.add('lead-capture-open'); setOpened(true); emit('lead_tool_opened', product ? { intent: 'ev-charging' } : answers);
-				if (product) startCallback({ intent: 'ev-charging' }, step === 'success');
-			}, close,
+		open: (trigger, point, campaignId) => {
+			opener.current = trigger;
+			entry.current = drawerEntryPoints.find(value => value === point) ?? 'floating-launcher';
+			if (step === 'success') reset();
+			const campaign = [featured, currentCampaign].find((item): item is DrawerCampaign =>
+				!!item && 'id' in item && item.id === campaignId && campaignIsActive(item));
+			const product = point === 'charger-quote' && config.charger && 'id' in config.charger ? config.charger : undefined;
+			setCharger(product);
+			setCampaignNow(Date.now() / 1000);
+			if (campaign) openGrant(campaign);
+			else if (product) {
+				setGrant(undefined); setAnswers({ intent: 'ev-charging' }); setHistory([]); setDirect(true); setStep('contact');
+			}
+			dialog.current?.showModal();
+			document.body.classList.add('lead-capture-open'); setOpened(true);
+			emit('lead_tool_opened', product || campaign ? { intent: 'ev-charging' } : answers);
+			if (product || campaign) startCallback({ intent: 'ev-charging' }, step === 'success');
+		}, close,
 	}));
 	useEffect(() => {
 		if (!opened) return;
 		body.current?.scrollTo(0, 0);
 		dialog.current?.querySelector<HTMLElement>('[data-step-heading]')?.focus({ preventScroll: true });
 	}, [step, opened]);
+	useEffect(() => {
+		const syncCampaign = () => setCampaignNow(Date.now() / 1000);
+		document.addEventListener('greendawn:campaign-phase', syncCampaign);
+		return () => document.removeEventListener('greendawn:campaign-phase', syncCampaign);
+	}, []);
 	useEffect(() => () => { document.body.classList.remove('lead-capture-open'); }, []);
 	function go(next: Step): void { setHistory([...history, step]); setStep(next); setMessage(''); }
 	function startCallback(values = answers, force = false): void { if (force || !started) { emit('lead_callback_started', values); setStarted(true); } }
 	function choose(name: string, value: string): void {
 		const next = { ...answers, [name]: value };
-		if (name === 'intent') { setDirect(false); delete next.siteType; delete next.aftercareIssue; delete next.powerReason; }
+		if (name === 'intent') { setGrant(undefined); setDirect(false); delete next.siteType; delete next.aftercareIssue; delete next.powerReason; }
 		setAnswers(next);
 		if (name === 'intent') { emit('lead_intent_selected', next); go(contexts[value] ? 'context' : 'stage'); }
 		else go(name === 'projectStage' ? 'location' : 'stage');
@@ -109,10 +135,11 @@ function App({ config, transport, handleRef }: { config: LeadConfig; transport: 
 		if (email instanceof HTMLInputElement && email.value && !email.validity.valid) next.email = 'Enter a valid email address.';
 		const phone = contact.phone?.trim() ?? '';
 		if (!/^[+\d][\d\s()./-]*(?:\s?(?:x|ext\.?)\s?\d{1,6})?$/i.test(phone) || phone.replace(/\D/g, '').length < 7 || phone.replace(/\D/g, '').length > 18) next.phone = 'Enter a telephone number we can use for the callback.';
+		if (contact.chargerCount && !/^[1-9][0-9]{0,8}$/.test(contact.chargerCount)) next.chargerCount = 'Enter a positive whole number of chargers.';
 		if (!contact.callbackPreference) next.callbackPreference = 'Choose when you would prefer us to call.';
 		if (Object.keys(next).length) { focusErrors(next); return; }
 		inFlight.current = true; setSubmitting(true); setMessage(''); setErrors({});
-		const values: Record<string, string> = { ...answers, ...contact, source: config.source, entryPoint: entry.current, pagePath: window.location.pathname.slice(0, 240), ...getVisitAttribution(), ...getAdvertisingAttribution(answers.intent === 'aftercare'), chargerId: charger ? String(charger.id) : '', chargerTitle: charger?.title ?? '', chargerURL: charger?.url ?? '' };
+		const values: Record<string, string> = { ...answers, ...contact, source: config.source, entryPoint: entry.current, pagePath: window.location.pathname.slice(0, 240), ...getVisitAttribution(), ...getAdvertisingAttribution(answers.intent === 'aftercare'), chargerId: charger ? String(charger.id) : '', chargerTitle: charger?.title ?? '', chargerURL: charger?.url ?? '', campaignId: grant && !support ? String(grant.id) : '', chargerCount: contact.chargerCount ?? '' };
 		for (const name of ['intent', 'projectStage', 'siteType', 'aftercareIssue', 'powerReason', 'location', 'preferredCallbackTime', 'notes', 'website', 'utmSource', 'utmMedium', 'utmCampaign']) values[name] ??= '';
 		if (values.callbackPreference !== 'scheduled') values.preferredCallbackTime = '';
 		const submitted = getTrackingConsent();
@@ -131,7 +158,17 @@ function App({ config, transport, handleRef }: { config: LeadConfig; transport: 
 		finally { inFlight.current = false; setSubmitting(false); }
 	}
 
-	function openDirect(): void { setDirect(true); startCallback(); go('contact'); }
+	function openDirect(): void { setGrant(undefined); setDirect(true); startCallback(); go('contact'); }
+
+	function openGrant(campaign: DrawerCampaign): void {
+		setGrant(campaign);
+		setAnswers({ intent: 'ev-charging' });
+		setDirect(true);
+		setHistory(['intent']);
+		setStep('contact');
+		setErrors({});
+		setMessage('');
+	}
 
 	const choiceName = step === 'intent' ? 'intent' : step === 'context' ? (context ?? 'siteType') : 'projectStage';
 	return <dialog ref={dialog} className="lead-capture__dialog" id="lead-capture-dialog" aria-labelledby="lead-capture-title" onClose={() => { document.body.classList.remove('lead-capture-open'); setOpened(false); opener.current?.focus(); }} onClick={(e) => { if (e.target === e.currentTarget) close(); }}>
@@ -146,6 +183,10 @@ function App({ config, transport, handleRef }: { config: LeadConfig; transport: 
 				<div className="screen-reader-text" role="status" aria-live="polite">{opened ? stageLabel : ''}</div>
 				<div className="lead-capture__body" ref={body}>
 					<section className={`lead-capture__step${step === 'success' ? ' lead-capture__success' : ''}`}>
+						{showGrantNotice && grantNotice?.drawer_title && <aside className="lead-capture__campaign">
+							<strong>{grantNotice.drawer_title}</strong>
+							<p>{noticePhase === 'late' ? grantNotice.late_drawer || grantNotice.drawer_copy : grantNotice.drawer_copy}</p>
+						</aside>}
 						{['intent', 'context', 'stage'].includes(step) && <>
 							<fieldset>
 								<legend tabIndex={-1} data-step-heading>{legends[choiceName]}</legend>
@@ -153,6 +194,7 @@ function App({ config, transport, handleRef }: { config: LeadConfig; transport: 
 								{step === 'intent' && <div className="lead-capture__step-actions lead-capture__direct-phone">
 									<button className="lead-capture__text-button" type="button" onClick={openDirect}>Just request a callback</button>
 								</div>}
+								{step === 'intent' && featuredActive?.drawer_cta && <button type="button" className="lead-capture__primary lead-capture__campaign-button" onClick={() => { openGrant(featuredActive); startCallback({ intent: 'ev-charging' }); }}>{featuredActive.drawer_cta}<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 18 18 6M8 6h10v10" /></svg></button>}
 								<div className="lead-capture__choices lead-capture__choices--stacked">{Object.entries(config.choices[choiceName] ?? {}).map(([value, label]) => <button className="lead-capture__option" type="button" key={value} aria-pressed={answers[choiceName] === value} onClick={() => choose(choiceName, value)}>{label}<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 5 7 7-7 7" /></svg></button>)}</div>
 							</fieldset>
 							{step === 'intent' && <div className="lead-capture__step-actions lead-capture__direct-default">
@@ -161,12 +203,23 @@ function App({ config, transport, handleRef }: { config: LeadConfig; transport: 
 						</>}
 						{step === 'location' && <><div className="lead-capture__heading-group"><h2 tabIndex={-1} data-step-heading>Where is the site?</h2><p className="lead-capture__intro">Optional, but useful for routing your enquiry.</p></div>{field('location', 'Town, city or postcode (optional)', 'text', 'postal-code')}<div className="lead-capture__step-actions"><button className="lead-capture__primary" type="button" onClick={() => { startCallback(); go('contact'); }}>Continue</button><button className="lead-capture__text-button" type="button" onClick={() => { setContact({ ...contact, location: '' }); startCallback(); go('contact'); }}>Skip for now</button></div></>}
 						{step === 'contact' && <>
-							<div className="lead-capture__heading-group"><h2 tabIndex={-1} data-step-heading>How should we reach you?</h2><p className="lead-capture__intro">Greendawn supports commercial sites. All four contact fields are required so we can route the enquiry.</p></div>
+							<div className="lead-capture__heading-group"><h2 tabIndex={-1} data-step-heading>How should we reach you?</h2><p className="lead-capture__intro">{grant?.drawer_context || 'Greendawn supports commercial sites. All four contact fields are required so we can route the enquiry.'}</p></div>
 							{charger && <div className="lead-capture__product-context"><p>Enquiry about <strong>{charger.title}</strong></p><button type="button" className="lead-capture__text-button" onClick={() => setCharger(undefined)}>Remove charger selection</button></div>}
 							<div className="lead-capture__field-grid">{field('firstName', 'First name', 'text', 'given-name', 80)}{field('phone', 'Telephone number', 'tel', 'tel', 40)}{field('company', 'Company name', 'text', 'organization')}{field('email', 'Email', 'email', 'email', 160)}</div>
 							<fieldset className="lead-capture__callback-fieldset"><legend>When would you prefer a call?</legend><div className="lead-capture__choices lead-capture__choices--compact">{Object.entries(config.choices.callbackPreference ?? {}).map(([value, label]) => <label key={value} className="lead-capture__option lead-capture__option--compact"><input type="radio" name="callbackPreference" value={value} checked={contact.callbackPreference === value} required aria-invalid={!!errors.callbackPreference} aria-describedby={errors.callbackPreference ? 'lead-error-callbackPreference' : undefined} onChange={() => { setContact({ ...contact, callbackPreference: value, preferredCallbackTime: '' }); setErrors({ ...errors, callbackPreference: '' }); }} /><span>{label}</span></label>)}</div>{errors.callbackPreference && <p className="lead-capture__error" id="lead-error-callbackPreference">{errors.callbackPreference}</p>}</fieldset>
 							{contact.callbackPreference === 'scheduled' && <>{field('preferredCallbackTime', 'Suggested date and time (optional)', 'datetime-local', '', 30)}<p className="lead-capture__intro">We’ll confirm availability. Times are interpreted in UK local time.</p></>}
-							<details className="lead-capture__details"><summary>Add project details <span>Optional</span></summary><div className="lead-capture__details-body"><label className="lead-capture__field"><span>Anything useful for us to know?</span><textarea name="notes" rows={4} maxLength={1500} value={contact.notes ?? ''} onChange={(e) => setContact({ ...contact, notes: e.target.value })} /></label></div></details>
+							<fieldset className="lead-capture__project-details">
+								<legend>{support ? 'Charger details' : 'Project details'}</legend>
+								<label className="lead-capture__field">
+									<span>{support ? 'Number of chargers affected' : 'Estimated number of chargers'} <small>Optional</small></span>
+									<input name="chargerCount" type="number" inputMode="numeric" min={1} max={999999999} step={1} placeholder="e.g. 4" value={contact.chargerCount ?? ''} aria-invalid={!!errors.chargerCount} aria-describedby={errors.chargerCount ? 'lead-error-chargerCount' : undefined} onChange={e => { setContact({ ...contact, chargerCount: e.target.value }); setErrors({ ...errors, chargerCount: '' }); }} />
+									{errors.chargerCount && <span className="lead-capture__error" id="lead-error-chargerCount">{errors.chargerCount}</span>}
+								</label>
+								<label className="lead-capture__field">
+									<span>Anything else we should know? <small>Optional</small></span>
+									<textarea name="notes" rows={3} maxLength={1500} placeholder={support ? 'e.g. the charger model and what’s happening' : 'e.g. the site location and when you’d like the chargers installed'} value={contact.notes ?? ''} onChange={e => setContact({ ...contact, notes: e.target.value })} />
+								</label>
+							</fieldset>
 							<label className="lead-capture__honeypot" aria-hidden="true">Leave this empty<input name="website" type="text" tabIndex={-1} autoComplete="off" value={contact.website ?? ''} onChange={(e) => setContact({ ...contact, website: e.target.value })} /></label>
 							<p className="lead-capture__privacy">We’ll use these details to respond to this enquiry. Read our <a href={config.privacyUrl}>privacy policy</a>.</p>
 						</>}
@@ -186,9 +239,9 @@ export function mountLeadCapture(element: HTMLElement, transport: HTMLFormElemen
 	const fallback = config.fallbackUrl;
 	flushSync(() => root.render(<Boundary fallback={fallback}><App config={config} transport={transport} handleRef={handle} /></Boundary>));
 	return {
-		open: (trigger: HTMLElement, entry: string) => {
+		open: (trigger: HTMLElement, entry: string, campaignId: number) => {
 			if (!handle.current) throw new Error('Callback form is unavailable');
-			handle.current.open(trigger, entry);
+			handle.current.open(trigger, entry, campaignId);
 		},
 		close: () => handle.current?.close(),
 		destroy: () => root.unmount(),

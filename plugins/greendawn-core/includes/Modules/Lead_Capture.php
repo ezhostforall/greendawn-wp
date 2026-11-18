@@ -21,6 +21,7 @@ final class Lead_Capture implements Module_Interface {
 		add_filter( 'greendawn_lead_config', array( $this, 'configuration' ) );
 		add_filter( 'wpcf7_contact_form_properties', array( $this, 'attribution_properties' ), 10, 2 );
 		add_filter( 'wpcf7_posted_data', array( $this, 'charger_context_data' ) );
+		add_filter( 'wpcf7_mail_components', array( $this, 'project_mail' ), 15, 3 );
 		add_filter( 'wpcf7_validate', array( $this, 'validate' ), 20, 2 );
 		add_filter( 'wpcf7_spam', array( $this, 'spam' ), 20, 2 );
 	}
@@ -106,6 +107,8 @@ final class Lead_Capture implements Module_Interface {
 			'location'              => 120,
 			'preferredCallbackTime' => 30,
 			'notes'                 => 1500,
+			'chargerCount'          => 9,
+			'campaignId'            => 20,
 			'pagePath'              => 240,
 			'entryPoint'            => 30,
 			'source'                => 30,
@@ -156,6 +159,11 @@ final class Lead_Capture implements Module_Interface {
 				$extra[] = $name . ': [' . $name . ']';
 			}
 		}
+		foreach ( array( 'chargerCount', 'campaignId' ) as $name ) {
+			if ( ! preg_match( '/\[[a-z0-9_*]+\s+' . $name . '(?:\s|\])/', $markup ) ) {
+				$markup .= "\n[hidden " . $name . ']';
+			}
+		}
 		$properties['form'] = $markup;
 		if ( $extra ) {
 			$mail['body']       = ( $mail['body'] ?? '' ) . "\n\nVisit attribution\n" . implode( "\n", $extra );
@@ -199,7 +207,7 @@ final class Lead_Capture implements Module_Interface {
 			if ( in_array( $name, array( 'firstName', 'company' ), true ) ) {
 				$type .= '*';
 			}
-			$markup[] = in_array( $name, self::attribution_fields(), true )
+			$markup[] = in_array( $name, array_merge( self::attribution_fields(), array( 'chargerCount', 'campaignId' ) ), true )
 				? '[hidden ' . $name . ']'
 				: sprintf( '<label>%1$s [%2$s %1$s maxlength:%3$d]</label>', $name, $type, $limit );
 		}
@@ -214,7 +222,7 @@ final class Lead_Capture implements Module_Interface {
 		$mail['additional_headers'] = 'Reply-To: [email]';
 		$mail['body']               = "Commercial callback request\n\n";
 		foreach ( array_merge( array_keys( self::choices() ), array_keys( self::limits() ) ) as $name ) {
-			if ( 'website' !== $name ) {
+			if ( ! in_array( $name, array( 'website', 'chargerCount', 'campaignId' ), true ) ) {
 				$mail['body'] .= $name . ': [' . $name . "]\n";
 			}
 		}
@@ -267,7 +275,42 @@ final class Lead_Capture implements Module_Interface {
 		if ( $context ) {
 			$data['chargerId'] = (string) $context['id'];
 		}
+		$support            = in_array( 'aftercare', (array) ( $data['intent'] ?? array() ), true );
+		$campaign           = $support ? 0 : Campaigns::public_id( $data['campaignId'] ?? '' );
+		$data['campaignId'] = $campaign ? (string) $campaign : '';
 		return $data;
+	}
+
+	/**
+	 * Add populated project details to the managed internal notification.
+	 *
+	 * @param array                   $components Rendered message.
+	 * @param \WPCF7_ContactForm|null $form       Form owning the message.
+	 * @param \WPCF7_Mail             $mail       Message template.
+	 */
+	public function project_mail( array $components, ?\WPCF7_ContactForm $form, \WPCF7_Mail $mail ): array {
+		$submission = \WPCF7_Submission::get_instance();
+		if ( 'mail' !== $mail->name() || ! $submission || ! $form || $form->id() !== absint( get_option( 'greendawn_core_callback_form', 0 ) ) ) {
+			return $components;
+		}
+		$template = $form->prop( 'mail' );
+		$data     = $submission->get_posted_data();
+		$support  = in_array( 'aftercare', (array) ( $data['intent'] ?? array() ), true );
+		$lines    = array();
+		$count    = $data['chargerCount'] ?? '';
+		if ( is_string( $count ) && preg_match( '/^[1-9][0-9]{0,8}$/D', $count ) && ! str_contains( (string) ( $template['body'] ?? '' ), '[chargerCount]' ) ) {
+			$label   = $support ? __( 'Number of chargers affected', 'greendawn-core' ) : __( 'Estimated number of chargers', 'greendawn-core' );
+			$lines[] = $label . ': ' . $count;
+		}
+		if ( ! empty( $data['campaignId'] ) ) {
+			$lines[] = __( 'Campaign', 'greendawn-core' ) . ': ' . get_the_title( (int) $data['campaignId'] );
+		}
+		if ( $lines ) {
+			$components['body'] .= empty( $template['use_html'] )
+				? "\n\n" . implode( "\n", $lines )
+				: '<p>' . implode( '<br>', array_map( 'esc_html', $lines ) ) . '</p>';
+		}
+		return $components;
 	}
 
 	/**
@@ -285,7 +328,7 @@ final class Lead_Capture implements Module_Interface {
 		$data                  = $submission ? $submission->get_posted_data() : array();
 		$choices               = self::choices();
 		$choices['source']     = array_fill_keys( array( 'homepage', 'website' ), '' );
-		$choices['entryPoint'] = array_fill_keys( array( 'floating-launcher', 'header', 'hero', 'services', 'pricing', 'final-cta', 'footer-cta', 'charger-quote' ), '' );
+		$choices['entryPoint'] = array_fill_keys( array( 'floating-launcher', 'header', 'hero', 'services', 'pricing', 'final-cta', 'footer-cta', 'charger-quote', 'campaign-landing', 'campaign-popup' ), '' );
 		$limits                = self::limits();
 		foreach ( $tags as $tag ) {
 			$name  = $tag->name;
@@ -307,6 +350,9 @@ final class Lead_Capture implements Module_Interface {
 			}
 			if ( 'phone' === $name && ( ! preg_match( '/^[+\d][\d\s().\/-]*(?:\s?(?:x|ext\.?)\s?\d{1,6})?$/i', $value ) || strlen( preg_replace( '/\D/', '', $value ) ) < 7 || strlen( preg_replace( '/\D/', '', $value ) ) > 18 ) ) {
 				$result->invalidate( $tag, __( 'Enter a telephone number we can use for the callback.', 'greendawn-core' ) );
+			}
+			if ( 'chargerCount' === $name && '' !== $value && ! preg_match( '/^[1-9][0-9]{0,8}$/D', $value ) ) {
+				$result->invalidate( $tag, __( 'Enter a positive whole number of chargers.', 'greendawn-core' ) );
 			}
 			if ( 'preferredCallbackTime' === $name && '' !== $value && ! preg_match( '/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/', $value ) ) {
 				$result->invalidate( $tag, __( 'Please check the suggested date and time.', 'greendawn-core' ) );

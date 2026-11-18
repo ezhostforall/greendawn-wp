@@ -42,6 +42,16 @@ final class Settings {
 	 */
 	public static function register_settings(): void {
 		register_setting(
+			'greendawn_core_campaign_settings',
+			Modules\Campaigns::FEATURED_OPTION,
+			array(
+				'type'              => 'integer',
+				'default'           => 0,
+				'sanitize_callback' => array( Modules\Campaigns::class, 'public_id' ),
+			)
+		);
+
+		register_setting(
 			'greendawn_core_settings',
 			'greendawn_core_services_enabled',
 			array(
@@ -115,6 +125,34 @@ final class Settings {
 				<?php endif; ?>
 				<?php submit_button(); ?>
 			</form>
+			<h2><?php esc_html_e( 'Campaigns', 'greendawn-core' ); ?></h2>
+			<form action="options.php" method="post">
+				<?php settings_fields( 'greendawn_core_campaign_settings' ); ?>
+				<label for="greendawn-featured-campaign"><?php esc_html_e( 'Featured campaign', 'greendawn-core' ); ?></label>
+				<select id="greendawn-featured-campaign" name="<?php echo esc_attr( Modules\Campaigns::FEATURED_OPTION ); ?>">
+					<option value="0"><?php esc_html_e( 'None', 'greendawn-core' ); ?></option>
+					<?php
+					foreach ( get_posts(
+						array(
+							'post_type'    => Modules\Campaigns::TYPE,
+							'post_status'  => 'publish',
+							'has_password' => false,
+							'numberposts'  => -1,
+						)
+					) as $campaign ) :
+						?>
+						<option value="<?php echo esc_attr( (string) $campaign->ID ); ?>" <?php selected( get_option( Modules\Campaigns::FEATURED_OPTION, 0 ), $campaign->ID ); ?>><?php echo esc_html( $campaign->post_title ); ?></option>
+					<?php endforeach; ?>
+				</select>
+				<?php submit_button( __( 'Save featured campaign', 'greendawn-core' ) ); ?>
+			</form>
+			<?php if ( ! get_page_by_path( Modules\Campaigns::WORKPLACE_SLUG, OBJECT, array( Modules\Campaigns::TYPE ) ) && current_user_can( 'publish_posts' ) ) : ?>
+				<form action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" method="post">
+					<input type="hidden" name="action" value="greendawn_core_publish_workplace_campaign">
+					<?php wp_nonce_field( 'greendawn_core_publish_workplace_campaign' ); ?>
+					<?php submit_button( __( 'Publish and feature the Workplace Charging Scheme campaign', 'greendawn-core' ), 'secondary' ); ?>
+				</form>
+			<?php endif; ?>
 			<h2><?php esc_html_e( 'Callback enquiry drawer', 'greendawn-core' ); ?></h2>
 			<?php if ( ! class_exists( '\WPCF7_ContactForm' ) ) : ?>
 				<p><?php esc_html_e( 'Activate Contact Form 7 to configure callback requests.', 'greendawn-core' ); ?></p>

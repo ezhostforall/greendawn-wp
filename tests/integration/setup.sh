@@ -500,3 +500,11 @@ wp plugin activate secure-custom-fields
 docker cp tests/integration/gallery-page.php "$container_id:/tmp/gallery-page.php"
 wp eval-file /tmp/gallery-page.php
 wp plugin deactivate secure-custom-fields
+
+# Campaign pages exist for browser tests, while sitewide notices are opt-in per test context.
+docker cp tests/fixtures/campaigns.php "$container_id:/var/www/html/wp-content/plugins/campaigns-test-fixture.php"
+wp plugin activate campaigns-test-fixture
+wp eval '$id = \Greendawn_Core\Modules\Campaigns::provision_workplace(); if ( is_wp_error( $id ) || $id !== \Greendawn_Core\Modules\Campaigns::provision_workplace() || home_url( "/workplace-charging-grant/" ) !== get_permalink( $id ) ) { WP_CLI::error( "Workplace campaign needs a stable root URL and idempotent provisioning." ); } if ( ! get_page_by_path( "another-campaign", OBJECT, "gdcampaign" ) ) { wp_insert_post( array( "post_type" => "gdcampaign", "post_status" => "publish", "post_name" => "another-campaign", "post_title" => "Another campaign" ) ); }'
+wp plugin activate secure-custom-fields
+wp eval '$post = get_page_by_path( "workplace-charging-grant", OBJECT, "gdcampaign" ); if ( "20270331" !== get_field( "greendawn_campaign_expiry", $post->ID ) || ! get_field_object( "greendawn_campaign_drawer_copy", $post->ID ) ) { WP_CLI::error( "Campaign dates and notice copy must be editable in SCF." ); }'
+wp plugin deactivate secure-custom-fields

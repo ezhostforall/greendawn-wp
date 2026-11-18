@@ -13,14 +13,19 @@ if ( $greendawn_campaign ) :
 	$greendawn_phase = $greendawn_campaign['phase'];
 	$greendawn_open  = in_array( $greendawn_phase, array( 'live', 'late' ), true );
 	$greendawn_id    = $greendawn_campaign['id'];
+	$greendawn_hero  = absint( $greendawn_campaign['hero_image'] );
+	if ( ! wp_attachment_is_image( $greendawn_hero ) || 'trash' === get_post_status( $greendawn_hero ) ) {
+		$greendawn_hero = get_post_thumbnail_id( $greendawn_id );
+	}
 	?>
 	<article class="gd-campaign-landing" data-gd-campaign-timeline="<?php echo esc_attr( greendawn_campaign_timeline( $greendawn_campaign ) ); ?>">
 		<section class="gd-campaign-hero" aria-labelledby="gd-campaign-title">
-			<?php if ( has_post_thumbnail( $greendawn_id ) ) : ?>
+			<?php if ( $greendawn_hero ) : ?>
 				<?php
-				echo get_the_post_thumbnail(
-					$greendawn_id,
+				echo wp_get_attachment_image(
+					$greendawn_hero,
 					'full',
+					false,
 					array(
 						'class'         => 'gd-campaign-hero__image',
 						'alt'           => '',

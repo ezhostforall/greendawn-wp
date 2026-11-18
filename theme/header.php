@@ -30,8 +30,10 @@ $greendawn_submenu_label = __( 'Toggle submenu for %s', 'greendawn' );
 </head>
 <body <?php body_class( $greendawn_home_classes ); ?>>
 <?php wp_body_open(); ?>
-<a class="skip-link screen-reader-text" href="#content"><?php esc_html_e( 'Skip to content', 'greendawn' ); ?></a>
-<?php do_action( 'greendawn_before_site' ); ?>
+<div class="site-announcements">
+	<a class="skip-link screen-reader-text" href="#content"><?php esc_html_e( 'Skip to content', 'greendawn' ); ?></a>
+	<?php do_action( 'greendawn_before_site' ); ?>
+</div>
 <div class="site" id="page">
 
 	<div class="gd-utility-bar">

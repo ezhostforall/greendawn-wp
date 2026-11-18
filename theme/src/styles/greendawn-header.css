@@ -498,7 +498,11 @@
 	}
 }
 
-/* Keep the keyboard skip link above the utility and compact-header layers. */
+/* Anchor the skip link below the admin toolbar and above the site header. */
+.site-announcements {
+	position: relative;
+	display: grid;
+}
 .skip-link:focus {
 	z-index: 23;
 }

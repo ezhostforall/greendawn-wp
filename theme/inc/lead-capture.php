@@ -42,6 +42,11 @@ function greendawn_lead_render(): void {
 	$config['phoneUrl']    = greendawn_phone_uri( $config['phone'] );
 	$config['charger']     = apply_filters( 'greendawn_selected_charger', array() );
 	$config['source']      = greendawn_is_homepage_template() ? 'homepage' : 'website';
+	$campaigns             = greendawn_campaign_context();
+	$config['campaigns']   = array(
+		'featured' => greendawn_campaign_drawer_data( $campaigns['featured'] ),
+		'current'  => greendawn_campaign_drawer_data( $campaigns['current'] ),
+	);
 	$fallback_url          = esc_url_raw( (string) get_theme_mod( 'greendawn_header_cta_url', '' ) );
 	$config['fallbackUrl'] = '' !== $fallback_url && '#' !== $fallback_url ? $fallback_url : home_url( '/contact/' );
 	?>

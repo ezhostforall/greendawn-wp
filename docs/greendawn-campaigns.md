@@ -1,0 +1,11 @@
+# Greendawn campaigns
+
+Install the matching theme and Greendawn Core packages together. Secure Custom Fields enables the campaign editor fields. Published records render from their saved metadata even if the editor plugin is temporarily disabled.
+
+1. On staging, open **Settings → Greendawn Core → Campaigns** and choose **Publish and feature the Workplace Charging Scheme campaign**. This creates the initial record at `/workplace-charging-grant/` with the approved copy and dates. It refuses to take over an existing Page or Post URL. Where the record already exists, select it in **Featured campaign**.
+2. Edit the record from **Campaigns**. Use Featured Image to replace the packaged mock-up photograph. The date tokens shown beside eligible fields insert the saved UK planning and expiry dates. Other published campaign records use `/campaigns/{slug}/`. Selecting **None** removes the featured notices while the landing pages remain available.
+3. Confirm the exact landing URL on staging and preserve Google and Microsoft advertising parameters in the final ad URLs. Enable the existing managed callback drawer and confirm native Contact Form 7 delivery. The new optional charger count and campaign reference appear in the main internal callback notification when supplied. The campaign reference identifies the enquiry independently of advertising consent.
+4. After staging checks, repeat the publication and featured selection on production. Purge SiteGround Dynamic Cache after the initial upgrade and verify a normal cached visit to a public page. SiteGround Speed Optimizer, when active, is called on featured selection changes, campaign saves and date boundaries. Keep WordPress scheduled events running. Browsers also apply the embedded UK phase boundaries to already cached markup.
+5. Confirm the planning phase through 31 January, the availability phase from 1 February, and the evergreen page from 1 April. Verify both timer and scroll triggers, including deferral behind the mobile menu, cookie banner or callback drawer. Verify advertising attribution with Marketing accepted and declined. The pop-up uses session storage per campaign and browser tab.
+
+If the update needs to be rolled back, select **None** and purge the page cache before restoring the previous matched theme and Core packages.

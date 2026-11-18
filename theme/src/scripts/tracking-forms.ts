@@ -3,7 +3,7 @@ import { getTrackingConsent, pushTrackingEvent, type ConsentSnapshot } from './t
 const inlineLocations = ['contact', 'about', 'workplace', 'enquire', 'business_installations', 'customer_care'] as const;
 type FormLocation = typeof inlineLocations[number] | 'enquiry_drawer';
 type LeadType = 'sales_enquiry' | 'charger_quote' | 'support';
-export const drawerEntryPoints = ['floating-launcher', 'header', 'hero', 'services', 'pricing', 'final-cta', 'footer-cta', 'charger-quote'] as const;
+export const drawerEntryPoints = ['floating-launcher', 'header', 'hero', 'services', 'pricing', 'final-cta', 'footer-cta', 'charger-quote', 'campaign-landing', 'campaign-popup'] as const;
 export type DrawerEntryPoint = typeof drawerEntryPoints[number];
 
 export function reportConfirmedForm(

@@ -61,6 +61,7 @@ final class Plugin {
 		( new Modules\Lead_Capture() )->register();
 		( new Modules\Advertising_Attribution() )->register();
 		( new Modules\Tracking() )->register();
+		( new Modules\Campaigns() )->register();
 		( new Modules\Contact_Page() )->register();
 		( new Modules\About_Page() )->register();
 		( new Modules\Greendawn_About() )->register();

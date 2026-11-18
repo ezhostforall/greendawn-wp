@@ -692,14 +692,14 @@ test('the mobile callback bar is available from the hero through the footer', as
 	const launcher = page.getByRole('button', { name: 'Request a callback', exact: true });
 	await expect(hero).toBeVisible();
 	await expect(launcher).toBeVisible();
-	const dock = page.locator('.gd-refresh-callback-dock');
+	const dock = page.locator('.lead-capture__dock');
 	await expect(dock).toHaveCSS('background-color', 'rgb(7, 23, 33)');
 	await expect(launcher).toHaveCSS('background-color', 'rgb(233, 242, 39)');
 	const dockBox = await dock.boundingBox();
 	const homepage = await page.locator('main#content').boundingBox();
 	expect(dockBox).toMatchObject({ x: homepage?.x, width: homepage?.width });
 	expect(await launcher.boundingBox()).toMatchObject({ x: dockBox!.x + 14, width: dockBox!.width - 28 });
-	await expect(launcher.locator('.gd-home-arrow')).toBeVisible();
+	await expect(launcher.locator('svg')).toBeVisible();
 	await launcher.click();
 	const drawer = page.getByRole('dialog');
 	await expect(drawer.getByRole('button', { name: 'Just request a callback' })).toBeVisible();

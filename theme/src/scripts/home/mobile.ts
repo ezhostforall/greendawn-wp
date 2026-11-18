@@ -10,7 +10,6 @@ if (home) {
 	const hero = home.querySelector<HTMLElement>('#top');
 	const project = home.querySelector<HTMLElement>('#projects');
 	const solutions = home.querySelector<HTMLElement>('#who-we-help');
-	const launcher = document.querySelector<HTMLButtonElement>('.lead-capture__launcher');
 	const tablist = home.querySelector<HTMLElement>('.gd-refresh-process-tabs');
 	const list = home.querySelector<HTMLOListElement>('.gd-process__steps');
 	const tabs = Array.from(tablist?.querySelectorAll<HTMLButtonElement>('[role="tab"]') ?? []);
@@ -20,20 +19,6 @@ if (home) {
 	const buttons = Array.from(controls?.querySelectorAll<HTMLButtonElement>('[data-gd-step]') ?? []);
 	let active = 0;
 	let gesture: { x: number; y: number } | null = null;
-	let frame = 0;
-
-	function updateLauncher(): void {
-		if (!launcher) return;
-		const viewport = window.visualViewport;
-		const keyboard = viewport && viewport.scale === 1 && viewport.height + 150 < innerHeight
-			&& document.activeElement?.matches('input, textarea, [contenteditable="true"]');
-		launcher.toggleAttribute('data-gd-refresh-keyboard', Boolean(keyboard));
-	}
-
-	function queueLauncher(): void {
-		cancelAnimationFrame(frame);
-		frame = requestAnimationFrame(updateLauncher);
-	}
 
 	function selectStage(index: number, focus = false): void {
 		active = index;
@@ -102,7 +87,6 @@ if (home) {
 		}
 		if (focused instanceof HTMLElement && focused.isConnected && document.activeElement !== focused) focused.focus({ preventScroll: true });
 		syncProcess();
-		updateLauncher();
 	}
 
 	tabs.forEach((tab, index) => tab.addEventListener('click', () => selectStage(index), options));
@@ -144,16 +128,8 @@ if (home) {
 	}, options);
 
 	phone.addEventListener('change', syncLayout, options);
-	window.addEventListener('resize', queueLauncher, { ...options, passive: true });
-	document.addEventListener('focusin', queueLauncher, options);
-	document.addEventListener('focusout', queueLauncher, options);
-	window.visualViewport?.addEventListener('resize', queueLauncher, options);
-	window.addEventListener('pageshow', queueLauncher, options);
 	window.addEventListener('pagehide', (event) => {
-		if (!event.persisted) {
-			cancelAnimationFrame(frame);
-			lifecycle.abort();
-		}
+		if (!event.persisted) lifecycle.abort();
 	}, options);
 	syncLayout();
 }

@@ -94,12 +94,17 @@ test('UK date boundaries switch the CTA, then remove notices while the URL stays
 	await page.clock.setSystemTime(new Date(dates.closed));
 	await page.evaluate(() => window.dispatchEvent(new PageTransitionEvent('pageshow')));
 	await expect(page.getByRole('complementary', { name: 'Featured campaign' })).toBeHidden();
+	await expect(page.locator('.gd-campaign-metrics')).toBeHidden();
+	await expect(page.locator('.gd-campaign-checklist')).toBeHidden();
+	await expect(page.getByRole('heading', { name: 'Get your voucher.' })).toBeHidden();
+	await expect(page.getByRole('heading', { name: 'Agree your plan.' })).toBeVisible();
+	await expect(page.getByText('Can we apply if we lease our premises?', { exact: true })).toBeHidden();
 	await expect(page.locator('.gd-campaign-hero').getByRole('link', { name: 'Discuss my workplace project' })).toBeVisible();
 
 	await page.context().addCookies([{ name: 'gd_test_campaign', value: 'closed', url: baseURL! }]);
 	await page.reload();
 	await expect(page.locator('[data-gd-campaign-popup]')).toHaveCount(0);
-	await expect(page.getByRole('heading', { name: 'Workplace charging after the grant.' })).toBeVisible();
+	await expect(page.getByRole('heading', { name: 'Planning your workplace charging?' })).toBeVisible();
 	await expect(page).toHaveURL(`${baseURL}${landing}`);
 });
 
@@ -169,4 +174,68 @@ test('aftercare hides the campaign notice and uses its own charger count label',
 	const mail = await (await request.get('/wp-json/greendawn-test/v1/callback')).json();
 	expect(mail.message).toContain('Number of chargers affected: 2');
 	expect(mail.message).not.toMatch(/Campaign: Workplace Charging Scheme|Advertising attribution|QA-Aftercare/);
+});
+
+test('the expanded campaign follows the shared container at desktop, tablet and phone widths', async ({ page, baseURL }) => {
+	await phase(page, baseURL);
+	for (const width of [1920, 1440, 1024, 768, 393, 320]) {
+		await page.setViewportSize({ width, height: 1000 });
+		await page.goto(landing);
+		await expect(page.getByRole('heading', { name: 'Could your workplace qualify?' })).toBeVisible();
+		await expect(page.locator('.gd-campaign-metrics__grid > div')).toHaveCount(3);
+		await expect(page.locator('.gd-campaign-checklist li')).toHaveCount(4);
+		await expect(page.locator('.gd-campaign-steps > li')).toHaveCount(3);
+		await expect(page.locator('.gd-campaign-faq details')).toHaveCount(4);
+		const alignment = await page.evaluate(() => {
+			const hero = document.querySelector('.gd-campaign-hero .gd-campaign-shell')!.getBoundingClientRect();
+			return {
+				overflow: document.documentElement.scrollWidth > innerWidth,
+				sections: Array.from(document.querySelectorAll<HTMLElement>('.gd-campaign-landing .gd-campaign-shell')).filter(el => el.getClientRects().length).map(el => {
+					const box = el.getBoundingClientRect();
+					return Math.abs(box.left - hero.left) < 1 && Math.abs(box.width - hero.width) < 1;
+				}),
+			};
+		});
+		expect(alignment.overflow, `overflow at ${width}px`).toBe(false);
+		expect(alignment.sections.every(Boolean), `section alignment at ${width}px`).toBe(true);
+	}
+});
+
+test('new eligibility and closing CTAs use the existing grant drawer', async ({ page, baseURL }) => {
+	await phase(page, baseURL);
+	await page.goto(landing);
+	const drawer = page.getByRole('dialog', { name: 'Request a callback' });
+	for (const selector of ['.gd-campaign-panel', '.gd-campaign-closing']) {
+		const cta = page.locator(selector).getByRole('link').first();
+		await expect(cta).toHaveAttribute('data-lead-entry-point', 'campaign-landing');
+		await expect(cta).toHaveAttribute('data-lead-campaign', /^\d+$/);
+		await cta.click();
+		await expect(drawer.getByRole('heading', { name: 'How should we reach you?' })).toBeVisible();
+		await expect(drawer.getByRole('spinbutton', { name: /Estimated number of chargers/ })).toBeVisible();
+		await page.keyboard.press('Escape');
+		const popup = page.locator('[data-gd-campaign-popup]');
+		if (await popup.isVisible()) await page.keyboard.press('Escape');
+	}
+});
+
+test('campaign sections and FAQ answers are available without JavaScript', async ({ browser, baseURL }) => {
+	const context = await browser.newContext({ javaScriptEnabled: false });
+	await context.addCookies([{ name: 'gd_test_campaign', value: 'live', url: baseURL! }]);
+	const page = await context.newPage();
+	await page.goto(`${baseURL}${landing}`);
+	await expect(page.getByRole('heading', { name: 'Could your workplace qualify?' })).toBeVisible();
+	await expect(page.getByRole('heading', { name: 'From first plans to charging at work.' })).toBeVisible();
+	const question = page.getByText('Can we apply if we lease our premises?', { exact: true });
+	await question.click();
+	await expect(page.getByText('Yes, provided the site qualifies and you have the necessary landlord and landowner permission.')).toBeVisible();
+	await expect(page.locator('.gd-campaign-panel a.gd-campaign-button').first()).toHaveAttribute('href', /\/enquire\/$/);
+	await context.close();
+});
+
+test('a second campaign omits empty optional sections', async ({ page, baseURL }) => {
+	await phase(page, baseURL);
+	await page.goto('/campaigns/another-campaign/');
+	await expect(page.getByRole('heading', { level: 1 })).toHaveText('Another campaign');
+	await expect(page.locator('.gd-campaign-metrics, .gd-campaign-process, .gd-campaign-faq, .gd-campaign-closing')).toHaveCount(0);
+	await expect(page.locator('.gd-campaign-landing')).not.toContainText('£500');
 });

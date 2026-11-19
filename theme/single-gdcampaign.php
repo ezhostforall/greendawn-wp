@@ -51,10 +51,12 @@ if ( $greendawn_campaign ) :
 					<p data-gd-campaign-variant="closed upcoming" <?php echo $greendawn_open ? 'hidden' : ''; ?>><?php echo esc_html( greendawn_campaign_copy( $greendawn_campaign['closed_intro'], __( 'Talk to us about your project.', 'greendawn' ) ) ); ?></p>
 					<div class="gd-campaign-actions">
 						<?php greendawn_campaign_actions( $greendawn_campaign ); ?>
+						<?php if ( $greendawn_campaign['guide_title'] || $greendawn_campaign['closed_guide'] || $greendawn_campaign['eligibility'] || $greendawn_campaign['panel_title'] ) : ?>
 						<a class="gd-campaign-textlink" href="#campaign-guide">
 							<?php echo esc_html( greendawn_campaign_copy( $greendawn_campaign['guide_link'], __( 'Read the guide', 'greendawn' ) ) ); ?>
 							<?php get_template_part( 'template-parts/home/arrow', null, array( 'diagonal' => true ) ); ?>
 						</a>
+						<?php endif; ?>
 					</div>
 				</div>
 			</div>
@@ -75,34 +77,7 @@ if ( $greendawn_campaign ) :
 				<?php endif; ?>
 			</div>
 		</section>
-		<section id="campaign-guide" class="gd-campaign-guide">
-			<div class="gd-campaign-shell">
-				<div>
-					<p class="gd-campaign-kicker"><?php echo esc_html( get_the_title( $greendawn_id ) ); ?></p>
-					<h2 data-gd-campaign-variant="live late" <?php echo $greendawn_open ? '' : 'hidden'; ?>><?php echo esc_html( $greendawn_campaign['guide_title'] ); ?></h2>
-					<h2 data-gd-campaign-variant="closed upcoming" <?php echo $greendawn_open ? 'hidden' : ''; ?>><?php echo esc_html( greendawn_campaign_copy( $greendawn_campaign['closed_guide'], $greendawn_campaign['guide_title'] ) ); ?></h2>
-					<p data-gd-campaign-variant="live late" <?php echo $greendawn_open ? '' : 'hidden'; ?>><?php echo esc_html( $greendawn_campaign['guide_intro'] ); ?></p>
-					<p data-gd-campaign-variant="closed upcoming" <?php echo $greendawn_open ? 'hidden' : ''; ?>><?php echo esc_html( greendawn_campaign_copy( $greendawn_campaign['closed_summary'], __( 'Contact our team to discuss your plans.', 'greendawn' ) ) ); ?></p>
-					<?php if ( $greendawn_campaign['faq_question'] ) : ?>
-						<details data-gd-campaign-variant="live late" <?php echo $greendawn_open ? '' : 'hidden'; ?>><summary><?php echo esc_html( $greendawn_campaign['faq_question'] ); ?></summary><p><?php echo esc_html( $greendawn_campaign['faq_answer'] ); ?></p></details>
-					<?php endif; ?>
-					<?php if ( $greendawn_campaign['voucher_question'] ) : ?>
-						<details><summary><?php echo esc_html( $greendawn_campaign['voucher_question'] ); ?></summary><p><?php echo esc_html( $greendawn_campaign['voucher_answer'] ); ?></p></details>
-					<?php endif; ?>
-					<?php if ( $greendawn_campaign['guidance_url'] ) : ?>
-						<a class="gd-campaign-textlink" href="<?php echo esc_url( $greendawn_campaign['guidance_url'] ); ?>"><?php esc_html_e( 'Official GOV.UK guidance', 'greendawn' ); ?>
-							<?php get_template_part( 'template-parts/home/arrow', null, array( 'diagonal' => true ) ); ?>
-						</a>
-					<?php endif; ?>
-				</div>
-				<aside class="gd-campaign-panel">
-					<h3><?php echo esc_html( $greendawn_campaign['panel_title'] ); ?></h3>
-					<p data-gd-campaign-variant="live late" <?php echo $greendawn_open ? '' : 'hidden'; ?>><?php echo esc_html( $greendawn_campaign['panel_copy'] ); ?></p>
-					<p data-gd-campaign-variant="closed upcoming" <?php echo $greendawn_open ? 'hidden' : ''; ?>><?php echo esc_html( greendawn_campaign_copy( $greendawn_campaign['closed_panel'], __( 'Tell us about your site and what you’re planning.', 'greendawn' ) ) ); ?></p>
-					<?php greendawn_campaign_actions( $greendawn_campaign ); ?>
-				</aside>
-			</div>
-		</section>
+		<?php get_template_part( 'template-parts/campaign/content', null, $greendawn_campaign ); ?>
 	</article>
 <?php elseif ( have_posts() ) : ?>
 	<?php the_post(); ?>

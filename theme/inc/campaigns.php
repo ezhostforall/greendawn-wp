@@ -80,12 +80,13 @@ function greendawn_campaign_enquiry_fallback( array $campaign ): string {
 /**
  * Render the landing-page actions for each campaign phase.
  *
- * @param array $campaign Campaign content and dates.
+ * @param array  $campaign   Campaign content and dates.
+ * @param string $live_label Optional label during the planning phase.
  */
-function greendawn_campaign_actions( array $campaign ): void {
+function greendawn_campaign_actions( array $campaign, string $live_label = '' ): void {
 	$fallback = greendawn_campaign_enquiry_fallback( $campaign );
 	$labels   = array(
-		'live'            => $campaign['cta'],
+		'live'            => greendawn_campaign_copy( $live_label, $campaign['cta'] ),
 		'late'            => greendawn_campaign_copy( $campaign['late_cta'], $campaign['cta'] ),
 		'closed upcoming' => greendawn_campaign_copy( $campaign['closed_cta'], __( 'Discuss your project', 'greendawn' ) ),
 	);
@@ -145,4 +146,43 @@ function greendawn_campaign_drawer_data( array $campaign ): array {
  */
 function greendawn_campaign_copy( string $copy, string $fallback ): string {
 	return '' !== $copy ? $copy : $fallback;
+}
+
+/**
+ * Render phase visibility on both the server and already cached pages.
+ *
+ * @param string $phases Space-separated phases in which the element is visible.
+ * @param string $phase  Current campaign phase.
+ */
+function greendawn_campaign_visibility( string $phases, string $phase ): void {
+	?>
+	data-gd-campaign-variant="<?php echo esc_attr( $phases ); ?>" <?php echo in_array( $phase, explode( ' ', $phases ), true ) ? '' : 'hidden'; ?>
+	<?php
+}
+
+/**
+ * Render active and evergreen versions, with an explicit empty state after expiry.
+ *
+ * @param string $active Active campaign text.
+ * @param string $closed Evergreen text.
+ * @param string $phase  Current phase.
+ */
+function greendawn_campaign_evergreen_text( string $active, string $closed, string $phase ): void {
+	?>
+	<span <?php greendawn_campaign_visibility( 'live late', $phase ); ?>><?php echo esc_html( $active ); ?></span>
+	<span <?php greendawn_campaign_visibility( 'closed upcoming', $phase ); ?>><?php echo esc_html( $closed ); ?></span>
+	<?php
+}
+
+/**
+ * Resolve an editor's FAQ visibility to the existing campaign phase names.
+ *
+ * @param string $visibility Saved visibility choice.
+ */
+function greendawn_campaign_faq_phases( string $visibility ): string {
+	return match ( $visibility ) {
+		'always' => 'live late closed upcoming',
+		'closed' => 'closed',
+		default => 'live late',
+	};
 }

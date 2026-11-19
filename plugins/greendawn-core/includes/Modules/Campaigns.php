@@ -20,6 +20,8 @@ final class Campaigns implements Module_Interface {
 	public function register(): void {
 		add_action( 'init', array( $this, 'register_type' ) );
 		add_action( 'acf/init', array( $this, 'register_fields' ) );
+		add_action( 'admin_init', array( Campaign_Content::class, 'maybe_upgrade' ) );
+		add_action( 'load-post.php', array( Campaign_Content::class, 'maybe_upgrade_faqs' ) );
 		add_filter( 'request', array( $this, 'workplace_route' ) );
 		add_filter( 'post_type_link', array( $this, 'workplace_link' ), 10, 2 );
 		add_action( 'admin_post_greendawn_core_publish_workplace_campaign', array( $this, 'publish_workplace' ) );
@@ -101,62 +103,65 @@ final class Campaigns implements Module_Interface {
 
 	/** Campaign field names map directly from the editor to post metadata. */
 	private static function fields(): array {
-		return array(
-			'Dates'            => array(
-				'start'    => array( 'Promotion begins (optional)', 'date_picker' ),
-				'planning' => array( 'Planning target (optional)', 'date_picker' ),
-				'expiry'   => array( 'Promotion ends (inclusive)', 'date_picker' ),
+		return array_merge(
+			array(
+				'Dates'            => array(
+					'start'    => array( 'Promotion begins (optional)', 'date_picker' ),
+					'planning' => array( 'Planning target (optional)', 'date_picker' ),
+					'expiry'   => array( 'Promotion ends (inclusive)', 'date_picker' ),
+				),
+				'Landing page'     => array(
+					'hero_image'       => array( 'Hero image', 'image' ),
+					'kicker'           => array( 'Hero kicker' ),
+					'headline'         => array( 'Hero headline' ),
+					'accent'           => array( 'Hero accent' ),
+					'intro'            => array( 'Hero intro', 'textarea' ),
+					'late_intro'       => array( 'Hero intro after planning target', 'textarea' ),
+					'closed_intro'     => array( 'Hero intro after expiry', 'textarea' ),
+					'cta'              => array( 'Primary CTA' ),
+					'late_cta'         => array( 'Primary CTA after planning target' ),
+					'closed_cta'       => array( 'Primary CTA after expiry' ),
+					'guide_link'       => array( 'Guide link label' ),
+					'guide_title'      => array( 'Guide heading' ),
+					'guide_intro'      => array( 'Guide intro', 'textarea' ),
+					'closed_guide'     => array( 'Guide heading after expiry' ),
+					'closed_summary'   => array( 'Guide intro after expiry', 'textarea' ),
+					'faq_question'     => array( 'Grant FAQ question' ),
+					'faq_answer'       => array( 'Grant FAQ answer', 'textarea' ),
+					'voucher_question' => array( 'Voucher FAQ question' ),
+					'voucher_answer'   => array( 'Voucher FAQ answer', 'textarea' ),
+					'guidance_url'     => array( 'Official guidance URL', 'url' ),
+					'panel_title'      => array( 'Contact panel heading' ),
+					'panel_copy'       => array( 'Contact panel copy', 'textarea' ),
+					'closed_panel'     => array( 'Contact panel copy after expiry', 'textarea' ),
+					'planning_label'   => array( 'Planning card label' ),
+					'planning_hint'    => array( 'Planning card context' ),
+					'late_hint'        => array( 'Planning card context after target' ),
+					'expiry_label'     => array( 'Expiry card label' ),
+					'expiry_hint'      => array( 'Expiry card context' ),
+				),
+				'Sitewide notices' => array(
+					'bar_title'      => array( 'Bar heading' ),
+					'bar_copy'       => array( 'Bar supporting text' ),
+					'late_bar'       => array( 'Bar supporting text after planning target' ),
+					'bar_cta'        => array( 'Bar link label' ),
+					'popup_title'    => array( 'Pop-up heading' ),
+					'popup_planning' => array( 'Pop-up planning heading' ),
+					'popup_note'     => array( 'Pop-up planning context', 'textarea' ),
+					'late_popup'     => array( 'Pop-up planning heading after target' ),
+					'late_note'      => array( 'Pop-up planning context after target', 'textarea' ),
+					'popup_expiry'   => array( 'Pop-up expiry heading' ),
+					'popup_copy'     => array( 'Pop-up summary', 'textarea' ),
+					'popup_cta'      => array( 'Pop-up enquiry link label' ),
+					'popup_guide'    => array( 'Pop-up guide link label' ),
+					'drawer_title'   => array( 'Drawer notice heading' ),
+					'drawer_copy'    => array( 'Drawer notice copy', 'textarea' ),
+					'late_drawer'    => array( 'Drawer notice copy after planning target', 'textarea' ),
+					'drawer_cta'     => array( 'Drawer grant enquiry button' ),
+					'drawer_context' => array( 'Drawer grant contact intro', 'textarea' ),
+				),
 			),
-			'Landing page'     => array(
-				'hero_image'       => array( 'Hero image', 'image' ),
-				'kicker'           => array( 'Hero kicker' ),
-				'headline'         => array( 'Hero headline' ),
-				'accent'           => array( 'Hero accent' ),
-				'intro'            => array( 'Hero intro', 'textarea' ),
-				'late_intro'       => array( 'Hero intro after planning target', 'textarea' ),
-				'closed_intro'     => array( 'Hero intro after expiry', 'textarea' ),
-				'cta'              => array( 'Primary CTA' ),
-				'late_cta'         => array( 'Primary CTA after planning target' ),
-				'closed_cta'       => array( 'Primary CTA after expiry' ),
-				'guide_link'       => array( 'Guide link label' ),
-				'guide_title'      => array( 'Guide heading' ),
-				'guide_intro'      => array( 'Guide intro', 'textarea' ),
-				'closed_guide'     => array( 'Guide heading after expiry' ),
-				'closed_summary'   => array( 'Guide intro after expiry', 'textarea' ),
-				'faq_question'     => array( 'Grant FAQ question' ),
-				'faq_answer'       => array( 'Grant FAQ answer', 'textarea' ),
-				'voucher_question' => array( 'Voucher FAQ question' ),
-				'voucher_answer'   => array( 'Voucher FAQ answer', 'textarea' ),
-				'guidance_url'     => array( 'Official guidance URL', 'url' ),
-				'panel_title'      => array( 'Contact panel heading' ),
-				'panel_copy'       => array( 'Contact panel copy', 'textarea' ),
-				'closed_panel'     => array( 'Contact panel copy after expiry', 'textarea' ),
-				'planning_label'   => array( 'Planning card label' ),
-				'planning_hint'    => array( 'Planning card context' ),
-				'late_hint'        => array( 'Planning card context after target' ),
-				'expiry_label'     => array( 'Expiry card label' ),
-				'expiry_hint'      => array( 'Expiry card context' ),
-			),
-			'Sitewide notices' => array(
-				'bar_title'      => array( 'Bar heading' ),
-				'bar_copy'       => array( 'Bar supporting text' ),
-				'late_bar'       => array( 'Bar supporting text after planning target' ),
-				'bar_cta'        => array( 'Bar link label' ),
-				'popup_title'    => array( 'Pop-up heading' ),
-				'popup_planning' => array( 'Pop-up planning heading' ),
-				'popup_note'     => array( 'Pop-up planning context', 'textarea' ),
-				'late_popup'     => array( 'Pop-up planning heading after target' ),
-				'late_note'      => array( 'Pop-up planning context after target', 'textarea' ),
-				'popup_expiry'   => array( 'Pop-up expiry heading' ),
-				'popup_copy'     => array( 'Pop-up summary', 'textarea' ),
-				'popup_cta'      => array( 'Pop-up enquiry link label' ),
-				'popup_guide'    => array( 'Pop-up guide link label' ),
-				'drawer_title'   => array( 'Drawer notice heading' ),
-				'drawer_copy'    => array( 'Drawer notice copy', 'textarea' ),
-				'late_drawer'    => array( 'Drawer notice copy after planning target', 'textarea' ),
-				'drawer_cta'     => array( 'Drawer grant enquiry button' ),
-				'drawer_context' => array( 'Drawer grant contact intro', 'textarea' ),
-			),
+			Campaign_Content::fields()
 		);
 	}
 
@@ -168,12 +173,7 @@ final class Campaigns implements Module_Interface {
 		foreach ( self::fields() as $group => $definitions ) {
 			$fields = array();
 			foreach ( $definitions as $key => $definition ) {
-				$field = array(
-					'key'   => 'field_greendawn_campaign_' . $key,
-					'name'  => 'greendawn_campaign_' . $key,
-					'label' => $definition[0],
-					'type'  => $definition[1] ?? 'text',
-				);
+				$field = Campaign_Content::editor_field( $key, $definition );
 				if ( 'image' === $field['type'] ) {
 					$field['return_format'] = 'id';
 					$field['preview_size']  = 'medium';
@@ -186,7 +186,10 @@ final class Campaigns implements Module_Interface {
 				if ( in_array( $key, array( 'intro', 'late_intro', 'bar_title', 'bar_copy', 'popup_planning', 'popup_expiry', 'drawer_title', 'drawer_copy' ), true ) ) {
 					$field['instructions'] = __( 'Use {{planning}}, {{planning_short}}, or {{expiry}} to display the corresponding campaign date.', 'greendawn-core' );
 				}
-				$fields[] = $field;
+				// Legacy FAQ data remains available to old packages; the repeatable FAQ editor replaces it.
+				if ( ! in_array( $key, array( 'faq_question', 'faq_answer', 'voucher_question', 'voucher_answer' ), true ) ) {
+					$fields[] = $field;
+				}
 			}
 			acf_add_local_field_group(
 				array(
@@ -226,7 +229,7 @@ final class Campaigns implements Module_Interface {
 		$content = array();
 		foreach ( self::fields() as $definitions ) {
 			foreach ( $definitions as $key => $definition ) {
-				$content[ $key ] = (string) get_post_meta( $id, 'greendawn_campaign_' . $key, true );
+				$content[ $key ] = Campaign_Content::read( $id, $key, $definition );
 			}
 		}
 		return $content;
@@ -268,7 +271,13 @@ final class Campaigns implements Module_Interface {
 		);
 		foreach ( $content as $key => $copy ) {
 			if ( ! in_array( $key, array( 'start', 'planning', 'expiry', 'guidance_url' ), true ) ) {
-				$content[ $key ] = strtr( $copy, $dates );
+				if ( is_array( $copy ) ) {
+					foreach ( $copy as $index => $row ) {
+						$content[ $key ][ $index ] = array_map( static fn( string $cell ): string => strtr( $cell, $dates ), $row );
+					}
+				} else {
+					$content[ $key ] = strtr( $copy, $dates );
+				}
 			}
 		}
 		$phase = ! $end || $now >= $end ? 'closed' : ( $start && $now < $start ? 'upcoming' : ( $late && $now >= $late ? 'late' : 'live' ) );
@@ -363,6 +372,9 @@ final class Campaigns implements Module_Interface {
 		$existing = get_page_by_path( self::WORKPLACE_SLUG, OBJECT, array( self::TYPE ) );
 		if ( $existing ) {
 			$id = self::public_id( $existing->ID );
+			if ( $id ) {
+				Campaign_Content::upgrade( $id );
+			}
 			return $id ? $id : new \WP_Error( 'campaign_not_public', __( 'Publish the existing workplace charging campaign before featuring it.', 'greendawn-core' ) );
 		}
 		if ( self::WORKPLACE_SLUG !== wp_unique_post_slug( self::WORKPLACE_SLUG, 0, 'publish', self::TYPE, 0 ) ) {
@@ -374,7 +386,7 @@ final class Campaigns implements Module_Interface {
 			$meta[ 'greendawn_campaign_' . $name ]  = $value;
 			$meta[ '_greendawn_campaign_' . $name ] = 'field_greendawn_campaign_' . $name;
 		}
-		return wp_insert_post(
+		$id = wp_insert_post(
 			array(
 				'post_type'   => self::TYPE,
 				'post_status' => 'publish',
@@ -384,5 +396,9 @@ final class Campaigns implements Module_Interface {
 			),
 			true
 		);
+		if ( ! is_wp_error( $id ) ) {
+			Campaign_Content::upgrade( $id );
+		}
+		return $id;
 	}
 }

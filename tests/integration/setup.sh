@@ -508,3 +508,10 @@ wp eval '$id = \Greendawn_Core\Modules\Campaigns::provision_workplace(); if ( is
 wp plugin activate secure-custom-fields
 wp eval '$post = get_page_by_path( "workplace-charging-grant", OBJECT, "gdcampaign" ); if ( "20270331" !== get_field( "greendawn_campaign_expiry", $post->ID ) || ! get_field_object( "greendawn_campaign_drawer_copy", $post->ID ) ) { WP_CLI::error( "Campaign dates and notice copy must be editable in SCF." ); }'
 wp plugin deactivate secure-custom-fields
+
+# Check the content upgrade with SCF enabled and with the editor plugin absent.
+wp plugin activate secure-custom-fields
+docker cp tests/integration/campaign-content.php "$container_id:/tmp/campaign-content.php"
+wp eval-file /tmp/campaign-content.php
+wp eval-file /tmp/campaign-content.php --skip-plugins=secure-custom-fields
+wp plugin deactivate secure-custom-fields

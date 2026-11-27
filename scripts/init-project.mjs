@@ -84,6 +84,9 @@ export function buildReplacements(o) {
 	const pluginSlug = `${o.slug}-core`;
 	const pluginPrefix = `${o.prefix}_core`;
 	return [
+		// Guides use short WordPress identifiers; keep renamed CPT/taxonomy within core limits.
+		[/gdguide_topic/g, `${o.prefix.slice(0, 12)}_guide_topic`],
+		[/gdguide/g, `${o.prefix.slice(0, 12)}_guide`],
 		[/https:\/\/github\.com\/ezhostforall\/wp-starter/g, o.repository ? `https://github.com/${o.repository}` : 'https://example.invalid/configure-client-repository'],
 		[/ezhostforall\/wp-starter/g, o.repository ?? 'CONFIGURE_CLIENT_REPOSITORY'],
 		[/https:\/\/wp-starter-theme\.ezhostforall\.com/g, o.stagingUrl?.replace(/\/$/, '') ?? 'https://example.invalid/configure-client-staging'],

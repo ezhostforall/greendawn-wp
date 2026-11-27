@@ -15,6 +15,9 @@ test('reading components reflow, preserve content and work without JavaScript', 
 			await expect(main.locator('.gd-editorial-meta time')).toHaveAttribute('datetime', '2024-01-01');
 			await expect(main.locator('.gd-page-hero__media img')).toHaveCSS('object-position', '50% 20%');
 			await expect(main.locator('.gd-guide-card')).toHaveCount(4);
+			if (width === 1440) {
+				expect((await main.locator('.gd-guide-card--featured').boundingBox())?.height).toBeLessThan(600);
+			}
 			await expect(main).not.toContainText('Hidden component draft');
 			await expect(main).not.toContainText('Hidden component password');
 			await expect(main.locator('.gd-reading-section')).toHaveCount(3);

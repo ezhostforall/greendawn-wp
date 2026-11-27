@@ -68,6 +68,7 @@ export default defineConfig(({ command }) => ({
 				'greendawn-homepage': resolve(root, 'src/styles/greendawn-homepage.css'),
 				'greendawn-campaign': resolve(root, 'src/scripts/campaign.ts'),
 				'greendawn-pages': resolve(root, 'src/scripts/greendawn-pages.ts'),
+				'greendawn-reading': resolve(root, 'src/styles/greendawn-reading.css'),
 			},
 		},
 	},

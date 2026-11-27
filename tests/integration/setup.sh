@@ -514,4 +514,8 @@ wp plugin activate secure-custom-fields
 docker cp tests/integration/campaign-content.php "$container_id:/tmp/campaign-content.php"
 wp eval-file /tmp/campaign-content.php
 wp eval-file /tmp/campaign-content.php --skip-plugins=secure-custom-fields
+# Guides foundation: edit with SCF, then verify native reads and revision restores.
+docker cp tests/integration/guides-foundation.php "$container_id:/tmp/guides-foundation.php"
+wp eval-file /tmp/guides-foundation.php scf
+wp eval-file /tmp/guides-foundation.php native --skip-plugins=secure-custom-fields
 wp plugin deactivate secure-custom-fields

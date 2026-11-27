@@ -8,6 +8,7 @@
 defined( 'ABSPATH' ) || exit;
 $greendawn_feature_id = sanitize_html_class( $args['instance_id'] ?? wp_unique_id( 'gd-features-' ) );
 $greendawn_support    = 'support' === ( $args['variant'] ?? '' );
+$greendawn_icons      = 'icons' === ( $args['variant'] ?? '' );
 $greendawn_features   = array_filter( (array) ( $args['items'] ?? array() ), static fn( $item ) => ! empty( $item['title'] ) || ( $greendawn_support && ! empty( $item['copy'] ) ) );
 if ( ! $greendawn_features ) {
 	return;
@@ -30,10 +31,17 @@ if ( ! $greendawn_features ) {
 <section class="gd-section gd-benefits" aria-labelledby="<?php echo esc_attr( $greendawn_feature_id . '-title' ); ?>">
 	<div class="gd-shell">
 		<h2 id="<?php echo esc_attr( $greendawn_feature_id . '-title' ); ?>"><?php echo esc_html( $args['heading'] ?? '' ); ?></h2>
-		<div class="gd-feature-grid">
+		<div class="gd-feature-grid<?php echo $greendawn_icons ? ' gd-feature-grid--icons' : ''; ?>">
 			<?php foreach ( array_values( $greendawn_features ) as $greendawn_index => $greendawn_feature ) : ?>
 				<article>
-					<span class="gd-feature-number" aria-hidden="true"><?php echo esc_html( sprintf( '%02d', $greendawn_index + 1 ) ); ?></span>
+					<?php
+					if ( $greendawn_icons ) :
+						?>
+						<?php echo greendawn_component_icon( $greendawn_feature['icon'] ?? '' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Fixed decorative path allowlist. ?>
+						<?php
+else :
+	?>
+						<span class="gd-feature-number" aria-hidden="true"><?php echo esc_html( sprintf( '%02d', $greendawn_index + 1 ) ); ?></span><?php endif; ?>
 					<h3><?php echo esc_html( $greendawn_feature['title'] ); ?></h3>
 					<?php
 					if ( ! empty( $greendawn_feature['copy'] ) ) :

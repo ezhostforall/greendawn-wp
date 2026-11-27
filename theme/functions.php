@@ -26,5 +26,6 @@ require_once GREENDAWN_DIR . '/inc/react.php';
 require_once GREENDAWN_DIR . '/inc/lead-capture.php';
 
 require_once GREENDAWN_DIR . '/inc/greendawn-pages.php';
+require_once GREENDAWN_DIR . '/inc/greendawn-reading.php';
 
 require_once GREENDAWN_DIR . '/inc/campaigns.php';

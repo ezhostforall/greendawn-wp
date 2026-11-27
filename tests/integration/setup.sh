@@ -519,3 +519,13 @@ docker cp tests/integration/guides-foundation.php "$container_id:/tmp/guides-fou
 wp eval-file /tmp/guides-foundation.php scf
 wp eval-file /tmp/guides-foundation.php native --skip-plugins=secure-custom-fields
 wp plugin deactivate secure-custom-fields
+# Shared reading components use disposable records only; no public templates are seeded.
+wp plugin activate secure-custom-fields
+docker cp tests/integration/reading-components.php "$container_id:/tmp/reading-components.php"
+wp eval-file /tmp/reading-components.php seed
+wp eval-file /tmp/reading-components.php without-scf --skip-plugins=secure-custom-fields
+wp eval-file /tmp/reading-components.php without-core --skip-plugins=greendawn-core
+wp plugin deactivate secure-custom-fields
+docker cp tests/fixtures/guide-components.php "$container_id:/var/www/html/wp-content/plugins/guide-components-test-fixture.php"
+docker cp tests/fixtures/guide-components-template.php "$container_id:/var/www/html/wp-content/plugins/guide-components-template.php"
+wp plugin activate guide-components-test-fixture

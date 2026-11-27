@@ -13,6 +13,7 @@ $greendawn_card_label_id = sanitize_html_class( $args['label_id'] ?? $greendawn_
 $greendawn_card_label    = ! empty( $args['show_label'] );
 $greendawn_card_class    = sanitize_html_class( $args['variant'] ?? '' );
 $greendawn_editorial     = ! empty( $args['editorial'] );
+$greendawn_guide_card    = in_array( $args['variant'] ?? '', array( 'guide', 'guide-featured' ), true );
 $greendawn_card_image    = wp_get_attachment_image(
 	absint( $args['image_id'] ?? 0 ),
 	$greendawn_editorial ? 'medium_large' : 'large',
@@ -22,6 +23,39 @@ $greendawn_card_image    = wp_get_attachment_image(
 		'sizes'   => $args['sizes'] ?? '(max-width: 42rem) calc(100vw - 2rem), (max-width: 61rem) 45vw, 30vw',
 	)
 );
+if ( $greendawn_guide_card ) :
+	if ( '' === greendawn_component_text( $args['title'] ?? '' ) || '' === esc_url( greendawn_component_text( $args['url'] ?? '' ) ) ) {
+		return;
+	}
+	$greendawn_featured = 'guide-featured' === $args['variant'];
+	$greendawn_minutes  = is_scalar( $args['reading_minutes'] ?? null ) ? absint( $args['reading_minutes'] ) : 0;
+	?>
+	<a class="gd-insight-card gd-guide-card<?php echo $greendawn_featured ? ' gd-guide-card--featured' : ''; ?>" href="<?php echo esc_url( $args['url'] ?? '' ); ?>" aria-labelledby="<?php echo esc_attr( $greendawn_card_title_id ); ?>">
+		<?php if ( $greendawn_card_image && ( $args['show_image'] ?? $greendawn_featured ) ) : ?>
+			<figure class="<?php echo esc_attr( trim( greendawn_image_position_class( $args['image_position'] ?? '' ) ) ); ?>"><?php echo $greendawn_card_image; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Native escaped attachment markup. ?></figure>
+		<?php endif; ?>
+		<div class="gd-guide-card__body">
+			<?php
+			if ( ! empty( $args['topic'] ) ) :
+				?>
+				<span class="gd-guide-card__topic"><?php echo esc_html( $args['topic'] ); ?></span><?php endif; ?>
+			<h3 id="<?php echo esc_attr( $greendawn_card_title_id ); ?>"><?php echo esc_html( $args['title'] ?? '' ); ?></h3>
+			<?php
+			if ( ! empty( $args['summary'] ) ) :
+				?>
+				<p class="gd-guide-card__summary"><?php echo esc_html( $args['summary'] ); ?></p><?php endif; ?>
+			<div class="gd-guide-card__footer">
+				<?php
+				if ( $greendawn_minutes ) :
+					?>
+					<span><?php echo esc_html( sprintf( /* translators: %s: estimated minutes. */ _n( '%s minute read', '%s minutes read', $greendawn_minutes, 'greendawn' ), number_format_i18n( $greendawn_minutes ) ) ); ?></span><?php endif; ?>
+				<span><?php esc_html_e( 'Read guide', 'greendawn' ); ?></span>
+			</div>
+		</div>
+	</a>
+	<?php
+	return;
+endif;
 if ( $greendawn_editorial ) :
 	$greendawn_title = ! empty( $args['title'] ) ? (string) $args['title'] : __( 'Untitled article', 'greendawn' );
 	$greendawn_url   = (string) ( $args['url'] ?? '' );

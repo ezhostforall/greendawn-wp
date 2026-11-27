@@ -121,6 +121,7 @@ export function initProject(root, options, { dryRun = false } = {}) {
 	}
 	const pluginSlug = `${options.slug}-core`;
 	const renames = [
+		['theme/single-gdguide.php', `theme/single-${options.prefix.slice(0, 12)}_guide.php`],
 		[`plugins/${STARTER.pluginSlug}/${STARTER.pluginSlug}.php`, `plugins/${STARTER.pluginSlug}/${pluginSlug}.php`],
 		[`plugins/${STARTER.pluginSlug}`, `plugins/${pluginSlug}`],
 		[`mu-plugins/${STARTER.pluginSlug}-env.php`, `mu-plugins/${pluginSlug}-env.php`],

@@ -529,3 +529,10 @@ wp plugin deactivate secure-custom-fields
 docker cp tests/fixtures/guide-components.php "$container_id:/var/www/html/wp-content/plugins/guide-components-test-fixture.php"
 docker cp tests/fixtures/guide-components-template.php "$container_id:/var/www/html/wp-content/plugins/guide-components-template.php"
 wp plugin activate guide-components-test-fixture
+# Public templates consume their real Core data, not a template override.
+wp plugin activate secure-custom-fields
+docker cp tests/integration/guides-templates.php "$container_id:/tmp/guides-templates.php"
+wp eval-file /tmp/guides-templates.php seed
+wp eval-file /tmp/guides-templates.php without-scf --skip-plugins=secure-custom-fields
+wp eval-file /tmp/guides-templates.php without-core --skip-plugins=greendawn-core
+wp plugin deactivate secure-custom-fields

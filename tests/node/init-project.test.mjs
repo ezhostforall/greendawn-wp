@@ -102,7 +102,7 @@ test('dry-run reports every write and rename without touching source', () => {
 		assert.deepEqual(snapshot(dir), original);
 		assert.ok(plan.changed.includes('README.md'));
 		assert.ok(plan.changed.includes('project.identity.json'));
-		assert.equal(plan.renames.length, 3);
+		assert.equal(plan.renames.length, 3 + Number(existsSync(join(repo, 'theme/single-gdguide.php'))));
 		assert.deepEqual(initProject(dir, client).changed, plan.changed);
 		writeFileSync(join(dir, 'theme/style.css'), 'Theme Name: WP Starter\n');
 		assert.throws(() => initProject(dir, client), /already been initialised/);
@@ -175,4 +175,22 @@ test('two independently configured client projects build and package with correc
 		} finally { rmSync(dir, { recursive: true, force: true }); }
 	}
 });
+});
+
+test('initialisation keeps the Guide single filename aligned with the renamed CPT', () => {
+	const dir = mkdtempSync(join(tmpdir(), 'init-guide-template-'));
+	try {
+		mkdirSync(join(dir, 'theme'));
+		writeFileSync(join(dir, 'theme/style.css'), 'Theme Name: WP Starter\n');
+		writeFileSync(join(dir, 'theme/single-gdguide.php'), '<?php // Template for gdguide.\n');
+		writeFileSync(join(dir, 'package.json'), '{"version":"0.5.0"}');
+		const options = { name: 'Example', slug: 'example', prefix: 'very_long_agency_prefix', textDomain: 'example', hostname: 'example.localhost' };
+		const target = 'theme/single-very_long_ag_guide.php';
+		const plan = initProject(dir, options, { dryRun: true });
+		assert.ok(plan.renames.some(([from, to]) => from === 'theme/single-gdguide.php' && to === target));
+		assert.ok(existsSync(join(dir, 'theme/single-gdguide.php')));
+		initProject(dir, options);
+		assert.ok(!existsSync(join(dir, 'theme/single-gdguide.php')));
+		assert.match(readFileSync(join(dir, target), 'utf8'), /very_long_ag_guide/);
+	} finally { rmSync(dir, { recursive: true, force: true }); }
 });

@@ -7,11 +7,16 @@
 
 defined( 'ABSPATH' ) || exit;
 $greendawn_sections = greendawn_reading_sections( is_array( $args['sections'] ?? null ) ? $args['sections'] : array(), $args['prefix'] ?? 'guide' );
+$greendawn_subheads = 3 === ( $args['heading_level'] ?? 2 );
 foreach ( $greendawn_sections as $greendawn_section ) :
 	$greendawn_id = $greendawn_section['id'];
 	?>
 	<section class="gd-reading-section" id="<?php echo esc_attr( $greendawn_id ); ?>" aria-labelledby="<?php echo esc_attr( $greendawn_id ); ?>-title">
-		<h2 id="<?php echo esc_attr( $greendawn_id ); ?>-title"><?php echo esc_html( $greendawn_section['heading'] ); ?></h2>
+		<?php if ( $greendawn_subheads ) : ?>
+			<h3 id="<?php echo esc_attr( $greendawn_id ); ?>-title"><?php echo esc_html( $greendawn_section['heading'] ); ?></h3>
+		<?php else : ?>
+			<h2 id="<?php echo esc_attr( $greendawn_id ); ?>-title"><?php echo esc_html( $greendawn_section['heading'] ); ?></h2>
+		<?php endif; ?>
 		<?php echo greendawn_page_prose( $greendawn_section['body'] ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Restricted prose allowlist. ?>
 		<?php if ( $greendawn_section['list_items'] ) : ?>
 			<?php $greendawn_numbered = 'numbered' === $greendawn_section['list_style']; ?>

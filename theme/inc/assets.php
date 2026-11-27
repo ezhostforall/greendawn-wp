@@ -84,6 +84,10 @@ function greendawn_enqueue_assets(): void {
 		greendawn_enqueue_entry( 'greendawn-pages' );
 	}
 
+	if ( is_page_template( array( 'templates/greendawn-guides.php', 'templates/greendawn-region.php' ) ) || is_singular( 'gdguide' ) ) {
+		greendawn_enqueue_entry( 'greendawn-reading' );
+	}
+
 	foreach ( (array) apply_filters( 'greendawn_page_entries', array() ) as $name ) {
 		greendawn_enqueue_entry( (string) $name );
 	}

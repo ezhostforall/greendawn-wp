@@ -57,6 +57,12 @@ $greendawn_user    = get_user_by( 'login', 'admin' );
 wp_set_current_user( $greendawn_user->ID );
 
 try {
+	set_error_handler( static function ( int $severity, string $message, string $file, int $line ): bool {
+		if ( error_reporting() & $severity ) {
+			throw new ErrorException( $message, 0, $severity, $file, $line );
+		}
+		return false;
+	} );
 	if ( 'scf' === $greendawn_phase ) {
 		greendawn_guides_check( function_exists( 'update_field' ), 'This phase requires SCF.' );
 		$greendawn_type = get_post_type_object( Guides::TYPE );
@@ -128,6 +134,10 @@ try {
 		$greendawn_bad_sections[0]['table_rows'][0]['cells'][] = array( 'text' => 'Extra cell' );
 		greendawn_guides_check( is_wp_error( Guide_Content::write( $greendawn_id, array( 'sections' => $greendawn_bad_sections ) ) ), 'Malformed table dimensions were accepted.' );
 		greendawn_guides_check( is_wp_error( Guide_Content::write( $greendawn_id, array( 'answer' => '' ) ) ), 'A published Guide lost its required opening answer.' );
+		greendawn_guides_check( is_wp_error( Guide_Content::write( $greendawn_id, array( 'sections' => array( array( 'heading' => 'An empty checklist', 'list_items' => array( array( 'text' => '' ) ) ) ) ) ) ), 'An empty checklist counted as useful public content.' );
+		$greendawn_orphan = $greendawn_read;
+		$greendawn_orphan['sections'][0] = array_replace( $greendawn_orphan['sections'][0], array( 'image' => 0, 'caption' => 'Invisible image caption', 'columns' => array(), 'table_rows' => array(), 'table_caption' => 'Invisible table caption' ) );
+		greendawn_guides_check( ! str_contains( Guide_Content::reading_text( $greendawn_orphan ), 'Invisible' ), 'Hidden optional captions inflated searchable/reading copy.' );
 		$_POST = array( '_acf_post_id' => $greendawn_id, 'post_status' => 'publish', 'acf' => array( 'field_greendawn_guide_answer' => '' ) );
 		acf_reset_validation_errors();
 		( new Guides() )->validate_editor();
@@ -140,6 +150,10 @@ try {
 		$greendawn_new_sections = array( array( 'heading' => 'Edited section', 'body' => str_repeat( 'Updated ', 410 ) ) );
 		greendawn_guides_check( true === Guide_Content::write( $greendawn_id, array( 'sections' => $greendawn_new_sections, 'reviewed_on' => '', 'image' => 0, 'faqs' => array() ) ), 'Optional clears or shorter repeater could not save.' );
 		greendawn_guides_check( ! metadata_exists( 'post', $greendawn_id, 'greendawn_guide_sections_0_table_rows_0_cells_1_text' ) && 3 === (int) get_post_meta( $greendawn_id, Guide_Content::MINUTES_META, true ), 'Deleted nested rows survived, or reading time was stale.' );
+		require_once ABSPATH . 'wp-admin/includes/revision.php';
+		$greendawn_latest = wp_get_post_revisions( $greendawn_id );
+		$greendawn_diff = wp_get_revision_ui_diff( $greendawn_id, $greendawn_revision, reset( $greendawn_latest )->ID );
+		greendawn_guides_check( in_array( 'greendawn-structured-content', array_column( $greendawn_diff, 'id' ), true ), 'The native revision screen cannot show structured content changes.' );
 		$greendawn_count = count( wp_get_post_revisions( $greendawn_id ) );
 		Guides::commit( $greendawn_id );
 		greendawn_guides_check( $greendawn_count === count( wp_get_post_revisions( $greendawn_id ) ), 'An unchanged commit duplicated revisions.' );
@@ -153,6 +167,10 @@ try {
 		$greendawn_module->restore_revision( $greendawn_id, $greendawn_revision );
 		greendawn_guides_check( 'Keep the current version during a denied restore.' === Guide_Content::read( $greendawn_id )['intro'], 'Unauthorised restore changed structured fields.' );
 		wp_set_current_user( $greendawn_user->ID );
+		update_metadata( 'post', $greendawn_revision, Guides::SNAPSHOT, array( 'version' => Guide_Fields::VERSION, 'kind' => 'guide', 'meta' => 'Invalid snapshot shape', 'topics' => array() ) );
+		$greendawn_module->restore_revision( $greendawn_id, $greendawn_revision );
+		greendawn_guides_check( 'Keep the current version during a denied restore.' === Guide_Content::read( $greendawn_id )['intro'], 'Malformed snapshot changed current content.' );
+		update_metadata( 'post', $greendawn_revision, Guides::SNAPSHOT, wp_slash( $greendawn_original_revision ) );
 		wp_restore_post_revision( $greendawn_revision );
 		wp_update_post( array( 'ID' => $greendawn_records['private'], 'post_status' => 'publish' ) );
 		greendawn_guides_check( 'draft' === get_post_status( $greendawn_records['private'] ), 'Native API bypassed publication requirements.' );
@@ -180,6 +198,7 @@ try {
 } catch ( Throwable $greendawn_exception ) {
 	$greendawn_error = $greendawn_exception->getMessage();
 } finally {
+	restore_error_handler();
 	if ( isset( $greendawn_permalink ) ) {
 		update_option( 'permalink_structure', $greendawn_permalink );
 		$GLOBALS['wp_rewrite']->init();

@@ -169,17 +169,21 @@ final class Guide_Content {
 		foreach ( $data['sections'] ?? array() as $section ) {
 			$text[] = $section['heading'];
 			$text[] = $section['body'];
-			$text[] = $section['table_caption'];
-			$text[] = $section['caption'];
+			if ( $section['image'] ) {
+				$text[] = $section['caption'];
+			}
 			foreach ( $section['list_items'] as $item ) {
 				$text[] = $item['text'];
 			}
-			foreach ( $section['columns'] as $column ) {
-				$text[] = $column['label'];
-			}
-			foreach ( $section['table_rows'] as $row ) {
-				foreach ( $row['cells'] as $cell ) {
-					$text[] = $cell['text'];
+			if ( $section['columns'] && $section['table_rows'] ) {
+				$text[] = $section['table_caption'];
+				foreach ( $section['columns'] as $column ) {
+					$text[] = $column['label'];
+				}
+				foreach ( $section['table_rows'] as $row ) {
+					foreach ( $row['cells'] as $cell ) {
+						$text[] = $cell['text'];
+					}
 				}
 			}
 		}
@@ -362,6 +366,9 @@ final class Guide_Content {
 			foreach ( $data['sections'] ?? array() as $section ) {
 				if ( ! is_array( $section ) || empty( $section['heading'] ) || ( empty( $section['body'] ) && empty( $section['list_items'] ) && empty( $section['table_rows'] ) && empty( $section['image'] ) ) ) {
 					$errors[] = __( 'Each reading section needs a heading and useful content.', 'greendawn' );
+				}
+				if ( in_array( '', array_column( $section['list_items'] ?? array(), 'text' ), true ) ) {
+					$errors[] = __( 'Complete list items or remove empty rows before publishing.', 'greendawn' );
 				}
 			}
 		}

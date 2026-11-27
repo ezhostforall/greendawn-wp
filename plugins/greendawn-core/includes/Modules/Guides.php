@@ -514,7 +514,11 @@ final class Guides implements Module_Interface {
 	 */
 	public function restore_revision( int $id, int $revision_id ): void {
 		$snapshot = get_metadata( 'post', $revision_id, self::SNAPSHOT, true );
-		if ( ! current_user_can( 'edit_post', $id ) || (int) wp_is_post_revision( $revision_id ) !== $id || ! is_array( $snapshot ) || Guide_Fields::VERSION !== ( $snapshot['version'] ?? '' ) || ! isset( Guide_Fields::PREFIXES[ $snapshot['kind'] ?? '' ] ) ) {
+		if ( ! current_user_can( 'edit_post', $id ) || (int) wp_is_post_revision( $revision_id ) !== $id || ! is_array( $snapshot ) || Guide_Fields::VERSION !== ( $snapshot['version'] ?? '' ) || ! isset( Guide_Fields::PREFIXES[ $snapshot['kind'] ?? '' ] ) || ! is_array( $snapshot['meta'] ?? null ) || ! is_array( $snapshot['topics'] ?? null ) ) {
+			return;
+		}
+		$expected_type = 'guide' === $snapshot['kind'] ? self::TYPE : 'page';
+		if ( get_post_type( $id ) !== $expected_type ) {
 			return;
 		}
 		self::$busy = true;
@@ -524,13 +528,13 @@ final class Guides implements Module_Interface {
 			}
 		}
 		foreach ( $snapshot['meta'] as $key => $values ) {
-			if ( self::owned_key( $key ) ) {
+			if ( self::owned_key( $key ) && is_array( $values ) ) {
 				foreach ( $values as $value ) {
 					add_post_meta( $id, $key, wp_slash( $value ) );
 				}
 			}
 		}
-		if ( 'page' === get_post_type( $id ) && in_array( $snapshot['template'], self::TEMPLATES, true ) ) {
+		if ( 'page' === get_post_type( $id ) && in_array( $snapshot['template'] ?? '', self::TEMPLATES, true ) ) {
 			update_post_meta( $id, '_wp_page_template', $snapshot['template'] );
 		}
 		if ( self::TYPE === get_post_type( $id ) ) {
@@ -558,13 +562,13 @@ final class Guides implements Module_Interface {
 	/**
 	 * Make otherwise invisible structured changes inspectable in native revision UI.
 	 *
-	 * @param array $diff Existing diff rows.
-	 * @param mixed $from Source revision ID.
-	 * @param mixed $to Target revision ID.
+	 * @param array               $diff Existing diff rows.
+	 * @param \WP_Post|false|null $from Source revision object, if present.
+	 * @param \WP_Post            $to Target revision object.
 	 */
 	public function revision_diff( array $diff, $from, $to ): array {
-		$a = get_metadata( 'post', (int) $from, self::SNAPSHOT, true );
-		$b = get_metadata( 'post', (int) $to, self::SNAPSHOT, true );
+		$a = $from instanceof \WP_Post ? get_metadata( 'post', $from->ID, self::SNAPSHOT, true ) : array();
+		$b = $to instanceof \WP_Post ? get_metadata( 'post', $to->ID, self::SNAPSHOT, true ) : array();
 		if ( $a !== $b && ( is_array( $a ) || is_array( $b ) ) ) {
 			$html = wp_text_diff( wp_json_encode( $a, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE ), wp_json_encode( $b, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE ) );
 			if ( $html ) {
